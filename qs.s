@@ -90,9 +90,7 @@ word_18E:	dc.w $A4B3
 		dc.b $20, $20, $20, $20, $20, $20, $20,	$20, $20, $20, $20, $20, $20, $20, $20,	$20, $20, $20, $20, $20
 		dc.b $20, $20, $20, $20, 0, 4, 0, 0, 0,	$F, $FF, $FF, $20, $20,	$20, $20, $20, $20, $20, $20
 		dc.b $4A, $55, $45, $20, $20, $20, $20,	$20, $20, $20, $20, $20, $20, $20, $20,	$20
-
 Reserv3F:
-
 		nop
 		nop
 		bra.s	Reserv3F
@@ -168,7 +166,6 @@ loc_280:
 
 loc_292:
 		bra.s	loc_300
-
 word_294:	dc.w $8000
 		dc.w $3FFF
 		dc.w $100
@@ -397,30 +394,21 @@ off_4A0:	dc.l sub_45AE
 dword_4E4:	dc.l 0,	0, 0, 0
 
 sub_4F4:
-		lea	(Reserv3F).w,a0
-		lea	($3FFFF).l,a1
-		move.l	a1,d0
-		moveq	#0,d1
-
-loc_502:
-		add.w	(a0)+,d1
-		cmp.l	a0,d0
-		bcc.s	loc_502
-		lea	(byte_100000).l,a0
-		lea	(unk_13FFFF).l,a1
-		move.l	a1,d0
+    lea	($200).w,a0
+    lea	($13FFFF).l,a1
+    move.l  a1,d0
+    moveq   #0,d1
 
 loc_516:
-		add.w	(a0)+,d1
-		cmp.l	a0,d0
-		bcc.s	loc_516
-		movea.l	#word_18E,a1
-		cmp.w	(a1),d1
-		bne.s	sub_528
-		rts
+    add.w   (a0)+,d1
+    cmp.l   a0,d0
+    bcc.s   loc_516
+    movea.l #word_18E,a1
+    cmp.w   (a1),d1
+    bne.s   sub_528
+    rts
 
 sub_528:
-
 		move.l	d1,-(sp)
 		jsr	sub_200A(pc)
 		move.l	(sp)+,d1
@@ -466,15 +454,10 @@ loc_59A:
 
 loc_5A6:
 		bra.w	loc_5BE
-
 		bra.w	loc_5F6
-
 		bra.w	loc_5FA
-
 		bra.w	loc_63C
-
 		bra.w	loc_790
-
 		bra.w	loc_756
 
 loc_5BE:
@@ -631,7 +614,6 @@ sub_7A8:
 		move.w	d1,(a6)
 
 sub_7B8:
-
 		move.w	d1,(a6)
 		move.w	d1,(a6)
 		move.w	d1,(a6)
@@ -655,7 +637,6 @@ sub_7CE:
 off_7E4:	dc.w sub_8AE-off_7E4
 		dc.w sub_7EA-off_7E4
 		dc.w sub_81E-off_7E4
-
 sub_7EA:
 		jsr	sub_C3C(pc)
 		jsr	sub_B24(pc)
@@ -724,13 +705,11 @@ off_896:	dc.w sub_FAA-off_896
 		dc.w sub_FC2-off_896
 		dc.w sub_FC8-off_896
 off_8A2:	dc.w sub_FF0-off_8A2
-
 		dc.w sub_1006-off_8A2
 		dc.w sub_1016-off_8A2
 		dc.w sub_102C-off_8A2
 		dc.w sub_103C-off_8A2
 		dc.w sub_103E-off_8A2
-
 sub_8AE:
 		move	#$2700,sr
 		moveq	#0,d0
@@ -745,9 +724,9 @@ sub_8AE:
 		move.l	#$50000003,(a5)
 		move.w	d0,(a6)
 		move.l	#$2000000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$7000000,d0
-		trap	#0
+		trap	#0		; Trap0
 		moveq	#0,d0
 		move.w	#$802E,d1
 		move.w	#$8000,d2
@@ -782,7 +761,7 @@ loc_940:
 		moveq	#0,d0
 		lea	word_AA0(pc),a1
 		move.w	(a1,d1.w),d0
-		jsr	sub_F9E(pc)
+		jsr	sub_F9E(pc)	; d0 = ?
 		moveq	#2,d7
 
 loc_958:
@@ -839,8 +818,7 @@ loc_9D4:
 		lea	(word_AD0).l,a1
 
 loc_9FE:
-		jsr	copy_to_vram(pc)
-
+		jsr	copy_to_vram(pc) ; d7 =	count
 		tst.b	(byte_FFEEE7).w
 		beq.s	loc_A28
 		move.l	#$43300003,(a5)
@@ -851,7 +829,7 @@ loc_9FE:
 		lea	(word_B08).l,a1
 
 loc_A24:
-		jsr	copy_to_vram(pc)
+		jsr	copy_to_vram(pc) ; d7 =	count
 
 loc_A28:
 		addq.w	#1,(word_FF8FA4).w
@@ -870,32 +848,28 @@ loc_A3E:
 		rts
 
 word_A60:	dc.w $800D, $800B, $8016, $8016, $803B,	$801D, $8012, $800F
-
 		dc.w $800B, $8013, $801B, $8019, $8016,	$800B, $8018, $800F
 word_A80:	dc.w $803B, $803B, $803B, $803B, $803B,	$803B, $803D, $803B
-
 		dc.w $808C, $807B, $803C, $8078, $806C,	$8065, $805B, $803B
 word_AA0:	dc.w $C60E, $C61A, $C626, $C88E, $C89A,	$C8A6
 word_AAC:	dc.w $8019, $8016, $801E, $8018, $8011,	$800F, $801B, $803B
-
 		dc.w $803B, $8019, $8001, $8019, $800D,	$8001, $801B, $8018
 		dc.w $803B, $803B
 word_AD0:	dc.w $803B, $807D, $80A2, $80A0, $808F,	$983E, $809F, $803B
-
 		dc.w $803B, $808F, $983E, $80A0, $808D,	$983E, $807B, $803C
 		dc.w $809F, $803B
 word_AF4:	dc.w $800C, $801E, $800C, $800C, $8016,	$800F, $803B, $8011
-
 		dc.w $801E, $8017
 word_B08:	dc.w $803B, $808B, $983D, $808D, $983D,	$809A, $8077, $983D
-
 		dc.w $8092, $803B
 
+; d7 = count
+; a1 = source
+; a6 = VDP_DATA
+
 copy_to_vram:
-
 		move.w	(a1)+,(a6)
-		dbf	d7,copy_to_vram
-
+		dbf	d7,copy_to_vram	; d7 = count
 		rts
 
 sub_B24:
@@ -933,7 +907,6 @@ loc_B5A:
 		bls.s	loc_B6E
 		moveq	#0,d0
 		bra.s	loc_B6E
-
 		rts
 
 loc_B6E:
@@ -945,10 +918,9 @@ loc_B7A:
 		rts
 
 sub_B80:
-
 		jsr	sub_CD6(pc)
 		move	#$2700,sr
-		jsr	sub_F9E(pc)
+		jsr	sub_F9E(pc)	; d0 = ?
 		move.l	d0,(a5)
 		move.w	(word_FF8F9C).w,d2
 		cmpi.w	#$A,d2
@@ -988,7 +960,6 @@ loc_BEC:
 		bra.s	sub_C16
 
 sub_BF6:
-
 		move.l	#$80358036,(a6)
 		move.l	#$80368036,(a6)
 		move.l	#$80368036,(a6)
@@ -1013,7 +984,7 @@ loc_C2A:
 sub_C3C:
 		jsr	sub_CD6(pc)
 		move	#$2700,sr
-		jsr	sub_F9E(pc)
+		jsr	sub_F9E(pc)	; d0 = ?
 		move.l	#$803B803B,d1
 		move.l	d0,(a5)
 		cmpi.w	#$A,(word_FF8F9C).w
@@ -1075,7 +1046,6 @@ sub_CD6:
 
 word_CEA:	dc.w $C210, $C220, $C230, $C58C, $C598,	$C5A4
 		dc.w $C80C, $C818, $C824, $C8B0, $C5B0,	$C730
-
 sub_D02:
 		move.w	(word_FF8F9C).w,d0
 		cmpi.w	#9,d0
@@ -1096,12 +1066,12 @@ loc_D20:
 		bmi.s	loc_D4E
 		beq.s	loc_D46
 		move.l	#$22000000,d0
-		trap	#1
+		trap	#1		; Trap1
 		bra.s	loc_D9C
 
 loc_D46:
 		move.l	#$21000000,d0
-		trap	#1
+		trap	#1		; Trap1
 
 loc_D4E:
 		bra.s	loc_D9C
@@ -1152,7 +1122,6 @@ loc_DBE:
 		rts
 
 sub_DD6:
-
 		move	#$2700,sr
 		move.l	#$5D020003,(a5)
 		moveq	#8,d0
@@ -1254,7 +1223,7 @@ sub_EFA:
 		moveq	#0,d0
 		lea	word_F26(pc,d1.w),a1
 		move.w	(a1)+,d0
-		jsr	sub_F9E(pc)
+		jsr	sub_F9E(pc)	; d0 = ?
 		move.l	d0,(a5)
 		move.w	(a1),d2
 		move.w	d2,(a6)
@@ -1272,9 +1241,7 @@ word_F26:	dc.w $DCAA, $839C
 		dc.w $DCAA, $8390
 		dc.w $DCAA, $8394
 		dc.w $DCB6, $8398
-
 sub_F36:
-
 		move.l	#$5D3E0003,(a5)
 		move.w	#$8000,d2
 		move.l	(dword_FFEF34).w,d0
@@ -1288,22 +1255,19 @@ sub_F36:
 		move.w	d0,d7
 		swap	d0
 		ext.l	d0
-		jsr	print_value
-
+		jsr	print_value	; d0 = value
 		move.l	d7,d0
-		jsr	print_value
-
+		jsr	print_value	; d0 = value
 		rts
 
 word_F6A:	dc.w $8030, $8030, $8030, $8030, $8030,	$8030, $8030, $8030
-
 		dc.w $8031, $8031, $8031, $8031, $8031,	$8031, $8031, $8031
 word_F8A:	dc.w $8032, $8032, $8032, $8032, $8032
 		dc.w $8033, $8033, $8033, $8033, $8033
 
+; d0 = ?
 sub_F9E:
-		jmp	sub_94DC
-
+		jmp	sub_94DC	; d0 = ?
 sub_FA4:
 		jmp	sub_966E
 
@@ -1324,12 +1288,10 @@ sub_FBC:
 		jmp	sub_1046(pc)
 
 sub_FC2:
-
 		moveq	#$A,d1
 		jmp	sub_1046(pc)
 
 sub_FC8:
-
 		tst.b	(byte_FFEEF8).w
 		beq.s	loc_FEA
 		move.b	#$92,(byte_FFEE76).w
@@ -1368,10 +1330,8 @@ sub_102C:
 		beq.w	sub_1040
 		st	(byte_FFEED3).w
 		bra.w	sub_1044
-
 sub_103C:
 		bra.s	sub_FC2
-
 sub_103E:
 		bra.s	sub_FC8
 
@@ -1383,7 +1343,6 @@ sub_1044:
 		moveq	#$3A,d1
 
 sub_1046:
-
 		jsr	sub_105A(pc)
 		jmp	sub_1060(pc)
 
@@ -1396,7 +1355,6 @@ locret_1058:
 		rts
 
 sub_105A:
-
 		move.w	d1,(word_FF8FBC).w
 		rts
 
@@ -1533,7 +1491,6 @@ loc_11C4:
 		rts
 
 sub_11CE:
-
 		cmp.w	(word_FF8F72).w,d0
 		bne.s	loc_11DC
 		bclr	#1,$D(a0)
@@ -1623,7 +1580,6 @@ loc_127C:
 		rts
 
 sub_12AA:
-
 		movem.l	a1-a2,-(sp)
 		move.w	#$80,d6
 		lea	(unk_FFA360).w,a2
@@ -1682,11 +1638,13 @@ loc_1336:
 		bra.s	loc_1336
 
 loc_134A:
-		bsr.w	sub_1358
-
+		bsr.w	sub_1358	; d0 = ?
 		dbf	d2,loc_12EA
 		movem.l	(sp)+,a1-a2
 		rts
+; d0 = ?
+; d1 = count
+; a1 = ?
 
 sub_1358:
 		move.w	d0,d5
@@ -1945,10 +1903,8 @@ loc_15B4:
 		rts
 
 stru_15C6:	struc_1	$35, $36, $835
-
 stru_15CC:	struc_1	$37, $3B, $837
 stru_15D2:	struc_1	$1035,	$1036, $1835
-
 Trap0:
 		bsr.s	sub_15DC
 		rte
@@ -2022,10 +1978,10 @@ word_1718:	dc.w $35, $36, $36, $36, $36
 		dc.w $1036, $1036, $1036, $1036, $1036
 		dc.w $1036, $1036, $1036, $1036, $1036
 		dc.w $1036, $1036, $1036, $1036, $1835
-
 Trap1:
-		bsr.s	sub_1802
+		bsr.s	sub_1802	; d0 = indexes
 		rte
+; d0 = indexes
 
 sub_1802:
 		moveq	#3,d2
@@ -2038,7 +1994,7 @@ loc_1804:
 		lea	stru_1826(pc),a0
 		move.l	-8(a0,d1.w),(a5)
 		movea.l	-4(a0,d1.w),a0
-		jsr	(nemesis_decomp_to_vram).l
+		jsr	(nemesis_decomp_to_vram).l ; a0	= source
 
 loc_181E:
 		ror.l	#8,d0
@@ -2136,7 +2092,6 @@ stru_1826:	struc_4	$40200000, byte_1C120
 		struc_4	$70000003, byte_1FBA0
 		struc_4	$54000001, byte_31620
 		struc_4	$6C000001, byte_1FEEA
-
 Trap2:
 		bsr.s	sub_1B02
 		rte
@@ -2151,10 +2106,9 @@ loc_1B04:
 		lsl.w	#3,d1
 		movea.l	stru_1B20-8(pc,d1.w),a0
 		movea.l	stru_1B20-4(pc,d1.w),a4
-		jsr	nemesis_decomp_to_ram(pc)
+		jsr	nemesis_decomp_to_ram(pc) ; a0 = source
 
 loc_1B18:
-
 		ror.l	#8,d0
 
 loc_1B1A:
@@ -2166,7 +2120,6 @@ stru_1B20:	struc_5	byte_106FC4, unk_FF6020
 		struc_5	byte_10F300, unk_FF6020
 		struc_5	byte_11174C, unk_FF6020
 		struc_5	byte_1041EA, unk_FF6020
-
 Trap3:
 		bsr.s	sub_1B4C
 		rte
@@ -2186,7 +2139,7 @@ loc_1B54:
 		movea.l	-(a0),a1
 		move.l	-(a0),d3
 		movea.l	d3,a0
-		jsr	(sub_2374).l
+		jsr	(sub_2374).l	; a0 = source
 
 loc_1B70:
 		ror.l	#8,d1
@@ -2244,7 +2197,6 @@ stru_1B7E:	struc_6 0, 0, 0
 		struc_6	byte_3DCD4, unk_FF5800, $61D0
 		struc_6	byte_3DDF2, unk_FF5000, $4100
 		struc_6	byte_3DFC6, unk_FF5800, $61D0
-
 Trap4:
 		bsr.s	sub_1D6C
 		rte
@@ -2260,12 +2212,10 @@ loc_1D6E:
 		movea.l	stru_1D92-8(pc,d1.w),a0
 		movea.l	stru_1D92-4(pc,d1.w),a1
 		movem.l	d0/d2,-(sp)
-		jsr	kosinski_decompress(pc)
-
+		jsr	kosinski_decompress(pc)	; a0 = source
 		movem.l	(sp)+,d0/d2
 
 loc_1D8A:
-
 		ror.l	#8,d0
 
 loc_1D8C:
@@ -2351,7 +2301,6 @@ stru_1D92:	struc_7	byte_32B4C, M68K_RAM
 		struc_7	byte_19F18, unk_FFA400
 		struc_7	byte_13B000, unk_FFCE00
 		struc_7	byte_13BD40, unk_FFCE00
-
 sub_200A:
 		jsr	sub_13FF0E
 		moveq	#$40,d0
@@ -2366,7 +2315,6 @@ set_initial_vdp_regs:
 
 init_vdp_regs:
 		move.w	#$8000,d0
-
 		moveq	#$12,d7
 
 loc_203C:
@@ -2377,11 +2325,8 @@ loc_203C:
 		rts
 
 initial_vdp_regs:dc.b 4, $14, $30, $34,	7, $6A,	0, 0, 0, 0, 0, 0, $81, $34, 0, 2, 1, 0,	0
-
 		align 2
-
 sub_205E:
-
 		jsr	(sub_20FE).l
 		bsr.s	sub_2084
 		move.l	#$40000003,(a5)
@@ -2458,7 +2403,6 @@ sub_2114:
 		jmp	sub_94E8(pc)
 
 sub_211E:
-
 		lea	(M68K_RAM).l,a1
 		moveq	#0,d1
 		move.w	#$1F9,d7
@@ -2564,13 +2508,16 @@ sub_2218:
 		ror.l	#8,d0
 		lsl.w	#5,d1
 		adda.w	d1,a1
-		jmp	copy_bytes_to_dest_32(pc)
+		jmp	copy_bytes_to_dest_32(pc) ; a1 = source
+; a0 = source
 
 nemesis_decomp_to_vram:
 		movem.l	d0-a1/a3-a5,-(sp)
 		lea	(nemesis_pcd_write_row_to_vdp).l,a3
 		lea	(VDP_DATA).l,a4
 		bra.s	nemesis_decomp_main
+; a0 = source
+; a4 = ram dest
 
 nemesis_decomp_to_ram:
 		movem.l	d0-a1/a3-a5,-(sp)
@@ -2601,7 +2548,6 @@ loc_225A:
 		rts
 
 nemesis_process_compressed_data:
-
 		move.w	d6,d7
 		subq.w	#8,d7
 		move.w	d5,d1
@@ -2626,7 +2572,6 @@ loc_22A6:
 		andi.w	#$F0,d0
 
 loc_22B4:
-
 		lsr.w	#4,d0
 
 loc_22B6:
@@ -2637,7 +2582,6 @@ loc_22B6:
 		jmp	(a3)
 
 loc_22C0:
-
 		moveq	#0,d4
 		moveq	#8,d3
 
@@ -2709,7 +2653,6 @@ loc_232C:
 		move.w	d0,d7
 
 loc_232E:
-
 		move.b	(a0)+,d0
 		cmpi.b	#$80,d0
 		bcc.s	loc_2324
@@ -2742,6 +2685,8 @@ loc_2368:
 		addq.w	#2,d0
 		dbf	d5,loc_2368
 		bra.s	loc_232E
+; a0 = source
+; a1 = dest
 
 sub_2374:
 		movem.l	d0-d7/a1-a5,-(sp)
@@ -2781,7 +2726,6 @@ loc_23AE:
 		jmp	loc_240A(pc,d1.w)
 
 loc_23BE:
-
 		move.w	a2,(a1)+
 		addq.w	#1,a2
 		dbf	d2,loc_23BE
@@ -2830,19 +2774,12 @@ loc_23FE:
 
 loc_240A:
 		bra.s	loc_23BE
-
 		bra.s	loc_23BE
-
 		bra.s	loc_23C8
-
 		bra.s	loc_23C8
-
 		bra.s	loc_23D0
-
 		bra.s	loc_23DC
-
 		bra.s	loc_23EA
-
 		bra.s	loc_23F8
 
 loc_241A:
@@ -2862,7 +2799,6 @@ loc_242C:
 		rts
 
 sub_2432:
-
 		move.w	a3,d3
 		move.b	d4,d1
 		add.b	d1,d1
@@ -2961,9 +2897,7 @@ word_24C2:	dc.w 1
 		dc.w $3FFF
 		dc.w $7FFF
 		dc.w $FFFF
-
 sub_24E2:
-
 		sub.w	d0,d6
 		cmpi.w	#9,d6
 		bcc.s	locret_24F0
@@ -2973,9 +2907,10 @@ sub_24E2:
 
 locret_24F0:
 		rts
+; a0 = source
+; a1 = dest
 
 kosinski_decompress:
-
 		subq.l	#2,sp
 		move.b	(a0)+,1(sp)
 		move.b	(a0)+,(sp)
@@ -2983,7 +2918,6 @@ kosinski_decompress:
 		moveq	#$F,d4
 
 loc_24FE:
-
 		lsr.w	#1,d5
 		move	sr,d6
 		dbf	d4,loc_2510
@@ -3047,7 +2981,6 @@ loc_255C:
 		addq.w	#1,d3
 
 loc_2572:
-
 		move.b	(a1,d2.w),d0
 		move.b	d0,(a1)+
 		dbf	d3,loc_2572
@@ -3127,20 +3060,14 @@ sub_262C:
 		add.w	d0,d0
 		add.w	d0,d0
 		jmp	loc_263A(pc,d0.w)
-
 		nop
 
 loc_263A:
 		bra.w	locret_26A0
-
 		bra.w	loc_2652
-
 		bra.w	loc_2662
-
 		bra.w	loc_266E
-
 		bra.w	loc_267C
-
 		bra.w	loc_268C
 
 loc_2652:
@@ -3255,7 +3182,6 @@ locret_2766:
 		rts
 
 sub_2768:
-
 		move.w	d0,d2
 		move.w	d1,d3
 		lsl.w	#4,d3
@@ -3505,15 +3431,15 @@ sub_29B6:
 
 sub_29C4:
 		lea	(word_322E).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_29CE:
 		lea	(word_323A).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_29D8:
 		lea	(word_3250).l,a1
-		jsr	sub_31F8(pc)
+		jsr	sub_31F8(pc)	; a1 = ?
 		lea	(unk_FF8B00).w,a1
 		moveq	#0,d2
 		move.w	#$97,d7
@@ -3534,16 +3460,16 @@ sub_2A00:
 		jsr	sub_2EF8(pc)
 		bsr.s	sub_2A26
 		lea	(word_325C).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2A10:
 		bsr.s	sub_2A26
 		lea	(word_3268).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2A1C:
 		lea	(word_3280).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2A26:
 		lea	(unk_FF8B00).w,a1
@@ -3586,7 +3512,7 @@ sub_2A6C:
 		tst.b	(byte_FFEEEC).w
 		beq.s	locret_2A7E
 		lea	(word_3274).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 locret_2A7E:
 		rts
@@ -3634,26 +3560,25 @@ loc_2AEC:
 
 loc_2B00:
 		lea	(word_328C).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 word_2B0A:	dc.w $864, $EA2, $A66, $E84, $C66, $E66, $E66, $C66, $E84, $A66
 		dc.w $EA2, $864, $E84, $A66, $E66, $C66, $C66, $E66, $A66, $E84
-
 sub_2B32:
 		lea	(word_3298).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2B3C:
 		lea	(word_32AE).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2B46:
 		lea	(word_32BA).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2B50:
 		lea	(word_32D0).l,a1
-		jsr	sub_31F8(pc)
+		jsr	sub_31F8(pc)	; a1 = ?
 		move.w	(dword_FF8524).w,d5
 		sub.w	(dword_FF8564).w,d5
 		tst.b	2(a2)
@@ -3701,13 +3626,13 @@ loc_2BBC:
 
 sub_2BCC:
 		lea	(word_32DC).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2BD6:
 		tst.b	(byte_FFEEF3).w
 		beq.s	locret_2BE6
 		lea	(word_32F2).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 locret_2BE6:
 		rts
@@ -3724,30 +3649,30 @@ sub_2BE8:
 		asr.w	#1,d3
 		movem.w	d3-d4,(dword_FF8F86).w
 		lea	(word_32FE).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2C0E:
 		lea	(word_330A).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2C18:
 		tst.b	(byte_FFEEE1).w
 		beq.s	locret_2C28
 		lea	(word_3320).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 locret_2C28:
 		rts
 
 sub_2C2A:
 		lea	(word_332C).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2C34:
 		tst.b	(byte_FFEEED).w
 		beq.s	locret_2C44
 		lea	(word_3338).l,a1
-		jsr	sub_31F8(pc)
+		jsr	sub_31F8(pc)	; a1 = ?
 
 locret_2C44:
 		rts
@@ -3755,7 +3680,7 @@ locret_2C44:
 sub_2C46:
 		jsr	sub_2C54(pc)
 		lea	(word_3344).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2C54:
 		tst.b	(byte_FF89A8).w
@@ -3780,7 +3705,6 @@ locret_2C8E:
 word_2C90:	dc.w $C68, $A46, $824, $E68, $C46, $A24, $C88, $A66, $844, $E88
 		dc.w $C66, $A44, $E8A, $C68, $A46, $EAA, $E68, $A46, $E8A, $C68
 		dc.w $A46, $E88, $C66, $A44, $C88, $A66, $844, $E68, $C46, $A24
-
 sub_2CCC:
 		jsr	sub_2C54(pc)
 		cmpi.b	#2,(byte_FFEE48).w
@@ -3795,7 +3719,7 @@ sub_2CCC:
 
 loc_2CEE:
 		lea	(word_3350).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2CF8:
 		lea	(unk_FF8B00).w,a1
@@ -3863,7 +3787,7 @@ loc_2D74:
 
 loc_2D9E:
 		lea	(word_3366).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2DA8:
 		neg.w	d2
@@ -3874,7 +3798,6 @@ loc_2DAA:
 		rts
 
 word_2DB2:	dc.w $EEE, $AA6, $AA6, $EEE
-
 sub_2DBA:
 		jsr	sub_2C54(pc)
 		lea	off_2DDC(pc),a1
@@ -3885,13 +3808,12 @@ sub_2DBA:
 		movea.l	d0,a1
 		jsr	(a1)
 		lea	(word_337C).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 off_2DDC:	dc.w sub_2DE4
 		dc.w sub_2E20
 		dc.w sub_2E48
 		dc.w locret_2E64
-
 sub_2DE4:
 		tst.b	(byte_FFEEE5).w
 		beq.s	locret_2E1E
@@ -3940,7 +3862,6 @@ sub_2E48:
 		addq.w	#1,0.w(a2)
 
 locret_2E64:
-
 		rts
 
 sub_2E66:
@@ -3957,47 +3878,47 @@ sub_2E66:
 
 loc_2E86:
 		lea	(word_3388).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2E90:
 		lea	(word_33B6).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2E9A:
 		lea	(word_33D6).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2EA4:
 		lea	(word_33F6).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2EAE:
 		lea	(word_340C).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2EB8:
 		lea	(word_3422).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2EC2:
 		lea	(word_3442).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2ECC:
 		tst.b	(byte_FFEEEE).w
 		bne.s	loc_2EDC
 		lea	(word_3394).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 loc_2EDC:
 		lea	(word_33AA).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2EE6:
 		tst.b	(byte_FFEEEE).w
 		beq.s	locret_2EF6
 		lea	(word_3462).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 locret_2EF6:
 		rts
@@ -4016,7 +3937,7 @@ loc_2F18:
 		tst.b	(byte_FFEEF5).w
 		beq.s	locret_2F28
 		lea	(word_346E).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 locret_2F28:
 		rts
@@ -4024,16 +3945,16 @@ locret_2F28:
 sub_2F2A:
 		jsr	sub_2F50(pc)
 		lea	(word_347A).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2F38:
 		jsr	sub_2F50(pc)
 		lea	(word_3490).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2F46:
 		lea	(word_34A6).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_2F50:
 		subq.w	#1,(a2)
@@ -4063,7 +3984,7 @@ sub_2F7E:
 
 loc_2F98:
 		lea	(word_34BC).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 off_2FA2:	dc.w sub_2FB2
 		dc.w sub_2FC0
@@ -4073,7 +3994,6 @@ off_2FA2:	dc.w sub_2FB2
 		dc.w sub_30A0
 		dc.w sub_309A
 		dc.w locret_309E
-
 sub_2FB2:
 		cmpi.w	#$C0,(dword_FFA2D0).w
 		bcs.s	locret_2FBE
@@ -4091,14 +4011,13 @@ sub_2FC0:
 		move.w	2(a2),d1
 		asl.w	#8,d1
 		add.w	d1,d0
-		jsr	sub_94DC(pc)
+		jsr	sub_94DC(pc)	; d0 = ?
 		lea	byte_3012(pc),a1
 		moveq	#1,d1
 		moveq	#0,d2
 		move.l	a2,-(sp)
 		movea.l	a3,a2
-		jsr	loc_424A(pc)
-
+		jsr	loc_424A(pc)	; d0 = ?
 		movea.l	(sp)+,a2
 		addq.w	#1,2(a2)
 		cmpi.w	#$C,2(a2)
@@ -4111,7 +4030,6 @@ locret_3010:
 		rts
 
 byte_3012:	dc.b 3,	4
-
 sub_3014:
 		move.l	#$10203,d0
 		cmp.l	$A(a2),d0
@@ -4163,7 +4081,6 @@ locret_309E:
 		rts
 
 sub_30A0:
-
 		moveq	#2,d4
 		bchg	d4,(dword_FF8F86+3).w
 		subq.b	#1,$E(a2)
@@ -4178,7 +4095,7 @@ sub_30B8:
 		move.w	#$1C0,d1
 		jsr	sub_30CA(pc)
 		lea	(word_34D2).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_30CA:
 		move.w	(dword_FFA2D4).w,d0
@@ -4194,7 +4111,7 @@ locret_30E2:
 
 sub_30E4:
 		lea	(word_34DE).l,a1
-		jsr	sub_31F8(pc)
+		jsr	sub_31F8(pc)	; a1 = ?
 		move.w	(dword_FFA2D0).w,d1
 		cmpi.w	#$EA0,d1
 		bcc.s	loc_3106
@@ -4222,12 +4139,12 @@ loc_3138:
 		move.w	#$2D0,d1
 		jsr	sub_30CA(pc)
 		lea	(word_34EA).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_314A:
 		addq.w	#1,(word_FFA342).w
 		lea	(word_34F6).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_3158:
 		subq.w	#1,(a2)
@@ -4242,7 +4159,7 @@ sub_3158:
 
 loc_317A:
 		lea	(word_3502).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_3184:
 		tst.b	(byte_FFEEFA).w
@@ -4258,7 +4175,7 @@ locret_319C:
 
 sub_319E:
 		lea	(word_350E).l,a1
-		jsr	sub_31F8(pc)
+		jsr	sub_31F8(pc)	; a1 = ?
 		move.w	(dword_FFA2D0).w,d1
 		cmpi.w	#$C30,d1
 		bcc.s	loc_31C6
@@ -4280,14 +4197,15 @@ loc_31D4:
 
 sub_31E2:
 		lea	(word_351A).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 sub_31EC:
 		lea	(word_3526).l,a1
-		jmp	sub_31F8(pc)
+		jmp	sub_31F8(pc)	; a1 = ?
 
 nullsub_2:
 		rts
+; a1 = ?
 
 sub_31F8:
 		tst.b	(byte_FFEE5E).w
@@ -4433,19 +4351,18 @@ word_351A:	dc.w 0
 		struc_8	$540, $FFFF, 0, $80, 2
 word_3526:	dc.w 0
 		struc_8	$3D0, $FFFF, 0, $FFFF,	3
-
 sub_3532:
 		move.l	#$7000000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$2000000,d0
-		trap	#0
+		trap	#0		; Trap0
 		move.l	#$5D2E0003,(a5)
 		move.w	#$802E,(a6)
 		move.b	#1,(byte_FFEE5B).w
 		jsr	sub_F36(pc)
 		jsr	sub_407C(pc)
 		move.l	#$4C000000,d0
-		trap	#4
+		trap	#4		; Trap4
 		jsr	sub_3F48(pc)
 		lea	(unk_FFA402).w,a0
 		adda.w	(a0),a0
@@ -4480,8 +4397,8 @@ loc_35AC:
 		move.l	#unk_FF5800,$18(a1)
 		bsr.s	sub_3602
 		lea	(off_362A).l,a0
-		jsr	sub_403A(pc)
-
+		jsr	sub_403A(pc)	; a0 = ?
+					;
 		jsr	(a0)
 		jsr	sub_5086(pc)
 		jsr	sub_3FE6(pc)
@@ -4520,32 +4437,30 @@ off_362A:	dc.l off_3652
 		dc.l off_3D9C
 		dc.l off_3E9C
 off_3652:	dc.w sub_3658
-
 		dc.w sub_3680
 		dc.w sub_36A8
-
 sub_3658:
 		move.w	#sub_29C4,(word_FFEF48).w
 		move.l	#$6050000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$5041E00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$6053A36,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$2010000,d0
-		trap	#4
+		trap	#4		; Trap4
 		rts
 
 sub_3680:
 		move.w	#sub_29CE,(word_FFEF48).w
 		move.l	#$6080000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$5062300,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$8070036,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$4030000,d0
-		trap	#4
+		trap	#4		; Trap4
 		rts
 
 sub_36A8:
@@ -4553,13 +4468,13 @@ sub_36A8:
 		seq	(byte_FFEEF7).w
 		move.w	#sub_29D8,(word_FFEF48).w
 		move.l	#$6080000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$1D1C1E00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$8074137,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$25240000,d0
-		trap	#4
+		trap	#4		; Trap4
 		moveq	#3,d0
 		jsr	sub_4462(pc)
 		jsr	sub_3FB8(pc)
@@ -4569,7 +4484,7 @@ sub_36A8:
 		move.w	#$AF,(a1)+
 		move.w	#$8B00,(a1)
 		moveq	#5,d0
-		trap	#2
+		trap	#2		; Trap2
 		move.l	#$4600,(dword_FFEF28).w
 		move.l	#unk_FF6020,(dword_FF6000).l
 		moveq	#0,d7
@@ -4581,42 +4496,41 @@ off_3716:	dc.w sub_371E
 		dc.w sub_374A
 		dc.w sub_3772
 		dc.w sub_37B6
-
 sub_371E:
 		move.w	#sub_2A00,(word_FFEF48).w
 		move.l	#$A090000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$8071F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$A090000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$6050000,d0
-		trap	#4
+		trap	#4		; Trap4
 		st	(byte_FFEE74).w
 		bra.s	loc_379C
 
 sub_374A:
 		move.w	#sub_2A10,(word_FFEF48).w
 		move.l	#$A0F0000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$F0D2D00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$A100000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$60B0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		bra.s	loc_379C
 
 sub_3772:
 		move.w	#sub_2A6C,(word_FFEF48).w
 		move.l	#$A090000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$80E1F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$A095539,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$60C0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		st	(byte_FFEE74).w
 
 loc_379C:
@@ -4631,15 +4545,15 @@ loc_379C:
 sub_37B6:
 		move.w	#sub_2A1C,(word_FFEF48).w
 		move.l	#$E0D0000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$C0B2000,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$F0E3650,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$A090000,d0
-		trap	#4
+		trap	#4		; Trap4
 		moveq	#1,d0
-		trap	#2
+		trap	#2		; Trap2
 		move.l	#$4360,(dword_FFEF28).w
 		move.l	#unk_FF6020,(dword_FF6000).l
 		moveq	#0,d7
@@ -4654,41 +4568,40 @@ off_37FC:	dc.w sub_380A
 		dc.w sub_38E6
 		dc.w sub_390E
 		dc.w sub_3936
-
 sub_380A:
 		move.w	#sub_2A80,(word_FFEF48).w
 		move.l	#$C0B0000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$A092300,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$C0B0000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$8070000,d0
-		trap	#4
+		trap	#4		; Trap4
 		rts
 
 sub_3832:
 		move.w	#sub_2B32,(word_FFEF48).w
 		move.l	#$13120000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$11102100,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$1E1D0051,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$E0D0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		rts
 
 sub_385A:
 		move.w	#sub_2B3C,(word_FFEF48).w
 		move.l	#$14120000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$13122200,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$1D5B0000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$100F0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		lea	(unk_FF5000).l,a1
 		move.w	#$3FF,d7
 
@@ -4697,7 +4610,7 @@ loc_388A:
 		adda.w	#2,a1
 		dbf	d7,loc_388A
 		moveq	#2,d0
-		trap	#2
+		trap	#2		; Trap2
 		move.l	#$3120,(dword_FFEF28).w
 		move.l	#unk_FF6020,(dword_FF6000).l
 		moveq	#0,d7
@@ -4710,49 +4623,49 @@ loc_388A:
 sub_38BE:
 		move.w	#sub_2B46,(word_FFEF48).w
 		move.l	#$13120000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$1B1A2100,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$1E1D4151,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$E110000,d0
-		trap	#4
+		trap	#4		; Trap4
 		rts
 
 sub_38E6:
 		move.w	#sub_2B50,(word_FFEF48).w
 		move.l	#$15120000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$1B1A2100,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$1D000051,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$13120000,d0
-		trap	#4
+		trap	#4		; Trap4
 		rts
 
 sub_390E:
 		move.w	#sub_2BCC,(word_FFEF48).w
 		move.l	#$14120000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$1B1A2100,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$1D005141,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$10140000,d0
-		trap	#4
+		trap	#4		; Trap4
 		rts
 
 sub_3936:
 		move.w	#sub_2BD6,(word_FFEF48).w
 		move.l	#$13120000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$11122C00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$1E1D0041,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$E230000,d0
-		trap	#4
+		trap	#4		; Trap4
 		st	(byte_FFEE6C).w
 		tst.b	(byte_FFEEF3).w
 		bne.s	locret_396C
@@ -4766,70 +4679,69 @@ off_396E:	dc.w sub_3978
 		dc.w sub_39D0
 		dc.w sub_39FC
 		dc.w sub_3A2C
-
 sub_3978:
 		move.w	#sub_2BE8,(word_FFEF48).w
 		move.l	#$1A190000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$29281F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$1C1B0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		move.l	#$2827003C,d0
-		trap	#1
+		trap	#1		; Trap1
 		st	(word_FFEE56+1).w
 		rts
 
 sub_39A4:
 		move.w	#sub_2C0E,(word_FFEF48).w
 		move.l	#$1A190000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$29282300,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$1E1D0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		move.l	#$28273D37,d0
-		trap	#1
+		trap	#1		; Trap1
 		st	(byte_FFEE78).w
 		rts
 
 sub_39D0:
 		move.w	#sub_2C18,(word_FFEF48).w
 		move.l	#$1A190000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$29281F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$1C320000,d0
-		trap	#4
+		trap	#4		; Trap4
 		move.l	#$2827004D,d0
-		trap	#1
+		trap	#1		; Trap1
 		st	(word_FFEE56+1).w
 		rts
 
 sub_39FC:
 		move.w	#sub_2C2A,(word_FFEF48).w
 		move.l	#$1C1B0000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$2B2A2100,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$201F0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		move.l	#$413C3600,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$2A290000,d0
-		trap	#1
+		trap	#1		; Trap1
 		rts
 
 sub_3A2C:
 		move.w	#sub_2C34,(word_FFEF48).w
 		move.l	#$1C1B0000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$2B2A3100,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$20210000,d0
-		trap	#4
+		trap	#4		; Trap4
 		move.l	#$2A290041,d0
-		trap	#1
+		trap	#1		; Trap1
 		st	(byte_FFEE80).w
 		tst.b	(byte_FFEEED).w
 		bne.s	locret_3A62
@@ -4842,43 +4754,42 @@ off_3A64:	dc.w sub_3A6C
 		dc.w sub_3A98
 		dc.w sub_3AC4
 		dc.w sub_3B08
-
 sub_3A6C:
 		move.w	#sub_2C46,(word_FFEF48).w
 		move.l	#$25240052,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$17160000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$16150000,d0
-		trap	#4
+		trap	#4		; Trap4
 		move.l	#$25241F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		st	(byte_FFEE65).w
 		rts
 
 sub_3A98:
 		move.w	#sub_2CCC,(word_FFEF48).w
 		move.l	#$25240000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$17160000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$16170000,d0
-		trap	#4
+		trap	#4		; Trap4
 		move.l	#$255C1F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		st	(byte_FFEE65).w
 		rts
 
 sub_3AC4:
 		move.w	#sub_2CF8,(word_FFEF48).w
 		move.l	#$26240000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$18160000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$19180000,d0
-		trap	#4
+		trap	#4		; Trap4
 		move.l	#$27265D00,d0
-		trap	#5
+		trap	#5		; Trap5
 		st	(byte_FFEE65).w
 		jsr	sub_3FB8(pc)
 		lea	(unk_FF8D00).w,a1
@@ -4891,15 +4802,15 @@ sub_3AC4:
 sub_3B08:
 		move.w	#sub_2DBA,(word_FFEF48).w
 		move.l	#$3B353400,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$25240057,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$17160000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$161A0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		move.l	#$25241F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		st	(byte_FFEE65).w
 		sf	(byte_FFEE6A).w
 		sf	(byte_FFEEF9).w
@@ -4917,44 +4828,43 @@ off_3B50:	dc.w sub_3B62
 		dc.w sub_3BF4
 		dc.w sub_3BFC
 		dc.w sub_3C2A
-
 sub_3B62:
 		move.w	#sub_2E66,(word_FFEF48).w
 		move.l	#$1E090000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$35345800,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$2C090000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$2F2E0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		st	(byte_FFEE74).w
 		rts
 
 sub_3B8E:
 		move.w	#sub_2ECC,(word_FFEF48).w
 		move.l	#$3D310000,d0
-		trap	#4
+		trap	#4		; Trap4
 		bra.s	loc_3BBC
 
 sub_3B9E:
 		move.w	#sub_2E90,(word_FFEF48).w
 		move.l	#$3D390000,d0
-		trap	#4
+		trap	#4		; Trap4
 		bra.s	loc_3BBC
 
 sub_3BAE:
 		move.w	#sub_2E9A,(word_FFEF48).w
 		move.l	#$3D3A0000,d0
-		trap	#4
+		trap	#4		; Trap4
 
 loc_3BBC:
 		move.l	#$1E260000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$42402F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$2C3E0000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.w	#8,(word_FF8F74).w
 		rts
 
@@ -4967,7 +4877,7 @@ sub_3BE4:
 
 loc_3BEA:
 		move.l	#$3D3B0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		bra.s	loc_3BBC
 
 sub_3BF4:
@@ -4979,26 +4889,26 @@ sub_3BFC:
 
 loc_3C02:
 		move.l	#$1E260000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$42412F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$2C3E0000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$3D3C0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		move.w	#8,(word_FF8F74).w
 		rts
 
 sub_3C2A:
 		move.w	#sub_2EE6,(word_FFEF48).w
 		move.l	#$1E260000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$56553000,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$2C3E0041,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$3D300000,d0
-		trap	#4
+		trap	#4		; Trap4
 		st	(byte_FFEE6C).w
 		rts
 
@@ -5008,58 +4918,57 @@ off_3C56:	dc.w sub_3C62
 		dc.w sub_3CDE
 		dc.w sub_3D24
 		dc.w sub_3D64
-
 sub_3C62:
 		move.w	#sub_2EF8,(word_FFEF48).w
 		move.l	#$1D090000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$33325800,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$2B090056,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$27260000,d0
-		trap	#4
+		trap	#4		; Trap4
 		st	(byte_FFEE74).w
 		rts
 
 sub_3C8E:
 		move.w	#sub_2F2A,(word_FFEF48).w
 		move.l	#$201F0000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$37361F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$2E2D0036,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$29280000,d0
-		trap	#4
+		trap	#4		; Trap4
 		bra.s	loc_3D04
 
 sub_3CB6:
 		move.w	#sub_2F38,(word_FFEF48).w
 		move.l	#$201F0000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$37362D00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$2E2D0000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$2B2A0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		bra.s	loc_3D04
 
 sub_3CDE:
 		move.w	#sub_2F46,(word_FFEF48).w
 		move.l	#$201F0000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$37361F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$2E2D0000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$2D2C0000,d0
-		trap	#4
+		trap	#4		; Trap4
 
 loc_3D04:
 		moveq	#3,d0
-		trap	#2
+		trap	#2		; Trap2
 		move.l	#$2500,(dword_FFEF28).w
 		move.l	#unk_FF6020,(dword_FF6000).l
 		moveq	#0,d7
@@ -5070,15 +4979,15 @@ loc_3D04:
 sub_3D24:
 		move.w	#sub_2F7E,(word_FFEF48).w
 		move.l	#$25240000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$37361F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$2E2D3836,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$48000000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$37360000,d0
-		trap	#4
+		trap	#4		; Trap4
 		move.w	#6,(word_FF89E2).w
 		move.b	#1,(byte_FF8A2F).w
 		sf	(byte_FFEE70).w
@@ -5087,13 +4996,13 @@ sub_3D24:
 sub_3D64:
 		move.w	#sub_30B8,(word_FFEF48).w
 		move.l	#$20210000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$37381F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$2E330011,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$2D350000,d0
-		trap	#4
+		trap	#4		; Trap4
 		st	(byte_FFEE5E).w
 		move.w	#0,(word_FF8D20).w
 		move.b	#0,(byte_FFEE75).w
@@ -5104,19 +5013,18 @@ off_3D9C:	dc.w sub_3DA6
 		dc.w sub_3E1A
 		dc.w sub_3E48
 		dc.w sub_3E70
-
 sub_3DA6:
 		move.w	#sub_30E4,(word_FFEF48).w
 		move.l	#$5B5A2E00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$2F2E0000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$4A490037,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$45460000,d0
-		trap	#4
+		trap	#4		; Trap4
 		moveq	#4,d0
-		trap	#2
+		trap	#2		; Trap2
 		move.l	#$3200,(dword_FFEF28).w
 		move.l	#unk_FF6020,(dword_FF6000).l
 		moveq	#0,d7
@@ -5127,51 +5035,51 @@ sub_3DA6:
 sub_3DEC:
 		move.w	#sub_3114,(word_FFEF48).w
 		move.l	#$2C2B0000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$49471E00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$47460011,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$42410000,d0
-		trap	#4
+		trap	#4		; Trap4
 		move.b	#0,(byte_FFEE75).w
 		rts
 
 sub_3E1A:
 		move.w	#sub_314A,(word_FFEF48).w
 		move.l	#$28270000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$44432000,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$403F0000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$3E430000,d0
-		trap	#4
+		trap	#4		; Trap4
 		move.w	#$F0,(word_FFA342).w
 		rts
 
 sub_3E48:
 		move.w	#sub_3158,(word_FFEF48).w
 		move.l	#$28270000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$44435700,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$403F0000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$3E470000,d0
-		trap	#4
+		trap	#4		; Trap4
 		rts
 
 sub_3E70:
 		move.w	#sub_3184,(word_FFEF48).w
 		move.l	#$28270000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$44435F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$403F0000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$3E330000,d0
-		trap	#4
+		trap	#4		; Trap4
 		st	(byte_FFEE6C).w
 		rts
 
@@ -5179,54 +5087,53 @@ off_3E9C:	dc.w sub_3EA4
 		dc.w sub_3ECC
 		dc.w sub_3EF8
 		dc.w sub_3F20
-
 sub_3EA4:
 		move.w	#sub_319E,(word_FFEF48).w
 		move.l	#$2F2E0000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$4B4A1F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$4A490000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$45440000,d0
-		trap	#4
+		trap	#4		; Trap4
 		rts
 
 sub_3ECC:
 		move.w	#sub_31E2,(word_FFEF48).w
 		move.l	#$2A290000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$46451F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$43420037,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$49480000,d0
-		trap	#4
+		trap	#4		; Trap4
 		st	(byte_FFEE78).w
 		rts
 
 sub_3EF8:
 		move.w	#sub_31EC,(word_FFEF48).w
 		move.l	#$31300000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$4D4C1F00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$4C4B0000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$4B4A0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		rts
 
 sub_3F20:
 		move.w	#nullsub_2,(word_FFEF48).w
 		move.l	#$2A290000,d1
-		trap	#3
+		trap	#3		; Trap3
 		move.l	#$46455E00,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$43420000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$403F0000,d0
-		trap	#4
+		trap	#4		; Trap4
 		rts
 
 sub_3F48:
@@ -5264,7 +5171,6 @@ locret_3FB6:
 		rts
 
 sub_3FB8:
-
 		bset	#0,(byte_FFEE01).w
 		move.w	#$8B03,(a5)
 		lea	(word_FFF700).w,a1
@@ -5279,7 +5185,6 @@ sub_3FB8:
 		rts
 
 sub_3FE6:
-
 		move	#$2700,sr
 		lea	(word_FF8500).w,a1
 		lea	(unk_FF8600).w,a3
@@ -5307,6 +5212,9 @@ loc_4012:
 		dbf	d7,loc_4012
 		move.l	(sp)+,$20(a1)
 		rts
+; a0 = ?
+;
+; a0 =	jump addr
 
 sub_403A:
 		moveq	#0,d1
@@ -5452,10 +5360,8 @@ loc_418A:
 		rts
 
 sub_4190:
-
 		btst	#0,d6
-		bne.w	loc_424A
-
+		bne.w	loc_424A	; d0 = ?
 		movea.l	$C(a0),a1
 		move.w	$10(a0),d0
 		add.w	d0,d0
@@ -5519,9 +5425,7 @@ locret_4248:
 		rts
 
 loc_424A:
-
-		movem.l	d3-d7/a3-a4,-(sp)
-
+		movem.l	d3-d7/a3-a4,-(sp) ; d0 = ?
 		move.l	#$800000,d4
 
 loc_4254:
@@ -5591,7 +5495,6 @@ loc_42CC:
 
 off_42DA:	dc.w nullsub_3-off_42DA
 		dc.w nullsub_4-off_42DA
-
 nullsub_3:
 		rts
 
@@ -5649,7 +5552,6 @@ loc_4362:
 		rts
 
 sub_436E:
-
 		moveq	#0,d0
 		move.l	d0,0.w(a0)
 		move.l	d0,4(a0)
@@ -5662,7 +5564,6 @@ sub_436E:
 		rts
 
 sub_4392:
-
 		movem.l	d0-a4,-(sp)
 		lea	(unk_FF8998).w,a4
 		move.w	#$10,d4
@@ -5740,7 +5641,6 @@ loc_442A:
 		rts
 
 sub_4436:
-
 		move.b	#1,(byte_FFEE02).w
 		move.b	#0,(a4,d4.w)
 		moveq	#0,d0
@@ -5755,7 +5655,6 @@ sub_4436:
 		rts
 
 sub_4462:
-
 		movem.l	d0-d2/a0-a2,-(sp)
 		lea	(stru_44E0).l,a0
 		lsl.w	#3,d0
@@ -5825,11 +5724,9 @@ stru_44E0:	struc_9	2, 0, $40, $FF, unk_FFF600
 word_4518:	dc.w $FFFF
 		dc.w 0
 word_451C:	dc.w $46C, $AEE, 0, $AEE, $AEE,	$8EA, $8E8, $8C4
-
 		dc.w $6A4, $486, $266, $AEC, $8CA, $6C6, $688, $468, $66, $44
 		dc.w $A44, $AEE, $AEE, $AEE, $AEE, $AAE, $8CC, $8AC, $68A, $468
 		dc.w $8CA, $AEC, $88E, $66C, $468, $AEE
-
 sub_4560:
 		bsr.s	sub_459A
 		moveq	#0,d1
@@ -5839,7 +5736,6 @@ sub_4560:
 		bra.s	loc_4584
 
 sub_4572:
-
 		bsr.s	sub_459A
 		lea	(unk_FFF600).w,a1
 		moveq	#$3F,d7
@@ -5863,8 +5759,7 @@ sub_459A:
 		sf	(byte_FFEE02).w
 		lea	(dword_FFF580).w,a1
 		lea	(unk_FFF600).w,a2
-		jsr	copy_bytes_to_dest_128
-
+		jsr	copy_bytes_to_dest_128 ; a1 = source
 		rts
 
 sub_45AE:
@@ -5889,8 +5784,7 @@ loc_45CE:
 
 loc_45F2:
 		lea	(unk_FFF584).w,a2
-		jsr	copy_bytes_to_dest_20(pc)
-
+		jsr	copy_bytes_to_dest_20(pc) ; a1 = source
 		tst.w	(word_FF8F78).w
 		bne.s	locret_460A
 		jsr	sub_4572(pc)
@@ -5909,11 +5803,11 @@ loc_460C:
 		jsr	sub_13FED8
 		move.w	#0,(word_FFFF1A).w
 		moveq	#$D,d0
-		trap	#1
+		trap	#1		; Trap1
 		moveq	#$11,d1
-		trap	#3
+		trap	#3		; Trap3
 		moveq	#1,d0
-		trap	#0
+		trap	#0		; Trap0
 		move.w	#$28,(word_FF8F78).w
 		clr.w	(word_FF8F76).w
 		move.l	#$ECC,(dword_FFF580).w
@@ -5944,7 +5838,6 @@ loc_4698:
 		rts
 
 sub_46A0:
-
 		move.w	(word_FFFF08).w,(a5)
 		move.w	#1,(word_FFFF1A).w
 		jsr	sub_20AC(pc)
@@ -5968,9 +5861,9 @@ sub_46A0:
 		move.w	#$9700,(a3)+
 		move.l	#$70000083,(a3)
 		move.l	#$4030201,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$201F0000,d0
-		trap	#1
+		trap	#1		; Trap1
 		moveq	#$22,d0
 		move.w	(word_FF8F66).w,d1
 		subq.w	#2,d1
@@ -5978,7 +5871,7 @@ sub_46A0:
 		moveq	#$21,d0
 
 loc_471A:
-		trap	#1
+		trap	#1		; Trap1
 		move.w	(word_FF8F34).w,d0
 		lea	(unk_FFEEBF).w,a1
 		tst.b	(a1,d0.w)
@@ -6009,11 +5902,11 @@ loc_476A:
 		jsr	sub_2592(pc)
 		jsr	sub_969E(pc)
 		move.l	#$4E000000,d0
-		trap	#4
+		trap	#4		; Trap4
 		tst.b	(byte_FFFF1C).w
 		bne.s	loc_47A0
 		move.l	#$4F000000,d0
-		trap	#4
+		trap	#4		; Trap4
 
 loc_47A0:
 		move.w	(word_FFFF0A).w,(a5)
@@ -6023,7 +5916,6 @@ loc_47A0:
 
 byte_47B0:	dc.b $FF, 0, 2,	0, 2, 0, 0, 0, $FF, $FF
 word_47BA:	dc.w $FFFF, 5, 6, 7, 7,	7, $A, $A, $FFFF, $FFFF
-
 sub_47CE:
 		jsr	(sub_1060).l
 		jsr	sub_13FED8
@@ -6063,7 +5955,6 @@ loc_4826:
 loc_4838:
 		sf	(byte_FFEE5F).w
 		bra.s	loc_4842
-
 		jsr	sub_968A(pc)
 
 loc_4842:
@@ -6120,8 +6011,7 @@ sub_48B8:
 sub_48C4:
 		lea	(byte_FFEEE0).w,a1
 		lea	(unk_FFFCA0).w,a2
-		jsr	copy_bytes_to_dest_32(pc)
-
+		jsr	copy_bytes_to_dest_32(pc) ; a1 = source
 		rts
 
 sub_48D2:
@@ -6168,7 +6058,6 @@ loc_4948:
 		rts
 
 sub_4950:
-
 		tst.b	(word_FF89E0).w
 		bne.s	loc_495E
 		move.l	#$45940003,(a5)
@@ -6198,11 +6087,11 @@ sub_4992:
 		sf	(byte_FFEE01).w
 		jsr	sub_20AC(pc)
 		move.l	#$1000000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$1000000,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$16000000,d0
-		trap	#0
+		trap	#0		; Trap0
 		move.w	(word_FFFF0A).w,(a5)
 		move.b	#$97,(byte_FFEE53).w
 		jsr	sub_13FED8
@@ -6211,7 +6100,7 @@ sub_4992:
 
 sub_49CE:
 		move.l	#$38000000,d0
-		trap	#4
+		trap	#4		; Trap4
 		subq.w	#1,(word_FFFF20).w
 		bpl.s	loc_49E2
 		move.w	#4,(word_FFFF20).w
@@ -6237,14 +6126,13 @@ loc_49E2:
 		jsr	sub_46A0(pc)
 		move.w	#7,(word_FFFF18).w
 		move.l	#$38000000,d0
-		trap	#4
+		trap	#4		; Trap4
 		rts
 
 byte_4A4C:	dc.b 1,	1, 1, 0, 0, 0
 word_4A52:	dc.w 7,	4, 3, 2, 1
 word_4A5C:	dc.w 3,	1, 3, 1, 0
 word_4A66:	dc.w 0,	0, 2, 0, 0
-
 sub_4A70:
 		jsr	sub_968A(pc)
 		clr.w	(word_FFFF18).w
@@ -6294,7 +6182,7 @@ loc_4AF0:
 
 sub_4AF4:
 		lea	off_4AFC(pc),a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_4AFC:	dc.w sub_4B10-off_4AFC
 		dc.w sub_4BDE-off_4AFC
@@ -6306,7 +6194,6 @@ off_4AFC:	dc.w sub_4B10-off_4AFC
 		dc.w sub_4CB2-off_4AFC
 		dc.w sub_4DFE-off_4AFC
 		dc.w sub_4E1E-off_4AFC
-
 sub_4B10:
 		move.l	#off_2BDF0,$20(a0)
 		move.w	#$7A8,$A(a0)
@@ -6366,13 +6253,13 @@ loc_4B98:
 		dbf	d7,loc_4B98
 		move.b	#1,$31(a0)
 		move.l	#$F0E0D,d0
-		trap	#0
+		trap	#0		; Trap0
 		move.w	(word_FFFF1E).w,d0
 		jsr	sub_4CFE(pc)
 		moveq	#$11,d0
-		trap	#0
+		trap	#0		; Trap0
 		move.l	#$5900,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.b	#0,(byte_FFEE02).w
 		move.w	#$50,$10(a0)
 		move.w	#$34,$14(a0)
@@ -6381,7 +6268,6 @@ loc_4B98:
 		rts
 
 sub_4BDE:
-
 		jsr	sub_4560(pc)
 		addq.w	#1,2(a0)
 
@@ -6424,8 +6310,7 @@ loc_4C36:
 		lea	(word_4E2E).l,a1
 		lea	(a1,d0.w),a1
 		lea	(M68K_RAM).l,a2
-		jsr	copy_bytes_to_dest_32(pc)
-
+		jsr	copy_bytes_to_dest_32(pc) ; a1 = source
 		ext.l	d0
 		divu.w	#$18,d0
 		move.b	byte_4CA6(pc,d0.w),d0
@@ -6455,7 +6340,6 @@ sub_4C98:
 		rts
 
 byte_4CA6:	dc.b $83, $84, $88, $8E, $89, $85, $86,	$96, $8A, $87, $8B, 0
-
 sub_4CB2:
 		move.b	(word_FF8FB0+1).w,d7
 		btst	#7,d7
@@ -6493,8 +6377,7 @@ sub_4CFE:
 		moveq	#2,d7
 
 loc_4D0C:
-		jsr	copy_bytes_to_dest_12(pc)
-
+		jsr	copy_bytes_to_dest_12(pc) ; a1 = source
 		move.w	(a1)+,(a2)+
 		movea.l	a1,a3
 		movea.l	a2,a1
@@ -6507,26 +6390,20 @@ loc_4D0C:
 		rts
 
 word_4D2C:	dc.w $200B, $202A, $200E, $200B, $201C,	$2012, $203B
-
 		dc.w $200C, $202A, $201C, $2012, $2001,	$2001, $201D
 		dc.w $200D, $202A, $2014, $201E, $2017,	$2019, $203B
-
 		dc.w $200B, $202A, $201C, $2012, $2001,	$2001, $201D
 		dc.w $200C, $202A, $2014, $201E, $2017,	$2019, $203B
 		dc.w $200D, $202A, $200E, $200B, $201C,	$2012, $203B
-
 		dc.w $200B, $202A, $2014, $201E, $2017,	$2019, $203B
 		dc.w $200C, $202A, $201C, $2012, $2001,	$2001, $201D
 		dc.w $200D, $202A, $200E, $200B, $201C,	$2012, $203B
-
 		dc.w $200B, $202A, $201C, $2012, $2001,	$2001, $201D
 		dc.w $200C, $202A, $200E, $200B, $201C,	$2012, $203B
 		dc.w $200D, $202A, $2014, $201E, $2017,	$2019, $203B
-
 		dc.w $200B, $202A, $2014, $201E, $2017,	$2019, $203B
 		dc.w $200C, $202A, $200E, $200B, $201C,	$2012, $203B
 		dc.w $200D, $202A, $201C, $2012, $2001,	$2001, $201D
-
 sub_4DFE:
 		move.b	(word_FF8FB0+1).w,d0
 		btst	#0,d0
@@ -6547,60 +6424,44 @@ sub_4E1E:
 		rts
 
 word_4E2E:	dc.w $200E, $201E, $200D, $2015, $200C,	$201E, $201B, $2011
-
 		dc.w $203B, $203B, $203B, $203B, $2017,	$200F, $2021, $2013
-
 		dc.w $200D, $2001, $203B, $203B, $203B,	$203B, $203B, $203B
 		dc.w $201D, $201B, $200B, $2018, $201C,	$2022, $2016, $201F
-
 		dc.w $200B, $2018, $2013, $200B, $201F,	$2013, $2015, $2013
 		dc.w $2018, $2011, $203B, $201C, $2012,	$2013, $2019, $203B
-
 		dc.w $201C, $2001, $201E, $201D, $2012,	$203B, $2019, $2001
 		dc.w $2016, $200F, $203B, $203B, $2017,	$200B, $2012, $200B
-
 		dc.w $201B, $200B, $2014, $200B, $2012,	$203B, $203B, $203B
 		dc.w $200F, $2011, $2022, $2019, $201D,	$203B, $203B, $203B
-
 		dc.w $203B, $203B, $203B, $203B, $2012,	$2013, $200E, $200F
 		dc.w $2001, $201E, $201D, $203B, $203B,	$203B, $203B, $203B
-
 		dc.w $201D, $2012, $200F, $203B, $2013,	$201C, $2016, $200B
 		dc.w $2018, $200E, $203B, $203B, $201B,	$2001, $2001, $2017
-
 		dc.w $2002, $203B, $203B, $203B, $203B,	$203B, $203B, $203B
 		dc.w $201B, $2001, $2001, $2017, $2003,	$203B, $203B, $203B
-
 		dc.w $203B, $203B, $203B, $203B
-
 sub_4F36:
 		move.w	#5,(word_FFFF1A).w
 		move.w	#$9A,(word_FF9000).w
 		clr.b	(byte_FFEE01).w
 		move.l	#$4F2001,d0
-		trap	#1
+		trap	#1		; Trap1
 		lea	(byte_129144).l,a0
 		lea	(M68K_RAM).l,a1
-		jsr	(kosinski_decompress).l
-
+		jsr	(kosinski_decompress).l	; a0 = source
 		move.l	#$120C0B,d0
-		trap	#0
+		trap	#0		; Trap0
 		move.l	#$5900,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.b	#0,(byte_FFEE02).w
 		rts
 
 word_4F78:	dc.w $201C, $201D, $200B, $201B, $201D
 word_4F82:	dc.w $2001, $2019, $201D, $2013, $2001,	$2018, $201C
-
 word_4F90:	dc.w $201C, $2001, $201E, $2018, $200E,	$203B, $201D, $200F, $201C, $201D
-
 word_4FA4:	dc.w $200D, $2001, $2018, $201D, $201B,	$2001, $2016
-
 word_4FB2:	dc.w $200F, $2021, $2013, $201D, $203B,	$203B, $203B, $203B, $203B, $203B
-
 		dc.w $203B, $203B, $203B, $203B, $203B,	$203B
-
 sub_4FD2:
 		move.w	(word_FF8FAE).w,d0
 		beq.s	locret_4FE4
@@ -6613,15 +6474,14 @@ locret_4FE4:
 
 off_4FE6:	dc.w sub_4FEA-off_4FE6
 		dc.w sub_4FF0-off_4FE6
-
 sub_4FEA:
 		moveq	#$10,d0
-		trap	#0
+		trap	#0		; Trap0
 		rts
 
 sub_4FF0:
 		moveq	#$11,d0
-		trap	#0
+		trap	#0		; Trap0
 		rts
 
 sub_4FF6:
@@ -6634,9 +6494,7 @@ sub_4FF6:
 		add.w	d0,d0
 		move.w	off_5012-2(pc,d0.w),d0
 		jmp	off_5012(pc,d0.w)
-
 off_5012:	dc.w loc_501A-off_5012
-
 		dc.w loc_502C-off_5012
 		dc.w loc_503A-off_5012
 		dc.w loc_5048-off_5012
@@ -6706,7 +6564,6 @@ locret_50A2:
 		rts
 
 word_50A4:	dc.w $2CE, $22E, $2A2
-
 sub_50AA:
 		move.w	#3,(word_FF8F98).w
 		moveq	#0,d0
@@ -6719,8 +6576,7 @@ sub_50AA:
 		move.w	#$63,(word_FF8F8E).w
 		lea	(unk_FFFCA0).w,a1
 		lea	(byte_FFEEE0).w,a2
-		jsr	copy_bytes_to_dest_32(pc)
-
+		jsr	copy_bytes_to_dest_32(pc) ; a1 = source
 		moveq	#0,d0
 		tst.b	(byte_FFEEED).w
 		beq.s	loc_50E8
@@ -6754,7 +6610,7 @@ sub_5108:
 		moveq	#$5A,d0
 
 loc_5112:
-		trap	#1
+		trap	#1		; Trap1
 		rts
 
 sub_5116:
@@ -6768,11 +6624,8 @@ sub_5116:
 
 loc_512C:
 		bra.w	loc_513C
-
 		bra.w	loc_5172
-
 		bra.w	loc_51A4
-
 		bra.w	locret_51E4
 
 loc_513C:
@@ -6846,7 +6699,6 @@ locret_51E4:
 		rts
 
 sub_51E6:
-
 		move.w	(word_FF8F66).w,d7
 		add.w	d7,d7
 		add.w	d7,d7
@@ -6854,9 +6706,7 @@ sub_51E6:
 
 loc_51F2:
 		bra.w	loc_51FE
-
 		bra.w	loc_5216
-
 		bra.w	loc_523E
 
 loc_51FE:
@@ -6910,10 +6760,8 @@ loc_5254:
 
 sub_5258:
 		lea	off_5266(pc),a1
-		jsr	jump_by_table2
-
+		jsr	jump_by_table2	; a0 = ?
 		jmp	sub_5A24(pc)
-
 off_5266:	dc.w sub_5394
 		dc.w sub_5444
 		dc.w sub_5520
@@ -6923,10 +6771,8 @@ off_5266:	dc.w sub_5394
 
 sub_5272:
 		lea	off_5280(pc),a1
-		jsr	jump_by_table2
-
+		jsr	jump_by_table2	; a0 = ?
 		jmp	sub_5A24(pc)
-
 off_5280:	dc.w sub_5394
 		dc.w sub_5444
 		dc.w sub_5520
@@ -6937,10 +6783,8 @@ off_5280:	dc.w sub_5394
 
 sub_528E:
 		lea	off_529C(pc),a1
-		jsr	jump_by_table2
-
+		jsr	jump_by_table2	; a0 = ?
 		jmp	sub_5A24(pc)
-
 off_529C:	dc.w sub_5394
 		dc.w sub_5444
 		dc.w sub_5520
@@ -6964,7 +6808,6 @@ loc_52CA:
 		move.w	#6,2(a0)
 
 loc_52DA:
-
 		jsr	sub_5320(pc)
 		jsr	sub_5374(pc)
 		tst.b	(byte_FFEE60).w
@@ -7029,7 +6872,6 @@ loc_5386:
 		rts
 
 sub_5394:
-
 		move.l	#off_2BDF0,$20(a0)
 		move.w	#4,6(a0)
 		bset	#1,$D(a0)
@@ -7053,7 +6895,6 @@ loc_53E0:
 		neg.w	d3
 
 loc_53E4:
-
 		move.w	d3,$36(a0)
 		move.w	#$FFFB,d3
 		move.b	$1C(a2,d0.w),d2
@@ -7077,7 +6918,6 @@ loc_5412:
 word_541A:	dc.w 1,	1, 1, 1, $203, $203, $203
 		dc.w $F808, $F808, $F808, $F808, 0, 0, 0
 		dc.w 0,	0, 0, 0, $F8F8,	$F8F8, $F8F8
-
 sub_5444:
 		tst.w	$30(a0)
 		bne.w	loc_549C
@@ -7221,7 +7061,6 @@ sub_5604:
 		rts
 
 sub_5614:
-
 		subq.w	#1,$26(a0)
 		bne.s	locret_564E
 		move.b	#$A3,(byte_FFEE52).w
@@ -7250,7 +7089,6 @@ sub_5650:
 		bne.w	loc_56BA
 
 loc_5666:
-
 		movea.w	$30(a0),a1
 		tst.w	(a1)
 		beq.w	loc_56BA
@@ -7336,10 +7174,8 @@ locret_5772:
 
 sub_5774:
 		lea	off_5782(pc),a1
-		jsr	jump_by_table2
-
+		jsr	jump_by_table2	; a0 = ?
 		jmp	sub_5A24(pc)
-
 off_5782:	dc.w sub_5788
 		dc.w sub_5804
 		dc.w sub_5814
@@ -7375,7 +7211,6 @@ loc_57EA:
 
 byte_57F0:	dc.b $C0, $40, $C0, $40, $C0, $40, $C0,	$40, 0,	0, 0, 0, 0, 0
 byte_57FE:	dc.b $F0, $F8, 0, 8, $10, 0
-
 sub_5804:
 		jsr	sub_5954(pc)
 		bne.s	loc_580E
@@ -7391,14 +7226,12 @@ sub_5814:
 
 sub_581E:
 		lea	off_582C(pc),a1
-		jsr	jump_by_table2
-
+		jsr	jump_by_table2	; a0 = ?
 		jmp	sub_5A24(pc)
 
 off_582C:	dc.w sub_5832
 		dc.w sub_58B6
 		dc.w sub_5906
-
 sub_5832:
 		move.l	#off_2BEB6,$20(a0)
 		bset	#4,$E(a0)
@@ -7425,7 +7258,6 @@ sub_5832:
 word_588C:	dc.w 1,	1, 1, 1, $202, $202, $202
 		dc.w $FE02, $FE02, $FE02, $FE02, 0, 0, 0
 		dc.w 0,	0, 0, 0, $FEFE,	$FEFE, $FEFE
-
 sub_58B6:
 		jsr	sub_5954(pc)
 		move.w	6(a0),d0
@@ -7495,10 +7327,8 @@ locret_5964:
 
 sub_5966:
 		lea	off_5974(pc),a1
-		jsr	jump_by_table2
-
+		jsr	jump_by_table2	; a0 = ?
 		jmp	sub_5A24(pc)
-
 off_5974:	dc.w sub_5978
 		dc.w sub_59E8
 
@@ -7525,7 +7355,6 @@ sub_5978:
 
 word_59CC:	dc.w $FE02, $FE02, $FE02, $FE02, 0, 0, 0
 		dc.w 0,	0, 0, 0, $FEFE,	$FEFE, $FEFE
-
 sub_59E8:
 		subq.w	#1,$26(a0)
 		beq.s	loc_5A1C
@@ -7587,7 +7416,6 @@ sub_5A5E:
 
 word_5A88:	dc.w $F60A, $FA06, $F010, $F010, $F808,	$FB05, $F808
 byte_5A96:	dc.b $E8, $E8, $DD, $DD, $DD, $DD, $F9,	$F9, $D0, $D0, $D5, $D5, $D5, $D5
-
 sub_5AA4:
 		tst.b	(byte_FFEE44).w
 		bne.s	loc_5AE6
@@ -7721,19 +7549,12 @@ locret_5BC6:
 
 loc_5BC8:
 		bra.s	loc_5BE0
-
 		bra.s	loc_5BFA
-
 		bra.s	loc_5BD8
-
 		bra.s	loc_5BF0
-
 		bra.s	loc_5BE0
-
 		bra.s	loc_5C08
-
 		bra.s	loc_5BE8
-
 		bra.s	loc_5C04
 
 loc_5BD8:
@@ -7743,7 +7564,6 @@ loc_5BD8:
 		rts
 
 loc_5BE0:
-
 		move.l	d1,d0
 		asr.l	#3,d0
 		add.l	d0,d1
@@ -7778,7 +7598,6 @@ loc_5C08:
 		bra.s	loc_5BE0
 
 sub_5C0C:
-
 		jsr	sub_5F48(pc)
 		bne.s	loc_5C26
 		moveq	#$FFFFFFF2,d2
@@ -7857,7 +7676,6 @@ sub_5CA2:
 		rts
 
 sub_5CC0:
-
 		lea	(word_FF8FC0).w,a0
 		moveq	#$4A,d7
 
@@ -7989,7 +7807,6 @@ locret_5DE8:
 		rts
 
 sub_5DEA:
-
 		move.l	$18(a0),d0
 		btst	#7,(byte_FFEE03).w
 		beq.s	loc_5DF8
@@ -8108,8 +7925,7 @@ sub_5ECE:
 loc_5EF2:
 		lea	(word_FFA2C0).w,a1
 		lea	(unk_FF7C00).l,a2
-		jsr	copy_bytes_to_dest_64(pc)
-
+		jsr	copy_bytes_to_dest_64(pc) ; a1 = source
 		move.b	#$AE,(byte_FFEE52).w
 		move.w	#$801A,2(a0)
 
@@ -8131,7 +7947,6 @@ locret_5F28:
 		rts
 
 sub_5F2A:
-
 		move.b	3(a0),d0
 		bclr	#0,d0
 		bclr	#0,d1
@@ -8160,7 +7975,6 @@ loc_5F58:
 		rts
 
 sub_5F5E:
-
 		tst.b	(byte_FFEE06).w
 		beq.s	locret_5F76
 		subq.b	#1,(byte_FFEE06).w
@@ -8172,7 +7986,6 @@ locret_5F76:
 		rts
 
 sub_5F78:
-
 		addi.w	#$100,d0
 		move.w	d0,(word_FF8F3C).w
 		move.b	#0,d0
@@ -8275,7 +8088,6 @@ locret_6082:
 		rts
 
 sub_6084:
-
 		bclr	#0,(byte_FFEE04).w
 		beq.s	locret_60A4
 		lea	(unk_FFFA80).w,a3
@@ -8413,133 +8225,69 @@ loc_6228:
 
 loc_6248:
 		bra.w	loc_6372
-
 		bra.w	sub_6ED4
-
 		bra.w	loc_6404
-
 		bra.w	loc_6404
-
 		bra.w	loc_6444
-
 		bra.w	loc_6444
-
 		bra.w	loc_64A8
-
 		bra.w	loc_64FE
-
 		bra.w	loc_64A2
-
 		bra.w	loc_64F8
-
 		bra.w	sub_659E
-
 		bra.w	sub_659E
-
 		bra.w	sub_6628
-
 		bra.w	loc_6646
-
 		bra.w	sub_677E
-
 		bra.w	sub_677E
-
 		bra.w	loc_6404
-
 		bra.w	loc_6404
-
 		bra.w	sub_682A
-
 		bra.w	sub_682A
-
 		bra.w	sub_68F4
-
 		bra.w	sub_68F4
-
 		bra.w	sub_6678
-
 		bra.w	sub_6678
-
 		bra.w	loc_69E0
-
 		bra.w	loc_69E0
-
 		bra.w	sub_6AE8
-
 		bra.w	sub_6AE8
-
 		bra.w	sub_6B50
-
 		bra.w	sub_6B50
-
 		bra.w	sub_6C06
-
 		bra.w	sub_6C06
-
 		bra.w	sub_6ED4
-
 		bra.w	sub_6ED4
-
 		bra.w	sub_6CA6
-
 		bra.w	sub_6CA6
-
 		bra.w	sub_6CA6
-
 		bra.w	sub_6CA6
-
 		bra.w	sub_6DD2
-
 		bra.w	sub_6DD2
-
 		bra.w	sub_6DD2
-
 		bra.w	sub_6DD2
-
 		bra.w	sub_6CA6
-
 		bra.w	sub_6CA6
-
 		bra.w	sub_6628
-
 		bra.w	loc_6646
-
 		bra.w	loc_6D0A
-
 		bra.w	loc_6D0A
-
 		bra.w	loc_6D78
-
 		bra.w	loc_6D78
-
 		bra.w	sub_6ED4
-
 		bra.w	sub_6ED4
-
 		bra.w	sub_6ED4
-
 		bra.w	sub_6ED4
-
 		bra.w	sub_6ED4
-
 		bra.w	sub_6ED4
-
 		bra.w	sub_6ED4
-
 		bra.w	sub_6ED4
-
 		bra.w	sub_6ED4
-
 		bra.w	sub_6ED4
-
 		bra.w	sub_6B50
-
 		bra.w	sub_6B50
-
 		bra.w	sub_6ED4
-
 		bra.w	sub_6ED4
-
 		lea	(unk_FF9EC0).w,a1
 		move.w	(word_FF8F54).w,$14(a1)
 		move.w	(word_FF8F58).w,$10(a1)
@@ -8603,7 +8351,6 @@ loc_643A:
 		jmp	loc_646C(pc)
 
 loc_6444:
-
 		bclr	#7,2(a0)
 		beq.s	loc_6458
 		moveq	#2,d0
@@ -8618,7 +8365,6 @@ loc_6458:
 		rts
 
 loc_646C:
-
 		tst.b	(byte_FFEE47).w
 		bmi.s	locret_6486
 		move.w	$1C(a0),d0
@@ -8633,11 +8379,9 @@ loc_6480:
 		bsr.s	loc_6488
 
 locret_6486:
-
 		rts
 
 loc_6488:
-
 		bset	#1,(byte_FFEE03).w
 		move.b	#0,(byte_FFEE06).w
 		move.w	#$80,(word_FF8F84).w
@@ -8696,7 +8440,6 @@ locret_6546:
 		rts
 
 loc_6548:
-
 		jsr	(sub_6E68).l
 		move.w	(word_FF8F84).w,d0
 		lsr.w	#2,d0
@@ -8725,9 +8468,7 @@ stru_658A:	struc_11 $A, $104
 		struc_11 $20, $106
 		struc_11 $C8, $107
 		struc_11 $C8, $107
-
 sub_659E:
-
 		bclr	#7,2(a0)
 		beq.s	loc_65C8
 		move.w	#$104,(word_FF8F3C).w
@@ -8773,7 +8514,6 @@ locret_6626:
 		rts
 
 sub_6628:
-
 		bclr	#7,2(a0)
 		bne.s	loc_6664
 		move.w	#$FFFC,$18(a0)
@@ -8782,7 +8522,6 @@ sub_6628:
 		rts
 
 loc_6646:
-
 		bclr	#7,2(a0)
 		bne.s	loc_6664
 		move.w	#4,$18(a0)
@@ -8798,7 +8537,6 @@ loc_6664:
 		rts
 
 sub_6678:
-
 		jsr	sub_6EDA(pc)
 		btst	#7,(word_FF8F2C+1).w
 		sne	(byte_FFEE5A).w
@@ -8867,7 +8605,6 @@ loc_673A:
 		rts
 
 sub_6742:
-
 		moveq	#$FFFFFFD8,d1
 		moveq	#8,d2
 		jsr	sub_75A6(pc)
@@ -8895,7 +8632,6 @@ loc_6778:
 		rts
 
 sub_677E:
-
 		bclr	#7,2(a0)
 		beq.s	loc_6792
 		moveq	#6,d0
@@ -8962,7 +8698,6 @@ locret_6828:
 		rts
 
 sub_682A:
-
 		movea.l	(dword_FFEF3C).w,a1
 		bclr	#7,2(a0)
 		beq.s	loc_6858
@@ -9029,7 +8764,6 @@ loc_68DE:
 		rts
 
 sub_68F4:
-
 		movea.l	(dword_FFEF3C).w,a1
 		bclr	#7,2(a0)
 		beq.s	loc_6930
@@ -9103,7 +8837,6 @@ loc_69C6:
 		bra.w	loc_6A62
 
 loc_69E0:
-
 		movea.l	(dword_FFEF3C).w,a1
 		bclr	#7,2(a0)
 		beq.s	loc_6A12
@@ -9133,7 +8866,6 @@ loc_6A20:
 		rts
 
 loc_6A44:
-
 		bclr	#3,$E(a1)
 		move.w	#1,$28(a1)
 		move.l	(dword_FFEF68).w,$10(a0)
@@ -9149,7 +8881,6 @@ loc_6A62:
 		jmp	loc_6488(pc)
 
 sub_6A80:
-
 		moveq	#$20,d0
 		jsr	sub_5F78(pc)
 		clr.b	(byte_FFEE03).w
@@ -9182,7 +8913,6 @@ loc_6AD4:
 		rts
 
 sub_6AE8:
-
 		bclr	#7,2(a0)
 		beq.s	loc_6B0C
 		moveq	#$10,d0
@@ -9212,13 +8942,12 @@ loc_6B32:
 		bclr	#7,(byte_FFEE03).w
 		lea	(unk_FF7C00).l,a1
 		lea	(word_FFA2C0).w,a2
-		jmp	copy_bytes_to_dest_64(pc)
+		jmp	copy_bytes_to_dest_64(pc) ; a1 = source
 
 loc_6B4C:
 		jmp	sub_5FDC(pc)
 
 sub_6B50:
-
 		bclr	#7,2(a0)
 		beq.s	loc_6B72
 		moveq	#$A,d0
@@ -9290,7 +9019,6 @@ loc_6BFA:
 		rts
 
 sub_6C06:
-
 		bclr	#7,2(a0)
 		beq.s	loc_6C4A
 		clr.l	$18(a0)
@@ -9342,7 +9070,6 @@ loc_6C98:
 		rts
 
 sub_6CA6:
-
 		btst	#6,(byte_FFEE03).w
 		bne.w	loc_6D78
 		bclr	#7,2(a0)
@@ -9376,7 +9103,6 @@ locret_6D08:
 		rts
 
 loc_6D0A:
-
 		bclr	#7,2(a0)
 		beq.s	loc_6D2A
 		moveq	#$14,d0
@@ -9416,7 +9142,6 @@ locret_6D76:
 		rts
 
 loc_6D78:
-
 		bclr	#7,2(a0)
 		beq.s	loc_6D98
 		moveq	#$1C,d0
@@ -9439,7 +9164,6 @@ loc_6D98:
 		add.b	d1,(word_FFEE54).w
 
 loc_6DC4:
-
 		subq.w	#1,$26(a0)
 		bne.s	locret_6DD0
 		moveq	#2,d1
@@ -9449,7 +9173,6 @@ locret_6DD0:
 		rts
 
 sub_6DD2:
-
 		bclr	#7,2(a0)
 		beq.s	loc_6E14
 		move.b	(word_FF8F2C).w,d0
@@ -9504,7 +9227,6 @@ loc_6E46:
 		rts
 
 sub_6E68:
-
 		tst.b	(byte_FFEE59).w
 		bne.s	loc_6E74
 		addq.w	#4,(word_FF8F84).w
@@ -9550,12 +9272,10 @@ loc_6ECA:
 		bra.w	loc_6E46
 
 sub_6ED4:
-
 		divu.w	#0,d7
 		rts
 
 sub_6EDA:
-
 		cmpi.w	#$E,2(a0)
 		beq.s	locret_6F20
 		btst	#2,(byte_FFEE03).w
@@ -9582,7 +9302,6 @@ locret_6F20:
 		rts
 
 sub_6F22:
-
 		tst.b	(byte_FFEE5E).w
 		bne.s	loc_6F32
 		btst	#7,(word_FF8F2C+1).w
@@ -9633,7 +9352,6 @@ locret_6FA0:
 		rts
 
 off_6FA2:	dc.w sub_7022-off_6FA2
-
 		dc.w sub_7058-off_6FA2
 		dc.w sub_70C6-off_6FA2
 		dc.w sub_7022-off_6FA2
@@ -9666,7 +9384,6 @@ off_6FA2:	dc.w sub_7022-off_6FA2
 		dc.w sub_7022-off_6FA2
 		dc.w sub_7022-off_6FA2
 off_6FE2:	dc.w sub_7022-off_6FE2
-
 		dc.w sub_7058-off_6FE2
 		dc.w sub_70C6-off_6FE2
 		dc.w sub_7022-off_6FE2
@@ -9698,9 +9415,7 @@ off_6FE2:	dc.w sub_7022-off_6FE2
 		dc.w sub_7022-off_6FE2
 		dc.w sub_7022-off_6FE2
 		dc.w sub_7022-off_6FE2
-
 sub_7022:
-
 		btst	#7,(byte_FFEE47).w
 		bne.s	loc_7046
 		btst	#0,(byte_FFEE03).w
@@ -9721,7 +9436,6 @@ loc_704C:
 		rts
 
 sub_7058:
-
 		btst	#0,(byte_FFEE03).w
 		bne.s	locret_7086
 		tst.b	(byte_FFEE41).w
@@ -9741,7 +9455,6 @@ locret_7086:
 		rts
 
 sub_7088:
-
 		move.w	#0,(word_FF8F3A).w
 		move.l	(dword_FFEF10).w,d1
 		neg.l	d1
@@ -9754,7 +9467,6 @@ locret_70A6:
 		rts
 
 sub_70A8:
-
 		move.w	#1,(word_FF8F3A).w
 		move.l	(dword_FFEF10).w,d1
 		move.l	d1,$34(a0)
@@ -9766,7 +9478,6 @@ locret_70C4:
 		rts
 
 sub_70C6:
-
 		btst	#0,(byte_FFEE03).w
 		bne.s	locret_70E6
 		tst.b	(byte_FFEE41).w
@@ -9782,7 +9493,6 @@ locret_70E6:
 		rts
 
 sub_70E8:
-
 		btst	#1,(byte_FFEE03).w
 		bne.s	locret_7122
 		btst	#0,(byte_FFEE03).w
@@ -9808,12 +9518,10 @@ locret_7122:
 		rts
 
 sub_7124:
-
 		clr.w	(word_FF8F3A).w
 		bra.s	loc_7130
 
 sub_712A:
-
 		move.w	#1,(word_FF8F3A).w
 
 loc_7130:
@@ -9874,7 +9582,6 @@ loc_71BA:
 		rts
 
 sub_71C0:
-
 		tst.w	(word_FF8F3A).w
 		bne.w	loc_71F0
 
@@ -9893,7 +9600,6 @@ locret_71EE:
 		rts
 
 loc_71F0:
-
 		tst.b	(byte_FFEE47).w
 		bmi.s	locret_7216
 		btst	#1,(byte_FFEE03).w
@@ -9940,7 +9646,6 @@ sub_7218:
 		rts
 
 off_7274:	dc.w sub_72FC-off_7274
-
 		dc.w sub_72D0-off_7274
 		dc.w sub_72D0-off_7274
 		dc.w sub_72D0-off_7274
@@ -9986,7 +9691,6 @@ off_7274:	dc.w sub_72FC-off_7274
 		dc.w sub_7440-off_7274
 		dc.w sub_7448-off_7274
 		dc.w sub_72FC-off_7274
-
 sub_72D0:
 		bclr	#0,(byte_FFEE03).w
 		st	(byte_FFEE45).w
@@ -10005,7 +9709,6 @@ locret_72FA:
 		rts
 
 sub_72FC:
-
 		bset	#0,(byte_FFEE03).w
 		move.w	#0,d1
 		moveq	#$FFFFFFF8,d2
@@ -10035,7 +9738,6 @@ sub_732E:
 		rts
 
 sub_7344:
-
 		move.b	#$82,(byte_FFEE47).w
 		move.l	$10(a0),d1
 		andi.l	#$FFFFF,d1
@@ -10044,7 +9746,6 @@ sub_7344:
 		bra.w	sub_73F4
 
 sub_7360:
-
 		move.b	#$80,(byte_FFEE47).w
 		move.l	$10(a0),d1
 		andi.l	#$FFFFF,d1
@@ -10054,7 +9755,6 @@ sub_7360:
 		bra.w	sub_73F4
 
 sub_737E:
-
 		move.b	#$80,(byte_FFEE47).w
 		move.l	$10(a0),d1
 		andi.l	#$FFFFF,d1
@@ -10064,14 +9764,12 @@ sub_737E:
 		bra.w	sub_73F4
 
 sub_739C:
-
 		move.b	#$83,(byte_FFEE47).w
 		move.l	$10(a0),d1
 		andi.l	#$FFFFF,d1
 		bra.s	sub_73F4
 
 sub_73AE:
-
 		move.b	#$81,(byte_FFEE47).w
 		move.l	$10(a0),d1
 		andi.l	#$FFFFF,d1
@@ -10083,7 +9781,6 @@ sub_73AE:
 		bra.s	sub_73F4
 
 sub_73D2:
-
 		move.b	#$81,(byte_FFEE47).w
 		move.l	$10(a0),d1
 		andi.l	#$FFFFF,d1
@@ -10115,22 +9812,18 @@ locret_742E:
 		rts
 
 sub_7430:
-
 		move.b	#$82,(byte_FFEE47).w
 		bra.s	sub_744E
 
 sub_7438:
-
 		move.b	#$80,(byte_FFEE47).w
 		bra.s	sub_744E
 
 sub_7440:
-
 		move.b	#$83,(byte_FFEE47).w
 		bra.s	sub_744E
 
 sub_7448:
-
 		move.b	#$81,(byte_FFEE47).w
 
 sub_744E:
@@ -10165,12 +9858,10 @@ sub_749C:
 		rts
 
 sub_74A4:
-
 		bsr.s	sub_74AA
 		bra.w	sub_72D0
 
 sub_74AA:
-
 		tst.b	(byte_FFEE08).w
 		bne.s	locret_74BA
 		tst.b	(byte_FFEE62).w
@@ -10249,12 +9940,10 @@ off_7502:	dc.w nullsub_6-off_7502
 		dc.w nullsub_6-off_7502
 		dc.w nullsub_6-off_7502
 		dc.w nullsub_6-off_7502
-
 sub_755E:
 		st	(byte_FFEE45).w
 
 nullsub_6:
-
 		rts
 
 sub_7564:
@@ -10262,7 +9951,6 @@ sub_7564:
 		st	(byte_FFEE45).w
 
 sub_756C:
-
 		jsr	sub_BAF6(pc)
 		lea	byte_7578(pc,d7.w),a2
 		tst.b	(a2)
@@ -10271,7 +9959,6 @@ sub_756C:
 byte_7578:	dc.b 0,	$FF, $FF, 0, 0,	1, 1, 1, 0, 0, 0, 1, 1,	1, 0, 0, 0, $FF, $FF, $FF
 		dc.b 0,	1, 1, 1, 0, 0, 0, 1, 1,	1, 0, 0, 0, $FF, $FF, $FF, $FF,	1, 1, 1
 		dc.b 1,	0, 0, 0, 0, 0
-
 sub_75A6:
 		jsr	sub_BAF6(pc)
 		lea	byte_75B2(pc,d7.w),a2
@@ -10281,7 +9968,6 @@ sub_75A6:
 byte_75B2:	dc.b 0,	$FF, $FF, 0, 0,	1, 1, 1, 0, 0, 0, 1, 1,	1, 0, 0, 0, 0, 0, 0
 		dc.b 0,	1, 1, 1, 0, 0, 0, 1, 1,	1, 0, 0, 0, $FF, $FF, $FF, $FF,	1, 1, 1
 		dc.b 1,	0, 0, 0, 0, 0
-
 sub_75E0:
 		jsr	sub_BAF6(pc)
 		lea	byte_75EE(pc,d7.w),a2
@@ -10292,7 +9978,6 @@ sub_75E0:
 byte_75EE:	dc.b 0,	$FF, $FF, $FF, $FF, 1, 1, 1, 1,	1, 1, 1, 1, 1, 1, 1, 1,	0, 0, 0
 		dc.b 0,	1, 1, 1, 1, 1, 1, 1, 1,	1, 1, 1, 1, $FF, $FF, $FF, $FF,	1, 1, 1
 		dc.b 1,	1, 1, 1, 1, 0
-
 sub_761C:
 		jsr	sub_BAF6(pc)
 		lea	off_762E(pc),a1
@@ -10346,21 +10031,17 @@ off_762E:	dc.w sub_7696-off_762E
 		dc.w sub_771E-off_762E
 		dc.w sub_7726-off_762E
 		dc.w sub_7696-off_762E
-
 sub_768A:
-
 		jsr	sub_773C(pc)
 		st	(byte_FFEE44).w
 		moveq	#1,d7
 		rts
 
 sub_7696:
-
 		jsr	sub_773C(pc)
 		bra.w	sub_772C
 
 sub_769E:
-
 		btst	#0,(byte_FFEE03).w
 		bne.w	sub_772C
 		move.l	$18(a0),d0
@@ -10372,7 +10053,6 @@ loc_76B0:
 		bra.w	sub_772C
 
 sub_76B8:
-
 		btst	#0,(byte_FFEE03).w
 		bne.w	sub_772C
 		move.l	$18(a0),d0
@@ -10385,7 +10065,6 @@ loc_76CA:
 		bra.w	sub_772C
 
 sub_76D4:
-
 		btst	#0,(byte_FFEE03).w
 		bne.w	sub_772C
 		move.l	$18(a0),d0
@@ -10397,7 +10076,6 @@ loc_76E6:
 		bra.w	sub_772C
 
 sub_76EE:
-
 		btst	#0,(byte_FFEE03).w
 		bne.w	sub_772C
 		move.l	$18(a0),d0
@@ -10410,32 +10088,27 @@ loc_7700:
 		bra.w	sub_772C
 
 sub_770A:
-
 		tst.b	(byte_FFEE47).w
 		bmi.s	sub_769E
 		bra.w	sub_772C
 
 sub_7714:
-
 		tst.b	(byte_FFEE47).w
 		bmi.s	sub_76B8
 		bra.w	sub_772C
 
 sub_771E:
-
 		tst.b	(byte_FFEE47).w
 		bmi.s	sub_76D4
 		bra.s	sub_772C
 
 sub_7726:
-
 		tst.b	(byte_FFEE47).w
 		bmi.s	sub_76EE
 
 sub_772C:
 		moveq	#0,d7
 		rts
-
 sub_7730:
 		bra.w	sub_7696
 
@@ -10459,7 +10132,6 @@ off_7752:	dc.l sub_76B8
 		dc.l sub_76EE
 		dc.l sub_769E
 		dc.l sub_76D4
-
 sub_7762:
 		jsr	sub_BAF6(pc)
 		lea	off_7774(pc),a1
@@ -10513,16 +10185,13 @@ off_7774:	dc.w sub_77DC-off_7774
 		dc.w sub_786A-off_7774
 		dc.w sub_7874-off_7774
 		dc.w sub_77DC-off_7774
-
 sub_77D0:
-
 		jsr	sub_787E(pc)
 		st	(byte_FFEE44).w
 		moveq	#1,d7
 		rts
 
 sub_77DC:
-
 		jsr	sub_787E(pc)
 		bra.w	sub_787A
 
@@ -10531,7 +10200,6 @@ sub_77E4:
 		bra.s	sub_77D0
 
 sub_77EA:
-
 		btst	#0,(byte_FFEE03).w
 		bne.w	sub_787A
 		move.l	$18(a0),d0
@@ -10543,7 +10211,6 @@ loc_77FC:
 		bra.w	sub_787A
 
 sub_7804:
-
 		btst	#0,(byte_FFEE03).w
 		bne.w	sub_787A
 		move.l	$18(a0),d0
@@ -10556,7 +10223,6 @@ loc_7816:
 		bra.w	sub_787A
 
 sub_7820:
-
 		btst	#0,(byte_FFEE03).w
 		bne.w	sub_787A
 		move.l	$18(a0),d0
@@ -10568,7 +10234,6 @@ loc_7832:
 		bra.w	sub_787A
 
 sub_783A:
-
 		btst	#0,(byte_FFEE03).w
 		bne.w	sub_787A
 		move.l	$18(a0),d0
@@ -10581,25 +10246,21 @@ loc_784C:
 		bra.w	sub_787A
 
 sub_7856:
-
 		tst.b	(byte_FFEE47).w
 		bmi.s	sub_77EA
 		bra.w	sub_787A
 
 sub_7860:
-
 		tst.b	(byte_FFEE47).w
 		bmi.s	sub_7804
 		bra.w	sub_787A
 
 sub_786A:
-
 		tst.b	(byte_FFEE47).w
 		bmi.s	sub_7820
 		bra.w	sub_787A
 
 sub_7874:
-
 		tst.b	(byte_FFEE47).w
 		bmi.s	sub_783A
 
@@ -10623,7 +10284,6 @@ off_7894:	dc.l sub_7804
 		dc.l sub_783A
 		dc.l sub_77EA
 		dc.l sub_7820
-
 sub_78A4:
 		move.w	2(a0),d0
 		add.w	d0,d0
@@ -10632,7 +10292,6 @@ sub_78A4:
 
 off_78B2:	dc.w sub_78B6-off_78B2
 		dc.w locret_78E0-off_78B2
-
 sub_78B6:
 		move.l	#off_791A,$20(a0)
 		move.w	#$8035,$A(a0)
@@ -10653,7 +10312,6 @@ sub_78E2:
 
 off_78F0:	dc.w sub_78F4-off_78F0
 		dc.w locret_7918-off_78F0
-
 sub_78F4:
 		move.l	#off_791A,$20(a0)
 		move.w	#$9835,$A(a0)
@@ -10668,18 +10326,15 @@ locret_7918:
 off_791A:	dc.w byte_791E-off_791A
 		dc.w byte_791E-off_791A
 byte_791E:	dc.b 0,	0, 0, 6, 0, 6, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
-
 		dc.b 0,	0
-
 sub_7930:
 		lea	off_793A(pc),a1
-		jmp	jump_by_table2
+		jmp	jump_by_table2	; a0 = ?
 
 off_793A:	dc.w loc_7986
 		dc.w sub_7942
 		dc.w sub_7960
 		dc.w loc_7970
-
 sub_7942:
 		tst.b	(byte_FFEE70).w
 		bne.s	loc_7952
@@ -10711,7 +10366,6 @@ sub_797C:
 		beq.s	loc_79A6
 
 loc_7986:
-
 		jsr	sub_BC72(pc)
 		move.l	#off_1E2A4,$20(a0)
 		jsr	sub_B852
@@ -10720,7 +10374,6 @@ loc_7986:
 		rts
 
 loc_79A6:
-
 		tst.b	(byte_FFEE41).w
 		bne.s	locret_79CA
 		move.w	(dword_FFA2D4).w,d1
@@ -10739,13 +10392,12 @@ locret_79CA:
 
 sub_79CC:
 		lea	off_79D6(pc),a1
-		jmp	jump_by_table2
+		jmp	jump_by_table2	; a0 = ?
 
 off_79D6:	dc.w sub_79FC
 		dc.w sub_79DE
 		dc.w sub_7A82
 		dc.w sub_7AF0
-
 sub_79DE:
 		tst.b	(byte_FFEEF7).w
 		beq.s	locret_79E8
@@ -10756,15 +10408,13 @@ locret_79E8:
 
 sub_79EA:
 		lea	off_79F4(pc),a1
-		jmp	jump_by_table2
+		jmp	jump_by_table2	; a0 = ?
 
 off_79F4:	dc.w sub_79FC
 		dc.w sub_7A42
 		dc.w sub_7A82
 		dc.w sub_7AF0
-
 sub_79FC:
-
 		move.w	#$300,$A(a0)
 		move.l	#off_1E20A,$20(a0)
 		jsr	sub_B852
@@ -10804,7 +10454,6 @@ locret_7A80:
 		rts
 
 sub_7A82:
-
 		bclr	#6,$E(a0)
 		beq.s	loc_7ADE
 		subq.w	#1,$34(a0)
@@ -10845,7 +10494,6 @@ loc_7ADE:
 		rts
 
 sub_7AF0:
-
 		addi.l	#$4000,$1C(a0)
 		jmp	sub_B88A(pc)
 
@@ -10883,10 +10531,8 @@ word_7BF2:	dc.w 4,	4, $24,	4, 0, $8018, 4
 		dc.w $5C, $2F6,	$2F6, $2F6
 word_7C16:	dc.w 4,	0, $50,	$2F6, $2F6, $2F6
 word_7C22:	dc.w 4,	0, $18,	4, 0, $8018, 4
-
 		dc.w 4,	$40, $2F6, $2F6, $2F6
 word_7C3A:	dc.w 4,	4, $1C,	4, 0, $8040, $2F6
-
 		dc.w $2F6, $2F6
 word_7C4C:	dc.w 4,	0, $58,	$2F6, $2F6, $2F6
 word_7C58:	dc.w 4,	0, $3C,	$2F6, $2F6, $2F6
@@ -10900,10 +10546,9 @@ word_7C88:	dc.w $FFFC, 0, $3C, $FFFC, $FFFC, $4C, $FFFC
 		dc.w 4,	$40, $FFFC, 0, $58, $FFFC, $FFFE
 		dc.w $68, $FFFC, 0, $18, $FFFC,	4, $40
 		dc.w $FFFC, 0, $2C, $2F6, $2F6,	$2F6
-
 sub_7CE8:
 		lea	off_7CF0(pc),a1
-		jmp	jump_by_table2(pc)
+		jmp	jump_by_table2(pc) ; a0	= ?
 
 off_7CF0:	dc.w sub_7D0C
 		dc.w sub_7D6C
@@ -10919,7 +10564,6 @@ off_7CF0:	dc.w sub_7D0C
 		dc.w sub_7E3A
 		dc.w sub_7F00
 		dc.w loc_7F10
-
 sub_7D0C:
 		move.w	#$6B4,d0
 		btst	#7,(word_FFA2CA).w
@@ -11042,7 +10686,6 @@ loc_7E32:
 		bra.s	loc_7E5A
 
 sub_7E3A:
-
 		jsr	sub_7E62(pc)
 		bne.s	loc_7E42
 		rts
@@ -11054,7 +10697,6 @@ loc_7E42:
 		move.w	#$32,(word_FF8F92).w
 
 loc_7E54:
-
 		bset	#0,(byte_FFEE5B).w
 
 loc_7E5A:
@@ -11138,13 +10780,12 @@ loc_7F22:
 
 sub_7F2E:
 		lea	off_7F38(pc),a1
-		jmp	jump_by_table2
+		jmp	jump_by_table2	; a0 = ?
 
 off_7F38:	dc.w sub_7F40
 		dc.w sub_7F6E
 		dc.w sub_7FBC
 		dc.w nullsub_7
-
 sub_7F40:
 		move.w	#$4310,$A(a0)
 		move.l	#off_1E078,$20(a0)
@@ -11302,13 +10943,12 @@ locret_80FE:
 
 sub_8100:
 		lea	off_810A(pc),a1
-		jmp	jump_by_table2
+		jmp	jump_by_table2	; a0 = ?
 
 off_810A:	dc.w sub_8112
 		dc.w sub_816A
 		dc.w sub_8182
 		dc.w sub_81A2
-
 sub_8112:
 		jsr	sub_81B0(pc)
 		move.w	(word_FF8FB8).w,d0
@@ -11360,7 +11000,6 @@ locret_81AE:
 		rts
 
 sub_81B0:
-
 		move.w	(word_FFA2CA).w,d0
 		andi.w	#$8000,d0
 		addi.w	#$260,d0
@@ -11398,7 +11037,6 @@ loc_81EA:
 off_821E:	dc.l off_1E60E
 		dc.l off_1F1B4
 		dc.l off_1F44C
-
 sub_822A:
 		jsr	sub_B9B8(pc)
 		beq.s	loc_823C
@@ -11448,7 +11086,6 @@ locret_82A8:
 		rts
 
 sub_82AA:
-
 		movem.l	d0-a3,-(sp)
 		lea	(unk_FF9EC0).w,a3
 		moveq	#$E,d7
@@ -11477,7 +11114,6 @@ loc_82DC:
 		move.w	word_8308(pc,d0.w),$14(a0)
 		move.w	word_830E(pc,d0.w),$28(a0)
 		rts
-
 word_8302:	dc.w $1A0, $130, $90
 word_8308:	dc.w $E0, $D0, $D0
 word_830E:	dc.w $EEED, $EEF3, $EEEE
@@ -11516,7 +11152,6 @@ locret_836C:
 		rts
 
 sub_836E:
-
 		move.w	#$8320,$A(a0)
 		move.l	#off_1E864,$20(a0)
 		jsr	sub_B852(pc)
@@ -11526,14 +11161,13 @@ sub_836E:
 
 sub_838E:
 		lea	off_8398(pc),a1
-		jmp	jump_by_table2
+		jmp	jump_by_table2	; a0 = ?
 
 off_8398:	dc.w sub_83A2
 		dc.w sub_83D8
 		dc.w sub_83EE
 		dc.w loc_840A
 		dc.w loc_8424
-
 sub_83A2:
 		move.w	#$4360,$A(a0)
 		move.l	#off_1F8D6,$20(a0)
@@ -11577,7 +11211,6 @@ loc_840A:
 		move.b	#0,$2C(a0)
 
 loc_8424:
-
 		move.w	#$1F8,$10(a0)
 
 locret_842A:
@@ -11585,14 +11218,13 @@ locret_842A:
 
 sub_842C:
 		lea	off_8436(pc),a1
-		jmp	jump_by_table2
+		jmp	jump_by_table2	; a0 = ?
 
 off_8436:	dc.w sub_8440
 		dc.w sub_846C
 		dc.w sub_848C
 		dc.w loc_84A4
 		dc.w locret_84C0
-
 sub_8440:
 		move.w	#$4360,$A(a0)
 		move.l	#off_1FB80,$20(a0)
@@ -11675,7 +11307,6 @@ loc_8518:
 		rts
 
 sub_8520:
-
 		move.w	#$320,$A(a0)
 		btst	#7,(word_FFA2CA).w
 		beq.s	loc_8534
@@ -11692,13 +11323,12 @@ loc_8534:
 
 sub_855C:
 		lea	off_8566(pc),a1
-		jmp	jump_by_table2
+		jmp	jump_by_table2	; a0 = ?
 
 off_8566:	dc.w sub_856E
 		dc.w loc_8588
 		dc.w sub_85B6
 		dc.w sub_862A
-
 sub_856E:
 		jsr	sub_8520(pc)
 		lea	(off_863C).l,a1
@@ -11809,16 +11439,14 @@ word_87C6:	dc.w 0,	$20, 0,	$38, 1,	$20, $20, $38, 0, $20
 		dc.w 0,	$68, 2,	$20, $FFE0, $B0, 0, $20, 0, $60
 		dc.w 2,	$20, 0,	$20, 2,	$20, $10, $70, 0, $20
 		dc.w 0,	$140, 2, 0, $FFF0, $10,	$2F6
-
 sub_8810:
 		lea	off_881A(pc),a1
-		jmp	jump_by_table2
+		jmp	jump_by_table2	; a0 = ?
 
 off_881A:	dc.w sub_8822
 		dc.w sub_8848
 		dc.w sub_8856
 		dc.w sub_887A
-
 sub_8822:
 		move.w	#$C350,$A(a0)
 		move.l	#off_1F44C,$20(a0)
@@ -11886,7 +11514,7 @@ loc_88A2:
 		jsr	sub_961A
 		move.l	a0,-(sp)
 		move.l	#$59000000,d0
-		trap	#1
+		trap	#1		; Trap1
 		movea.l	(sp)+,a0
 
 loc_88EC:
@@ -11986,13 +11614,12 @@ loc_89DA:
 
 sub_8A02:
 		lea	off_8A0A(pc),a1
-		jmp	jump_by_table2(pc)
+		jmp	jump_by_table2(pc) ; a0	= ?
 
 off_8A0A:	dc.w sub_8A12
 		dc.w sub_8A3E
 		dc.w sub_8A72
 		dc.w sub_8AAA
-
 sub_8A12:
 		move.w	#$A48E,$A(a0)
 		move.l	#off_1221C8,$20(a0)
@@ -12274,12 +11901,11 @@ loc_8D12:
 
 sub_8D1E:
 		lea	off_8D26(pc),a1
-		jmp	jump_by_table2(pc)
+		jmp	jump_by_table2(pc) ; a0	= ?
 
 off_8D26:	dc.w sub_8D2C
 		dc.w sub_8D72
 		dc.w sub_8D94
-
 sub_8D2C:
 		st	(byte_FFEEEF).w
 		move.w	#$A340,$A(a0)
@@ -12326,12 +11952,11 @@ locret_8D9A:
 
 sub_8D9C:
 		lea	off_8DA4(pc),a1
-		jmp	jump_by_table2(pc)
+		jmp	jump_by_table2(pc) ; a0	= ?
 
 off_8DA4:	dc.w sub_8DAA
 		dc.w sub_8DDC
 		dc.w sub_8E24
-
 sub_8DAA:
 		move.w	#$2320,$A(a0)
 		move.l	#off_207EE,$20(a0)
@@ -12379,12 +12004,11 @@ sub_8E24:
 
 sub_8E32:
 		lea	off_8E3C(pc),a1
-		jmp	jump_by_table2
+		jmp	jump_by_table2	; a0 = ?
 
 off_8E3C:	dc.w sub_8E42
 		dc.w sub_8E7E
 		dc.w locret_8ED6
-
 sub_8E42:
 		move.w	#$A310,$A(a0)
 		move.l	#off_204C2,$20(a0)
@@ -12441,12 +12065,11 @@ loc_8EBA:
 		jsr	sub_92C8(pc)
 
 locret_8ED6:
-
 		rts
 
 sub_8ED8:
 		lea	off_8EE0(pc),a1
-		jmp	jump_by_table2(pc)
+		jmp	jump_by_table2(pc) ; a0	= ?
 
 off_8EE0:	dc.w sub_8EEC
 		dc.w sub_8F44
@@ -12454,7 +12077,6 @@ off_8EE0:	dc.w sub_8EEC
 		dc.w sub_8F8E
 		dc.w sub_8FB4
 		dc.w locret_8FD2
-
 sub_8EEC:
 		move.l	#off_20D36,$20(a0)
 		move.w	#$8320,$A(a0)
@@ -12530,16 +12152,14 @@ sub_8FB4:
 		addq.w	#1,2(a0)
 
 locret_8FD2:
-
 		rts
 
 sub_8FD4:
 		lea	off_8FDE(pc),a1
-		jmp	jump_by_table2
+		jmp	jump_by_table2	; a0 = ?
 
 off_8FDE:	dc.w sub_8FE2
 		dc.w sub_900A
-
 sub_8FE2:
 		tst.b	(byte_FFEEE3).w
 		bne.s	loc_9002
@@ -12567,11 +12187,10 @@ locret_9028:
 
 sub_902A:
 		lea	off_9034(pc),a1
-		jmp	jump_by_table2
+		jmp	jump_by_table2	; a0 = ?
 
 off_9034:	dc.w sub_9038
 		dc.w sub_9060
-
 sub_9038:
 		tst.b	(byte_FFEEE5).w
 		bne.s	loc_9058
@@ -12600,7 +12219,7 @@ locret_9084:
 
 sub_9086:
 		lea	off_9090(pc),a1
-		jmp	jump_by_table2
+		jmp	jump_by_table2	; a0 = ?
 
 off_9090:	dc.w sub_90A2
 		dc.w sub_9104
@@ -12611,7 +12230,6 @@ off_9090:	dc.w sub_90A2
 		dc.w sub_91C2
 		dc.w sub_9138
 		dc.w sub_91E4
-
 sub_90A2:
 		move.w	#$83E0,$A(a0)
 		move.l	#off_125880,$20(a0)
@@ -12655,7 +12273,6 @@ loc_9134:
 		jmp	Reserv3F
 
 sub_9138:
-
 		jsr	sub_B88A(pc)
 		subq.w	#1,$26(a0)
 		bne.s	locret_9154
@@ -12725,7 +12342,7 @@ sub_91E4:
 
 sub_91FC:
 		lea	off_9204(pc),a1
-		jmp	jump_by_table2(pc)
+		jmp	jump_by_table2(pc) ; a0	= ?
 
 off_9204:	dc.w sub_9212
 		dc.w loc_922A
@@ -12734,7 +12351,6 @@ off_9204:	dc.w sub_9212
 		dc.w sub_928A
 		dc.w sub_92A6
 		dc.w locret_92C6
-
 sub_9212:
 		move.w	#$300,$A(a0)
 		move.l	#off_214CA,$20(a0)
@@ -12802,7 +12418,6 @@ sub_92A6:
 		addq.w	#1,2(a0)
 
 locret_92C6:
-
 		rts
 
 sub_92C8:
@@ -12833,7 +12448,6 @@ loc_92F8:
 		move.w	(a1,d0.w),d0
 		movea.l	d0,a1
 		jmp	(a1)
-
 off_9314:	dc.w sub_9328
 		dc.w sub_9338
 		dc.w sub_937A
@@ -12874,7 +12488,6 @@ stru_935E:	struc_12 $B0, $1200
 		struc_12 $2C0,	$F50
 		struc_12 $C0, $ED0
 		struc_12 $A0, $F20
-
 sub_937A:
 		move.w	(dword_FFA2D0).w,d3
 		andi.w	#$FFF0,d3
@@ -13003,9 +12616,9 @@ sub_94CE:
 		move.b	#0,(word_FF8FA0).w
 		move.b	#1,(word_FF8FA0+1).w
 		rts
+; d0 = ?
 
 sub_94DC:
-
 		lsl.l	#2,d0
 		lsr.w	#2,d0
 		ori.w	#$4000,d0
@@ -13054,7 +12667,6 @@ loc_9522:
 		rts
 
 sub_952A:
-
 		move.l	d1,(a6)
 		move.l	d1,(a6)
 		move.l	d1,(a6)
@@ -13083,7 +12695,6 @@ loc_954A:
 		move.l	d1,(a6)
 
 loc_955A:
-
 		move.l	d1,(a6)
 		move.l	d1,(a6)
 		move.l	d1,(a6)
@@ -13095,6 +12706,8 @@ loc_9562:
 		move.l	d1,(a6)
 		move.l	d1,(a6)
 		rts
+; a1 = source
+; a2 = dest
 
 copy_bytes_to_dest_128:
 		move.l	(a1)+,(a2)+
@@ -13115,9 +12728,7 @@ copy_bytes_to_dest_128:
 		move.l	(a1)+,(a2)+
 
 copy_bytes_to_dest_64:
-
-		move.l	(a1)+,(a2)+
-
+		move.l	(a1)+,(a2)+	; a1 = source
 		move.l	(a1)+,(a2)+
 		move.l	(a1)+,(a2)+
 		move.l	(a1)+,(a2)+
@@ -13127,21 +12738,23 @@ copy_bytes_to_dest_64:
 		move.l	(a1)+,(a2)+
 
 copy_bytes_to_dest_32:
+		move.l	(a1)+,(a2)+	; a1 = source
 		move.l	(a1)+,(a2)+
-
 		move.l	(a1)+,(a2)+
-		move.l	(a1)+,(a2)+
+; a1 = source
+; a2 = dest
 
 copy_bytes_to_dest_20:
 		move.l	(a1)+,(a2)+
 		move.l	(a1)+,(a2)+
 
 copy_bytes_to_dest_12:
-		move.l	(a1)+,(a2)+
-
+		move.l	(a1)+,(a2)+	; a1 = source
 		move.l	(a1)+,(a2)+
 		move.l	(a1)+,(a2)+
 		rts
+; a1 = source
+; a6 = VDP_DATA
 
 copy_words_64:
 		move.l	(a1)+,(a6)
@@ -13170,8 +12783,7 @@ copy_words_64:
 		move.l	(a1)+,(a6)
 
 copy_words_16:
-		move.l	(a1)+,(a6)
-
+		move.l	(a1)+,(a6)	; a1 = source
 		move.l	(a1)+,(a6)
 		move.l	(a1)+,(a6)
 		move.l	(a1)+,(a6)
@@ -13203,7 +12815,6 @@ loc_95FE:
 		rts
 
 sub_961A:
-
 		move.b	#1,(byte_FFEE00).w
 		move	#$2500,sr
 
@@ -13215,6 +12826,9 @@ loc_9624:
 sub_962C:
 		move.w	#$FF00,(word_FF8F2C).w
 		rts
+; d0 = value
+; d2 = ?
+; a6 = VDP_DATA
 
 print_value:
 		movem.l	d0-d2,-(sp)
@@ -13256,7 +12870,6 @@ sub_966E:
 		rts
 
 sub_968A:
-
 		move.b	#$F8,(byte_FFEE53).w
 		jsr	sub_13FED8
 		move.b	#0,(byte_FFEE67).w
@@ -13302,7 +12915,6 @@ loc_96FA:
 		rts
 
 sub_9704:
-
 		add.w	d0,d0
 		add.w	d0,d0
 		movea.l	off_9740-4(pc,d0.w),a1
@@ -13528,13 +13140,10 @@ off_9740:	dc.l sub_615C
 		dc.l sub_8900
 		dc.l sub_79CC
 		dc.l sub_7930
-
 nullsub_10:
-
 		rts
 
 sub_9A6A:
-
 		lea	(dword_FFF300).w,a2
 		move.l	#$1400301,(a2)+
 		move.l	#1,(a2)+
@@ -13675,7 +13284,6 @@ loc_9BAA:
 		subq.b	#1,(byte_FF8F2E).w
 
 loc_9C00:
-
 		dbf	d1,loc_9BAA
 		bra.s	loc_9C7C
 
@@ -13728,7 +13336,6 @@ loc_9C16:
 		subq.b	#1,(byte_FF8F2E).w
 
 loc_9C78:
-
 		dbf	d1,loc_9C16
 
 loc_9C7C:
@@ -13736,7 +13343,6 @@ loc_9C7C:
 		rts
 
 sub_9C82:
-
 		cmpi.w	#$60,d0
 		bcs.s	loc_9C92
 		cmpi.w	#$160,d0
@@ -13750,7 +13356,6 @@ loc_9C92:
 		rts
 
 sub_9C98:
-
 		cmpi.w	#$60,d0
 		bcs.s	loc_9CA8
 		cmpi.w	#$1C0,d0
@@ -13776,11 +13381,11 @@ sub_9CB2:
 		jsr	sub_200A(pc)
 		jsr	sub_20AC(pc)
 		move.l	#$17161500,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$3B454401,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$53580000,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.w	#$BB,(word_FF9080).l
 		move.w	#$B2,(word_FF9040).l
 		bsr.w	sub_962C
@@ -13791,33 +13396,29 @@ sub_9CB2:
 		move.w	#$6340,d0
 		lea	(byte_30598).l,a0
 		lea	(M68K_RAM).l,a1
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		lea	(byte_30620).l,a0
 		lea	(unk_FF1000).l,a1
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		move.l	#$908,d0
-		trap	#0
+		trap	#0		; Trap0
 		tst.b	(byte_FFEEF3).w
 		beq.s	loc_9D70
 		move.w	#$8100,d0
 		lea	(byte_127F88).l,a0
 		lea	(unk_FF2000).l,a1
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		moveq	#$A,d0
-		trap	#0
+		trap	#0		; Trap0
 		bra.s	loc_9D8A
 
 loc_9D70:
 		move.w	#$8100,d0
 		lea	(byte_128004).l,a0
 		lea	(unk_FF2000).l,a1
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		moveq	#$14,d0
-		trap	#0
+		trap	#0		; Trap0
 
 loc_9D8A:
 		move.w	(word_FFFF0A).w,(a5)
@@ -13866,7 +13467,6 @@ loc_9E16:
 		beq.s	locret_9E60
 
 loc_9E2C:
-
 		addq.w	#1,(word_FFA344).w
 		move.w	#$B4,(word_FFA346).w
 		move.w	#$B1,(word_FF9000).w
@@ -13881,11 +13481,9 @@ loc_9E2C:
 		move.w	word_9E62-2(pc,d0.w),(word_FF8F74).w
 
 loc_9E5C:
-
 		bra.w	sub_9FD6
 
 locret_9E60:
-
 		rts
 
 word_9E62:	dc.w 5,	6, 7, 7, 7, $A,	$A, $101, $102,	$202
@@ -13894,7 +13492,6 @@ word_9E62:	dc.w 5,	6, 7, 7, 7, $A,	$A, $101, $102,	$202
 		dc.w $900, 1, $300, $102, $300,	$102, $304, $506, 1, $203
 		dc.w $400, $102, $300, $801, $203, $405, $607, 1, $203,	$405
 		dc.w 1,	$203, $400, $102, $300
-
 sub_9ED0:
 		move.b	(word_FF8F2C+1).w,d5
 		move.w	(word_FF8F40).w,d0
@@ -14000,7 +13597,6 @@ loc_9FCA:
 		clr.w	(word_FF8F74).w
 
 sub_9FD6:
-
 		move.w	(word_FF8F34).w,d0
 		bne.s	loc_9FE2
 		move.w	#1,(word_FF8F34).w
@@ -14155,7 +13751,6 @@ stru_A136:	struc_13 2, $2A, 2
 		struc_13 $A, $2A, 4
 		struc_13 $A, $2A, $C
 		struc_13 $F, $18, $E
-
 sub_A1C6:
 		jsr	(sub_200A).l
 		jsr	sub_13FE00
@@ -14163,13 +13758,12 @@ sub_A1C6:
 		jsr	sub_A738(pc)
 		jsr	sub_A774(pc)
 		moveq	#1,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$3231302F,d0
-		trap	#1
+		trap	#1		; Trap1
 		lea	(byte_1C120).l,a0
 		lea	(dword_FF6000).l,a4
-		jsr	(nemesis_decomp_to_ram).l
-
+		jsr	(nemesis_decomp_to_ram).l ; a0 = source
 		move.w	#1,(word_FF8F34).w
 		jsr	sub_A2D4(pc)
 		jsr	sub_A2A4(pc)
@@ -14248,20 +13842,16 @@ sub_A2D4:
 		lea	(word_13CA70).l,a1
 		lea	word_13D1F0-word_13CA70(a1),a1
 		lea	(dword_FFF580).w,a2
-		jsr	copy_bytes_to_dest_64
-
+		jsr	copy_bytes_to_dest_64 ;	a1 = source
 		lea	$20(a1),a1
-		jsr	copy_bytes_to_dest_32
-
+		jsr	copy_bytes_to_dest_32 ;	a1 = source
 		jsr	sub_A71C(pc)
 		lea	(word_13CA70).l,a1
 		lea	word_13CD70-word_13CA70(a1),a1
 		lea	(unk_FFF5C0).w,a2
-		jsr	copy_bytes_to_dest_32
-
+		jsr	copy_bytes_to_dest_32 ;	a1 = source
 		lea	word_13CD50-word_13CD70(a1),a1
-		jsr	copy_bytes_to_dest_32
-
+		jsr	copy_bytes_to_dest_32 ;	a1 = source
 		lea	(unk_FF2800).l,a1
 		lea	(unk_FF5800).l,a2
 		move.l	#$60000003,(a5)
@@ -14320,28 +13910,26 @@ sub_A3A8:
 		jsr	sub_A738(pc)
 		jsr	sub_A774(pc)
 		move.l	#$3C3E3D3C,d0
-		trap	#5
+		trap	#5		; Trap5
 		jsr	sub_A71C(pc)
 		move.l	#$18181818,d0
-		trap	#5
+		trap	#5		; Trap5
 		moveq	#1,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$32313000,d0
-		trap	#1
+		trap	#1		; Trap1
 		jsr	sub_961A(pc)
 		move.b	#$8C,(byte_FFEE52).w
 		jsr	sub_13FED8
 		lea	(byte_12C192).l,a0
 		lea	(unk_FF1000).l,a1
 		move.w	#$100,d0
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		move.l	#$504,d0
-		trap	#0
+		trap	#0		; Trap0
 		lea	(byte_1C120).l,a0
 		lea	(dword_FF6000).l,a4
-		jsr	(nemesis_decomp_to_ram).l
-
+		jsr	(nemesis_decomp_to_ram).l ; a0 = source
 		move.w	#$6C,(word_FF9100).w
 		move.w	#$6D,(word_FF9140).w
 		move.w	#$6E,(word_FF9180).w
@@ -14390,36 +13978,32 @@ loc_A4AE:
 
 sub_A4CC:
 		lea	byte_A7CE(pc),a0
-		jsr	(init_vdp_regs).l
-
+		jsr	(init_vdp_regs).l ; a0 = vdp regs array	(19)
 		jsr	sub_13FE00
 		move.w	(word_FFFF08).w,(a5)
 		jsr	sub_A738(pc)
 		jsr	sub_A774(pc)
 		move.l	#$18161818,d0
-		trap	#5
+		trap	#5		; Trap5
 		move.l	#$15141312,d0
-		trap	#1
+		trap	#1		; Trap1
 		move.l	#$19181716,d0
-		trap	#1
+		trap	#1		; Trap1
 		lea	(byte_2C3B8).l,a0
 		lea	(M68K_RAM).l,a1
 		move.w	#$8000,d0
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		lea	(byte_2C470).l,a0
 		lea	(unk_FF0800).l,a1
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		lea	(byte_2C572).l,a0
 		lea	(unk_FF1000).l,a1
 		moveq	#0,d0
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		move.l	#$4030201,d0
-		jsr	send_ram_data_to_vram(pc)
+		jsr	send_ram_data_to_vram(pc) ; d0 = indexes
 		move.l	#$8070605,d0
-		jsr	send_ram_data_to_vram(pc)
+		jsr	send_ram_data_to_vram(pc) ; d0 = indexes
 		jsr	sub_A78A(pc)
 		move.w	#$30,(word_FF9000).w
 		move.w	#$31,(word_FF9040).w
@@ -14460,16 +14044,15 @@ loc_A5DA:
 		jsr	sub_A738(pc)
 		jsr	sub_A774(pc)
 		move.l	#$17161519,d0
-		trap	#5
+		trap	#5		; Trap5
 		jsr	sub_A7A6(pc)
 		move.l	#$1C1A1915,d0
-		trap	#1
+		trap	#1		; Trap1
 		jsr	sub_AB72(pc)
 		jsr	sub_ABEA(pc)
 		lea	(byte_12BBA6).l,a0
 		lea	(word_FF9080).w,a4
-		jsr	(nemesis_decomp_to_ram).l
-
+		jsr	(nemesis_decomp_to_ram).l ; a0 = source
 		move.w	#$140,(dword_FF8564).w
 		jsr	sub_A78A(pc)
 		move.l	#off_21532,(dword_FF90A0).w
@@ -14520,7 +14103,6 @@ sub_A6B0:
 		rts
 
 sub_A6BE:
-
 		move.w	#$10,(word_FFFC0C).w
 		move.w	#0,(word_FFFC0E).w
 		rts
@@ -14551,7 +14133,6 @@ sub_A6F4:
 		bra.s	loc_A6FE
 
 sub_A6FA:
-
 		lea	sub_B78A(pc),a3
 
 loc_A6FE:
@@ -14571,12 +14152,12 @@ locret_A71A:
 sub_A71C:
 		lea	(dword_FFF580).w,a1
 		lea	(unk_FFF600).w,a2
-		jmp	copy_bytes_to_dest_128
+		jmp	copy_bytes_to_dest_128 ; a1 = source
 
 sub_A72A:
 		lea	(unk_FFF600).w,a1
 		lea	(dword_FFF580).w,a2
-		jmp	copy_bytes_to_dest_128
+		jmp	copy_bytes_to_dest_128 ; a1 = source
 
 sub_A738:
 		move.w	#$8F01,(a5)
@@ -14606,7 +14187,6 @@ loc_A780:
 		rts
 
 sub_A78A:
-
 		lea	(unk_FFFA80).w,a3
 		move.l	#$93809402,(a3)+
 		move.l	#$96009500,(a3)+
@@ -14615,7 +14195,6 @@ sub_A78A:
 		rts
 
 sub_A7A6:
-
 		move.l	#$22E0EEE,(dword_FFF5D0).w
 		move.l	#$460022A,(dword_FFF5D4).w
 		move.l	#$4AE048E,(dword_FFF5D8).w
@@ -14624,9 +14203,7 @@ sub_A7A6:
 		rts
 
 byte_A7CE:	dc.b 4,	$14, $30, $2C, 7, $5A, 0, 0, 0,	0, 0, 2, $81, $2C, 0, 2, 3, 0, 0
-
 		align 2
-
 sub_A7E2:
 		st	(byte_FFEE7A).w
 		lea	stru_A84C(pc),a1
@@ -14668,7 +14245,6 @@ locret_A84A:
 		rts
 
 stru_A84C:	struc_A84C sub_A90C-stru_A84C,	$B4
-
 		struc_A84C sub_A920-stru_A84C,	$258
 		struc_A84C sub_A924-stru_A84C,	$294
 		struc_A84C sub_A928-stru_A84C,	$438
@@ -14701,7 +14277,6 @@ stru_A84C:	struc_A84C sub_A90C-stru_A84C,	$B4
 		struc_A84C sub_AAB4-stru_A84C,	$1996
 		struc_A84C sub_A9BC-stru_A84C,	$FFFF
 stru_A8CC:	struc_A8CC sub_A954-stru_A8CC,	$1A4
-
 		struc_A8CC sub_A944-stru_A8CC,	$1C2
 		struc_A8CC sub_A958-stru_A8CC,	$2EE
 		struc_A8CC sub_A944-stru_A8CC,	$316
@@ -14710,7 +14285,6 @@ stru_A8CC:	struc_A8CC sub_A954-stru_A8CC,	$1A4
 		struc_A8CC sub_A960-stru_A8CC,	$708
 		struc_A8CC sub_A944-stru_A8CC,	$FFFF
 stru_A8EC:	struc_A8EC sub_A948-stru_A8EC,	$1A4
-
 		struc_A8EC sub_A944-stru_A8EC,	$1C2
 		struc_A8EC sub_A94C-stru_A8EC,	$2EE
 		struc_A8EC sub_A944-stru_A8EC,	$316
@@ -14718,7 +14292,6 @@ stru_A8EC:	struc_A8EC sub_A948-stru_A8EC,	$1A4
 		struc_A8EC sub_A944-stru_A8EC,	$58C
 		struc_A8EC sub_A964-stru_A8EC,	$708
 		struc_A8EC sub_A944-stru_A8EC,	$FFFF
-
 sub_A90C:
 		move.w	#$5A,(word_FF9000).w
 		move.w	#$59,(word_FF9040).w
@@ -14730,7 +14303,6 @@ sub_A920:
 		bra.s	sub_A966
 
 sub_A924:
-
 		moveq	#$12,d1
 		bra.s	sub_A966
 
@@ -14763,7 +14335,6 @@ sub_A940:
 		bra.s	sub_A966
 
 sub_A944:
-
 		moveq	#$11,d1
 		bra.s	sub_A966
 
@@ -14797,16 +14368,11 @@ sub_A960:
 
 sub_A964:
 		moveq	#$2F,d1
-
 sub_A966:
 		jmp	sub_12A964
-
 sub_A96C:
-
 		jmp	sub_A6BE(pc)
-
 sub_A970:
-
 		jmp	sub_A6B0(pc)
 
 sub_A974:
@@ -14906,15 +14472,14 @@ sub_AA72:
 		subq.w	#1,d0
 		move.w	d0,(word_FFFC48).w
 		lea	(dword_FF6000).l,a4
-		jsr	(nemesis_decomp_to_ram).l
-
+		jsr	(nemesis_decomp_to_ram).l ; a0 = source
 		movem.l	(sp)+,a0-a6
 		rts
 
 sub_AAB4:
 		movem.l	a0-a6,-(sp)
 		moveq	#6,d0
-		trap	#0
+		trap	#0		; Trap0
 		move.l	#$EEE0EEA,(dword_FFF5A2).w
 		move.l	#$ECA0EC4,(dword_FFF5A6).w
 		move.b	#1,(byte_FFEE02).w
@@ -14935,13 +14500,11 @@ loc_AAF2:
 		subq.w	#1,d0
 		move.w	d0,(word_FFFC48).w
 		lea	(dword_FF6000).l,a4
-		jsr	(nemesis_decomp_to_ram).l
-
+		jsr	(nemesis_decomp_to_ram).l ; a0 = source
 		movem.l	(sp)+,a0-a6
 		rts
 
 sub_AB26:
-
 		move.w	(word_FFFC4A).w,d4
 		beq.s	locret_AB70
 		subq.w	#1,(word_FFFC4A).w
@@ -14981,50 +14544,44 @@ sub_AB72:
 		lea	(byte_31608).l,a0
 		lea	(unk_FF2000).l,a1
 		move.w	#$2460,d0
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		btst	#7,(byte_FFFF0C).w
 		bne.s	loc_ABC8
 		lea	(byte_315A2).l,a0
 		lea	(M68K_RAM).l,a1
 		move.w	#$6460,d0
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		lea	(byte_31616).l,a0
 		lea	(unk_FF4000).l,a1
 		move.w	#$6460,d0
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		move.l	#$D0C0B,d0
-		jsr	send_ram_data_to_vram(pc)
+		jsr	send_ram_data_to_vram(pc) ; d0 = indexes
 		rts
 
 loc_ABC8:
 		lea	(byte_315D4).l,a0
 		lea	(M68K_RAM).l,a1
 		move.w	#$6460,d0
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		move.l	#$C0B,d0
-		jsr	send_ram_data_to_vram(pc)
+		jsr	send_ram_data_to_vram(pc) ; d0 = indexes
 		rts
 
 sub_ABEA:
-
 		move.l	a0,-(sp)
 		move.w	#$6180,d0
 		lea	(byte_30598).l,a0
 		lea	(M68K_RAM).l,a1
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		lea	(byte_30620).l,a0
 		lea	(unk_FF1000).l,a1
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		movea.l	(sp)+,a0
 		move.l	#$A09,d0
-		jsr	send_ram_data_to_vram(pc)
+		jsr	send_ram_data_to_vram(pc) ; d0 = indexes
 		rts
+; d0 = indexes
 
 send_ram_data_to_vram:
 		moveq	#3,d2
@@ -15041,14 +14598,17 @@ loc_AC24:
 		move.w	-(a1),d1
 		move.l	-(a1),d0
 		movea.l	-(a1),a1
-		bsr.s	write_data_to_vram
-
+		bsr.s	write_data_to_vram ; d0	= vdp cmd
 		movem.l	(sp)+,d0-d2
 
 loc_AC4A:
 		ror.l	#8,d0
 		dbf	d2,loc_AC24
 		rts
+; d0 = vdp cmd
+; d1 = width
+; d2 = height
+; a1 = source
 
 write_data_to_vram:
 		move.l	#$1000000,d4
@@ -15071,11 +14631,10 @@ sub_AC72:
 		jsr	sub_A774(pc)
 		jsr	(sub_205E).l
 		move.l	#$5401,d0
-		trap	#1
+		trap	#1		; Trap1
 		lea	(byte_1C120).l,a0
 		lea	(dword_FF6000).l,a4
-		jsr	(nemesis_decomp_to_ram).l
-
+		jsr	(nemesis_decomp_to_ram).l ; a0 = source
 		lea	(byte_1C120).l,a0
 		jsr	sub_AE56(pc)
 		jsr	sub_AB26(pc)
@@ -15083,8 +14642,7 @@ sub_AC72:
 		lea	(byte_12FF1E).l,a0
 		lea	(unk_FF1000).l,a1
 		move.w	#$100,d0
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		moveq	#$15,d0
 		jsr	(sub_15DC).l
 		move.w	#$13,(word_FFFC80).w
@@ -15106,8 +14664,7 @@ loc_ACFC:
 		movea.l	(a1,d0.w),a0
 		lea	(unk_FF1000).l,a1
 		move.w	#0,d0
-		jsr	(sub_2374).l
-
+		jsr	(sub_2374).l	; a0 = source
 		jsr	sub_AE88(pc)
 		move.w	d7,d1
 		add.w	d1,d1
@@ -15262,13 +14819,10 @@ off_AEBE:	dc.l byte_12FE5C
 		dc.l byte_12FEE8
 		dc.l byte_12FF02
 word_AED2:	dc.w $4E4E, $504F, $5251, $5353, $5454
-
 sub_AEDC:
 		lea	off_AEE4(pc),a1
-		jmp	j_jump_by_table1(pc)
-
+		jmp	j_jump_by_table1(pc) ; a0 = ?
 off_AEE4:	dc.w sub_AEF2-off_AEE4
-
 		dc.w sub_AF1E-off_AEE4
 		dc.w sub_AF56-off_AEE4
 		dc.w sub_AF6E-off_AEE4
@@ -15349,10 +14903,8 @@ locret_AFF6:
 
 sub_AFF8:
 		lea	off_B000(pc),a1
-		jmp	j_jump_by_table1(pc)
-
+		jmp	j_jump_by_table1(pc) ; a0 = ?
 off_B000:	dc.w sub_B004-off_B000
-
 		dc.w sub_B024-off_B000
 
 sub_B004:
@@ -15395,11 +14947,9 @@ stru_B076:	struc_19 $C, $FFE8
 		struc_19 $D, $FFE5
 		struc_19 $C, $FFEB
 		struc_19 8, $FFEC
-
 sub_B08E:
 		lea	off_B0C4(pc),a1
-		jsr	j_jump_by_table1(pc)
-
+		jsr	j_jump_by_table1(pc) ; a0 = ?
 		cmpi.w	#5,2(a0)
 		bcc.s	loc_B0B8
 		move.w	(word_FF9050).w,$10(a0)
@@ -15420,7 +14970,6 @@ off_B0C4:	dc.w sub_B0D2-off_B0C4
 		dc.w sub_B1C8-off_B0C4
 		dc.w sub_B1F0-off_B0C4
 		dc.w locret_B21A-off_B0C4
-
 sub_B0D2:
 		bset	#3,$C(a0)
 		move.w	#$4061,$A(a0)
@@ -15456,16 +15005,14 @@ loc_B140:
 		move.l	a0,-(sp)
 		lea	(byte_1C120).l,a0
 		lea	(dword_FF6000).l,a4
-		jsr	(nemesis_decomp_to_ram).l
-
+		jsr	(nemesis_decomp_to_ram).l ; a0 = source
 		movea.l	(sp)+,a0
 		move.w	#$1E0,$38(a0)
 		move.l	#$17161514,d0
-		trap	#5
+		trap	#5		; Trap5
 		lea	(dword_FFF580).w,a1
 		lea	(unk_FFF600).w,a2
-		jsr	copy_bytes_to_dest_128
-
+		jsr	copy_bytes_to_dest_128 ; a1 = source
 		jmp	sub_B74A(pc)
 
 sub_B188:
@@ -15513,13 +15060,12 @@ locret_B21A:
 
 sub_B21C:
 		lea	off_B224(pc),a1
-		jmp	j_jump_by_table1(pc)
+		jmp	j_jump_by_table1(pc) ; a0 = ?
 
 off_B224:	dc.w sub_B22C-off_B224
 		dc.w sub_B274-off_B224
 		dc.w sub_B2A6-off_B224
 		dc.w sub_B2BE-off_B224
-
 sub_B22C:
 		bset	#3,$C(a0)
 		bset	#1,$D(a0)
@@ -15565,7 +15111,7 @@ sub_B2BE:
 
 sub_B2D0:
 		lea	off_B2D8(pc),a1
-		jmp	j_jump_by_table1(pc)
+		jmp	j_jump_by_table1(pc) ; a0 = ?
 
 off_B2D8:	dc.w sub_B2EA-off_B2D8
 		dc.w sub_B326-off_B2D8
@@ -15576,7 +15122,6 @@ off_B2D8:	dc.w sub_B2EA-off_B2D8
 		dc.w sub_B408-off_B2D8
 		dc.w sub_B440-off_B2D8
 		dc.w sub_B456-off_B2D8
-
 sub_B2EA:
 		move.b	#$18,$C(a0)
 		move.w	#$E120,$A(a0)
@@ -15691,15 +15236,13 @@ nullsub_9:
 
 sub_B470:
 		lea	off_B47E(pc),a1
-		jsr	j_jump_by_table1(pc)
-
+		jsr	j_jump_by_table1(pc) ; a0 = ?
 		jmp	(sub_5FDC).l
 
 off_B47E:	dc.w sub_B486-off_B47E
 		dc.w sub_B4CA-off_B47E
 		dc.w sub_B4EC-off_B47E
 		dc.w locret_B4FC-off_B47E
-
 sub_B486:
 		move.b	#$18,$C(a0)
 		bset	#1,$D(a0)
@@ -15735,12 +15278,11 @@ locret_B4FC:
 
 sub_B4FE:
 		lea	off_B506(pc),a1
-		jmp	j_jump_by_table1(pc)
+		jmp	j_jump_by_table1(pc) ; a0 = ?
 
 off_B506:	dc.w sub_B50C-off_B506
 		dc.w sub_B560-off_B506
 		dc.w sub_B580-off_B506
-
 sub_B50C:
 		move.b	#$18,$C(a0)
 		bset	#1,$D(a0)
@@ -15756,7 +15298,7 @@ sub_B50C:
 		move.w	#4,6(a0)
 		move.w	#$1E,$38(a0)
 		move.l	#$17161519,d0
-		trap	#5
+		trap	#5		; Trap5
 
 sub_B560:
 		jsr	sub_B88A
@@ -15774,18 +15316,17 @@ sub_B580:
 		move.w	#$39,(word_FF9140).w
 		move.l	a0,-(sp)
 		moveq	#$1A,d0
-		trap	#1
+		trap	#1		; Trap1
 		movea.l	(sp)+,a0
 		rts
 
 sub_B5A0:
 		lea	off_B5A8(pc),a1
-		jmp	j_jump_by_table1(pc)
+		jmp	j_jump_by_table1(pc) ; a0 = ?
 
 off_B5A8:	dc.w sub_B5AE-off_B5A8
 		dc.w sub_B5E0-off_B5A8
 		dc.w locret_B5F0-off_B5A8
-
 sub_B5AE:
 		move.b	#$18,$C(a0)
 		move.w	#$200,$10(a0)
@@ -15807,12 +15348,9 @@ locret_B5F0:
 
 sub_B5F2:
 		lea	off_B5FE(pc),a1
-		jsr	j_jump_by_table1(pc)
-
+		jsr	j_jump_by_table1(pc) ; a0 = ?
 		bra.w	sub_B6DE
-
 off_B5FE:	dc.w sub_B606-off_B5FE
-
 		dc.w sub_B62A-off_B5FE
 		dc.w sub_B678-off_B5FE
 		dc.w sub_B6BE-off_B5FE
@@ -15832,8 +15370,7 @@ sub_B62A:
 		move.l	a0,-(sp)
 		lea	(byte_1C120).l,a0
 		lea	(M68K_RAM).l,a4
-		jsr	(nemesis_decomp_to_ram).l
-
+		jsr	(nemesis_decomp_to_ram).l ; a0 = source
 		move.l	#$40200002,(a5)
 		lea	(M68K_RAM).l,a1
 		lea	(VDP_DATA).l,a2
@@ -15857,12 +15394,10 @@ sub_B678:
 		move.l	#$54160003,(a5)
 		lea	word_B69A(pc),a1
 		move.l	(a1)+,(a6)
-		jmp	copy_words_16
+		jmp	copy_words_16	; a1 = source
 
 word_B69A:	dc.w $A53A, $A53B, $A53C, $A53D, $A53D,	0, $A53D, $A53E, $A53F
-
 		dc.w $A53B, $A53E, 0, $A540, $A541, $A53E, $A53E, $A542, $A543
-
 sub_B6BE:
 		jsr	sub_B740(pc)
 		move.w	#$1E,$38(a0)
@@ -15881,12 +15416,11 @@ sub_B6DE:
 
 sub_B6F8:
 		lea	off_B700(pc),a1
-		jmp	j_jump_by_table1(pc)
+		jmp	j_jump_by_table1(pc) ; a0 = ?
 
 off_B700:	dc.w sub_B706-off_B700
 		dc.w sub_B732-off_B700
 		dc.w locret_B73E-off_B700
-
 sub_B706:
 		move.b	#$18,$C(a0)
 		move.w	#$40F0,$A(a0)
@@ -15906,7 +15440,6 @@ locret_B73E:
 		rts
 
 sub_B740:
-
 		subq.w	#1,$38(a0)
 		beq.s	locret_B748
 		move.l	(sp)+,d0
@@ -15923,8 +15456,7 @@ sub_B74A:
 loc_B756:
 		lea	(unk_FFF600).w,a1
 		lea	(dword_FFF580).w,a2
-		jsr	copy_bytes_to_dest_128
-
+		jsr	copy_bytes_to_dest_128 ; a1 = source
 		bsr.s	sub_B78A
 		moveq	#2,d5
 
@@ -15943,7 +15475,6 @@ sub_B780:
 		bra.s	loc_B792
 
 sub_B78A:
-
 		lea	(dword_FFF580).w,a1
 		moveq	#4,d5
 		moveq	#$3F,d7
@@ -15981,12 +15512,14 @@ loc_B7B4:
 		dbf	d7,loc_B792
 		move.b	#1,(byte_FFEE02).w
 		rts
-
 sub_B7CE:
 		jmp	sub_B83E
-
+; a0 = ?
+; a1 = funcs table
 j_jump_by_table1:
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
+; a0 = ?
+; a1 = funcs table
 
 jump_by_table2:
 		moveq	#0,d0
@@ -15995,9 +15528,10 @@ jump_by_table2:
 		move.w	(a1,d0.w),d0
 		movea.l	d0,a1
 		jmp	(a1)
+; a0 = ?
+; a1 = funcs table
 
 jump_by_table1:
-
 		move.w	2(a0),d0
 		add.w	d0,d0
 		adda.w	(a1,d0.w),a1
@@ -16056,12 +15590,10 @@ sub_B856:
 		bra.s	sub_B83E
 
 sub_B85A:
-
 		moveq	#4,d0
 		bra.s	sub_B83E
 
 sub_B85E:
-
 		moveq	#6,d0
 		bra.s	sub_B83E
 
@@ -16086,12 +15618,10 @@ sub_B872:
 		bra.s	loc_B842
 
 sub_B876:
-
 		moveq	#4,d0
 		bra.s	loc_B842
 
 sub_B87A:
-
 		moveq	#6,d0
 		bra.s	loc_B842
 
@@ -16115,7 +15645,6 @@ sub_B88A:
 		rts
 
 sub_B89C:
-
 		bsr.s	sub_B8A4
 		move.l	d4,d3
 		addi.w	#$C0,d1
@@ -16146,9 +15675,7 @@ word_B8C6:	dc.w 0,	$648, $C90, $12D5, $1918, $1F56, $2590,	$2BC4, $31F1, $3817
 		dc.w $D4DB, $D848, $DB94, $DEBE, $E1C6,	$E4AA, $E76C, $EA0A, $EC83, $EED9
 		dc.w $F109, $F314, $F4FA, $F6BA, $F854,	$F9C8, $FB15, $FC3B, $FD3B, $FE13
 		dc.w $FEC4, $FF4E, $FFB1, $FFEC, $FFFF
-
 sub_B948:
-
 		jsr	sub_BB60(pc)
 		jsr	sub_BB72(pc)
 		jmp	sub_BBA8(pc)
@@ -16172,7 +15699,6 @@ locret_B978:
 		rts
 
 loc_B97A:
-
 		moveq	#0,d7
 		tst.b	(byte_FFEE09).w
 		bne.s	locret_B992
@@ -16196,12 +15722,10 @@ loc_B9A0:
 		rts
 
 sub_B9A8:
-
 		jsr	sub_BB60(pc)
 		jmp	sub_BC04(pc)
 
 sub_B9B0:
-
 		jsr	sub_BB84(pc)
 		jmp	sub_BC04(pc)
 
@@ -16237,7 +15761,6 @@ loc_B9F6:
 		rts
 
 loc_BA02:
-
 		tst.b	(byte_FFEE62).w
 		beq.s	loc_BA1C
 		jsr	loc_B97A(pc)
@@ -16320,7 +15843,6 @@ sub_BAAC:
 		add.w	$10(a0),d2
 
 sub_BAB4:
-
 		jsr	sub_BB72(pc)
 		bra.s	loc_BABE
 
@@ -16358,7 +15880,6 @@ loc_BAF2:
 		rts
 
 sub_BAF6:
-
 		add.w	$14(a0),d1
 		ble.s	loc_BB28
 		move.w	(word_FF8508).w,d4
@@ -16382,7 +15903,6 @@ loc_BB28:
 		rts
 
 sub_BB2C:
-
 		move.w	d2,d4
 		move.w	d1,d5
 		movea.l	(dword_FF8510).w,a2
@@ -16405,7 +15925,6 @@ sub_BB2C:
 		rts
 
 sub_BB60:
-
 		moveq	#0,d0
 		move.b	$24(a0),d0
 		lsl.w	#2,d0
@@ -16578,7 +16097,6 @@ off_BCAC:	dc.w stru_BCC0-off_BCAC
 		dc.w stru_C2AA-off_BCAC
 		dc.w stru_C396-off_BCAC
 stru_BCC0:	struc_BCC0 14,	stru_BCCC-stru_BCC0
-
 		struc_BCC0 12,	stru_BD26-stru_BCC0
 		struc_BCC0 5, stru_BD74-stru_BCC0
 stru_BCCC:	struc_30 2, $83C0, 0
@@ -16616,7 +16134,6 @@ stru_BD74:	struc_30 7, $A400, 0
 		struc_30 $18, $647E, 0
 		struc_30 $40, $492, 0
 stru_BD98:	struc_BD98 10,	stru_BDA8-stru_BD98
-
 		struc_BD98 9, stru_BDEA-stru_BD98
 		struc_BD98 9, stru_BDEA-stru_BD98
 		struc_BD98 4, stru_BE26-stru_BD98
@@ -16632,7 +16149,6 @@ stru_BDA8:	struc_30 2, $83C0, 0
 		struc_30 3, $2495, $C8
 		struc_30 6, $495, 0
 stru_BDEA:	struc_30 2, $83C0, 0
-
 		struc_30 3, $2400, $C8
 		struc_30 6, $400, 0
 		struc_30 $D, $A47F, $C8
@@ -16648,7 +16164,6 @@ stru_BE26:	struc_30 $11, $400, $64
 		struc_30 $1D, $40F, 0
 		struc_30 $63, $300, 0
 stru_BE44:	struc_BE44 4, stru_BE60-stru_BE44
-
 		struc_BE44 6, stru_BE7E-stru_BE44
 		struc_BE44 5, stru_BEA8-stru_BE44
 		struc_BE44 8, stru_BECC-stru_BE44
@@ -16674,7 +16189,6 @@ stru_BEA8:	struc_30 $23, $400, $C8
 		struc_30 $27, $2462, 0
 		struc_30 $28, $2473, 0
 stru_BECC:	struc_30 $2C, $8400, $C8
-
 		struc_30 $23, $42C, $12C
 		struc_30 $24, $42C, 0
 		struc_30 $2B, $C473, 0
@@ -16686,7 +16200,6 @@ stru_BECC:	struc_30 $2C, $8400, $C8
 stru_BF02:	struc_30 $70, $242C, 0
 		struc_30 $71, $400, $C8
 stru_BF0E:	struc_BF0E 13,	stru_BF22-stru_BF0E
-
 		struc_BF0E 13,	stru_BF76-stru_BF0E
 		struc_BF0E 0, stru_BFCA-stru_BF0E
 		struc_BF0E 10,	stru_BFD0-stru_BF0E
@@ -16742,7 +16255,6 @@ stru_C012:	struc_30 $90, $3C0, 0
 		struc_30 $98, $3C0, 0
 		struc_30 $99, $3C0, 0
 stru_C04E:	struc_C04E 11,	stru_C05E-stru_C04E
-
 		struc_C04E 13,	stru_C100-stru_C04E
 		struc_C04E 14,	stru_C0A6-stru_C04E
 		struc_C04E 13,	stru_C100-stru_C04E
@@ -16774,7 +16286,6 @@ stru_C0A6:	struc_30 2, $83C0, 0
 		struc_30 $3B, $454C, 0
 		struc_30 $3C, $454C, 0
 stru_C100:	struc_30 2, $83C0, 0
-
 		struc_30 $7A, $83E0, 0
 		struc_30 $7B, $83E0, 0
 		struc_30 $4D, $2400, $C8
@@ -16789,7 +16300,6 @@ stru_C100:	struc_30 2, $83C0, 0
 		struc_30 $3F, $856B, $12C
 		struc_30 $4B, $5B4, $12C
 stru_C154:	struc_C154 6, stru_C17E-stru_C154
-
 		struc_C154 0, stru_C178-stru_C154
 		struc_C154 6, stru_C1A8-stru_C154
 		struc_C154 6, stru_C1A8-stru_C154
@@ -16807,7 +16317,6 @@ stru_C17E:	struc_30 2, $83C0, 0
 		struc_30 $54, $847F, 0
 		struc_30 $19, $84D3, $12C
 stru_C1A8:	struc_30 2, $83C0, 0
-
 		struc_30 $45, $2400, $C8
 		struc_30 6, $400, 0
 		struc_30 $52, $47F, $12C
@@ -16816,7 +16325,6 @@ stru_C1A8:	struc_30 2, $83C0, 0
 		struc_30 $19, $4D3, $12C
 stru_C1D2:	struc_30 2, $83C0, 0
 stru_C1D8:	struc_C1D8 14,	stru_C1F0-stru_C1D8
-
 		struc_C1D8 6, stru_C256-stru_C1D8
 		struc_C1D8 2, stru_C280-stru_C1D8
 		struc_C1D8 2, stru_C292-stru_C1D8
@@ -16854,13 +16362,11 @@ stru_C292:	struc_30 $73, $464, 0
 stru_C29E:	struc_30 $8E, $C400, 0
 		struc_30 $76, $840C, 0
 stru_C2AA:	struc_C2AA 12,	stru_C2BE-stru_C2AA
-
 		struc_C2AA 12,	stru_C2BE-stru_C2AA
 		struc_C2AA 4, stru_C30C-stru_C2AA
 		struc_C2AA 12,	stru_C32A-stru_C2AA
 		struc_C2AA 4, stru_C378-stru_C2AA
 stru_C2BE:	struc_30 2, $83C0, 0
-
 		struc_30 $D, $A400, $C8
 		struc_30 $E, $8400, 0
 		struc_30 $1A, $8400, 0
@@ -16897,7 +16403,6 @@ stru_C378:	struc_30 $80, $8500, 0
 		struc_30 $49, $8480, 0
 		struc_30 6, $480, 0
 stru_C396:	struc_C396 5, stru_C3DC-stru_C396
-
 		struc_C396 8, stru_C3A6-stru_C396
 		struc_C396 0, stru_C400-stru_C396
 		struc_C396 2, stru_C406-stru_C396
@@ -16920,7 +16425,6 @@ stru_C400:	struc_30 $9E, $C400, 0
 stru_C406:	struc_30 $83, $8400, 0
 		struc_30 $84, $8500, 0
 		struc_30 $85, $C500, 0
-
 sub_C418:
 		move.w	(word_FF8F34).w,d0
 		add.w	d0,d0
@@ -16936,7 +16440,7 @@ sub_C418:
 loc_C438:
 		move.l	(a1)+,(a5)
 		movea.l	(a1)+,a0
-		jsr	(nemesis_decomp_to_vram).l
+		jsr	(nemesis_decomp_to_vram).l ; a0	= source
 		dbf	d2,loc_C438
 		rts
 
@@ -16951,7 +16455,6 @@ off_C448:	dc.w stru_C45C-off_C448
 		dc.w stru_C8E4-off_C448
 		dc.w stru_C9B0-off_C448
 stru_C45C:	struc_C45C 8, stru_C468-stru_C45C
-
 		struc_C45C 6, stru_C4B0-stru_C45C
 		struc_C45C 3, stru_C4E8-stru_C45C
 stru_C468:	nemesis_to_vram1 $78000001, byte_1202D4
@@ -16975,7 +16478,6 @@ stru_C4E8:	nemesis_to_vram1 $40000002, byte_1173C0
 		nemesis_to_vram1 $4FC00002, byte_11818A
 		nemesis_to_vram1 $52400002, byte_119858
 stru_C508:	struc_C508 5, stru_C518-stru_C508
-
 		struc_C508 5, stru_C548-stru_C508
 		struc_C508 5, stru_C548-stru_C508
 		struc_C508 1, stru_C578-stru_C508
@@ -16986,7 +16488,6 @@ stru_C518:	nemesis_to_vram1 $78000001, byte_1202D4
 		nemesis_to_vram1 $49E00002, byte_11785A
 		nemesis_to_vram1 $52A00002, byte_1165DA
 stru_C548:	nemesis_to_vram1 $78000001, byte_1202D4
-
 		nemesis_to_vram1 $40000002, byte_1165DA
 		nemesis_to_vram1 $4FE00002, byte_11785A
 		nemesis_to_vram1 $58A00002, byte_11838A
@@ -16995,7 +16496,6 @@ stru_C548:	nemesis_to_vram1 $78000001, byte_1202D4
 stru_C578:	nemesis_to_vram1 $40000002, byte_119132
 		nemesis_to_vram1 $41E00002, byte_118AF4
 stru_C588:	struc_C588 4, stru_C5A4-stru_C588
-
 		struc_C588 5, stru_C5CC-stru_C588
 		struc_C588 4, stru_C5FC-stru_C588
 		struc_C588 6, stru_C624-stru_C588
@@ -17019,7 +16519,6 @@ stru_C5FC:	nemesis_to_vram1 $40000002, byte_12096E
 		nemesis_to_vram1 $4E600002, byte_12125A
 		nemesis_to_vram1 $64000001, byte_1F1FE
 stru_C624:	nemesis_to_vram1 $40000002, byte_120462
-
 		nemesis_to_vram1 $45800002, byte_12096E
 		nemesis_to_vram1 $4E600002, byte_120800
 		nemesis_to_vram1 $51C00002, byte_11FEE6
@@ -17029,7 +16528,6 @@ stru_C624:	nemesis_to_vram1 $40000002, byte_120462
 stru_C65C:	nemesis_to_vram1 $40000002, byte_120462
 		nemesis_to_vram1 $45800002, byte_1227A6
 stru_C66C:	struc_C66C 6, stru_C680-stru_C66C
-
 		struc_C66C 5, stru_C6B8-stru_C66C
 		struc_C66C 0, stru_C6E8-stru_C66C
 		struc_C66C 6, stru_C6F0-stru_C66C
@@ -17057,7 +16555,6 @@ stru_C6F0:	nemesis_to_vram1 $78000001, byte_1202D4
 		nemesis_to_vram1 $6CA00002, byte_120E28
 stru_C728:	nemesis_to_vram1 $78000001, byte_1280F6
 stru_C730:	struc_C730 5, stru_C740-stru_C730
-
 		struc_C730 7, stru_C7A8-stru_C730
 		struc_C730 6, stru_C770-stru_C730
 		struc_C730 5, stru_C7B8-stru_C730
@@ -17083,7 +16580,6 @@ stru_C7B8:	nemesis_to_vram1 $78000001, byte_1202D4
 		nemesis_to_vram1 $76800002, byte_11F9D8
 		nemesis_to_vram1 $6A000001, byte_1E470
 stru_C7E8:	struc_C7E8 3, stru_C814-stru_C7E8
-
 		struc_C7E8 0, stru_C80C-stru_C7E8
 		struc_C7E8 3, stru_C814-stru_C7E8
 		struc_C7E8 3, stru_C814-stru_C7E8
@@ -17094,20 +16590,17 @@ stru_C7E8:	struc_C7E8 3, stru_C814-stru_C7E8
 		struc_C7E8 0, stru_C834-stru_C7E8
 stru_C80C:	nemesis_to_vram1 $78000001, byte_1147B0
 stru_C814:	nemesis_to_vram1 $78000001, byte_1202D4
-
 		nemesis_to_vram1 $40000002, byte_1165DA
 		nemesis_to_vram1 $4FE00002, byte_11D5E2
 		nemesis_to_vram1 $5A600002, byte_11838A
 stru_C834:	nemesis_to_vram1 $78000001, byte_1230DE
 stru_C83C:	struc_C83C 6, stru_C854-stru_C83C
-
 		struc_C83C 3, stru_C88C-stru_C83C
 		struc_C83C 2, stru_C8AC-stru_C83C
 		struc_C83C 1, stru_C8C4-stru_C83C
 		struc_C83C 6, stru_C854-stru_C83C
 		struc_C83C 1, stru_C8D4-stru_C83C
 stru_C854:	nemesis_to_vram1 $78000001, byte_1202D4
-
 		nemesis_to_vram1 $7C000001, byte_11C646
 		nemesis_to_vram1 $40000002, byte_1165DA
 		nemesis_to_vram1 $4FE00002, byte_11785A
@@ -17126,13 +16619,11 @@ stru_C8C4:	nemesis_to_vram1 $40000002, byte_11C094
 stru_C8D4:	nemesis_to_vram1 $40000002, byte_11C476
 		nemesis_to_vram1 $41800002, byte_11C7DA
 stru_C8E4:	struc_C8E4 7, stru_C8F8-stru_C8E4
-
 		struc_C8E4 7, stru_C8F8-stru_C8E4
 		struc_C8E4 3, stru_C938-stru_C8E4
 		struc_C8E4 7, stru_C958-stru_C8E4
 		struc_C8E4 2, stru_C998-stru_C8E4
 stru_C8F8:	nemesis_to_vram1 $78000001, byte_1202D4
-
 		nemesis_to_vram1 $7C000001, byte_11C646
 		nemesis_to_vram1 $40000002, byte_11785A
 		nemesis_to_vram1 $48C00002, byte_119132
@@ -17156,7 +16647,6 @@ stru_C998:	nemesis_to_vram1 $40000002, byte_125F08
 		nemesis_to_vram1 $50000002, byte_1165DA
 		nemesis_to_vram1 $60000002, byte_126506
 stru_C9B0:	struc_C9B0 4, stru_C9F8-stru_C9B0
-
 		struc_C9B0 6, stru_C9C0-stru_C9B0
 		struc_C9B0 0, stru_CA20-stru_C9B0
 		struc_C9B0 5, stru_CA28-stru_C9B0
@@ -17179,9 +16669,7 @@ stru_CA28:	nemesis_to_vram1 $78000001, byte_124824
 		nemesis_to_vram1 $4E200002, byte_124A5A
 		nemesis_to_vram1 $60000002, byte_1276A8
 		nemesis_to_vram1 $6C800002, byte_125384
-
 sub_CA58:
-
 		move.w	$32(a0),d1
 		lea	(off_CAA6).l,a1
 		lea	(a1,d1.w),a1
@@ -17207,7 +16695,6 @@ locret_CA8C:
 		rts
 
 sub_CA8E:
-
 		move.w	(word_FF8F34).w,d1
 		add.w	d1,d1
 		move.w	off_CAA6(pc,d1.w),d1
@@ -17235,9 +16722,7 @@ word_CAFC:	dc.w $164, $A4,	$B4, $1C4, $174, $184, $1A4
 word_CB0A:	dc.w $A4, $A4, $1B4, $1C4, $D4,	$D4, $1A4
 word_CB18:	dc.w $E4, $A4, $B4, $D4, $224, $D4, $1E4, $F4
 word_CB28:	dc.w $A4, $A4, $B4, $1C4, $A4, $D4, $1A4, $1D4,	$204
-
 word_CB3A:	dc.w $114, $1F4, $B4, $1C4, $224, $D4, $1A4, $1D4, $FAFE, $FEFE
-
 		dc.w $FA02, $FE02, $FAFE, $FA02, 0, 0, $F404, $FE04, $F4FC, $FEFC
 		dc.w $F4FC, $F404, $FC,	4, $FF01, $FF01, $FFFF,	$FFFF, $D4FC, $D404
 		dc.w 0,	0, $E20C, $FE0C, $E2F4,	$FEF4, $E2F8, $E208, 0,	0
@@ -17258,7 +16743,6 @@ word_CB3A:	dc.w $114, $1F4, $B4, $1C4, $224, $D4, $1A4, $1D4, $FAFE, $FEFE
 		dc.w $F8F8, $F808, $8F8, $808, $F820, $20, $F8E0, $E0, $F8F8, $F808
 		dc.w $E8, $18, $F40C, $C0C, $F4FE, $CFE, $F4F4,	$F40C, $CF4, $C0C
 		dc.w $A040, $FE40, $A0C4, $FEC4, $A0E2,	$A01E, $E2, $1E
-
 sub_CCDA:
 		cmpi.w	#1,2(a0)
 		beq.s	loc_CD0C
@@ -17304,7 +16788,7 @@ locret_CD64:
 
 sub_CD66:
 		lea	(off_CD70).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_CD70:	dc.w sub_CDFA-off_CD70
 		dc.w sub_CE7E-off_CD70
@@ -17318,9 +16802,7 @@ off_CD70:	dc.w sub_CDFA-off_CD70
 		dc.w sub_D0D8-off_CD70
 		dc.w sub_D0FA-off_CD70
 		dc.w sub_D118-off_CD70
-
 sub_CD88:
-
 		jsr	sub_B9B8(pc)
 		beq.s	loc_CDD0
 		move.w	a0,$30(a1)
@@ -17509,7 +16991,6 @@ loc_CFBA:
 		bra.w	sub_CD88
 
 sub_CFBE:
-
 		move.w	$10(a0),d0
 		sub.w	(dword_FF8524).w,d0
 		cmpi.w	#$1A0,d0
@@ -17551,7 +17032,6 @@ loc_D02A:
 		bra.w	sub_CD88
 
 sub_D02E:
-
 		move.w	$10(a0),d0
 		sub.w	(dword_FF8524).w,d0
 		cmpi.w	#$FFA0,d0
@@ -17713,7 +17193,7 @@ loc_D1EC:
 
 sub_D1FE:
 		lea	(off_D208).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_D208:	dc.w sub_D35E-off_D208
 		dc.w sub_D438-off_D208
@@ -17723,7 +17203,6 @@ off_D208:	dc.w sub_D35E-off_D208
 		dc.w sub_D574-off_D208
 		dc.w sub_D626-off_D208
 		dc.w sub_D658-off_D208
-
 sub_D218:
 		lea	(word_FF9000).w,a1
 		move.w	#$2F,d7
@@ -17804,7 +17283,6 @@ loc_D2CE:
 		rts
 
 sub_D2D8:
-
 		jsr	sub_B9B8(pc)
 		beq.s	loc_D304
 
@@ -17917,7 +17395,6 @@ loc_D3CC:
 
 locret_D412:
 		rts
-
 sub_D414:
 		bra.w	sub_D2D8
 
@@ -17925,9 +17402,7 @@ stru_D418:	struc_42 0, 4,	$1A000
 		struc_42 0, 8,	$1B000
 		struc_42 0, $C, $1C000
 		struc_42 1, $10, $1D000
-
 sub_D438:
-
 		jsr	sub_E9A8(pc)
 		bne.w	locret_D624
 		move.l	$1C(a0),d0
@@ -18159,13 +17634,12 @@ loc_D700:
 
 sub_D720:
 		lea	(off_D72A).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_D72A:	dc.w sub_D76C-off_D72A
 		dc.w sub_D792-off_D72A
 		dc.w sub_D79A-off_D72A
 		dc.w sub_D800-off_D72A
-
 sub_D732:
 		jsr	sub_B9B8(pc)
 		beq.s	loc_D756
@@ -18187,7 +17661,6 @@ loc_D75A:
 		movea.w	$3E(a0),a1
 		move.b	#2,$27(a1)
 		jmp	sub_B960(pc)
-
 sub_D768:
 		jmp	sub_B960(pc)
 
@@ -18318,7 +17791,6 @@ loc_D8F2:
 		move.b	#$64,$28(a0)
 		bset	#2,$D(a0)
 		rts
-
 word_D904:	dc.w $E, $EE
 
 loc_D908:
@@ -18336,9 +17808,8 @@ locret_D930:
 		rts
 
 sub_D932:
-
 		lea	(off_D93C).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_D93C:	dc.w sub_DA44-off_D93C
 		dc.w sub_DB22-off_D93C
@@ -18346,9 +17817,7 @@ off_D93C:	dc.w sub_DA44-off_D93C
 		dc.w sub_DB9C-off_D93C
 		dc.w sub_DBA4-off_D93C
 		dc.w sub_DBBA-off_D93C
-
 sub_D948:
-
 		clr.b	$F(a0)
 		jsr	sub_B9B8(pc)
 		bne.s	loc_D956
@@ -18385,7 +17854,6 @@ loc_D96A:
 		move.b	d0,$36(a1)
 		bset	#6,$36(a1)
 		bra.s	loc_DA3C
-
 		btst	#1,5(a0)
 		bne.s	loc_DA3C
 		jmp	sub_B960(pc)
@@ -18548,7 +18016,6 @@ sub_DBC6:
 		jmp	sub_B960(pc)
 
 word_DBDE:	dc.w 0,	$FFFF, $FFFE, $FFFF
-
 sub_DBE6:
 		moveq	#0,d0
 		move.w	2(a0),d0
@@ -18560,7 +18027,6 @@ off_DBF6:	dc.w sub_DBFE-off_DBF6
 		dc.w sub_DC1A-off_DBF6
 		dc.w sub_DC84-off_DBF6
 		dc.w sub_DD4E-off_DBF6
-
 sub_DBFE:
 		jsr	sub_BC72(pc)
 		move.l	#off_11A912,$20(a0)
@@ -18657,7 +18123,6 @@ stru_DD16:	struc_43 $FFFC, $FFF8,	6, $FFFF0000, $FFFF0000
 		struc_43 4, $FFF8, 5, $10000, $FFFF0000
 		struc_43 $FFFC, 0, 6, $FFFF0000, $10000
 		struc_43 4, 0,	5, $10000, $10000
-
 sub_DD4E:
 		move.l	#$4000,d0
 		jsr	sub_15C06
@@ -18672,14 +18137,13 @@ locret_DD6E:
 
 sub_DD70:
 		lea	(off_DD7A).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_DD7A:	dc.w sub_DD84-off_DD7A
 		dc.w sub_DDB6-off_DD7A
 		dc.w sub_DDD2-off_DD7A
 		dc.w sub_DE00-off_DD7A
 		dc.w sub_DF4A-off_DD7A
-
 sub_DD84:
 		jsr	sub_BC72(pc)
 		move.l	#off_11A912,$20(a0)
@@ -18759,7 +18223,6 @@ loc_DE50:
 		bra.s	loc_DEEA
 
 loc_DE74:
-
 		move.w	$28(a0),d0
 		subi.w	#$30,d0
 		cmp.w	$10(a0),d0
@@ -18772,7 +18235,6 @@ loc_DE74:
 		bra.s	loc_DF0A
 
 loc_DE9A:
-
 		tst.w	$18(a0)
 		blt.s	loc_DEB6
 		cmpi.w	#5,4(a0)
@@ -18840,9 +18302,8 @@ sub_DF4A:
 		jmp	sub_B960(pc)
 
 sub_DF52:
-
 		lea	(off_DF5C).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_DF5C:	dc.w sub_DFCA-off_DF5C
 		dc.w sub_E076-off_DF5C
@@ -18851,7 +18312,6 @@ off_DF5C:	dc.w sub_DFCA-off_DF5C
 		dc.w sub_E312-off_DF5C
 		dc.w sub_E476-off_DF5C
 		dc.w sub_E4B0-off_DF5C
-
 sub_DF6A:
 		jsr	sub_B9B8(pc)
 		beq.w	loc_DFA8
@@ -19314,7 +18774,7 @@ loc_E590:
 
 sub_E5A0:
 		lea	(off_E5AA).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_E5AA:	dc.w sub_E5B8-off_E5AA
 		dc.w sub_E626-off_E5AA
@@ -19323,7 +18783,6 @@ off_E5AA:	dc.w sub_E5B8-off_E5AA
 		dc.w sub_E6BA-off_E5AA
 		dc.w sub_E6DC-off_E5AA
 		dc.w sub_E70E-off_E5AA
-
 sub_E5B8:
 		jsr	sub_BC72(pc)
 		move.l	#off_11AEBE,$20(a0)
@@ -19376,7 +18835,6 @@ sub_E64A:
 		beq.w	loc_E5D8
 		addq.w	#2,2(a0)
 		bra.w	loc_E5D8
-
 sub_E670:
 		jmp	sub_B960(pc)
 
@@ -19658,15 +19116,13 @@ loc_E9D4:
 		rts
 
 sub_E9D8:
-
 		jsr	sub_EA3C(pc)
 		bne.w	locret_EA02
 		cmpa.l	a0,a1
 		bcc.s	loc_E9FE
 		movea.l	a1,a2
 		movea.l	a0,a1
-		jsr	copy_bytes_to_dest_64(pc)
-
+		jsr	copy_bytes_to_dest_64(pc) ; a1 = source
 		movea.l	a0,a1
 		moveq	#0,d1
 		jsr	loc_9508(pc)
@@ -19690,8 +19146,7 @@ sub_EA04:
 		bcs.s	loc_EA2A
 		movea.l	a1,a2
 		movea.l	a0,a1
-		jsr	copy_bytes_to_dest_64(pc)
-
+		jsr	copy_bytes_to_dest_64(pc) ; a1 = source
 		movea.l	a0,a1
 		moveq	#0,d1
 		jsr	loc_9508(pc)
@@ -19711,13 +19166,11 @@ loc_EA30:
 		rts
 
 sub_EA34:
-
 		lea	(unk_FF9EC0).w,a1
 		moveq	#$F,d7
 		bra.s	loc_EA42
 
 sub_EA3C:
-
 		lea	(word_FF9000).w,a1
 		moveq	#$2F,d7
 
@@ -19950,14 +19403,12 @@ stru_EB8C:	struc_44 $FF, $FFFF
 		struc_44 $B397, $B670
 		struc_44 $B505, $B505
 word_EC90:	dc.w $FF, $100,	$100, $100, $100, $100,	$101, $101, $101, $102
-
 		dc.w $103, $103, $104, $105, $106, $106, $107, $108, $109, $10B
 		dc.w $10C, $10D, $10E, $110, $111, $112, $114, $115, $117, $119
 		dc.w $11A, $11C, $11E, $120, $121, $123, $125, $127, $129, $12B
 		dc.w $12D, $130, $132, $134, $136, $138, $13B, $13D, $140, $142
 		dc.w $144, $147, $149, $14C, $14E, $151, $154, $156, $159, $15C
 		dc.w $15E, $161, $164, $167, $16A
-
 sub_ED12:
 		jsr	sub_E9A8(pc)
 		bne.s	locret_ED1C
@@ -19968,7 +19419,7 @@ locret_ED1C:
 
 sub_ED1E:
 		lea	(off_ED28).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_ED28:	dc.w sub_EDBE-off_ED28
 		dc.w sub_EDFE-off_ED28
@@ -19980,7 +19431,6 @@ off_ED28:	dc.w sub_EDBE-off_ED28
 		dc.w sub_EFFE-off_ED28
 		dc.w sub_F094-off_ED28
 		dc.w sub_F0BE-off_ED28
-
 sub_ED3C:
 		jsr	loc_BA02(pc)
 		beq.s	loc_ED50
@@ -20324,14 +19774,13 @@ loc_F122:
 
 sub_F12A:
 		lea	(off_F134).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_F134:	dc.w sub_F1A0-off_F134
 		dc.w sub_F1CA-off_F134
 		dc.w sub_F1FE-off_F134
 		dc.w sub_F25C-off_F134
 		dc.w sub_F272-off_F134
-
 sub_F13E:
 		jsr	sub_B9B8(pc)
 		bne.w	loc_F14E
@@ -20445,10 +19894,9 @@ sub_F272:
 
 word_F27C:	dc.w 0,	0, 0, 0, $C, 6,	0
 word_F28A:	dc.w 0,	0, $C, 6, 0, 0,	0
-
 sub_F298:
 		lea	(off_F2A2).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_F2A2:	dc.w sub_F310-off_F2A2
 		dc.w sub_F340-off_F2A2
@@ -20459,9 +19907,7 @@ off_F2A2:	dc.w sub_F310-off_F2A2
 		dc.w sub_F340-off_F2A2
 		dc.w sub_F438-off_F2A2
 		dc.w sub_F44E-off_F2A2
-
 sub_F2B4:
-
 		jsr	sub_B9B8(pc)
 		beq.w	loc_F2F2
 		move.w	a0,$30(a1)
@@ -20500,7 +19946,6 @@ sub_F310:
 		jmp	sub_B852(pc)
 
 sub_F340:
-
 		subq.b	#1,$26(a0)
 		bhi.s	locret_F3A6
 		cmpi.w	#2,2(a0)
@@ -20591,14 +20036,12 @@ sub_F44E:
 		bra.w	sub_15C06
 
 sub_F458:
-
 		lea	(off_F462).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_F462:	dc.w sub_F468-off_F462
 		dc.w sub_F4AC-off_F462
 		dc.w sub_F4FE-off_F462
-
 sub_F468:
 		jsr	sub_BC72(pc)
 		move.l	#off_1216BE,$20(a0)
@@ -20699,7 +20142,7 @@ loc_F55E:
 
 sub_F580:
 		lea	(off_F58A).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_F58A:	dc.w sub_F5A4-off_F58A
 		dc.w sub_F5F4-off_F58A
@@ -20714,7 +20157,6 @@ off_F58A:	dc.w sub_F5A4-off_F58A
 		dc.w sub_F6C0-off_F58A
 		dc.w sub_F736-off_F58A
 		dc.w sub_F6F4-off_F58A
-
 sub_F5A4:
 		jsr	sub_BC72(pc)
 		move.l	#off_121704,$20(a0)
@@ -20749,15 +20191,10 @@ sub_F5F4:
 
 loc_F60A:
 		bra.w	loc_F622
-
 		bra.w	loc_F632
-
 		bra.w	loc_F642
-
 		bra.w	loc_F652
-
 		bra.w	loc_F662
-
 		bra.w	loc_F670
 
 loc_F622:
@@ -20815,7 +20252,6 @@ loc_F68A:
 		rts
 
 sub_F696:
-
 		subq.b	#1,$26(a0)
 		bhi.s	locret_F6A6
 		addq.w	#1,2(a0)
@@ -20835,7 +20271,6 @@ loc_F6BC:
 		jmp	sub_B960(pc)
 
 sub_F6C0:
-
 		subq.b	#1,$26(a0)
 		bhi.s	loc_F6D8
 		addq.w	#1,2(a0)
@@ -20857,7 +20292,6 @@ loc_F6F0:
 		jmp	sub_B960(pc)
 
 sub_F6F4:
-
 		subq.b	#1,$26(a0)
 		bhi.s	locret_F6FE
 		subq.w	#5,2(a0)
@@ -20900,13 +20334,12 @@ loc_F752:
 
 sub_F756:
 		lea	(off_F760).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_F760:	dc.w sub_F768-off_F760
 		dc.w sub_F78A-off_F760
 		dc.w sub_F7EE-off_F760
 		dc.w sub_F86A-off_F760
-
 sub_F768:
 		jsr	sub_BC72(pc)
 		move.l	#off_121738,$20(a0)
@@ -21078,7 +20511,7 @@ loc_F95E:
 
 sub_F962:
 		lea	(off_F96C).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_F96C:	dc.w sub_F9C8-off_F96C
 		dc.w sub_FA12-off_F96C
@@ -21087,7 +20520,6 @@ off_F96C:	dc.w sub_F9C8-off_F96C
 		dc.w sub_FB12-off_F96C
 		dc.w sub_FB12-off_F96C
 		dc.w sub_FB4A-off_F96C
-
 sub_F97A:
 		jsr	sub_B9B8(pc)
 		beq.w	loc_F9AE
@@ -21208,7 +20640,6 @@ sub_FAF4:
 		bra.w	sub_F97A
 
 sub_FB12:
-
 		jsr	sub_15C24(pc)
 		bne.w	locret_FB48
 		subq.w	#4,2(a0)
@@ -21232,7 +20663,6 @@ sub_FB4A:
 		bra.w	sub_15C06
 
 sub_FB54:
-
 		lea	(unk_FF9C00).w,a1
 		moveq	#$A,d6
 
@@ -21274,14 +20704,13 @@ loc_FBB0:
 
 sub_FBB4:
 		lea	(off_FBBE).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_FBBE:	dc.w sub_FBC8-off_FBBE
 		dc.w sub_FBEA-off_FBBE
 		dc.w sub_FC04-off_FBBE
 		dc.w sub_FC2A-off_FBBE
 		dc.w sub_FC3A-off_FBBE
-
 sub_FBC8:
 		jsr	sub_BC72(pc)
 		move.l	#off_11A6B2,$20(a0)
@@ -21330,9 +20759,8 @@ sub_FC3A:
 		jmp	sub_B960
 
 sub_FC4A:
-
 		lea	(off_FC54).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_FC54:	dc.w sub_FC60-off_FC54
 		dc.w sub_FCDC-off_FC54
@@ -21340,7 +20768,6 @@ off_FC54:	dc.w sub_FC60-off_FC54
 		dc.w sub_FD16-off_FC54
 		dc.w sub_FD28-off_FC54
 		dc.w sub_FD32-off_FC54
-
 sub_FC60:
 		jsr	sub_BC72(pc)
 		move.l	#off_12191A,$20(a0)
@@ -21425,14 +20852,13 @@ locret_FD5E:
 
 sub_FD60:
 		lea	(off_FD6A).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_FD6A:	dc.w sub_FD74-off_FD6A
 		dc.w sub_FDBA-off_FD6A
 		dc.w sub_FDDA-off_FD6A
 		dc.w sub_FE3C-off_FD6A
 		dc.w sub_FE4A-off_FD6A
-
 sub_FD74:
 		jsr	sub_BC72(pc)
 		move.l	#off_11A0DE,$20(a0)
@@ -21512,14 +20938,13 @@ loc_FE5C:
 
 sub_FE60:
 		lea	(off_FE6A).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_FE6A:	dc.w sub_FE74-off_FE6A
 		dc.w sub_FEFA-off_FE6A
 		dc.w sub_FF38-off_FE6A
 		dc.w sub_FFFA-off_FE6A
 		dc.w sub_10008-off_FE6A
-
 sub_FE74:
 		jsr	sub_BC72(pc)
 		move.l	#off_11A0DE,$20(a0)
@@ -21538,7 +20963,6 @@ sub_FE74:
 		moveq	#6,d0
 		jsr	sub_CA8E(pc)
 		jmp	sub_B85E(pc)
-
 stru_FEBC:	struc_46 $28000, 0
 		struc_46 $1A000, $FFFF3000
 		struc_46 $1A000, $FFFE6000
@@ -21674,15 +21098,12 @@ stru_10026:	struc_45 $88, $80, 0
 		struc_45 $1A, $84, $14
 		struc_45 $C, $84, $18
 		struc_45 6, $86, $1C
-
 sub_10046:
 		lea	(off_10050).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_10050:	dc.w sub_10054-off_10050
-
 		dc.w sub_10090-off_10050
-
 sub_10054:
 		jsr	sub_BC72(pc)
 		move.l	#off_11A536,$20(a0)
@@ -21725,17 +21146,14 @@ loc_100D0:
 
 sub_100D4:
 		lea	(off_100DE).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_100DE:	dc.w sub_1020A-off_100DE
-
 		dc.w sub_10272-off_100DE
 		dc.w sub_1030A-off_100DE
 		dc.w sub_10324-off_100DE
 		dc.w sub_1036E-off_100DE
-
 sub_100E8:
-
 		moveq	#2,d0
 		jsr	sub_CA58(pc)
 		cmpi.w	#$2D,d7
@@ -21785,7 +21203,6 @@ loc_10170:
 		bset	#1,$D(a1)
 
 loc_101A8:
-
 		jsr	sub_1190C(pc)
 		beq.s	loc_101B2
 		jmp	sub_B960(pc)
@@ -21876,7 +21293,6 @@ loc_102BA:
 		rts
 
 loc_102CC:
-
 		subq.b	#1,$26(a0)
 		bhi.s	loc_102D6
 		bsr.w	sub_101B6
@@ -21889,7 +21305,6 @@ loc_102D6:
 		bra.w	sub_100E8
 
 loc_102F0:
-
 		bchg	#0,$36(a0)
 		movea.w	$2A(a0),a1
 		bchg	#0,$36(a1)
@@ -21920,7 +21335,6 @@ sub_10324:
 		neg.b	$2C(a1)
 
 loc_1034C:
-
 		tst.b	$27(a0)
 		bne.w	loc_1036A
 		clr.b	$2C(a0)
@@ -21940,7 +21354,6 @@ sub_1036E:
 		move.w	6(a0),6(a1)
 
 loc_1038E:
-
 		movea.w	$2A(a0),a1
 		cmpa.w	$2A(a1),a0
 		beq.s	locret_1039E
@@ -21951,18 +21364,15 @@ locret_1039E:
 
 sub_103A0:
 		lea	(off_103AA).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_103AA:	dc.w sub_103C2-off_103AA
-
 		dc.w sub_103FC-off_103AA
 		dc.w sub_1045C-off_103AA
 		dc.w sub_10494-off_103AA
 		dc.w sub_10524-off_103AA
 		dc.w sub_10590-off_103AA
-
 sub_103B6:
-
 		jsr	sub_1190C(pc)
 		beq.s	locret_103C0
 		jmp	sub_B960(pc)
@@ -22065,12 +21475,10 @@ loc_104C8:
 		jmp	loc_104FC
 
 loc_104E4:
-
 		jsr	sub_103B6(pc)
 		beq.s	locret_104FA
 
 loc_104EA:
-
 		bchg	#0,$36(a0)
 		moveq	#2,d0
 		add.b	$36(a0),d0
@@ -22080,7 +21488,6 @@ locret_104FA:
 		rts
 
 loc_104FC:
-
 		movea.w	$2A(a0),a1
 		cmpa.w	$2A(a1),a0
 		beq.s	loc_1050E
@@ -22113,7 +21520,6 @@ sub_10524:
 		rts
 
 loc_1055C:
-
 		tst.w	6(a0)
 		beq.s	loc_1058C
 		move.b	9(a0),d0
@@ -22130,7 +21536,6 @@ loc_10582:
 		jmp	sub_15AB0(pc)
 
 loc_1058C:
-
 		jmp	sub_103B6(pc)
 
 sub_10590:
@@ -22139,15 +21544,13 @@ sub_10590:
 
 sub_1059A:
 		lea	(off_105A4).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_105A4:	dc.w sub_105AE-off_105A4
-
 		dc.w sub_10600-off_105A4
 		dc.w sub_1067C-off_105A4
 		dc.w sub_10724-off_105A4
 		dc.w locret_10772-off_105A4
-
 sub_105AE:
 		jsr	sub_BC72(pc)
 		move.l	#off_12192C,$20(a0)
@@ -22202,7 +21605,6 @@ loc_10654:
 		bra.s	loc_106D8
 
 locret_1065A:
-
 		rts
 
 sub_1065C:
@@ -22221,7 +21623,6 @@ loc_10674:
 		bset	#0,$C(a0)
 
 locret_1067A:
-
 		rts
 
 sub_1067C:
@@ -22254,11 +21655,9 @@ loc_106D0:
 		bra.s	loc_106D8
 
 locret_106D6:
-
 		rts
 
 loc_106D8:
-
 		move.b	#$CB,(byte_FFEE52).w
 		moveq	#3,d6
 		lea	(stru_1071C).l,a2
@@ -22285,7 +21684,6 @@ stru_1071C:	struc_47 6, 0
 		struc_47 7, $40
 		struc_47 8, $80
 		struc_47 7, $C0
-
 sub_10724:
 		addq.b	#2,$27(a0)
 		movea.w	$2A(a0),a1
@@ -22314,10 +21712,9 @@ locret_10772:
 
 sub_10774:
 		lea	(off_1077E).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_1077E:	dc.w sub_10830-off_1077E
-
 		dc.w sub_10884-off_1077E
 		dc.w sub_108D0-off_1077E
 		dc.w sub_108D0-off_1077E
@@ -22325,9 +21722,7 @@ off_1077E:	dc.w sub_10830-off_1077E
 		dc.w sub_1092E-off_1077E
 		dc.w sub_10942-off_1077E
 		dc.w sub_1094C-off_1077E
-
 sub_1078E:
-
 		jsr	sub_B9B8(pc)
 		beq.s	loc_10806
 		move.w	a0,$30(a1)
@@ -22361,7 +21756,6 @@ loc_107EE:
 		bset	#1,$D(a0)
 
 loc_10806:
-
 		jmp	sub_B960(pc)
 
 sub_1080A:
@@ -22427,7 +21821,6 @@ loc_108B6:
 		bra.w	sub_1078E
 
 loc_108BA:
-
 		neg.l	$18(a0)
 		bchg	#0,$36(a0)
 		move.w	4(a0),d0
@@ -22435,7 +21828,6 @@ loc_108BA:
 		jmp	loc_B842(pc)
 
 sub_108D0:
-
 		subq.b	#1,$26(a0)
 		bhi.s	loc_108E6
 		move.b	#$1E,$26(a0)
@@ -22481,7 +21873,6 @@ sub_10942:
 		bra.w	sub_15C06
 
 sub_1094C:
-
 		cmpi.w	#1,2(a0)
 		beq.s	loc_10984
 		bhi.s	loc_10990
@@ -22539,7 +21930,6 @@ loc_109D0:
 		move.b	#$D4,(byte_FFEE52).w
 
 locret_10A02:
-
 		rts
 
 loc_10A04:
@@ -22554,19 +21944,16 @@ locret_10A1E:
 
 sub_10A20:
 		lea	(off_10A2A).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_10A2A:	dc.w sub_10AB0-off_10A2A
-
 		dc.w sub_10B2C-off_10A2A
 		dc.w sub_10BC8-off_10A2A
 		dc.w sub_10C10-off_10A2A
 		dc.w sub_10C48-off_10A2A
 		dc.w sub_10C86-off_10A2A
 		dc.w sub_10C94-off_10A2A
-
 sub_10A38:
-
 		movea.w	$3E(a0),a1
 		cmpa.w	$3E(a1),a0
 		bne.s	loc_10A7C
@@ -22588,7 +21975,6 @@ loc_10A5C:
 		jmp	sub_B960(pc)
 
 loc_10A7C:
-
 		jsr	sub_15CCC(pc)
 		move.w	#6,2(a0)
 		move.l	#$FFFD0000,$1C(a0)
@@ -22677,7 +22063,6 @@ loc_10BA6:
 		rts
 
 loc_10BAE:
-
 		movea.w	$3E(a0),a1
 		cmpa.w	$3E(a1),a0
 		beq.s	locret_10BC6
@@ -22703,7 +22088,6 @@ loc_10BE2:
 		jsr	loc_B842(pc)
 
 loc_10BE8:
-
 		subq.w	#1,$14(a0)
 		movea.w	$2A(a0),a1
 		cmpi.w	#$56,0.w(a1)
@@ -22737,7 +22121,6 @@ loc_10C20:
 		clr.w	$2A(a0)
 
 loc_10C44:
-
 		bra.w	sub_10A38
 
 sub_10C48:
@@ -22754,7 +22137,6 @@ loc_10C62:
 		jsr	loc_B842(pc)
 
 loc_10C68:
-
 		addq.w	#1,$14(a0)
 		subq.b	#1,$26(a0)
 		bhi.s	loc_10C82
@@ -22786,15 +22168,13 @@ locret_10CAC:
 
 sub_10CAE:
 		lea	(off_10CB8).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_10CB8:	dc.w sub_10CC2-off_10CB8
-
 		dc.w sub_10D24-off_10CB8
 		dc.w sub_10D36-off_10CB8
 		dc.w sub_10D76-off_10CB8
 		dc.w sub_10D88-off_10CB8
-
 sub_10CC2:
 		jsr	sub_BC72(pc)
 		move.l	#off_121B50,$20(a0)
@@ -22908,10 +22288,9 @@ locret_10DF2:
 
 sub_10DF4:
 		lea	(off_10DFE).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_10DFE:	dc.w sub_10E7A-off_10DFE
-
 		dc.w sub_10EB4-off_10DFE
 		dc.w sub_10F1A-off_10DFE
 		dc.w sub_10F76-off_10DFE
@@ -22919,9 +22298,7 @@ off_10DFE:	dc.w sub_10E7A-off_10DFE
 		dc.w sub_10F76-off_10DFE
 		dc.w sub_10F76-off_10DFE
 		dc.w sub_10F9C-off_10DFE
-
 sub_10E0E:
-
 		jsr	sub_B9B8(pc)
 		bne.s	loc_10E1A
 		jsr	loc_BA02(pc)
@@ -23002,7 +22379,6 @@ loc_10EE2:
 		move.l	#$FFFF0000,$18(a0)
 
 loc_10F16:
-
 		bra.w	sub_10E0E
 
 sub_10F1A:
@@ -23037,7 +22413,6 @@ loc_10F6A:
 		bra.w	sub_10E0E
 
 sub_10F76:
-
 		jsr	sub_15C24(pc)
 		bne.s	locret_10F9A
 		move.w	$28(a0),2(a0)
@@ -23048,7 +22423,6 @@ sub_10F76:
 		rts
 
 loc_10F94:
-
 		bclr	#1,$D(a0)
 
 locret_10F9A:
@@ -23060,14 +22434,12 @@ sub_10F9C:
 
 sub_10FA6:
 		lea	(off_10FB0).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_10FB0:	dc.w sub_10FB8-off_10FB0
-
 		dc.w sub_10FDA-off_10FB0
 		dc.w sub_10FEE-off_10FB0
 		dc.w sub_1100E-off_10FB0
-
 sub_10FB8:
 		jsr	sub_BC72(pc)
 		move.l	#off_121B88,$20(a0)
@@ -23102,21 +22474,17 @@ sub_1100E:
 		jmp	sub_B88A(pc)
 
 sub_1101A:
-
 		lea	(off_11024).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_11024:	dc.w sub_110CC-off_11024
-
 		dc.w sub_11132-off_11024
 		dc.w sub_11180-off_11024
 		dc.w sub_111CE-off_11024
 		dc.w sub_11230-off_11024
 		dc.w sub_11240-off_11024
 		dc.w sub_1124A-off_11024
-
 sub_11032:
-
 		jsr	sub_B9B8(pc)
 		bne.s	loc_1103E
 		jsr	loc_BA02(pc)
@@ -23156,7 +22524,6 @@ loc_1107E:
 		addq.w	#2,4(a0)
 
 locret_110BA:
-
 		rts
 
 loc_110BC:
@@ -23212,7 +22579,6 @@ loc_1114E:
 		move.b	#1,$3F(a0)
 
 loc_1117C:
-
 		jmp	sub_11032(pc)
 
 sub_11180:
@@ -23237,7 +22603,6 @@ loc_1119C:
 		move.b	#1,$3F(a0)
 
 loc_111CA:
-
 		jmp	sub_11032(pc)
 
 sub_111CE:
@@ -23288,7 +22653,6 @@ sub_1124A:
 		bra.w	sub_15C06
 
 sub_1125C:
-
 		cmpi.w	#$B3,0.w(a0)
 		bne.s	loc_11286
 		tst.b	$3F(a0)
@@ -23307,17 +22671,15 @@ loc_11286:
 
 sub_1128C:
 		lea	(off_11296).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_11296:	dc.w sub_112A4-off_11296
-
 		dc.w sub_112DC-off_11296
 		dc.w sub_112F6-off_11296
 		dc.w sub_11320-off_11296
 		dc.w sub_11348-off_11296
 		dc.w sub_11390-off_11296
 		dc.w sub_113C2-off_11296
-
 sub_112A4:
 		jsr	sub_BC72(pc)
 		move.l	#off_121C7E,$20(a0)
@@ -23411,7 +22773,6 @@ sub_11390:
 		move.l	#$FFFD0000,$1C(a0)
 
 locret_113C0:
-
 		rts
 
 sub_113C2:
@@ -23424,10 +22785,9 @@ locret_113CC:
 
 sub_113CE:
 		lea	(off_113D8).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_113D8:	dc.w sub_11452-off_113D8
-
 		dc.w sub_1149E-off_113D8
 		dc.w sub_11554-off_113D8
 		dc.w sub_1160E-off_113D8
@@ -23439,9 +22799,7 @@ off_113D8:	dc.w sub_11452-off_113D8
 		dc.w sub_117B6-off_113D8
 		dc.w sub_117F8-off_113D8
 		dc.w sub_1181C-off_113D8
-
 sub_113F0:
-
 		tst.b	$F(a0)
 		bne.s	loc_11400
 		jsr	sub_B9B8(pc)
@@ -23509,7 +22867,6 @@ sub_1149E:
 		jmp	sub_B83E(pc)
 
 loc_114C4:
-
 		moveq	#0,d0
 		jsr	sub_CA58(pc)
 		cmpi.w	#1,d7
@@ -23549,11 +22906,9 @@ loc_11518:
 		beq.s	loc_1152E
 
 loc_1152A:
-
 		bra.w	sub_113F0
 
 loc_1152E:
-
 		bset	#1,$36(a0)
 
 loc_11534:
@@ -23580,7 +22935,6 @@ sub_11554:
 		jmp	sub_B86E(pc)
 
 loc_1157C:
-
 		moveq	#1,d0
 		jsr	sub_CA58(pc)
 		cmpi.w	#1,d7
@@ -23620,11 +22974,9 @@ loc_115D0:
 		beq.s	loc_115E6
 
 loc_115E2:
-
 		bra.w	sub_113F0
 
 loc_115E6:
-
 		bset	#1,$36(a0)
 
 loc_115EC:
@@ -23694,17 +23046,11 @@ sub_116A2:
 
 loc_116B2:
 		bra.w	loc_116CE
-
 		bra.w	loc_116DA
-
 		bra.w	loc_11702
-
 		bra.w	loc_11702
-
 		bra.w	loc_116EC
-
 		bra.w	loc_116EC
-
 		bra.w	loc_11702
 
 loc_116CE:
@@ -23720,7 +23066,6 @@ loc_116DA:
 		bra.w	sub_113F0
 
 loc_116EC:
-
 		jsr	sub_B87A(pc)
 		move.l	#$20000,$1C(a0)
 		subq.b	#1,$26(a0)
@@ -23728,7 +23073,6 @@ loc_116EC:
 		bra.w	sub_113F0
 
 loc_11702:
-
 		subq.w	#4,2(a0)
 		bclr	#1,$D(a0)
 		clr.b	$26(a0)
@@ -23746,17 +23090,11 @@ sub_11728:
 
 loc_11738:
 		bra.w	loc_11754
-
 		bra.w	loc_11760
-
 		bra.w	loc_11774
-
 		bra.w	loc_11774
-
 		bra.w	loc_1178C
-
 		bra.w	loc_1178C
-
 		bra.w	loc_1178C
 
 loc_11754:
@@ -23773,7 +23111,6 @@ loc_11760:
 		bra.w	sub_113F0
 
 loc_11774:
-
 		moveq	#7,d0
 		jsr	loc_B842(pc)
 		move.l	#$20000,$1C(a0)
@@ -23782,7 +23119,6 @@ loc_11774:
 		bra.w	sub_113F0
 
 loc_1178C:
-
 		subq.w	#4,2(a0)
 		bclr	#1,$D(a0)
 		clr.b	$26(a0)
@@ -23793,7 +23129,6 @@ loc_1178C:
 		jmp	loc_B842(pc)
 
 nullsub_13:
-
 		rts
 
 sub_117B6:
@@ -23831,7 +23166,6 @@ sub_117F8:
 		bclr	#1,$D(a0)
 
 locret_1181A:
-
 		rts
 
 sub_1181C:
@@ -23840,14 +23174,12 @@ sub_1181C:
 
 sub_11826:
 		lea	(off_11830).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_11830:	dc.w sub_11838-off_11830
-
 		dc.w sub_1188A-off_11830
 		dc.w sub_118A0-off_11830
 		dc.w sub_118FE-off_11830
-
 sub_11838:
 		jsr	sub_BC72(pc)
 		move.l	#off_121C02,$20(a0)
@@ -23921,7 +23253,6 @@ locret_1190A:
 		rts
 
 sub_1190C:
-
 		move.w	(dword_FFA2D0).w,d2
 		move.w	(dword_FFA2D4).w,d1
 		subq.w	#8,d1
@@ -23953,7 +23284,6 @@ loc_1193C:
 		movea.l	(sp)+,a3
 
 loc_1194E:
-
 		lea	$40(a1),a1
 		dbf	d6,loc_1193C
 		rts
@@ -24015,7 +23345,6 @@ locret_119F4:
 		rts
 
 sub_119F6:
-
 		move.b	#1,(byte_FFEE02).w
 		lea	(word_11A14).l,a1
 		lsl.w	#4,d0
@@ -24029,10 +23358,8 @@ loc_11A0C:
 		rts
 
 word_11A14:	dc.w $ACE, $8AC, $68A, $468, $446, $66A, $488, 0, $ACE,	$ACE, $8AC, $68A, $468,	$88C, $6AA, 0
-
 		dc.w $ACE, $ACE, $ACE, $8AC, $68A, $AAC, $ACC, 0, $ACE,	$ACE, $ACE, $ACE, $8AC,	$ACE, $ACE, 0
 		dc.w $ACE, $ACE, $ACE, $ACE, $ACE, $ACE, $ACE, 0
-
 sub_11A64:
 		tst.w	2(a0)
 		bne.s	locret_11A7E
@@ -24060,15 +23387,13 @@ loc_11AAC:
 
 sub_11AB0:
 		lea	(off_11ABA).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_11ABA:	dc.w sub_11AC4-off_11ABA
-
 		dc.w sub_11AEA-off_11ABA
 		dc.w sub_11B1C-off_11ABA
 		dc.w sub_11B2E-off_11ABA
 		dc.w sub_11B58-off_11ABA
-
 sub_11AC4:
 		jsr	sub_BC72(pc)
 		move.l	#off_11A2EC,$20(a0)
@@ -24092,7 +23417,6 @@ sub_11AEA:
 		move.w	#$1D,$26(a0)
 
 locret_11B1A:
-
 		rts
 
 sub_11B1C:
@@ -24112,7 +23436,6 @@ sub_11B2E:
 		bra.w	sub_15C48
 
 loc_11B46:
-
 		addq.w	#1,2(a0)
 		bclr	#1,$D(a0)
 		move.w	#$1D,$26(a0)
@@ -24132,15 +23455,12 @@ sub_11B58:
 
 sub_11B7E:
 		lea	(off_11B88).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_11B88:	dc.w sub_11C10-off_11B88
-
 		dc.w sub_11C32-off_11B88
 		dc.w sub_11C42-off_11B88
-
 sub_11B8E:
-
 		moveq	#0,d0
 		move.b	$26(a0),d0
 		addq.b	#1,d0
@@ -24178,9 +23498,7 @@ loc_11BEC:
 		bra.w	sub_15C48
 
 byte_11BF0:	dc.b 1,	1, 0, 1, 0, 1, 0, 0, 0,	0, $FF,	0, $FF,	0, $FF,	$FF
-
 		dc.b $FF, $FF, 0, $FF, 0, $FF, 0, 0, 0,	0, 1, 0, 1, 0, 1, 1
-
 sub_11C10:
 		jsr	sub_BC72(pc)
 		move.l	#off_11A322,$20(a0)
@@ -24234,15 +23552,13 @@ locret_11CA0:
 
 sub_11CA2:
 		lea	(off_11CAC).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_11CAC:	dc.w sub_11CB6-off_11CAC
-
 		dc.w sub_11D4E-off_11CAC
 		dc.w sub_11D7A-off_11CAC
 		dc.w sub_11DA2-off_11CAC
 		dc.w sub_11DD0-off_11CAC
-
 sub_11CB6:
 		jsr	sub_BC72(pc)
 		move.l	#off_11A3A6,$20(a0)
@@ -24334,7 +23650,6 @@ sub_11DA2:
 		move.b	#$A,$26(a1)
 
 loc_11DC8:
-
 		bset	#0,$C(a0)
 
 locret_11DCE:
@@ -24360,7 +23675,6 @@ locret_11E00:
 		rts
 
 sub_11E02:
-
 		btst	#6,$E(a0)
 		beq.s	loc_11E24
 		movea.w	$28(a0),a1
@@ -24373,20 +23687,17 @@ sub_11E02:
 		move.b	#1,$27(a1)
 
 loc_11E24:
-
 		bra.w	sub_15C48
 
 sub_11E28:
 		lea	(off_11E32).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_11E32:	dc.w sub_11E3C-off_11E32
-
 		dc.w sub_11E8E-off_11E32
 		dc.w sub_11EA8-off_11E32
 		dc.w sub_11EDC-off_11E32
 		dc.w sub_11EF6-off_11E32
-
 sub_11E3C:
 		jsr	sub_BC72(pc)
 		move.l	#off_1214C6,$20(a0)
@@ -24466,15 +23777,13 @@ loc_11F12:
 
 sub_11F22:
 		lea	(off_11F2C).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_11F2C:	dc.w sub_11F36-off_11F2C
-
 		dc.w sub_11FAA-off_11F2C
 		dc.w sub_12050-off_11F2C
 		dc.w sub_12080-off_11F2C
 		dc.w sub_120A2-off_11F2C
-
 sub_11F36:
 		jsr	sub_BC72(pc)
 		move.l	#off_1215C6,$20(a0)
@@ -24524,7 +23833,6 @@ sub_11FAA:
 		beq.s	loc_11FE4
 
 loc_11FE0:
-
 		bra.w	sub_15C48
 
 loc_11FE4:
@@ -24552,7 +23860,6 @@ stru_12020:	struc_48 $FFFE8000, $FFFF0000
 		struc_48 $10000, $8000
 		struc_48 $18000, $FFFF0000
 		struc_48 $FFFE8000, $10000
-
 sub_12050:
 		jsr	sub_B88A(pc)
 		bclr	#6,$E(a0)
@@ -24602,18 +23909,15 @@ loc_120CA:
 
 sub_120CE:
 		lea	(off_120D8).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_120D8:	dc.w sub_12114-off_120D8
-
 		dc.w sub_1215E-off_120D8
 		dc.w sub_121CC-off_120D8
 		dc.w sub_121FE-off_120D8
 		dc.w sub_1225C-off_120D8
 		dc.w sub_122B8-off_120D8
-
 sub_120E4:
-
 		moveq	#0,d0
 		move.b	$28(a0),d0
 		addq.b	#1,d0
@@ -24625,7 +23929,6 @@ sub_120E4:
 		rts
 
 byte_12104:	dc.b 0,	1, 2, 3, 3, 3, 2, 1, 0,	$FF, $FE, $FD, $FD, $FD, $FE, $FF
-
 sub_12114:
 		jsr	sub_BC72(pc)
 		move.l	#off_121D3E,$20(a0)
@@ -24639,8 +23942,7 @@ sub_12114:
 		jsr	sub_B852(pc)
 		movea.l	a0,a1
 		lea	(unk_FF9F00).w,a2
-		jsr	copy_bytes_to_dest_64
-
+		jsr	copy_bytes_to_dest_64 ;	a1 = source
 		movea.l	a0,a1
 		moveq	#0,d1
 		jsr	loc_9508
@@ -24661,7 +23963,6 @@ sub_1215E:
 		jmp	sub_120E4(pc)
 
 loc_12192:
-
 		move.w	(dword_FFA2D0).w,d0
 		sub.w	$10(a0),d0
 		cmpi.w	#0,d0
@@ -24675,7 +23976,6 @@ loc_12192:
 		add.l	d0,$10(a0)
 
 loc_121BA:
-
 		jmp	sub_120E4(pc)
 
 loc_121BE:
@@ -24730,7 +24030,6 @@ loc_12250:
 		jmp	sub_120E4(pc)
 
 loc_12254:
-
 		addq.w	#1,2(a0)
 		jmp	sub_120E4(pc)
 
@@ -24786,17 +24085,14 @@ stru_122EC:	struc_43 $FFF0, $FFE0,	7, $FFFF0000, $FFFF0000
 		struc_43 $FFE0, $FFF0,	5, $FFFF0000, $FFFF0000
 		struc_43 $20, $FFF0, 4, $10000, $FFFF0000
 		struc_43 0, $FFD0, 5, 0, $FFFF0000
-
 sub_1235C:
 		lea	(off_12366).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_12366:	dc.w sub_1236E-off_12366
-
 		dc.w sub_12394-off_12366
 		dc.w sub_123D0-off_12366
 		dc.w sub_12394-off_12366
-
 sub_1236E:
 		jsr	sub_BC72(pc)
 		move.l	#off_1221C8,$20(a0)
@@ -24808,7 +24104,6 @@ sub_1236E:
 		jmp	sub_B83E(pc)
 
 sub_12394:
-
 		cmpi.w	#2,6(a0)
 		blt.s	locret_123B2
 		cmpi.b	#7,8(a0)
@@ -24877,7 +24172,6 @@ loc_12450:
 		bra.w	loc_12520
 
 loc_1245E:
-
 		btst	#2,$36(a0)
 		bne.s	loc_12484
 		move.w	(dword_FFA2D0).w,d0
@@ -24911,13 +24205,11 @@ loc_124AA:
 		blt.s	loc_12540
 
 loc_124C4:
-
 		btst	#0,$27(a0)
 		bne.w	loc_12560
 		bra.s	loc_12540
 
 loc_124D0:
-
 		tst.w	$18(a0)
 		bgt.s	loc_124EC
 		cmpi.w	#3,4(a0)
@@ -24926,7 +24218,6 @@ loc_124D0:
 		bsr.w	loc_B842
 
 loc_124E4:
-
 		bsr.w	sub_B88A
 		jmp	sub_B960(pc)
 
@@ -24938,7 +24229,6 @@ loc_124EC:
 		jmp	sub_B960(pc)
 
 loc_12500:
-
 		move.l	$1C(a0),d0
 		addi.l	#-$2000,d0
 		cmpi.l	#$FFFE0000,d0
@@ -24950,7 +24240,6 @@ loc_12518:
 		bra.w	loc_1245E
 
 loc_12520:
-
 		move.l	$1C(a0),d0
 		addi.l	#$2000,d0
 		cmpi.l	#$20000,d0
@@ -24962,7 +24251,6 @@ loc_12538:
 		bra.w	loc_1245E
 
 loc_12540:
-
 		move.l	$18(a0),d0
 		addi.l	#-$2000,d0
 		cmpi.l	#$FFFD0000,d0
@@ -24974,7 +24262,6 @@ loc_12558:
 		bra.w	loc_124D0
 
 loc_12560:
-
 		move.l	$18(a0),d0
 		addi.l	#$2000,d0
 		cmpi.l	#$30000,d0
@@ -24997,7 +24284,6 @@ sub_12580:
 		jmp	sub_B83E(pc)
 
 loc_125A4:
-
 		move.l	$1C(a0),d0
 		addi.l	#$2000,d0
 		cmpi.l	#$30000,d0
@@ -25032,7 +24318,6 @@ loc_125FA:
 		jsr	loc_B842(pc)
 
 loc_12606:
-
 		jmp	sub_B960(pc)
 
 loc_1260A:
@@ -25060,16 +24345,13 @@ loc_12644:
 		jmp	sub_B960(pc)
 
 sub_12648:
-
 		lea	(off_12652).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_12652:	dc.w sub_1265A-off_12652
-
 		dc.w sub_1268A-off_12652
 		dc.w sub_126EC-off_12652
 		dc.w sub_126EC-off_12652
-
 sub_1265A:
 		jsr	sub_BC72(pc)
 		move.l	#off_121DB4,$20(a0)
@@ -25118,7 +24400,6 @@ loc_126E0:
 		jmp	loc_B842(pc)
 
 sub_126EC:
-
 		movea.w	$2A(a0),a1
 		cmpa.w	$3E(a1),a0
 		beq.s	loc_126FE
@@ -25155,10 +24436,9 @@ loc_12744:
 
 sub_12750:
 		lea	(off_1275A).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_1275A:	dc.w sub_127C6-off_1275A
-
 		dc.w sub_127E8-off_1275A
 		dc.w sub_12858-off_1275A
 		dc.w sub_1287C-off_1275A
@@ -25166,9 +24446,7 @@ off_1275A:	dc.w sub_127C6-off_1275A
 		dc.w sub_128FC-off_1275A
 		dc.w sub_12934-off_1275A
 		dc.w sub_1294E-off_1275A
-
 sub_1276A:
-
 		jsr	sub_B9B8(pc)
 		beq.s	loc_127C2
 		move.w	a0,$30(a1)
@@ -25227,7 +24505,6 @@ loc_12828:
 		move.l	#$FFFE8000,$18(a0)
 
 locret_12836:
-
 		rts
 
 loc_12838:
@@ -25333,14 +24610,12 @@ sub_1294E:
 
 sub_12958:
 		lea	(off_12962).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_12962:	dc.w sub_1296A-off_12962
-
 		dc.w sub_129D6-off_12962
 		dc.w sub_129F8-off_12962
 		dc.w sub_12A66-off_12962
-
 sub_1296A:
 		jsr	sub_BC72(pc)
 		move.l	#off_1222B6,$20(a0)
@@ -25380,7 +24655,6 @@ locret_129F6:
 		rts
 
 sub_129F8:
-
 		move.l	$1C(a0),d0
 		addi.l	#$2000,d0
 		cmpi.l	#$40000,d0
@@ -25415,7 +24689,6 @@ loc_12A4C:
 		jsr	loc_B842(pc)
 
 loc_12A58:
-
 		jsr	sub_B9B8(pc)
 		beq.s	loc_12A62
 		move.w	a0,$30(a1)
@@ -25453,16 +24726,14 @@ loc_12AA4:
 
 sub_12AA8:
 		lea	(off_12AB2).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_12AB2:	dc.w sub_12ABE-off_12AB2
-
 		dc.w sub_12AE0-off_12AB2
 		dc.w sub_12AE0-off_12AB2
 		dc.w sub_12B74-off_12AB2
 		dc.w sub_12B48-off_12AB2
 		dc.w sub_12B8C-off_12AB2
-
 sub_12ABE:
 		jsr	sub_BC72(pc)
 		move.l	#off_1222A4,$20(a0)
@@ -25473,7 +24744,6 @@ sub_12ABE:
 		jmp	sub_B852(pc)
 
 sub_12AE0:
-
 		move.l	$1C(a0),d0
 		addi.l	#$4000,d0
 		cmpi.l	#$30000,d0
@@ -25633,7 +24903,6 @@ loc_12C5A:
 		jmp	loc_12BAE(pc)
 
 stru_12C7C:	struc_49 0, 1,	$14, $10
-
 		struc_49 $20, 3, $14, $10
 		struc_49 $3F, 3, $10, $18
 		struc_49 $20, 7, 8, $10
@@ -25649,7 +24918,6 @@ stru_12C7C:	struc_49 0, 1,	$14, $10
 		struc_49 $20, 5, 8, $10
 		struc_49 $3F, 5, $10, $18
 		struc_49 $20, 1, $14, $10
-
 sub_12CBC:
 		cmpi.w	#1,2(a0)
 		beq.s	loc_12D02
@@ -25678,7 +24946,6 @@ loc_12D02:
 		rts
 
 loc_12D16:
-
 		addq.w	#1,2(a0)
 		move.b	#$A,$26(a0)
 		rts
@@ -25698,7 +24965,6 @@ loc_12D30:
 		bset	#0,$C(a1)
 
 loc_12D44:
-
 		adda.w	#$40,a1
 		dbf	d7,loc_12D30
 		clr.w	2(a0)
@@ -25817,10 +25083,9 @@ loc_12EA4:
 
 sub_12EA8:
 		lea	(off_12EB2).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_12EB2:	dc.w sub_12EE6-off_12EB2
-
 		dc.w sub_12F70-off_12EB2
 		dc.w sub_12F9E-off_12EB2
 		dc.w sub_12FF2-off_12EB2
@@ -25828,9 +25093,7 @@ off_12EB2:	dc.w sub_12EE6-off_12EB2
 		dc.w sub_12F9E-off_12EB2
 		dc.w sub_12FE4-off_12EB2
 		dc.w sub_13040-off_12EB2
-
 sub_12EC2:
-
 		move.w	(dword_FFA2D0).w,d0
 		cmp.w	$10(a0),d0
 		blt.s	loc_12ED8
@@ -25890,11 +25153,9 @@ sub_12F70:
 		bset	#3,$D(a0)
 
 locret_12F9C:
-
 		rts
 
 sub_12F9E:
-
 		cmpi.w	#2,6(a0)
 		blt.s	locret_12FBC
 		cmpi.b	#7,8(a0)
@@ -25926,7 +25187,6 @@ sub_12FE4:
 		bsr.w	sub_12EC2
 
 sub_12FF2:
-
 		btst	#2,$36(a0)
 		bne.s	loc_13016
 		subq.w	#1,$26(a0)
@@ -25959,7 +25219,6 @@ sub_13040:
 		bsr.w	sub_12EC2
 
 sub_1304E:
-
 		btst	#2,$36(a0)
 		bne.s	loc_13072
 		subq.w	#1,$26(a0)
@@ -25987,15 +25246,13 @@ loc_13090:
 
 sub_1309C:
 		lea	(off_130A6).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_130A6:	dc.w sub_130B0-off_130A6
-
 		dc.w sub_130FE-off_130A6
 		dc.w sub_13126-off_130A6
 		dc.w sub_13126-off_130A6
 		dc.w locret_13142-off_130A6
-
 sub_130B0:
 		jsr	sub_BC72(pc)
 		move.l	#off_1220D2,$20(a0)
@@ -26029,7 +25286,6 @@ locret_13124:
 		rts
 
 sub_13126:
-
 		move.l	$18(a0),d0
 		add.l	d0,$10(a0)
 		subq.b	#1,$26(a0)
@@ -26039,15 +25295,13 @@ sub_13126:
 		move.b	#$50,$26(a0)
 
 locret_13142:
-
 		rts
 
 sub_13144:
 		lea	(off_1314E).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_1314E:	dc.w sub_13276-off_1314E
-
 		dc.w sub_1329A-off_1314E
 		dc.w sub_132C4-off_1314E
 		dc.w sub_13342-off_1314E
@@ -26060,9 +25314,7 @@ off_1314E:	dc.w sub_13276-off_1314E
 		dc.w sub_1360C-off_1314E
 		dc.w sub_136B0-off_1314E
 		dc.w sub_136CA-off_1314E
-
 sub_13168:
-
 		lea	(word_FF9000).w,a1
 		move.w	#$A3,d3
 		move.w	#$50,d4
@@ -26089,7 +25341,6 @@ loc_13192:
 		rts
 
 sub_13196:
-
 		jsr	sub_B9B8(pc)
 		beq.s	loc_131EE
 		move.w	a0,$30(a1)
@@ -26150,7 +25401,6 @@ loc_13256:
 		jsr	loc_B842(pc)
 
 loc_13272:
-
 		jmp	sub_B960(pc)
 
 sub_13276:
@@ -26179,11 +25429,9 @@ sub_1329A:
 		move.b	#1,$36(a1)
 
 locret_132C2:
-
 		rts
 
 sub_132C4:
-
 		subq.b	#1,$26(a0)
 		bgt.s	locret_13340
 		bset	#7,$C(a0)
@@ -26214,7 +25462,6 @@ loc_13324:
 		jmp	loc_B842(pc)
 
 locret_13340:
-
 		rts
 
 sub_13342:
@@ -26256,7 +25503,6 @@ loc_13388:
 		jmp	sub_B872(pc)
 
 loc_133AE:
-
 		bra.w	sub_13196
 
 loc_133B2:
@@ -26266,7 +25512,6 @@ loc_133B2:
 		bne.s	loc_133DA
 
 loc_133BE:
-
 		addq.w	#1,2(a0)
 		neg.l	$18(a0)
 		movea.w	$2A(a0),a1
@@ -26296,7 +25541,6 @@ loc_133E8:
 		jsr	sub_B872(pc)
 
 loc_1340E:
-
 		bra.w	sub_13196
 
 sub_13412:
@@ -26339,7 +25583,6 @@ loc_13458:
 		jsr	loc_B842(pc)
 
 loc_13480:
-
 		bra.w	sub_13196
 
 loc_13484:
@@ -26349,7 +25592,6 @@ loc_13484:
 		bne.s	loc_134AA
 
 loc_13490:
-
 		subq.w	#1,2(a0)
 		neg.l	$18(a0)
 		movea.w	$2A(a0),a1
@@ -26379,7 +25621,6 @@ loc_134B8:
 		jmp	loc_B842(pc)
 
 loc_134E0:
-
 		bra.w	sub_13196
 
 sub_134E4:
@@ -26474,11 +25715,9 @@ loc_135D8:
 		bra.s	loc_135F4
 
 loc_135F0:
-
 		clr.l	$18(a0)
 
 loc_135F4:
-
 		jsr	sub_B88A(pc)
 		moveq	#2,d0
 		jsr	sub_CA58(pc)
@@ -26514,7 +25753,6 @@ loc_13624:
 		bne.s	loc_1368A
 
 loc_1365A:
-
 		move.l	#$FFFF0000,$18(a0)
 		subq.w	#6,2(a0)
 		move.b	#$1E,$26(a0)
@@ -26531,7 +25769,6 @@ loc_1367C:
 		bne.s	loc_1365A
 
 loc_1368A:
-
 		move.l	#$10000,$18(a0)
 		subq.w	#7,2(a0)
 		move.b	#$1E,$26(a0)
@@ -26558,15 +25795,13 @@ sub_136CA:
 
 sub_136D4:
 		lea	(off_136DE).l,a1
-		jmp	jump_by_table1(pc)
+		jmp	jump_by_table1(pc) ; a0	= ?
 
 off_136DE:	dc.w sub_136E8-off_136DE
-
 		dc.w sub_1370C-off_136DE
 		dc.w sub_13776-off_136DE
 		dc.w sub_137A4-off_136DE
 		dc.w sub_137F2-off_136DE
-
 sub_136E8:
 		jsr	sub_BC72(pc)
 		move.l	#off_1220FC,$20(a0)
@@ -26626,12 +25861,10 @@ sub_13776:
 		bne.s	loc_1379A
 
 loc_13790:
-
 		move.w	#3,2(a0)
 		jmp	sub_B960(pc)
 
 loc_1379A:
-
 		move.w	#4,2(a0)
 
 loc_137A0:
@@ -26660,7 +25893,6 @@ loc_137BC:
 		bclr	#1,$36(a0)
 
 loc_137EE:
-
 		jmp	sub_B960(pc)
 
 sub_137F2:
@@ -26686,11 +25918,9 @@ loc_1380A:
 		bclr	#1,$36(a0)
 
 loc_13840:
-
 		jmp	sub_B960(pc)
 
 sub_13844:
-
 		btst	#0,$36(a0)
 		bne.s	loc_13870
 		moveq	#0,d0
@@ -26722,7 +25952,6 @@ loc_1388A:
 		move.w	#$FFFF,d7
 
 locret_13892:
-
 		rts
 
 sub_13894:
@@ -26738,14 +25967,12 @@ locret_138B0:
 
 sub_138B2:
 		lea	(off_138BE).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_138BE:	dc.w sub_138C6-off_138BE
-
 		dc.w sub_138F8-off_138BE
 		dc.w sub_1390A-off_138BE
 		dc.w sub_13958-off_138BE
-
 sub_138C6:
 		jsr	sub_BC72
 		move.l	#off_121888,$20(a0)
@@ -26792,7 +26019,6 @@ loc_1393E:
 		rts
 
 byte_1394A:	dc.b 1,	0, 0, 1, 0, 0, 0, $FF, 0, 0, $FF, 0, 0,	0
-
 sub_13958:
 		moveq	#0,d0
 		move.b	$26(a0),d0
@@ -26815,7 +26041,6 @@ loc_13974:
 		rts
 
 sub_13990:
-
 		moveq	#0,d0
 		move.b	$36(a0),d0
 		add.w	d0,d0
@@ -26823,22 +26048,17 @@ sub_13990:
 		jmp	off_139A0(pc,d0.w)
 
 off_139A0:	dc.w sub_139A8-off_139A0
-
 		dc.w sub_139A8-off_139A0
 		dc.w sub_13B76-off_139A0
 		dc.w sub_13B32-off_139A0
-
 sub_139A8:
-
 		lea	(off_139B4).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_139B4:	dc.w sub_139BC-off_139B4
-
 		dc.w sub_13A60-off_139B4
 		dc.w sub_13AA6-off_139B4
 		dc.w sub_13AEC-off_139B4
-
 sub_139BC:
 		jsr	sub_BC72
 		move.l	#off_11A3F6,$20(a0)
@@ -26874,8 +26094,7 @@ loc_13A30:
 		bne.s	locret_13A5E
 		movea.l	a1,a2
 		movea.l	a0,a1
-		jsr	copy_bytes_to_dest_64
-
+		jsr	copy_bytes_to_dest_64 ;	a1 = source
 		suba.w	#$40,a2
 		movea.w	$2A(a2),a1
 		move.w	a2,$2A(a1)
@@ -26902,7 +26121,6 @@ sub_13A60:
 		move.l	#$8000,$1C(a0)
 
 loc_13A98:
-
 		jsr	sub_15C9A(pc)
 		beq.s	loc_13AA2
 		move.l	d1,(dword_FFEF5C).w
@@ -26986,14 +26204,12 @@ loc_13B72:
 
 sub_13B76:
 		lea	(off_13B82).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_13B82:	dc.w sub_13B8A-off_13B82
-
 		dc.w sub_13BB6-off_13B82
 		dc.w sub_13BE2-off_13B82
 		dc.w sub_13C4A-off_13B82
-
 sub_13B8A:
 		jsr	sub_BC72
 		move.l	#off_11A3F6,$20(a0)
@@ -27016,7 +26232,6 @@ sub_13BB6:
 		clr.w	$28(a0)
 
 locret_13BE0:
-
 		rts
 
 sub_13BE2:
@@ -27045,7 +26260,6 @@ loc_13C22:
 		addq.w	#1,$28(a0)
 
 loc_13C26:
-
 		subq.w	#1,$26(a0)
 		bgt.s	locret_13C48
 		addq.w	#1,2(a0)
@@ -27084,7 +26298,6 @@ loc_13C8A:
 		addq.w	#1,$28(a0)
 
 loc_13C8E:
-
 		subq.w	#1,$26(a0)
 		bgt.s	locret_13CB0
 		subq.w	#1,2(a0)
@@ -27102,14 +26315,12 @@ nullsub_8:
 
 sub_13CB4:
 		lea	(off_13CC0).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_13CC0:	dc.w sub_13CC8-off_13CC0
-
 		dc.w sub_13CDC-off_13CC0
 		dc.w sub_13D02-off_13CC0
 		dc.w sub_13D44-off_13CC0
-
 sub_13CC8:
 		jsr	sub_BC72
 		move.l	#off_11A4E0,$20(a0)
@@ -27128,7 +26339,6 @@ sub_13CDC:
 		move.b	#$15,$26(a0)
 
 locret_13D00:
-
 		rts
 
 sub_13D02:
@@ -27193,7 +26403,6 @@ loc_13D88:
 		subq.b	#1,$28(a1)
 
 locret_13DDC:
-
 		rts
 
 loc_13DDE:
@@ -27221,19 +26430,16 @@ locret_13E28:
 
 sub_13E2A:
 		lea	(off_13E36).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_13E36:	dc.w sub_13E90-off_13E36
-
 		dc.w sub_13F00-off_13E36
 		dc.w sub_13F1A-off_13E36
 		dc.w sub_13F32-off_13E36
 		dc.w sub_13F46-off_13E36
 		dc.w sub_13F66-off_13E36
 		dc.w sub_13F8A-off_13E36
-
 sub_13E44:
-
 		jsr	sub_B9B8
 		beq.s	loc_13E7C
 		move.w	a0,$30(a1)
@@ -27244,7 +26450,6 @@ sub_13E44:
 		ble.s	loc_13E8C
 
 loc_13E60:
-
 		jsr	sub_15CD6(pc)
 		move.b	#$FA,$27(a0)
 		move.b	#3,$2C(a0)
@@ -27302,7 +26507,6 @@ sub_13F00:
 
 loc_13F10:
 		jmp	sub_B960
-
 sub_13F16:
 		bra.w	sub_13E44
 
@@ -27365,7 +26569,6 @@ loc_13F98:
 		neg.b	$2C(a0)
 
 loc_13FB0:
-
 		tst.b	$27(a0)
 		bne.w	locret_13FDA
 		move.b	$29(a0),3(a0)
@@ -27377,19 +26580,16 @@ loc_13FB0:
 		move.b	#$15,$26(a0)
 
 locret_13FDA:
-
 		rts
 
 sub_13FDC:
 		lea	(off_13FE8).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_13FE8:	dc.w sub_13FF0-off_13FE8
-
 		dc.w sub_14020-off_13FE8
 		dc.w sub_1407E-off_13FE8
 		dc.w sub_140CA-off_13FE8
-
 sub_13FF0:
 		jsr	sub_BC72
 		move.l	#off_11A5A8,$20(a0)
@@ -27422,7 +26622,6 @@ loc_14034:
 		move.l	#$FFFC0000,$1C(a0)
 
 loc_1406E:
-
 		bclr	#6,$E(a0)
 		beq.s	locret_1407C
 		move.w	$14(a0),(dword_FFA2D4).w
@@ -27483,26 +26682,21 @@ sub_14102:
 		jmp	off_14112(pc,d0.w)
 
 off_14112:	dc.w sub_1411A-off_14112
-
 		dc.w sub_14264-off_14112
 		dc.w sub_143DE-off_14112
 		dc.w sub_14568-off_14112
-
 sub_1411A:
 		lea	(off_14126).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_14126:	dc.w sub_1416C-off_14126
-
 		dc.w sub_1419A-off_14126
 		dc.w sub_141B6-off_14126
 		dc.w sub_141FC-off_14126
 		dc.w sub_14218-off_14126
 		dc.w sub_1423E-off_14126
 		dc.w sub_14254-off_14126
-
 sub_14134:
-
 		jsr	sub_B9B8
 		beq.s	loc_1415C
 		move.w	a0,$30(a1)
@@ -27540,7 +26734,6 @@ sub_1419A:
 		addq.w	#1,2(a0)
 
 loc_141B2:
-
 		bra.w	sub_14134
 
 sub_141B6:
@@ -27606,18 +26799,15 @@ locret_14262:
 
 sub_14264:
 		lea	(off_14270).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_14270:	dc.w sub_142B4-off_14270
-
 		dc.w sub_142F0-off_14270
 		dc.w sub_14348-off_14270
 		dc.w sub_1435C-off_14270
 		dc.w sub_143BA-off_14270
 		dc.w sub_143CE-off_14270
-
 sub_1427C:
-
 		jsr	sub_B9B8
 		beq.s	loc_142A4
 		move.w	a0,$30(a1)
@@ -27724,18 +26914,15 @@ locret_143DC:
 
 sub_143DE:
 		lea	(off_143EA).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_143EA:	dc.w sub_1442E-off_143EA
-
 		dc.w sub_14466-off_143EA
 		dc.w sub_144C8-off_143EA
 		dc.w sub_144DC-off_143EA
 		dc.w sub_14544-off_143EA
 		dc.w sub_14558-off_143EA
-
 sub_143F6:
-
 		jsr	sub_B9B8
 		beq.s	loc_1441E
 		move.w	a0,$30(a1)
@@ -27846,18 +27033,15 @@ locret_14566:
 
 sub_14568:
 		lea	(off_14574).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_14574:	dc.w sub_145B8-off_14574
-
 		dc.w sub_145FA-off_14574
 		dc.w sub_14620-off_14574
 		dc.w sub_1462E-off_14574
 		dc.w sub_14650-off_14574
 		dc.w sub_1465E-off_14574
-
 sub_14580:
-
 		jsr	sub_B9B8
 		beq.s	loc_145B2
 		move.w	a0,$30(a1)
@@ -27941,16 +27125,14 @@ locret_14678:
 
 sub_1467A:
 		lea	(off_14686).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_14686:	dc.w sub_14692-off_14686
-
 		dc.w sub_146B4-off_14686
 		dc.w sub_1473C-off_14686
 		dc.w sub_14868-off_14686
 		dc.w sub_148C6-off_14686
 		dc.w sub_148E8-off_14686
-
 sub_14692:
 		jsr	sub_BC72
 		move.l	#off_11A5D8,$20(a0)
@@ -27998,7 +27180,6 @@ loc_14724:
 		jmp	sub_B960
 
 locret_1473A:
-
 		rts
 
 sub_1473C:
@@ -28027,7 +27208,6 @@ loc_14754:
 		jmp	sub_B960
 
 loc_14790:
-
 		move.b	d0,$3E(a0)
 		move.b	d7,$3F(a0)
 		move.b	#$3C,$26(a0)
@@ -28114,7 +27294,6 @@ loc_14888:
 		jmp	sub_B960
 
 loc_1488E:
-
 		move.b	#$A7,d2
 		jsr	sub_ED12(pc)
 		jsr	sub_EA3C(pc)
@@ -28148,16 +27327,13 @@ sub_148E8:
 		clr.w	$2A(a1)
 
 loc_14902:
-
 		jmp	sub_B960
 
 sub_14908:
-
 		lea	(off_14914).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_14914:	dc.w sub_149E0-off_14914
-
 		dc.w sub_14A74-off_14914
 		dc.w sub_14B18-off_14914
 		dc.w sub_14BBC-off_14914
@@ -28168,9 +27344,7 @@ off_14914:	dc.w sub_149E0-off_14914
 		dc.w sub_14DAE-off_14914
 		dc.w sub_14DDC-off_14914
 		dc.w sub_14DF8-off_14914
-
 sub_1492A:
-
 		jsr	sub_B9B8
 		beq.s	locret_14986
 		move.w	a0,$30(a1)
@@ -28199,7 +27373,6 @@ locret_14986:
 		rts
 
 sub_14988:
-
 		tst.w	$2A(a0)
 		beq.s	loc_14998
 		movea.w	$2A(a0),a1
@@ -28227,7 +27400,6 @@ loc_149D4:
 		move.w	#4,4(a1)
 
 loc_149DA:
-
 		jmp	sub_B960
 
 sub_149E0:
@@ -28290,7 +27462,6 @@ sub_14A74:
 		jmp	sub_B872
 
 loc_14ABE:
-
 		moveq	#3,d0
 		jsr	sub_CA58
 		bne.s	loc_14AD8
@@ -28311,7 +27482,6 @@ loc_14AD8:
 		rts
 
 loc_14AFA:
-
 		neg.l	$18(a0)
 		addq.w	#3,2(a0)
 		move.b	#$1E,$26(a0)
@@ -28344,7 +27514,6 @@ sub_14B18:
 		jmp	loc_B842
 
 loc_14B64:
-
 		moveq	#3,d0
 		jsr	sub_CA58
 		bne.s	loc_14B7E
@@ -28365,7 +27534,6 @@ loc_14B7E:
 		rts
 
 loc_14BA0:
-
 		neg.l	$18(a0)
 		addq.w	#1,2(a0)
 		move.b	#$1E,$26(a0)
@@ -28471,7 +27639,6 @@ loc_14CB4:
 		move.l	#$FFFF0000,$18(a0)
 
 loc_14CC6:
-
 		jsr	sub_B88A
 		moveq	#2,d0
 		jsr	sub_CA58
@@ -28581,24 +27748,19 @@ sub_14E02:
 		jmp	off_14E14(pc,d0.w)
 
 off_14E14:	dc.w sub_14E1E-off_14E14
-
 		dc.w sub_14E1E-off_14E14
 		dc.w sub_14F34-off_14E14
 		dc.w sub_14FDE-off_14E14
 		dc.w sub_15130-off_14E14
-
 sub_14E1E:
-
 		lea	(off_14E2A).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_14E2A:	dc.w sub_14E34-off_14E2A
-
 		dc.w sub_14E7C-off_14E2A
 		dc.w sub_14EAA-off_14E2A
 		dc.w sub_14ED8-off_14E2A
 		dc.w sub_14F06-off_14E2A
-
 sub_14E34:
 		jsr	sub_BC72
 		move.l	#off_11A6B2,$20(a0)
@@ -28683,13 +27845,11 @@ nullsub_18:
 
 sub_14F34:
 		lea	(off_14F40).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_14F40:	dc.w sub_14F46-off_14F40
-
 		dc.w sub_14F8A-off_14F40
 		dc.w sub_14FAA-off_14F40
-
 sub_14F46:
 		jsr	sub_BC72
 		move.l	#off_11A6B2,$20(a0)
@@ -28716,7 +27876,6 @@ sub_14F8A:
 		rts
 
 loc_14F9E:
-
 		addq.w	#1,2(a0)
 		move.b	#$A,$26(a0)
 		rts
@@ -28736,7 +27895,6 @@ loc_14FB8:
 		bset	#0,$C(a1)
 
 loc_14FCC:
-
 		adda.w	#$40,a1
 		dbf	d7,loc_14FB8
 		clr.w	2(a0)
@@ -28747,14 +27905,12 @@ locret_14FDC:
 
 sub_14FDE:
 		lea	(off_14FEA).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_14FEA:	dc.w sub_14FF2-off_14FEA
-
 		dc.w sub_1501C-off_14FEA
 		dc.w sub_15034-off_14FEA
 		dc.w sub_150B2-off_14FEA
-
 sub_14FF2:
 		jsr	sub_BC72
 		move.l	#off_11A6B2,$20(a0)
@@ -28845,17 +28001,15 @@ loc_15120:
 
 sub_15130:
 		lea	(off_1513C).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_1513C:	dc.w sub_1517A-off_1513C
-
 		dc.w sub_15194-off_1513C
 		dc.w sub_15218-off_1513C
 		dc.w sub_15302-off_1513C
 		dc.w sub_15326-off_1513C
 		dc.w sub_153A6-off_1513C
 		dc.w sub_153C4-off_1513C
-
 sub_1514A:
 		movea.w	$3C(a0),a1
 		cmpi.w	#$1B,0.w(a1)
@@ -28912,7 +28066,6 @@ loc_151F8:
 		move.b	#8,$26(a0)
 
 locret_15216:
-
 		rts
 
 sub_15218:
@@ -28966,7 +28119,6 @@ stru_152C2:	struc_50 $FFBE, $61, $200C, 7
 		struc_50 $61, $52, $1004, 4
 		struc_50 $53, $24, $2003, $2004
 		struc_50 $2F, 7, $1001, $2000
-
 sub_15302:
 		subq.b	#1,$26(a0)
 		bne.s	loc_15320
@@ -28977,11 +28129,9 @@ sub_15302:
 		move.b	#$18,$26(a0)
 
 loc_15320:
-
 		jmp	sub_B960
 
 sub_15326:
-
 		subq.b	#1,$26(a0)
 		bne.s	loc_15364
 		lea	(stru_15386).l,a1
@@ -28999,7 +28149,6 @@ sub_15326:
 		move.b	#$18,$26(a0)
 
 loc_15364:
-
 		move.b	$28(a0),d1
 		move.b	$29(a0),d2
 		move.w	#$100,d3
@@ -29010,7 +28159,6 @@ loc_15364:
 		jmp	sub_1514A(pc)
 
 stru_15386:	struc_51 0, 0
-
 		struc_51 $20, 0
 		struc_51 $3F, 0
 		struc_51 $20, 4
@@ -29026,7 +28174,6 @@ stru_15386:	struc_51 0, 0
 		struc_51 $20, 6
 		struc_51 $3F, 6
 		struc_51 $20, 2
-
 sub_153A6:
 		jsr	sub_BC72
 		move.l	#off_11A6B2,$20(a0)
@@ -29050,17 +28197,15 @@ loc_153E0:
 
 sub_153E6:
 		lea	(off_153F2).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_153F2:	dc.w sub_15510-off_153F2
-
 		dc.w sub_1553C-off_153F2
 		dc.w sub_1555C-off_153F2
 		dc.w sub_15572-off_153F2
 		dc.w sub_15582-off_153F2
 		dc.w sub_155DA-off_153F2
 		dc.w sub_155FE-off_153F2
-
 sub_15400:
 		moveq	#3,d0
 		jsr	sub_CA58
@@ -29089,7 +28234,6 @@ locret_15452:
 		rts
 
 byte_15454:	dc.b 0,	1, 1, 1, 1, 2, 6, 6, 2,	6, 6, 3, 7, 7, 3, 7, 7,	1, 0, 1
-
 		dc.b 1,	2, 6, 6, 2, 6, 6, 3, 7,	7, 3, 7, 7, 0, 0, 0, 0,	2, 6, 3
 		dc.b 7,	2, 6, 3, 7, 0, 0, 0, 0,	0
 stru_15486:	struc_52 0, 0
@@ -29100,7 +28244,6 @@ stru_15486:	struc_52 0, 0
 		struc_52 $6000, 0
 		struc_52 $6000, $FFFFD000
 		struc_52 $6000, $3000
-
 sub_154C6:
 		tst.b	$2D(a0)
 		blt.s	loc_154E8
@@ -29118,7 +28261,6 @@ loc_154E8:
 		beq.s	loc_15506
 
 loc_154F0:
-
 		move.w	a0,$30(a1)
 		jsr	sub_15CD6(pc)
 		move.w	#5,2(a0)
@@ -29126,7 +28268,6 @@ loc_154F0:
 		rts
 
 loc_15506:
-
 		jmp	sub_B960
 
 loc_1550C:
@@ -29157,7 +28298,6 @@ sub_1553C:
 		move.b	#$20,$26(a0)
 
 locret_1555A:
-
 		rts
 
 sub_1555C:
@@ -29202,7 +28342,6 @@ loc_155C6:
 		bra.w	sub_154C6
 
 byte_155CA:	dc.b 0,	1, 2, 3, 3, 3, 2, 1, 0,	$FF, $FE, $FD, $FD, $FD, $FE, $FF
-
 sub_155DA:
 		addq.w	#1,$14(a0)
 		subq.b	#1,$26(a0)
@@ -29232,10 +28371,9 @@ nullsub_20:
 
 sub_1561C:
 		lea	(off_15628).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_15628:	dc.w sub_15638-off_15628
-
 		dc.w sub_1565E-off_15628
 		dc.w sub_15734-off_15628
 		dc.w sub_157EA-off_15628
@@ -29243,7 +28381,6 @@ off_15628:	dc.w sub_15638-off_15628
 		dc.w sub_15846-off_15628
 		dc.w sub_1585C-off_15628
 		dc.w sub_15870-off_15628
-
 sub_15638:
 		jsr	sub_BC72
 		move.l	#off_11A856,$20(a0)
@@ -29270,7 +28407,6 @@ loc_15684:
 		subq.w	#2,$10(a0)
 
 loc_15688:
-
 		jsr	sub_15A46(pc)
 		move.w	(dword_FFA2D0).w,d0
 		sub.w	$10(a0),d0
@@ -29309,11 +28445,8 @@ loc_156D8:
 		jmp	loc_B842
 
 loc_15700:
-
 		jmp	sub_15898(pc)
-
 stru_15704:	struc_53 0, 0,	$FFFF8000, $FFFC0000
-
 		struc_53 0, $FFF4, $8000, $FFFC0000
 		struc_53 $FFF4, $FFF4,	$FFFE8000, $FFFC0000
 		struc_53 $C, $FFF4, $18000, $FFFC0000
@@ -29361,14 +28494,12 @@ loc_157B2:
 		move.b	#$18,$26(a0)
 
 loc_157C4:
-
 		jmp	sub_B960
 
 stru_157CA:	struc_54 $FFFF8000, $FFFF8000
 		struc_54 0, $FFFF8000
 		struc_54 $8000, $FFFF8000
 		struc_54 0, 0
-
 sub_157EA:
 		jsr	sub_B88A
 		subq.b	#1,$26(a0)
@@ -29427,7 +28558,6 @@ loc_15888:
 		jmp	sub_B960
 
 sub_15898:
-
 		jsr	sub_B9B8
 		bne.s	loc_158A8
 		jsr	loc_BA02
@@ -29469,7 +28599,6 @@ loc_15904:
 		jmp	sub_B960
 
 loc_1590A:
-
 		move.w	a0,$30(a1)
 		jsr	sub_15CD6(pc)
 		move.b	#$FA,$27(a0)
@@ -29488,7 +28617,6 @@ loc_15928:
 		jmp	sub_B960
 
 loc_1594C:
-
 		lea	(stru_15704).l,a2
 		moveq	#3,d6
 
@@ -29515,11 +28643,9 @@ sub_1598A:
 		jmp	off_15998(pc,d0.w)
 
 off_15998:	dc.w sub_159A0-off_15998
-
 		dc.w sub_159C8-off_15998
 		dc.w sub_159F0-off_15998
 		dc.w sub_15A06-off_15998
-
 sub_159A0:
 		jsr	sub_BC72
 		move.l	#off_11A856,$20(a0)
@@ -29579,7 +28705,6 @@ loc_15A40:
 		jmp	sub_B960
 
 sub_15A46:
-
 		btst	#0,$36(a0)
 		bne.s	loc_15A68
 		moveq	#0,d0
@@ -29602,12 +28727,9 @@ loc_15A68:
 		rts
 
 byte_15A82:	dc.b 0,	1, 1, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 1, 1, 1, 1,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0
-
 sub_15AB0:
-
 		moveq	#0,d2
 		move.w	#$FFFF,d1
 		jsr	sub_BAF6
@@ -29618,7 +28740,6 @@ sub_15AB0:
 		bra.s	loc_15AD6
 
 loc_15ACA:
-
 		moveq	#0,d2
 		move.w	#0,d1
 		jsr	sub_BAF6
@@ -29630,7 +28751,6 @@ loc_15AD6:
 		jmp	(a1,d7.w)
 
 off_15AE4:	dc.w sub_15B4A-off_15AE4
-
 		dc.w sub_15B40-off_15AE4
 		dc.w sub_15B40-off_15AE4
 		dc.w sub_15B40-off_15AE4
@@ -29676,24 +28796,19 @@ off_15AE4:	dc.w sub_15B4A-off_15AE4
 		dc.w sub_15BB0-off_15AE4
 		dc.w sub_15BCC-off_15AE4
 		dc.w sub_15B4A-off_15AE4
-
 sub_15B40:
-
 		andi.w	#$FFF0,$14(a0)
 		moveq	#1,d7
 		rts
 
 sub_15B4A:
-
 		moveq	#0,d7
 		rts
 
 sub_15B4E:
-
 		subi.w	#$10,$14(a0)
 
 sub_15B54:
-
 		move.w	$10(a0),d0
 		andi.w	#$F,d0
 		andi.w	#$FFF0,$14(a0)
@@ -29703,11 +28818,9 @@ sub_15B54:
 		rts
 
 sub_15B70:
-
 		subi.w	#$10,$14(a0)
 
 sub_15B76:
-
 		move.w	$10(a0),d0
 		andi.w	#$F,d0
 		asr.w	#1,d0
@@ -29718,7 +28831,6 @@ sub_15B76:
 		rts
 
 sub_15B94:
-
 		move.w	$10(a0),d0
 		andi.w	#$F,d0
 		asr.w	#1,d0
@@ -29729,11 +28841,9 @@ sub_15B94:
 		rts
 
 sub_15BB0:
-
 		subi.w	#$10,$14(a0)
 
 sub_15BB6:
-
 		move.w	$10(a0),d0
 		andi.w	#$F,d0
 		andi.w	#$FFF0,$14(a0)
@@ -29742,11 +28852,9 @@ sub_15BB6:
 		rts
 
 sub_15BCC:
-
 		subi.w	#$10,$14(a0)
 
 sub_15BD2:
-
 		move.w	$10(a0),d0
 		andi.w	#$F,d0
 		asr.w	#1,d0
@@ -29757,7 +28865,6 @@ sub_15BD2:
 		rts
 
 sub_15BEE:
-
 		move.w	$10(a0),d0
 		andi.w	#$F,d0
 		asr.w	#1,d0
@@ -29787,7 +28894,6 @@ sub_15C24:
 		neg.b	$2C(a0)
 
 loc_15C3C:
-
 		tst.b	$27(a0)
 		bne.s	locret_15C46
 		clr.b	$2C(a0)
@@ -29796,7 +28902,6 @@ locret_15C46:
 		rts
 
 sub_15C48:
-
 		jsr	sub_B9B8
 		tst.b	$F(a0)
 		beq.s	locret_15C58
@@ -29823,7 +28928,6 @@ loc_15C72:
 		bset	#4,$E(a2)
 
 loc_15C90:
-
 		move.w	a0,$30(a1)
 
 loc_15C94:
@@ -29831,7 +28935,6 @@ loc_15C94:
 		rts
 
 sub_15C9A:
-
 		jsr	sub_B9B0
 		beq.s	loc_15CC8
 		moveq	#0,d1
@@ -29855,18 +28958,15 @@ loc_15CC4:
 		rts
 
 loc_15CC8:
-
 		moveq	#0,d1
 		rts
 
 sub_15CCC:
-
 		move.w	$34(a0),d0
 		add.w	d0,(word_FF8F7A).w
 		rts
 
 sub_15CD6:
-
 		movea.w	$2E(a0),a1
 		bset	#6,-3(a1)
 		bne.s	locret_15CEE
@@ -29879,12 +28979,10 @@ locret_15CEE:
 		rts
 
 sub_15CF0:
-
 		lea	(off_15CFC).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_15CFC:	dc.w sub_15E2A-off_15CFC
-
 		dc.w sub_15E6A-off_15CFC
 		dc.w sub_15E8E-off_15CFC
 		dc.w sub_15EC0-off_15CFC
@@ -29894,9 +28992,7 @@ off_15CFC:	dc.w sub_15E2A-off_15CFC
 		dc.w sub_160A6-off_15CFC
 		dc.w sub_160DE-off_15CFC
 		dc.w sub_16128-off_15CFC
-
 sub_15D10:
-
 		move.w	$2A(a0),d0
 		lsr.w	#2,d0
 		andi.w	#$F,d0
@@ -29907,9 +29003,7 @@ sub_15D10:
 		rts
 
 byte_15D32:	dc.b 0,	1, 2, 3, 3, 3, 2, 1, 0,	$FF, $FE, $FD, $FD, $FD, $FE, $FF
-
 sub_15D42:
-
 		jsr	loc_BA02
 		beq.s	locret_15D4E
 		move.w	a0,$30(a1)
@@ -29960,8 +29054,7 @@ loc_15DA0:
 		subq.w	#1,d0
 		move.w	d0,(word_FFFC48).w
 		lea	(dword_FF6000).l,a4
-		jsr	(nemesis_decomp_to_ram).l
-
+		jsr	(nemesis_decomp_to_ram).l ; a0 = source
 		movem.l	(sp)+,a0-a6
 		rts
 
@@ -30099,23 +29192,15 @@ sub_15F86:
 
 loc_15FA6:
 		bra.w	loc_15FC6
-
 		bra.w	loc_15FE6
-
 		bra.w	loc_15FC6
-
 		bra.w	loc_16004
-
 		bra.w	loc_15FE6
-
 		bra.w	loc_15FC6
-
 		bra.w	loc_1601C
-
 		bra.w	loc_15FE6
 
 loc_15FC6:
-
 		move.w	#$F0,$2A(a0)
 		bclr	#0,$36(a0)
 		clr.l	$1C(a0)
@@ -30124,7 +29209,6 @@ loc_15FC6:
 		jmp	loc_B842
 
 loc_15FE6:
-
 		move.w	#$F0,$2A(a0)
 		bset	#0,$36(a0)
 		clr.l	$1C(a0)
@@ -30152,7 +29236,6 @@ stru_1606E:	struc_43 $FFF0, $FFD8,	6, $10000, $FFFF0000
 		struc_43 $10, $FFD8, 5, $10000, $FFFF0000
 		struc_43 $FFF0, $FFE0,	4, 0, $18000
 		struc_43 $10, $FFE0, 1, 0, $18000
-
 sub_160A6:
 		subq.b	#1,$27(a0)
 		btst	#0,$27(a0)
@@ -30162,7 +29245,6 @@ sub_160A6:
 		neg.b	$2C(a0)
 
 loc_160BE:
-
 		tst.b	$27(a0)
 		bhi.s	loc_160D4
 		bclr	#1,$D(a0)
@@ -30192,7 +29274,6 @@ locret_16106:
 		rts
 
 loc_16108:
-
 		addi.w	#$3E8,(word_FF8F7A).w
 		move.b	#$95,(byte_FFEE76).w
 		move.b	#$88,(byte_FFEE67).w
@@ -30219,19 +29300,16 @@ locret_1614A:
 
 sub_1614C:
 		lea	(off_16158).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_16158:	dc.w sub_161EE-off_16158
-
 		dc.w sub_1621E-off_16158
 		dc.w sub_16262-off_16158
 		dc.w sub_16460-off_16158
 		dc.w sub_1621E-off_16158
 		dc.w sub_164E0-off_16158
 		dc.w sub_16532-off_16158
-
 sub_16166:
-
 		move.w	$10(a0),d0
 		move.w	$14(a0),d1
 		cmpi.w	#$FFE0,d0
@@ -30246,12 +29324,10 @@ sub_16166:
 		rts
 
 loc_1618A:
-
 		moveq	#1,d0
 		rts
 
 sub_1618E:
-
 		cmpi.w	#8,(word_FF9002).l
 		beq.s	loc_161D4
 		jsr	sub_B9B8
@@ -30272,7 +29348,6 @@ loc_161B4:
 		rts
 
 loc_161D4:
-
 		move.w	#6,2(a0)
 		move.l	#$FFFE0000,$1C(a0)
 		bset	#1,$D(a0)
@@ -30294,7 +29369,6 @@ loc_16216:
 		jmp	sub_B83E
 
 sub_1621E:
-
 		cmpi.w	#2,6(a0)
 		blt.s	locret_16242
 		cmpi.b	#7,8(a0)
@@ -30380,7 +29454,6 @@ loc_16326:
 		bra.w	loc_16400
 
 loc_16334:
-
 		btst	#2,$36(a0)
 		bne.s	loc_1635A
 		move.w	(dword_FFA2D0).w,d0
@@ -30414,13 +29487,11 @@ loc_16380:
 		blt.w	loc_16420
 
 loc_1639C:
-
 		btst	#0,$29(a0)
 		bne.w	loc_16440
 		bra.s	loc_16420
 
 loc_163A8:
-
 		tst.l	$18(a0)
 		bgt.s	loc_163C8
 		cmpi.w	#3,4(a0)
@@ -30429,7 +29500,6 @@ loc_163A8:
 		jsr	loc_B842
 
 loc_163BE:
-
 		jsr	sub_B88A
 		bra.w	sub_1618E
 
@@ -30441,7 +29511,6 @@ loc_163C8:
 		bra.w	sub_1618E
 
 loc_163E0:
-
 		move.l	$1C(a0),d0
 		addi.l	#-$2000,d0
 		cmpi.l	#$FFFE0000,d0
@@ -30453,7 +29522,6 @@ loc_163F8:
 		bra.w	loc_16334
 
 loc_16400:
-
 		move.l	$1C(a0),d0
 		addi.l	#$2000,d0
 		cmpi.l	#$20000,d0
@@ -30465,7 +29533,6 @@ loc_16418:
 		bra.w	loc_16334
 
 loc_16420:
-
 		move.l	$18(a0),d0
 		addi.l	#-$2000,d0
 		cmpi.l	#$FFFD0000,d0
@@ -30477,7 +29544,6 @@ loc_16438:
 		bra.w	loc_163A8
 
 loc_16440:
-
 		move.l	$18(a0),d0
 		addi.l	#$2000,d0
 		cmpi.l	#$30000,d0
@@ -30515,7 +29581,6 @@ loc_164AA:
 		jmp	sub_B85A
 
 loc_164B0:
-
 		tst.l	$18(a0)
 		bgt.s	loc_164CC
 		cmpi.w	#3,4(a0)
@@ -30547,7 +29612,6 @@ loc_164FE:
 		neg.b	$2C(a0)
 
 loc_16516:
-
 		tst.b	$27(a0)
 		bne.w	locret_16530
 		move.w	$2A(a0),2(a0)
@@ -30569,7 +29633,6 @@ locret_1654E:
 		rts
 
 sub_16550:
-
 		move.b	#1,(byte_FFEE02).w
 		lea	(unk_FFF5A0).w,a2
 		move.b	$27(a0),d1
@@ -30596,18 +29659,18 @@ loc_1657E:
 		lea	2(a2),a2
 		dbf	d7,loc_16574
 		rts
+; a0 = ?
+; a1 = funcs table
 
 jump_by_table3:
 		move.w	$3E(a0),d0
 
 jump_by_table4:
-		add.w	d0,d0
-
+		add.w	d0,d0		; a0 = ?
 		move.w	(a1,d0.w),d0
 		jmp	(a1,d0.w)
 
 sub_16598:
-
 		addq.w	#1,$3E(a0)
 		jmp	loc_B842
 
@@ -30626,14 +29689,11 @@ sub_165A2:
 		move.w	#1,(word_FF8FAA).w
 
 loc_165D2:
-
 		lea	(off_165E2).l,a1
-		jsr	jump_by_table1
-
+		jsr	jump_by_table1	; a0 = ?
 		jmp	sub_16CE0(pc)
 
 off_165E2:	dc.w sub_165F6-off_165E2
-
 		dc.w sub_16638-off_165E2
 		dc.w sub_1666E-off_165E2
 		dc.w sub_16868-off_165E2
@@ -30643,7 +29703,6 @@ off_165E2:	dc.w sub_165F6-off_165E2
 		dc.w sub_16B40-off_165E2
 		dc.w sub_16BA8-off_165E2
 		dc.w sub_16C4A-off_165E2
-
 sub_165F6:
 		move.w	#$118,$10(a0)
 		move.w	#$C0,$14(a0)
@@ -30673,19 +29732,15 @@ sub_16638:
 		rts
 
 byte_16666:	dc.b 2,	1, 4, 1, 3, 3, 4, 1
-
 sub_1666E:
 		lea	off_16680(pc),a1
 
 loc_16672:
-		jsr	sub_B88A
-
-		jsr	jump_by_table3(pc)
-
+		jsr	sub_B88A	; a0 = ?
+		jsr	jump_by_table3(pc) ; a0	= ?
 		jmp	sub_16CFC(pc)
 
 off_16680:	dc.w sub_16694-off_16680
-
 		dc.w sub_166E4-off_16680
 		dc.w sub_1673E-off_16680
 		dc.w sub_16788-off_16680
@@ -30695,16 +29750,13 @@ off_16680:	dc.w sub_16694-off_16680
 		dc.w sub_16808-off_16680
 		dc.w sub_167F6-off_16680
 		dc.w sub_16856-off_16680
-
 sub_16694:
-
 		lea	stru_166D4(pc),a1
 		cmpi.b	#4,$26(a0)
-		bcs.s	loc_166A4
+		bcs.s	loc_166A4	; a1 = ?
 		lea	stru_166DC(pc),a1
 
 loc_166A4:
-
 		move.l	(a1)+,$1C(a0)
 		move.l	(a1),d0
 		moveq	#$20,d1
@@ -30724,9 +29776,7 @@ loc_166B8:
 
 stru_166D4:	struc_57 $FFFC7880, $FFFD9400
 stru_166DC:	struc_57 $FFFD4900, $FFFCE800
-
 sub_166E4:
-
 		addi.l	#$1C80,$1C(a0)
 		bmi.s	loc_166F4
 		bset	#0,7(a0)
@@ -30755,11 +29805,9 @@ loc_16700:
 		jmp	sub_16598(pc)
 
 locret_1673C:
-
 		rts
 
 sub_1673E:
-
 		clr.w	(dword_FF8F86+2).w
 		move.b	$27(a0),d0
 		beq.s	loc_1675A
@@ -30790,7 +29838,6 @@ loc_1676A:
 		jmp	sub_16598(pc)
 
 sub_16788:
-
 		subq.w	#1,$28(a0)
 		bne.s	locret_16792
 		addq.w	#1,$3E(a0)
@@ -30799,15 +29846,13 @@ locret_16792:
 		rts
 
 sub_16794:
-
 		addq.b	#1,$26(a0)
 		moveq	#0,d0
 		move.b	$26(a0),d0
 		lea	off_167A6(pc),a1
-		jmp	jump_by_table4(pc)
+		jmp	jump_by_table4(pc) ; a0	= ?
 
 off_167A6:	dc.w sub_167D6-off_167A6
-
 		dc.w sub_167D6-off_167A6
 		dc.w sub_167D6-off_167A6
 		dc.w sub_167C2-off_167A6
@@ -30817,14 +29862,11 @@ off_167A6:	dc.w sub_167D6-off_167A6
 		dc.w sub_167C2-off_167A6
 		dc.w sub_167BA-off_167A6
 		dc.w sub_167BA-off_167A6
-
 sub_167BA:
-
 		move.w	#1,2(a0)
 		rts
 
 sub_167C2:
-
 		bclr	#1,$D(a0)
 		move.w	4(a0),d0
 		andi.w	#1,d0
@@ -30832,12 +29874,10 @@ sub_167C2:
 		jmp	sub_16598(pc)
 
 sub_167D6:
-
 		clr.w	$3E(a0)
 		rts
 
 sub_167DC:
-
 		cmpi.w	#1,6(a0)
 		bne.s	locret_167F4
 		move.w	#$14,$28(a0)
@@ -30848,7 +29888,6 @@ locret_167F4:
 		rts
 
 sub_167F6:
-
 		subq.w	#1,$28(a0)
 		bne.s	locret_167F4
 		bclr	#1,$D(a0)
@@ -30856,7 +29895,6 @@ sub_167F6:
 		rts
 
 sub_16808:
-
 		cmpi.w	#5,6(a0)
 		bne.s	locret_167F4
 		clr.l	(dword_FFFC86).w
@@ -30884,10 +29922,9 @@ sub_16856:
 
 sub_16868:
 		lea	off_16870(pc),a1
-		jmp	loc_16672(pc)
+		jmp	loc_16672(pc)	; a0 = ?
 
 off_16870:	dc.w sub_16694-off_16870
-
 		dc.w sub_166E4-off_16870
 		dc.w sub_1673E-off_16870
 		dc.w sub_16788-off_16870
@@ -30910,21 +29947,17 @@ off_16870:	dc.w sub_16694-off_16870
 		dc.w sub_1673E-off_16870
 		dc.w sub_16788-off_16870
 		dc.w sub_167BA-off_16870
-
 sub_1689E:
 		move.b	#4,$26(a0)
 		lea	stru_168AC(pc),a1
-		jmp	loc_166A4(pc)
+		jmp	loc_166A4(pc)	; a1 = ?
 
 stru_168AC:	struc_57 $FFFA8000, $FFFE2880
-
 sub_168B4:
-
 		move.b	#2,$26(a0)
 		jmp	sub_16794(pc)
 
 sub_168BE:
-
 		tst.w	6(a0)
 		bne.s	locret_168C8
 		addq.w	#1,$3E(a0)
@@ -30935,20 +29968,18 @@ locret_168C8:
 sub_168CA:
 		move.b	#5,$26(a0)
 		lea	stru_168D8(pc),a1
-		jmp	loc_166A4(pc)
+		jmp	loc_166A4(pc)	; a1 = ?
 
 stru_168D8:	struc_57 $FFFEA880, $FFFDC000
-
 sub_168E0:
 		clr.b	$26(a0)
 		jmp	sub_16694(pc)
 
 sub_168E8:
 		lea	off_168F0(pc),a1
-		jmp	loc_16672(pc)
+		jmp	loc_16672(pc)	; a0 = ?
 
 off_168F0:	dc.w sub_1690E-off_168F0
-
 		dc.w sub_166E4-off_168F0
 		dc.w sub_1673E-off_168F0
 		dc.w sub_16788-off_168F0
@@ -30963,27 +29994,23 @@ off_168F0:	dc.w sub_1690E-off_168F0
 		dc.w sub_1673E-off_168F0
 		dc.w sub_16788-off_168F0
 		dc.w sub_167BA-off_168F0
-
 sub_1690E:
 		lea	stru_168AC(pc),a1
-		jmp	loc_166A4(pc)
+		jmp	loc_166A4(pc)	; a1 = ?
 
 sub_16916:
 		clr.b	$26(a0)
 		lea	stru_16922(pc),a1
-		jmp	loc_166A4(pc)
+		jmp	loc_166A4(pc)	; a1 = ?
 
 stru_16922:	struc_57 $FFFEA880, $FFFE0000
-
 sub_1692A:
 		lea	off_16932(pc),a1
-		jmp	jump_by_table3(pc)
+		jmp	jump_by_table3(pc) ; a0	= ?
 
 off_16932:	dc.w sub_16938-off_16932
-
 		dc.w sub_1696A-off_16932
 		dc.w sub_16990-off_16932
-
 sub_16938:
 		moveq	#$30,d0
 		cmpi.w	#4,(word_FF9002).w
@@ -31049,18 +30076,15 @@ loc_169E2:
 
 byte_169EA:	dc.b 6,	6, 6, 4, 4, 4, 2, 2, 2,	0, 0, 0
 byte_169F6:	dc.b 6,	4, 4, 2, 0, 0
-
 sub_169FC:
 		jsr	sub_B88A
 		lea	off_16A0A(pc),a1
-		jmp	jump_by_table3(pc)
+		jmp	jump_by_table3(pc) ; a0	= ?
 
 off_16A0A:	dc.w sub_16A12-off_16A0A
-
 		dc.w loc_16A48-off_16A0A
 		dc.w loc_16AB0-off_16A0A
 		dc.w sub_16AF4-off_16A0A
-
 sub_16A12:
 		move.b	#$CC,(byte_FFEE52).w
 		move.b	#5,$26(a0)
@@ -31104,7 +30128,6 @@ loc_16A48:
 		jsr	sub_EB3C(pc)
 
 loc_16A9C:
-
 		move.l	d0,(dword_FFFC86).w
 		move.l	d1,(dword_FFFC8A).w
 
@@ -31113,7 +30136,6 @@ loc_16AA4:
 		move.l	(dword_FFFC8A).w,$1C(a0)
 
 loc_16AB0:
-
 		cmpi.w	#$70,$14(a0)
 		bcs.s	loc_16ACC
 		moveq	#$10,d1
@@ -31203,7 +30225,6 @@ loc_16B8E:
 		rts
 
 loc_16B94:
-
 		move.w	#8,2(a0)
 		clr.l	$18(a0)
 		clr.l	$1C(a0)
@@ -31213,13 +30234,11 @@ loc_16B94:
 sub_16BA8:
 		jsr	sub_B88A
 		lea	off_16BB6(pc),a1
-		jmp	jump_by_table3(pc)
+		jmp	jump_by_table3(pc) ; a0	= ?
 
 off_16BB6:	dc.w sub_16BBC-off_16BB6
-
 		dc.w sub_16BEA-off_16BB6
 		dc.w sub_16C02-off_16BB6
-
 sub_16BBC:
 		move.b	#$CD,(byte_FFEE52).w
 		cmpi.w	#$C0,$14(a0)
@@ -31256,7 +30275,6 @@ sub_16C02:
 		beq.s	loc_16C28
 
 locret_16C26:
-
 		rts
 
 loc_16C28:
@@ -31293,24 +30311,19 @@ loc_16C72:
 loc_16C80:
 		move.b	#1,(byte_FFEE02).w
 		lea	(unk_FFF5A0).w,a2
-		jsr	copy_bytes_to_dest_32
-
+		jsr	copy_bytes_to_dest_32 ;	a1 = source
 		tst.b	$34(a0)
 		bne.s	locret_16C9E
 		tst.b	$38(a0)
 		beq.w	loc_16B94
 
 locret_16C9E:
-
 		rts
 
 word_16CA0:	dc.w $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
-
 		dc.w $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE, $EEE
 word_16CC0:	dc.w $A22, $EEE, $4AE, $28E, $26A, $ACC, $6AA, $488
-
 		dc.w $266, $248, $24C, $24E, $EEC, $CCA, $886, $222
-
 sub_16CE0:
 		moveq	#$28,d0
 		cmp.w	$10(a0),d0
@@ -31342,7 +30355,6 @@ sub_16CFC:
 		move.b	#$28,$34(a0)
 
 locret_16D2C:
-
 		rts
 
 loc_16D2E:
@@ -31360,15 +30372,13 @@ sub_16D50:
 		bsr.s	sub_16D6E
 		jsr	sub_B88A
 		lea	(off_16D64).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_16D64:	dc.w sub_16DA6-off_16D64
-
 		dc.w sub_16DD0-off_16D64
 		dc.w sub_16DF2-off_16D64
 		dc.w sub_16E08-off_16D64
 		dc.w sub_16E2C-off_16D64
-
 sub_16D6E:
 		cmpi.w	#3,2(a0)
 		bcc.s	locret_16D86
@@ -31389,7 +30399,6 @@ loc_16D88:
 		rts
 
 loc_16D9E:
-
 		bset	#0,$C(a0)
 		rts
 
@@ -31426,7 +30435,6 @@ locret_16DF0:
 		rts
 
 sub_16DF2:
-
 		moveq	#$FFFFFFF8,d1
 		moveq	#$10,d2
 		tst.w	$18(a0)
@@ -31458,14 +30466,12 @@ sub_16E2C:
 
 sub_16E36:
 		lea	(off_16E42).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_16E42:	dc.w sub_16E4A-off_16E42
-
 		dc.w sub_16F06-off_16E42
 		dc.w sub_17218-off_16E42
 		dc.w sub_172BA-off_16E42
-
 sub_16E4A:
 		jsr	sub_BC72
 		move.l	#off_125992,$20(a0)
@@ -31524,7 +30530,6 @@ loc_16F24:
 		move.w	word_16F4A(pc,d0.w),d4
 		move.w	d4,$3C(a0)
 		bra.s	loc_16F5E
-
 word_16F4A:	dc.w $101, $201, $102, $202
 
 loc_16F52:
@@ -31533,7 +30538,6 @@ loc_16F52:
 		jsr	sub_17038
 
 loc_16F5E:
-
 		jsr	sub_17086
 		move.b	$3D(a0),d1
 		move.b	$3F(a0),d2
@@ -31567,13 +30571,11 @@ loc_16F94:
 		move.w	#5,d1
 
 loc_16FBC:
-
 		add.w	d1,d1
 		move.w	word_16FCA(pc,d1.w),d0
 		cmp.w	$14(a0),d0
 		bge.s	loc_17006
 		bra.s	loc_17016
-
 word_16FCA:	dc.w 0,	$170, $E0, $B0,	$130
 word_16FD4:	dc.w $E0
 
@@ -31585,14 +30587,12 @@ loc_16FD6:
 		bra.s	loc_16FF6
 
 loc_16FE6:
-
 		btst	#0,d6
 		beq.s	loc_17026
 		addi.l	#$10000,$10(a0)
 		bra.s	loc_1702A
 
 loc_16FF6:
-
 		btst	#1,d6
 		beq.s	loc_17026
 		subi.l	#$10000,$10(a0)
@@ -31611,11 +30611,9 @@ loc_17016:
 		bra.s	loc_1702A
 
 loc_17026:
-
 		clr.w	$3C(a0)
 
 loc_1702A:
-
 		jsr	sub_18686
 		jsr	sub_17CBE
 		rts
@@ -31632,7 +30630,6 @@ sub_17038:
 		bra.s	loc_17080
 
 loc_17054:
-
 		cmpi.w	#$156,d2
 		ble.s	loc_17060
 		move.w	#1,d0
@@ -31648,7 +30645,6 @@ loc_1706C:
 		move.w	#3,d0
 
 loc_17070:
-
 		cmpi.w	#$108,d1
 		ble.s	loc_1707C
 		ori.w	#$200,d0
@@ -31658,7 +30654,6 @@ loc_1707C:
 		ori.w	#$100,d0
 
 loc_17080:
-
 		move.w	d0,$3C(a0)
 		rts
 
@@ -31691,11 +30686,9 @@ loc_170B2:
 		bra.s	loc_170C6
 
 loc_170C4:
-
 		clr.w	d0
 
 loc_170C6:
-
 		cmpi.w	#$98,d1
 		bne.s	loc_170D2
 		ori.w	#$100,d0
@@ -31707,7 +30700,6 @@ loc_170D2:
 		ori.w	#$200,d0
 
 loc_170DC:
-
 		move.w	d0,$3E(a0)
 		rts
 
@@ -31726,12 +30718,9 @@ loc_170E4:
 		bra.w	locret_171BC
 
 loc_17102:
-
 		addq.l	#6,d0
 		bra.s	loc_170E4
-
 word_17106:	dc.w $98, $B0, $B
-
 		dc.w $178, $B0,	$B
 		dc.w $98, $E0, $D
 		dc.w $178, $E0,	$E
@@ -31768,9 +30757,7 @@ loc_1715A:
 loc_1716C:
 		move.w	#$C,d0
 		bra.w	locret_171BC
-
 word_17174:	dc.w $98, $A0, $1C0
-
 		dc.w $178, $A0,	$170
 		dc.w 0,	0, 0
 
@@ -31803,16 +30790,13 @@ loc_171B8:
 		move.w	#3,d0
 
 locret_171BC:
-
 		rts
 
 word_171BE:	dc.w $170, $30,	$178
-
 		dc.w $B0, $30, $178
 		dc.w $E0, $98, $178
 		dc.w $130, $178, $1C8
 		dc.w 0,	0, 0
-
 sub_171DC:
 		jsr	rand
 		andi.w	#$FFFF,d0
@@ -31839,7 +30823,6 @@ loc_17210:
 		rts
 
 loc_17214:
-
 		moveq	#0,d0
 		rts
 
@@ -31888,7 +30871,6 @@ loc_172A0:
 		move.w	#1,2(a0)
 
 loc_172AC:
-
 		jsr	sub_18686
 		jsr	sub_17CBE
 		rts
@@ -31911,10 +30893,9 @@ locret_172E6:
 
 sub_172E8:
 		lea	(off_172F4).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_172F4:	dc.w sub_17304-off_172F4
-
 		dc.w sub_1734A-off_172F4
 		dc.w sub_173BA-off_172F4
 		dc.w sub_17406-off_172F4
@@ -31922,7 +30903,6 @@ off_172F4:	dc.w sub_17304-off_172F4
 		dc.w sub_174F2-off_172F4
 		dc.w sub_1745E-off_172F4
 		dc.w sub_17498-off_172F4
-
 sub_17304:
 		tst.b	(byte_FFEEF8).w
 		beq.s	loc_17310
@@ -31997,7 +30977,6 @@ loc_173EE:
 		move.w	#1,2(a0)
 
 locret_17404:
-
 		rts
 
 sub_17406:
@@ -32104,7 +31083,6 @@ loc_17530:
 		clr.w	(word_FF9026).l
 
 locret_17582:
-
 		rts
 
 sub_17584:
@@ -32157,12 +31135,10 @@ nullsub_21:
 
 sub_17612:
 		lea	(off_1761E).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_1761E:	dc.w sub_17622-off_1761E
-
 		dc.w sub_17652-off_1761E
-
 sub_17622:
 		jsr	sub_BC72
 		move.l	#off_125992,$20(a0)
@@ -32224,7 +31200,6 @@ loc_176C4:
 		bra.s	loc_1774E
 
 loc_176E8:
-
 		cmpi.l	#$10000,$10(a0)
 		bne.w	loc_17714
 		cmpi.l	#$10000,$14(a0)
@@ -32234,7 +31209,6 @@ loc_176E8:
 		addi.l	#0,$14(a0)
 
 loc_17714:
-
 		addi.l	#$25000,$14(a0)
 		bra.s	loc_1774E
 
@@ -32253,7 +31227,6 @@ loc_1773E:
 		move.l	#$10000,$14(a0)
 
 loc_1774E:
-
 		cmpi.w	#1,4(a0)
 		bne.s	locret_1776C
 		tst.w	(word_FF90E6).l
@@ -32262,11 +31235,9 @@ loc_1774E:
 		jsr	sub_17CBE
 
 locret_1776C:
-
 		rts
 
 sub_1776E:
-
 		btst	#0,$3C(a0)
 		bne.s	loc_177A8
 		btst	#1,$3C(a0)
@@ -32281,7 +31252,7 @@ sub_1776E:
 
 loc_1779C:
 		lea	(off_177B4).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 loc_177A8:
 		jmp	sub_17B2A
@@ -32290,7 +31261,6 @@ loc_177AE:
 		jmp	sub_17BA8
 
 off_177B4:	dc.w sub_177C4-off_177B4
-
 		dc.w sub_1782C-off_177B4
 		dc.w sub_1785A-off_177B4
 		dc.w sub_178F2-off_177B4
@@ -32298,7 +31268,6 @@ off_177B4:	dc.w sub_177C4-off_177B4
 		dc.w sub_17980-off_177B4
 		dc.w sub_17A0C-off_177B4
 		dc.w sub_17A56-off_177B4
-
 sub_177C4:
 		move.w	#$A400,$A(a0)
 		move.l	#off_125AA0,$20(a0)
@@ -32334,7 +31303,6 @@ loc_17844:
 		jmp	sub_1776E
 
 byte_1784E:	dc.b 6,	5, 2, 3, 2, 4, 2, 3, 5,	0, 0, 0
-
 sub_1785A:
 		subq.w	#1,$2A(a0)
 		bgt.s	loc_178A6
@@ -32463,7 +31431,6 @@ loc_179CE:
 		rts
 
 loc_179E6:
-
 		move.b	$27(a0),d2
 		move.b	$2B(a0),$27(a0)
 		move.w	#$FFFF,d0
@@ -32494,7 +31461,6 @@ loc_17A2A:
 		rts
 
 sub_17A3E:
-
 		move.b	#1,(byte_FFEE02).w
 		lea	(unk_FFF5A0).w,a2
 		lea	(unk_FFF620).w,a1
@@ -32542,20 +31508,16 @@ sub_17AA6:
 		subq.w	#1,d0
 		move.w	d0,(word_FFFC48).w
 		lea	(dword_FF6000).l,a4
-		jsr	(nemesis_decomp_to_ram).l
-
+		jsr	(nemesis_decomp_to_ram).l ; a0 = source
 		movem.l	(sp)+,a0-a6
 		rts
 
 dword_17AE6:	dc.l $40000002
 word_17AEA:	dc.w $FEEF, $FEEF, $FEEF, $FEEF, $FCCF,	$FCCF, $FCCF, $FCCF
-
 		dc.w $F88F, $F88F, $F88F, $F88F, $F00F,	$F00F, $F00F, $F00F
 		dc.w $E00E, $E00E, $E00E, $E00E, $C00C,	$C00C, $C00C, $C00C
 		dc.w $8008, $8008, $8008, $8008, 0, 0, 0, 0
-
 sub_17B2A:
-
 		btst	#2,$3C(a0)
 		bne.s	loc_17B66
 		btst	#1,$D(a0)
@@ -32598,11 +31560,9 @@ loc_17B94:
 		clr.b	$2C(a0)
 
 locret_17BA6:
-
 		rts
 
 sub_17BA8:
-
 		move.w	$26(a0),d0
 		move.w	$3E(a0),d1
 		move.w	d1,$26(a0)
@@ -32691,7 +31651,6 @@ nullsub_22:
 		rts
 
 sub_17CBE:
-
 		jsr	sub_B9B8
 		beq.s	loc_17CCC
 		move.w	a0,$30(a1)
@@ -32706,7 +31665,6 @@ locret_17CD8:
 		rts
 
 sub_17CDA:
-
 		clr.l	d0
 		move.l	(dword_FFA2D0).w,d1
 		sub.l	$10(a0),d1
@@ -32719,7 +31677,6 @@ loc_17CEE:
 		bset	#$10,d0
 
 loc_17CF2:
-
 		move.l	(dword_FFA2D4).w,d2
 		sub.l	$14(a0),d2
 		beq.s	loc_17D08
@@ -32731,18 +31688,16 @@ loc_17D04:
 		bset	#$13,d0
 
 loc_17D08:
-
 		swap	d0
 		rts
 
 sub_17D0C:
-
 		btst	#0,$3C(a0)
 		bne.s	loc_17D28
 		btst	#1,$3C(a0)
 		bne.s	loc_17D2E
 		lea	(off_17D34).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 loc_17D28:
 		jmp	sub_17B2A
@@ -32751,7 +31706,6 @@ loc_17D2E:
 		jmp	sub_17BA8
 
 off_17D34:	dc.w sub_17D76-off_17D34
-
 		dc.w sub_17DEA-off_17D34
 		dc.w sub_17E1C-off_17D34
 		dc.w sub_17FCC-off_17D34
@@ -32767,7 +31721,6 @@ off_17D34:	dc.w sub_17D76-off_17D34
 		dc.w sub_17D56-off_17D34
 		dc.w nullsub_23-off_17D34
 		dc.w sub_18354-off_17D34
-
 nullsub_23:
 		rts
 
@@ -32776,7 +31729,6 @@ sub_17D56:
 		movea.l	a0,a1
 
 loc_17D5A:
-
 		tst.w	0.w(a1)
 		beq.s	loc_17D66
 		bset	#0,$C(a1)
@@ -32826,7 +31778,6 @@ loc_17DFE:
 		jmp	sub_17D0C
 
 byte_17E0C:	dc.b 3,	$F, 2, 5, $C, 4, 2, 5, $B, 6, 9, $A, 7,	7, 8, 0
-
 sub_17E1C:
 		subq.w	#1,$2A(a0)
 		beq.w	loc_17ECE
@@ -32875,7 +31826,6 @@ loc_17E9A:
 		move.w	#$FFDD,d2
 
 loc_17EA2:
-
 		move.w	$10(a1),d0
 		add.w	(a2,d1.w),d0
 		move.w	d0,$10(a0)
@@ -32899,7 +31849,6 @@ stru_17EDE:	struc_58 9, $FFDD
 		struc_58 0, $FFDD
 		struc_58 $FFFE, $FFE1
 		struc_58 $FFFE, $FFE1
-
 sub_17EF6:
 		subq.w	#1,$2A(a0)
 		beq.w	loc_17FA4
@@ -32947,7 +31896,6 @@ loc_17F74:
 		move.w	#$14,d1
 
 loc_17F78:
-
 		move.w	$10(a1),d0
 		add.w	(a2,d1.w),d0
 		move.w	d0,$10(a0)
@@ -32971,7 +31919,6 @@ stru_17FB4:	struc_58 $FFFE, $FFDD
 		struc_58 $FFF6, $FFE0
 		struc_58 $FFF3, $FFDD
 		struc_58 $FFE6, $FFE1
-
 sub_17FCC:
 		jsr	sub_18694
 		jsr	sub_17CBE
@@ -33060,7 +32007,6 @@ loc_1811C:
 		move.l	#0,$1C(a0)
 
 loc_18132:
-
 		btst	#0,5(a0)
 		beq.w	loc_18164
 		cmpi.w	#$2A,$10(a0)
@@ -33090,14 +32036,12 @@ loc_18164:
 		beq.s	loc_1819E
 
 loc_1818A:
-
 		jsr	sub_B88A
 		jsr	sub_18694
 		jsr	sub_17CBE
 		rts
 
 loc_1819E:
-
 		move.b	#$E4,(byte_FFEE52).w
 		jsr	sub_18694
 		jsr	sub_17CBE
@@ -33240,7 +32184,6 @@ loc_18346:
 		rts
 
 sub_18354:
-
 		subq.w	#1,$2A(a0)
 		bgt.s	loc_1838A
 		beq.w	loc_18426
@@ -33286,21 +32229,17 @@ loc_183C4:
 		rts
 
 loc_183D2:
-
 		moveq	#0,d0
 		bra.s	loc_183DC
 
 loc_183D6:
-
 		moveq	#$C,d0
 		bra.s	loc_183DC
 
 loc_183DA:
-
 		moveq	#$18,d0
 
 loc_183DC:
-
 		btst	#0,5(a0)
 		beq.s	loc_183E6
 		addq.l	#6,d0
@@ -33333,17 +32272,14 @@ stru_1843A:	struc_59 $FFEC, $FFB0,	6
 		struc_59 4, $FFBD, 1
 		struc_59 $10, $FFED, 4
 		struc_59 $FFF0, $FFED,	0
-
 sub_1845E:
 		subq.w	#1,$2A(a0)
 		lea	(off_1846E).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_1846E:	dc.w sub_18482-off_1846E
-
 		dc.w sub_184A8-off_1846E
 word_18472:	dc.w $7C, $A8, $D4, $100, $12C,	$158, $184, $1B0
-
 sub_18482:
 		jsr	sub_BC72
 		move.l	#off_125CF6,$20(a0)
@@ -33428,14 +32364,12 @@ loc_1855E:
 		move.w	d0,$3C(a0)
 
 loc_18588:
-
 		move.w	#0,$28(a0)
 		jsr	sub_B88A
 		jsr	sub_18686
 		jsr	sub_17CBE
 
 loc_185A0:
-
 		move.w	#1,2(a0)
 		rts
 
@@ -33499,7 +32433,6 @@ loc_18638:
 		bra.s	loc_18644
 
 loc_1863A:
-
 		adda.l	#6,a1
 		bra.s	loc_185FA
 
@@ -33520,15 +32453,12 @@ stru_1864A:	struc_60 $D0, $100, $40
 		struc_60 $50, $C0, $A0
 		struc_60 $110,	$180, $A0
 		struc_60 0, 0, 0
-
 sub_18686:
-
 		jsr	sub_B960
 		jsr	loc_B97A
 		rts
 
 sub_18694:
-
 		jsr	sub_B960
 		bne.s	loc_186A4
 		jsr	loc_B97A
@@ -33559,7 +32489,6 @@ loc_186C4:
 		move.b	#$C2,(byte_FFEE52).w
 
 locret_186DA:
-
 		rts
 
 loc_186DC:
@@ -33578,15 +32507,13 @@ loc_186E8:
 
 sub_18700:
 		lea	(off_1870C).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_1870C:	dc.w sub_18716-off_1870C
-
 		dc.w sub_18742-off_1870C
 		dc.w sub_18760-off_1870C
 		dc.w sub_18772-off_1870C
 		dc.w sub_1878C-off_1870C
-
 sub_18716:
 		move.w	#$23D4,$A(a0)
 		move.l	#off_1222F2,$20(a0)
@@ -33658,16 +32585,13 @@ loc_187CE:
 		rts
 
 sub_187DC:
-
 		lea	(off_187E8).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_187E8:	dc.w sub_187F0-off_187E8
-
 		dc.w sub_1882A-off_187E8
 		dc.w sub_18860-off_187E8
 		dc.w sub_18890-off_187E8
-
 sub_187F0:
 		move.w	#$4471,$A(a0)
 		move.l	#off_1249FC,$20(a0)
@@ -33714,20 +32638,17 @@ loc_1887C:
 		st	(byte_FF9FB6).l
 
 sub_18890:
-
 		move.b	#$B4,(byte_FFEE0B).w
 		rts
 
 sub_18898:
 		lea	(off_188A4).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_188A4:	dc.w sub_188AC-off_188A4
-
 		dc.w sub_188E8-off_188A4
 		dc.w sub_188F4-off_188A4
 		dc.w nullsub_25-off_188A4
-
 sub_188AC:
 		move.w	#$4564,$A(a0)
 		move.l	#off_125330,$20(a0)
@@ -33744,7 +32665,6 @@ loc_188C0:
 
 stru_188D8:	struc_61 unk_FF9FC0-M68K_RAM, $B9, $D0, $100
 		struc_61 unk_FFA000-M68K_RAM, $B8, $B8, $100
-
 sub_188E8:
 		tst.b	$36(a0)
 		beq.s	locret_188F2
@@ -33768,13 +32688,11 @@ nullsub_25:
 
 sub_1890E:
 		lea	(off_1891A).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_1891A:	dc.w sub_18920-off_1891A
-
 		dc.w sub_1893C-off_1891A
 		dc.w locret_1894C-off_1891A
-
 sub_18920:
 		move.w	#$4564,$A(a0)
 		move.l	#off_125330,$20(a0)
@@ -33789,21 +32707,18 @@ sub_1893C:
 		move.w	#1,6(a0)
 
 locret_1894C:
-
 		rts
 
 sub_1894E:
 		lea	(off_1895A).l,a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_1895A:	dc.w sub_18966-off_1895A
-
 		dc.w sub_18980-off_1895A
 		dc.w sub_189A0-off_1895A
 		dc.w sub_189BA-off_1895A
 		dc.w sub_189FA-off_1895A
 		dc.w locret_18A34-off_1895A
-
 sub_18966:
 		move.w	#$564,$A(a0)
 		move.l	#off_125330,$20(a0)
@@ -33886,14 +32801,12 @@ locret_18A68:
 
 sub_18A6A:
 		lea	off_18A74(pc),a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_18A74:	dc.w sub_18A7C-off_18A74
-
 		dc.w sub_18AA0-off_18A74
 		dc.w sub_18B96-off_18A74
 		dc.w sub_18B96-off_18A74
-
 sub_18A7C:
 		move.w	a0,(word_FF9284).w
 		moveq	#0,d0
@@ -33915,15 +32828,12 @@ sub_18AA0:
 		add.w	d0,d0
 		move.w	off_18AC0(pc,d0.w),d0
 		jmp	off_18AC0(pc,d0.w)
-
 off_18AC0:	dc.w sub_18AC8-off_18AC0
-
 		dc.w sub_18AC8-off_18AC0
 		dc.w sub_18AE4-off_18AC0
 		dc.w sub_18AE4-off_18AC0
 
 sub_18AC8:
-
 		cmpi.w	#$100,(dword_FFA2D0).w
 		bcc.s	loc_18B00
 		cmpi.w	#$B0,(dword_FFA2D0).w
@@ -33935,7 +32845,6 @@ locret_18AE2:
 		rts
 
 sub_18AE4:
-
 		cmpi.w	#$DD,(dword_FFA2D0).w
 		bcs.s	loc_18B0C
 		cmpi.w	#$12D,(dword_FFA2D0).w
@@ -33997,22 +32906,18 @@ loc_18B8A:
 		move.w	#1,2(a1)
 		addq.w	#1,2(a0)
 		rts
-
 sub_18B96:
-
 		bra.w	sub_19A10
 
 sub_18B9A:
 		lea	off_18BA4(pc),a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_18BA4:	dc.w sub_18BAE-off_18BA4
-
 		dc.w sub_18BC0-off_18BA4
 		dc.w sub_18C56-off_18BA4
 		dc.w sub_18BE0-off_18BA4
 		dc.w sub_18C7E-off_18BA4
-
 sub_18BAE:
 		move.w	a0,(word_FF9286).w
 		moveq	#7,d0
@@ -34031,7 +32936,6 @@ sub_18BC0:
 		bra.w	loc_18BFA
 
 locret_18BDE:
-
 		rts
 
 sub_18BE0:
@@ -34120,10 +33024,9 @@ loc_18C9E:
 
 sub_18D14:
 		lea	off_18D1E(pc),a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_18D1E:	dc.w sub_18D3A-off_18D1E
-
 		dc.w sub_1993A-off_18D1E
 		dc.w sub_18D44-off_18D1E
 		dc.w sub_18D48-off_18D1E
@@ -34137,7 +33040,6 @@ off_18D1E:	dc.w sub_18D3A-off_18D1E
 		dc.w sub_1960C-off_18D1E
 		dc.w sub_19636-off_18D1E
 		dc.w sub_19756-off_18D1E
-
 sub_18D3A:
 		move.w	a0,(word_FF928C).w
 		moveq	#2,d0
@@ -34161,15 +33063,13 @@ loc_18D5C:
 		bset	#0,$2B(a1)
 
 locret_18D62:
-
 		rts
 
 sub_18D64:
 		lea	off_18D6E(pc),a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_18D6E:	dc.w sub_18D8A-off_18D6E
-
 		dc.w sub_1993A-off_18D6E
 		dc.w sub_18D94-off_18D6E
 		dc.w sub_18D98-off_18D6E
@@ -34183,7 +33083,6 @@ off_18D6E:	dc.w sub_18D8A-off_18D6E
 		dc.w sub_19676-off_18D6E
 		dc.w sub_19680-off_18D6E
 		dc.w sub_19756-off_18D6E
-
 sub_18D8A:
 		move.w	a0,(word_FF928E).w
 		moveq	#3,d0
@@ -34212,15 +33111,13 @@ loc_18DC0:
 		bset	#1,$2B(a1)
 
 locret_18DC6:
-
 		rts
 
 sub_18DC8:
 		lea	off_18DD2(pc),a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_18DD2:	dc.w sub_18DEE-off_18DD2
-
 		dc.w sub_1993A-off_18DD2
 		dc.w sub_18DF8-off_18DD2
 		dc.w sub_18DFC-off_18DD2
@@ -34234,7 +33131,6 @@ off_18DD2:	dc.w sub_18DEE-off_18DD2
 		dc.w sub_196AC-off_18DD2
 		dc.w sub_196B6-off_18DD2
 		dc.w sub_19756-off_18DD2
-
 sub_18DEE:
 		move.w	a0,(word_FF9290).w
 		moveq	#4,d0
@@ -34263,15 +33159,13 @@ loc_18E24:
 		bset	#2,$2B(a1)
 
 locret_18E2A:
-
 		rts
 
 sub_18E2C:
 		lea	off_18E36(pc),a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_18E36:	dc.w sub_18E52-off_18E36
-
 		dc.w sub_1993A-off_18E36
 		dc.w sub_18E5C-off_18E36
 		dc.w sub_18E60-off_18E36
@@ -34285,7 +33179,6 @@ off_18E36:	dc.w sub_18E52-off_18E36
 		dc.w sub_196E2-off_18E36
 		dc.w sub_196EC-off_18E36
 		dc.w sub_19756-off_18E36
-
 sub_18E52:
 		move.w	a0,(word_FF9292).w
 		moveq	#5,d0
@@ -34314,15 +33207,13 @@ loc_18E88:
 		bset	#3,$2B(a1)
 
 locret_18E8E:
-
 		rts
 
 sub_18E90:
 		lea	off_18E9A(pc),a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_18E9A:	dc.w sub_18EB6-off_18E9A
-
 		dc.w sub_1993A-off_18E9A
 		dc.w sub_18EC0-off_18E9A
 		dc.w sub_18EC4-off_18E9A
@@ -34336,7 +33227,6 @@ off_18E9A:	dc.w sub_18EB6-off_18E9A
 		dc.w sub_19728-off_18E9A
 		dc.w sub_19732-off_18E9A
 		dc.w sub_19756-off_18E9A
-
 sub_18EB6:
 		move.w	a0,(word_FF9294).w
 		moveq	#6,d0
@@ -34371,20 +33261,17 @@ sub_18EFE:
 		movea.w	(word_FF9294).w,a0
 
 locret_18F02:
-
 		rts
 
 sub_18F04:
 		lea	off_18F0E(pc),a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_18F0E:	dc.w sub_18F18-off_18F0E
-
 		dc.w sub_18F60-off_18F0E
 		dc.w sub_18FB8-off_18F0E
 		dc.w sub_18FEE-off_18F0E
 		dc.w sub_1901A-off_18F0E
-
 sub_18F18:
 		move.w	a0,(word_FF9288).w
 		jsr	sub_BC72
@@ -34497,9 +33384,8 @@ loc_19044:
 		lea	off_19092(pc,d2.w),a1
 
 loc_1904C:
-		bsr.w	sub_190C4
-
-		bsr.w	sub_19C0E
+		bsr.w	sub_190C4	; a2 = ?
+		bsr.w	sub_19C0E	; a1 = bytes array
 		bcs.s	sub_19096
 		clr.b	$2A(a0)
 		move.b	#6,$D(a0)
@@ -34514,15 +33400,11 @@ loc_1904C:
 		rts
 
 off_1908A:	dc.w word_19420-off_1908A
-
 		dc.w word_19470-off_1908A
 off_1908E:	dc.w word_19378-off_1908E
-
 		dc.w word_193C8-off_1908E
 off_19092:	dc.w word_193CC-off_19092
-
 		dc.w word_1941C-off_19092
-
 sub_19096:
 		movea.w	(word_FF928A).w,a1
 		cmpi.w	#3,2(a1)
@@ -34538,8 +33420,9 @@ loc_190BC:
 		move.w	#3,2(a1)
 
 locret_190C2:
-
 		rts
+; a2 = ?
+; a3 = ?
 
 sub_190C4:
 		subq.b	#1,(byte_FF929A).w
@@ -34554,28 +33437,24 @@ sub_190C4:
 		addq.b	#1,(byte_FF929C).w
 
 loc_190EA:
-
 		move.b	(byte_FF929D).w,d2
 		rts
 
 sub_190F0:
 		lea	off_190FA(pc),a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_190FA:	dc.w sub_19104-off_190FA
-
 		dc.w sub_1910E-off_190FA
 		dc.w sub_19194-off_190FA
 		dc.w sub_1910E-off_190FA
 		dc.w sub_191F0-off_190FA
-
 sub_19104:
 		move.w	a0,(word_FF928A).w
 		moveq	#1,d0
 		bra.w	sub_199C8
 
 sub_1910E:
-
 		btst	#1,$2A(a0)
 		bne.s	loc_1913A
 		btst	#0,$2A(a0)
@@ -34595,7 +33474,6 @@ loc_1913A:
 		move.w	#$12,6(a0)
 
 loc_19154:
-
 		cmpi.w	#3,2(a0)
 		beq.s	loc_19164
 		move.w	#2,2(a0)
@@ -34646,7 +33524,6 @@ loc_191CA:
 		move.w	#1,2(a1)
 
 locret_191EE:
-
 		rts
 
 sub_191F0:
@@ -34676,18 +33553,15 @@ loc_19226:
 		bclr	#2,$D(a1)
 
 locret_19240:
-
 		rts
 
 sub_19242:
 		lea	off_1924C(pc),a1
-		jmp	jump_by_table1
+		jmp	jump_by_table1	; a0 = ?
 
 off_1924C:	dc.w sub_19252-off_1924C
-
 		dc.w sub_1925C-off_1924C
 		dc.w sub_192C6-off_1924C
-
 sub_19252:
 		move.w	a0,(word_FF9296).w
 		moveq	#8,d0
@@ -34714,7 +33588,6 @@ loc_1928A:
 		move.w	#$15,6(a0)
 
 loc_192A4:
-
 		clr.b	$D(a0)
 		move.w	#$90,$14(a0)
 		movea.w	(word_FF9284).w,a1
@@ -34744,15 +33617,12 @@ loc_192DE:
 		bne.s	locret_192F4
 
 loc_192EE:
-
 		move.w	#1,2(a0)
 
 locret_192F4:
-
 		rts
 
 sub_192F6:
-
 		movea.w	(word_FF9296).w,a1
 		bset	#2,$D(a1)
 		clr.b	$2A(a1)
@@ -34760,56 +33630,40 @@ sub_192F6:
 		rts
 
 byte_1930C:	dc.b $24, $14, $11, $10, $F, $E, $D, $C, $B, $A, 9, 8, 7, 6, 5,	4, 3, 0, $E1, $E0
-
 		dc.b $DF, $DE, $DD, $DC, $DB, $DA, $D9,	$D8, $D7, $D6, $D5, $D4, $D3, $D0, $C0,	0
 byte_19330:	dc.b $40, $50, $53, $54, $55, $56, $57,	$58, $59, $5A, $5B, $5C, $5D, $5E, $5F,	$60, $61, $80, $83, $84
-
 		dc.b $85, $86, $87, $88, $89, $8A, $8B,	$8C, $8D, $8E, $8F, $90, $91, $94, $A4,	0
 word_19354:	dc.w $101, $101, $101, $101, $101, $101, $101, $101, $101
-
 		dc.w $101, $101, $101, $101, $101, $101, $101, $101, $1FF
 word_19378:	dc.w $D9DA, $DBDC, $DDDE, $DFE0, $E1E2,	$E3E4, $102, $304, $506, $708
-
 		dc.w $90A, $B0C, $D0E, $F10, $1112, $1314, $1516, $4E4F, $5051,	$5253
 		dc.w $5455, $5657, $5859, $5A5B, $5C5D,	$5E5F, $6061, $6263, $6481, $8283
 		dc.w $8485, $8687, $8889, $8A8B, $8C8D,	$8E8F, $9091, $9293, $9495, $9600
 word_193C8:	dc.w $E4E4, $6400
 word_193CC:	dc.w $8B8A, $8988, $8786, $8584, $8382,	$8180, $6362, $6160, $5F5E, $5D5C
-
 		dc.w $5B5A, $5958, $5756, $5554, $5352,	$5150, $4F4E, $1615, $1413, $1211
 		dc.w $100F, $E0D, $C0B,	$A09, $807, $605, $403,	$201, $E3, $E2E1
 		dc.w $E0DF, $DEDD, $DCDB, $DAD9, $D8D7,	$D6D5, $D4D3, $D2D1, $D0CF, $CE00
 word_1941C:	dc.w $6464, $E400
 word_19420:	dc.w $101, $101, $101, $101, $101, $120, $101, $101, $101, $101
-
 		dc.w $101, $101, $101, $101, $101, $101, $101, $101, $101, $101
 		dc.w $101, $101, $101, $101, $101, $101, $101, $101, $2301, $101
 		dc.w $101, $101, $101, $101, $101, $101, $101, $101, $101, $1FF
 word_19470:	dc.w $230, $33FF
 byte_19474:	dc.b $20, $15, $10, $B,	6, $E0,	$D5, $D0, $CB, $C6, $12, $D2, $12, $D2,	$12, $D2
-
 byte_19484:	dc.b $52, $92, $52, $92, $52, $92, $46,	$4B, $50, $55, $60, $86, $8B, $90, $95,	$A0
-
 byte_19494:	dc.b $44, $4F, $54, $59, $5E, $84, $8F,	$94, $99, $9E, $52, $92, $52, $92, $52,	$92
-
 byte_194A4:	dc.b $12, $D2, $12, $D2, $12, $D2, $1E,	$19, $14, $F, 4, $DE, $D9, $D4,	$CF, $C4
-
 byte_194B4:	dc.b $40, $C0, $40, $C0
 byte_194B8:	dc.b $40, $80, $C0, $40, $C0, 0
-
 byte_194BE:	dc.b $40, 0, $C0, $40, $C0, 0
-
 byte_194C4:	dc.b $C0, $40
 byte_194C6:	dc.b $C0, 0, $40, 0
 byte_194CA:	dc.b $C0, $80, $40, 0
 word_194CE:	dc.w $101, $101, $101, $101, $50A, $303, $202, $101, $FF00
-
 word_194E0:	dc.w $101, $202, $303, $A05, $101, $101, $101, $101, $FF00
-
 word_194F2:	dc.w $101, $101, $101, $101, $50A, $303, $303, $201, $FF00
-
 word_19504:	dc.w $102, $303, $303, $A05, $101, $101, $101, $101, $FF00
-
 word_19516:	dc.w $50A, $404, $FF00
 word_1951C:	dc.w $702, $704, $4FF
 word_19522:	dc.w $402, $B03, $3FF
@@ -34820,9 +33674,7 @@ byte_19534:	dc.b 5,	$60, $FF, 0
 byte_19538:	dc.b 9,	7
 byte_1953A:	dc.b 2,	1, $FF,	0
 byte_1953E:	dc.b 1,	0, $FF,	0
-
 sub_19542:
-
 		move.w	#$150,$10(a0)
 		move.w	#2,6(a0)
 		tst.b	(byte_FF9299).w
@@ -34843,7 +33695,6 @@ loc_19576:
 		rts
 
 sub_19582:
-
 		subq.w	#1,$28(a0)
 		beq.s	loc_1959E
 		move.b	#$FD,$2C(a0)
@@ -34885,12 +33736,10 @@ sub_195DE:
 loc_195F0:
 		lea	(byte_19474).l,a1
 		tst.b	(byte_FF9299).w
-		beq.w	loc_19686
+		beq.w	loc_19686	; a1 = bytes array
 		lea	(byte_19494).l,a1
-		bra.w	loc_19686
-
+		bra.w	loc_19686	; a1 = bytes array
 off_19608:	dc.w word_194CE-off_19608
-
 		dc.w word_194F2-off_19608
 
 sub_1960C:
@@ -34909,25 +33758,23 @@ sub_1960C:
 sub_19636:
 		lea	(byte_19484).l,a1
 		tst.b	(byte_FF9299).w
-		beq.w	loc_19686
+		beq.w	loc_19686	; a1 = bytes array
 		lea	(byte_194A4).l,a1
-		bra.w	loc_19686
-
+		bra.w	loc_19686	; a1 = bytes array
 off_1964E:	dc.w word_194E0-off_1964E
-
 		dc.w word_19504-off_1964E
 
 sub_19652:
 		move.w	#$27,$28(a0)
 		move.l	#word_19516,d0
-		bsr.w	loc_1976E
+		bsr.w	loc_1976E	; d0 =	$3A (words)
 
 sub_19662:
 		lea	(byte_194B4).l,a1
 
 loc_19668:
-		moveq	#7,d2
-		bsr.w	sub_19C0E
+		moveq	#7,d2		; a1 = bytes array
+		bsr.w	sub_19C0E	; a1 = bytes array
 		bcs.s	locret_19674
 		addq.w	#1,2(a0)
 
@@ -34936,15 +33783,14 @@ locret_19674:
 
 sub_19676:
 		move.l	#word_19528,d0
-		bsr.w	loc_1976E
+		bsr.w	loc_1976E	; d0 =	$3A (words)
 
 sub_19680:
 		lea	(byte_194C4).l,a1
 
 loc_19686:
-
-		moveq	#7,d2
-		bsr.w	sub_19C0E
+		moveq	#7,d2		; a1 = bytes array
+		bsr.w	sub_19C0E	; a1 = bytes array
 		bcs.s	locret_19692
 		addq.w	#1,2(a0)
 
@@ -34954,68 +33800,67 @@ locret_19692:
 sub_19694:
 		move.w	#$27,$28(a0)
 		move.l	#word_1951C,d0
-		bsr.w	loc_1976E
+		bsr.w	loc_1976E	; d0 =	$3A (words)
 
 sub_196A4:
 		lea	(byte_194B8).l,a1
-		bra.s	loc_19668
+		bra.s	loc_19668	; a1 = bytes array
 
 sub_196AC:
 		move.l	#word_1952C,d0
-		bsr.w	loc_1976E
+		bsr.w	loc_1976E	; d0 =	$3A (words)
 
 sub_196B6:
 		lea	(byte_194C6).l,a1
-		bra.s	loc_19686
+		bra.s	loc_19686	; a1 = bytes array
 
 sub_196BE:
 		move.w	#$27,$28(a0)
 		move.l	#word_19522,d0
-		bsr.w	loc_1976E
+		bsr.w	loc_1976E	; d0 =	$3A (words)
 
 sub_196CE:
 		lea	(byte_194B8).l,a1
 		tst.b	(byte_FF9299).w
-		beq.s	loc_19668
+		beq.s	loc_19668	; a1 = bytes array
 		lea	(byte_194BE).l,a1
-		bra.s	loc_19668
+		bra.s	loc_19668	; a1 = bytes array
 
 sub_196E2:
 		move.l	#word_19530,d0
-		bsr.w	loc_1976E
+		bsr.w	loc_1976E	; d0 =	$3A (words)
 
 sub_196EC:
 		lea	(byte_194C6).l,a1
 		tst.b	(byte_FF9299).w
-		beq.s	loc_19686
+		beq.s	loc_19686	; a1 = bytes array
 		lea	(byte_194CA).l,a1
-		bra.s	loc_19686
+		bra.s	loc_19686	; a1 = bytes array
 
 sub_19700:
 		move.w	#$27,$28(a0)
 		move.l	#word_19522,d0
-		bsr.w	loc_1976E
+		bsr.w	loc_1976E	; d0 =	$3A (words)
 
 sub_19710:
 		lea	(byte_194BE).l,a1
 		tst.b	(byte_FF9299).w
-		beq.w	loc_19668
+		beq.w	loc_19668	; a1 = bytes array
 		lea	(byte_194B8).l,a1
-		bra.w	loc_19668
+		bra.w	loc_19668	; a1 = bytes array
 
 sub_19728:
 		move.l	#word_19530,d0
-		bsr.w	loc_1976E
+		bsr.w	loc_1976E	; d0 =	$3A (words)
 
 sub_19732:
 		lea	(byte_194CA).l,a1
 		tst.b	(byte_FF9299).w
-		beq.w	loc_19686
+		beq.w	loc_19686	; a1 = bytes array
 		lea	(byte_194C6).l,a1
-		bra.w	loc_19686
+		bra.w	loc_19686	; a1 = bytes array
 
 sub_1974A:
-
 		subq.w	#1,$28(a0)
 		bne.s	locret_19754
 		addq.w	#1,2(a0)
@@ -35024,7 +33869,6 @@ locret_19754:
 		rts
 
 sub_19756:
-
 		cmpa.w	(word_FF928C).w,a0
 		bne.s	locret_19766
 		bsr.w	sub_19782
@@ -35040,7 +33884,6 @@ loc_1976E:
 		move.l	d0,$3A(a0)
 
 loc_19772:
-
 		move.b	#1,$3E(a0)
 		clr.b	$3F(a0)
 		addq.w	#1,2(a0)
@@ -35099,7 +33942,6 @@ loc_19846:
 		movea.w	(word_FF9294).w,a0
 
 sub_19862:
-
 		move.w	#$90,$14(a0)
 		move.b	#6,$D(a0)
 		bset	#4,$E(a0)
@@ -35120,9 +33962,7 @@ loc_1989E:
 		add.w	d2,d2
 		move.w	off_198AC(pc,d2.w),d2
 		jmp	off_198AC(pc,d2.w)
-
 off_198AC:	dc.w sub_198B2-off_198AC
-
 		dc.w sub_198F6-off_198AC
 		dc.w sub_1990C-off_198AC
 
@@ -35136,8 +33976,7 @@ sub_198B2:
 		subq.w	#1,d0
 		move.w	d0,(word_FFFC48).w
 		lea	(dword_FF6000).l,a4
-		jsr	(nemesis_decomp_to_ram).l
-
+		jsr	(nemesis_decomp_to_ram).l ; a0 = source
 		movea.w	(word_FF928C).w,a0
 		move.w	#7,$28(a0)
 		addq.w	#1,(word_FF92A2).w
@@ -35168,7 +34007,6 @@ loc_19912:
 		jmp	sub_13FED8
 
 sub_1993A:
-
 		tst.b	(byte_FF9299).w
 		bne.s	loc_1995E
 		move.b	#1,$2B(a0)
@@ -35188,11 +34026,9 @@ loc_1995E:
 		move.w	#1,6(a0)
 
 locret_1997C:
-
 		rts
 
 sub_1997E:
-
 		movea.w	(word_FF9286).w,a1
 		cmpi.b	#$1F,$2B(a1)
 		bne.s	locret_199A2
@@ -35209,17 +34045,15 @@ locret_199A2:
 		rts
 
 sub_199A4:
-
 		lea	byte_1930C(pc),a1
-		bra.s	loc_199AE
+		bra.s	loc_199AE	; a1 = ?
 
 sub_199AA:
-
 		lea	byte_19330(pc),a1
 
 loc_199AE:
-		moveq	#8,d2
-		bsr.w	sub_19C0E
+		moveq	#8,d2		; a1 = ?
+		bsr.w	sub_19C0E	; a1 = bytes array
 		bcs.s	locret_199C6
 		addq.w	#1,2(a0)
 		clr.l	$1C(a0)
@@ -35230,7 +34064,6 @@ locret_199C6:
 		rts
 
 sub_199C8:
-
 		move.w	d0,-(sp)
 		jsr	sub_BC72
 		move.l	#off_128DC6,$20(a0)
@@ -35245,7 +34078,6 @@ sub_199C8:
 		rts
 
 sub_19A04:
-
 		move.w	a0,$30(a1)
 		movea.w	(word_FF9284).w,a0
 		bra.w	loc_19BF8
@@ -35259,7 +34091,6 @@ sub_19A10:
 		bne.w	loc_19B1C
 
 loc_19A28:
-
 		jsr	loc_BA02
 		bne.s	sub_19A04
 
@@ -35281,7 +34112,6 @@ loc_19A30:
 		jsr	sub_B960
 
 loc_19A78:
-
 		movea.w	(word_FF9296).w,a0
 		btst	#2,$D(a0)
 		bne.s	loc_19A9E
@@ -35346,7 +34176,6 @@ loc_19B5C:
 		bra.w	loc_19A28
 
 loc_19B66:
-
 		move.b	#1,(byte_FF929F).w
 		tst.b	$F(a0)
 		bmi.s	loc_19B76
@@ -35384,7 +34213,6 @@ loc_19B76:
 		subq.b	#1,(byte_FF92A1).w
 
 loc_19BF8:
-
 		move.w	#1,(word_FF8FAA).w
 		tst.b	(byte_FF92A4).w
 		beq.s	locret_19C0C
@@ -35393,9 +34221,9 @@ loc_19BF8:
 
 locret_19C0C:
 		rts
+; a1 = bytes array
 
 sub_19C0E:
-
 		subq.b	#1,$3E(a0)
 		bne.s	loc_19C66
 		movea.l	$3A(a0),a2
@@ -35422,9 +34250,7 @@ sub_19C0E:
 		add.b	d3,d3
 		move.w	off_19C5E(pc,d3.w),d3
 		jmp	off_19C5E(pc,d3.w)
-
 off_19C5E:	dc.w sub_19CD0-off_19C5E
-
 		dc.w sub_19CEA-off_19C5E
 		dc.w sub_19CCC-off_19C5E
 		dc.w sub_19CE6-off_19C5E
@@ -35442,11 +34268,9 @@ loc_19C7C:
 		rts
 
 word_19C82:	dc.w 0,	$59, $B2, $10B,	$163, $1BB, $212, $267,	$2BC, $30F
-
 		dc.w $361, $3B1, $400, $44C, $496, $4DE, $524, $567, $5A8, $5E5
 		dc.w $620, $658, $68D, $6BF, $6ED, $718, $740, $764, $784, $7A1
 		dc.w $7BA, $7CF, $7E0, $7EE, $7FA, $7FE, $800
-
 sub_19CCC:
 		neg.l	d0
 		neg.l	d1
@@ -35539,14 +34363,12 @@ loc_19D7C:
 		bsr.s	sub_19DE8
 
 loc_19D86:
-
 		addi.w	#$80,d0
 		addq.w	#1,d2
 		dbf	d7,loc_19D7C
 		rts
 
 sub_19D92:
-
 		lea	(unk_FF8000).w,a1
 		move.w	(a1)+,d3
 		lea	-2(a1,d3.w),a2
@@ -35587,14 +34409,12 @@ loc_19DD0:
 		bsr.s	sub_19DE8
 
 loc_19DDC:
-
 		addi.w	#$80,d1
 		addq.w	#1,d5
 		dbf	d7,loc_19DD0
 		rts
 
 sub_19DE8:
-
 		movem.l	d2/d5/d7/a2,-(sp)
 		moveq	#0,d3
 		move.b	(a1),d3
@@ -35635,7 +34455,6 @@ loc_19E1C:
 		bra.s	loc_19E58
 
 loc_19E54:
-
 		lea	8(a2),a2
 
 loc_19E58:
@@ -35649,7 +34468,7 @@ sub_19E62:
 		moveq	#0,d4
 		move.b	(byte_FFFF0D).w,d4
 		move.l	#$4D000000,d0
-		trap	#4
+		trap	#4		; Trap4
 		lea	(unk_FFA400).w,a1
 		adda.w	(a1),a1
 		lea	(unk_FFA402).w,a4
@@ -35666,8 +34485,7 @@ sub_19E62:
 		moveq	#9,d7
 
 loc_19E9E:
-		jsr	copy_bytes_to_dest_128
-
+		jsr	copy_bytes_to_dest_128 ; a1 = source
 		dbf	d7,loc_19E9E
 		moveq	#0,d7
 		move.b	(a4)+,d7
@@ -35690,7 +34508,6 @@ loc_19EAE:
 		bra.s	loc_19EE0
 
 loc_19EDC:
-
 		lea	6(a4),a4
 
 loc_19EE0:
@@ -35723,7 +34540,6 @@ locret_19F16:
 		rts
 
 byte_19F18:	dc.b $FF, $FF, 0, 4, 0,	$76, 0,	$14, 0,	$16, 0,	$1C, 0,	$24, 0,	$32, 0,	$FF, $FF, $3C
-
 		dc.b 0,	$44, 0,	$56, 0,	$62, 0,	$6C, 4,	$EE, 5,	$5C, 7,	$78, 8,	$FF, $FF, $D4, $B, $22
 		dc.b $C, $48, 4, $A0, $D, $86, $F, $80,	$10, $8A, $13, $3C, $14, $FF, $FF, $50,	$15, $8E, $17, $6E
 		dc.b $18, $CC, $18, $D6, $1A, $90, $1C,	$BC, $1C, $D4, $1E, $FF, $FF, $9A, $1E,	$FA, $21, 2, $21, $E4
@@ -36160,7 +34976,6 @@ byte_19F18:	dc.b $FF, $FF, 0, 4, 0,	$76, 0,	$14, 0,	$16, 0,	$1C, 0,	$24, 0,	$32,
 		dc.b $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF
 		dc.b $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF
 byte_1C120:	dc.b 0,	$AA, $81, 4, 6,	$15, $12, $27, $73, $37, $75, $82, 5, $18, $16,	$37, $28, $F5, $38, $F2
-
 		dc.b $48, $F3, $58, $F4, $68, $F6, $83,	8, $F1,	$84, 8,	$F0, $85, 4, 8,	$16, $36, $27, $77, $87
 		dc.b 8,	$F7, $8E, 2, 0,	$14, $A, $25, $1A, $37,	$76, $47, $74, $8F, 3, 2, $14, 7, $25, $13
 		dc.b $35, $17, $45, $16, $56, $38, $67,	$72, $75, $19, $FF, $7F, $21, $F7, $AD,	$C5, $B0, $B6, $16, $C2
@@ -36300,7 +35115,6 @@ byte_1C120:	dc.b 0,	$AA, $81, 4, 6,	$15, $12, $27, $73, $37, $75, $82, 5, $18, $
 		dc.b $73, $9C, $E3, $94, $1C, $31, $3E,	$A2, $FF, $87, $FC, $3F, $E1, $FF, $F, $F8, $7F, $C3, $FE, $1F
 		dc.b $F0, 0
 byte_1CBEA:	dc.b $80, $2E, $80, 3, 0, $15, $C, $25,	$14, $35, $15, $45, $18, $55, $16, $66,	$36, $74, 2, $81
-
 		dc.b 4,	5, $17,	$77, $67, $7A, $82, 5, $12, $17, $76, $68, $F7,	$83, 4,	4, $16,	$35, $58, $F6
 		dc.b $77, $75, $84, 6, $37, $85, 4, 3, $15, $11, $27, $74, $86,	6, $2F,	$87, 6,	$38, $88, 6
 		dc.b $33, $89, 6, $2E, $17, $73, $28, $F2, $8A,	5, $D, $8B, 5, $F, $17,	$78, $8C, 6, $32, $18
@@ -36345,13 +35159,11 @@ byte_1CBEA:	dc.b $80, $2E, $80, 3, 0, $15, $C, $25,	$14, $35, $15, $45, $18, $55
 		dc.b $D4, $89, $88, $44, $44, $44, $5E,	$EA, $44, $44, $44, $4B, $EE, $44, $44,	$44, $3F, $C7, $2F, $62
 		dc.b $22, $22, $22, $12, $22, $22, $22,	$2D, $A7, $FD, $E9, $91, $11, $11, $17,	$FD, $C8, $88, $88, $88
 byte_1CF5A:	dc.b 6,	3, 0, $10, 0, $28, $16,	$18, $A8, $90, 5, $45, $E6, $40, $BE, $2A, $2A,	4, $12,	$E
-
 		dc.b $2C, $22, $A1, $C3, $15, $E2, $A0,	$3F, $1C, $80, 8, $84, $1C, 9, $A1, $90, 2, $80, $10, $48
 		dc.b $28, $93, $A1, $C1, $9E, $41, 4, 6, $10, $17, 1, $4E, 5, $69, $F0,	$2B, $53, $81, $5A, $3C
 		dc.b $A, $D8, $E2, $D5,	$3F, $1E, $83, $85, $34, $4A, $E, $14, $D0, $E8, $38, $53, $44,	$A0, $E7, $4D
 		dc.b $41, $41, $4D, $22, $83, $87, $B, $EF, $BE, $FB, $FF, $C0
 byte_1CFB6:	dc.b 6,	3, 0, 1, 0, $28, $A2, $59, $44,	$B2, $89, $65, $12, $CA, $25, $94, $4B,	$28, $96, $51
-
 		dc.b $2C, $A2, $59, $44, $B2, $89, $65,	$12, $CA, $25, $94, $4B, $28, $96, $51,	$2C, $A2, $59, $44, $B2
 		dc.b $89, $65, $12, $CC, $25, $B8, $4B,	$70, $96, $E1, $2D, $C2, $5B, $84, $B7,	9, $6E,	$12, $DC, $25
 		dc.b $B8, $4B, $70, $96, $E1, $2D, $C2,	$5B, $84, $B7, 9, $6E, $12, $DC, $25, $B8, $4B,	$70, $96, $E1
@@ -36373,7 +35185,6 @@ byte_1CFB6:	dc.b 6,	3, 0, 1, 0, $28, $A2, $59, $44,	$B2, $89, $65, $12, $CA, $25
 		dc.b $89, $65, $12, $CA, $25, $94, $4B,	$28, $96, $51, $2C, $A2, $59, $44, $B2,	$89, $65, $12, $CA, $25
 		dc.b $94, $4B, $28, $96, $51, $2C, $A2,	$59, $44, $B2, $89, $65, $12, $CA, $25,	$90, $B, $3F, $80, 0
 byte_1D15A:	dc.b $80, $36, $80, 3, 0, $14, 4, $25, $13, $36, $33, $46, $34,	$57, $6E, $67, $73, $75, $10, $81
-
 		dc.b 4,	2, $16,	$32, $28, $E8, $58, $E9, $82, 5, $C, $17, $6F, $83, 4, 3, $16, $36, $28, $F1
 		dc.b $84, 5, $E, $17, $75, $28,	$F4, $85, 5, $12, $18, $EE, $86, 5, $11, $87, 4, 5, $16, $35
 		dc.b $28, $F3, $58, $F6, $88, 5, $D, $17, $70, $28, $F5, $89, 5, $14, $18, $F2,	$68, $F7, $8A, 5
@@ -36441,10 +35252,8 @@ byte_1D15A:	dc.b $80, $36, $80, 3, 0, $14, 4, $25, $13, $36, $33, $46, $34,	$57,
 off_1D66A:	dc.w byte_1D66E-off_1D66A
 		dc.w byte_1D680-off_1D66A
 byte_1D66E:	dc.b $A, $FF, 0, $1C, 0, $28, 0, $34, 0, $40, 0, $4C, 0, $58, 0, $64
-
 		dc.b 0,	$70
 byte_1D680:	dc.b 3,	4, 0, $6A, 0, $76, 0, $82, 0, $76, 0, $30, $30,	$30, $30, 0
-
 		dc.b $E8, 6, 0,	0, $F8,	0, 0, $30, $30,	$30, $30, 0, $F0, 5, 0,	6
 		dc.b $F8, 0, 0,	$30, $30, $30, $30, 0, $F0, 5, 0, $A, $F8, 0, 0, $30
 		dc.b $30, $30, $30, 0, $F0, 5, 0, $E, $F8, 0, 0, $30, $30, $30,	$30, 0
@@ -36454,7 +35263,6 @@ byte_1D680:	dc.b 3,	4, 0, $6A, 0, $76, 0, $82, 0, $76, 0, $30, $30,	$30, $30, 0
 		dc.b $F0, 5, 0,	$22, $F8, 0, 0,	$30, $30, $30, $30, 0, $F8, 0, 0, $26
 		dc.b $FC, 0, 0,	$30, $30, $30, $30, 0, $F0, 5, 0, $27, $F8, 0
 byte_1D70E:	dc.b $80, $2B, $80, 3, 0, $14, 5, $24, 7, $34, 8, $45, $19, $56, $37, $67, $7B,	$75, $16, $81
-
 		dc.b 4,	2, $17,	$77, $82, 5, $17, $83, 4, 4, $16, $39, $84, 5, $13, $17, $79, $85, 6, $36
 		dc.b $86, 5, $15, $87, 5, $18, $88, 7, $76, $89, 7, $78, $8A, 6, $35, $8B, 6, $34, $8C,	4
 		dc.b 6,	$16, $3A, $8D, 4, 3, $16, $38, $28, $F8, $8E, 5, $14, $17, $7A,	$8F, 5,	$12, $FF, $B0
@@ -36505,7 +35313,6 @@ byte_1D70E:	dc.b $80, $2B, $80, 3, 0, $14, 5, $24, 7, $34, 8, $45, $19, $56, $37
 		dc.b $A9, $B3, $F0, $A6, $CA, $60, $F7,	$31, $C3, $FF, $35, $CE, $D, $AC, $FF, $10, $6E, $6B, $F0, $EC
 		dc.b $D, $FA, $53, 6, $D0, $76,	$36, $C9, $B6, $E0
 byte_1DAEC:	dc.b 0,	$40, $81, 4, 8,	$15, $19, $27, $78, $38, $F7, $82, 3, 2, $15, $18, $26,	$37, $38, $F6
-
 		dc.b $48, $F2, $83, 3, 0, $14, $B, $26,	$38, $38, $F3, $84, 3, 1, $14, $A, $26,	$36, $37, $76
 		dc.b $85, 3, 3,	$15, $1A, $27, $77, $86, 4, 9, $16, $39, $87, 6, $3A, $77, $7A,	$FF, $EB, $FE
 		dc.b $96, $A1, $11, $37, $FC, $19, $E1,	$15, $12, $18, $C8, $33, $6C, $E4, $4D,	$B0, $A0, $48, $C3, 6
@@ -36577,14 +35384,11 @@ byte_1DAEC:	dc.b 0,	$40, $81, 4, 8,	$15, $19, $27, $78, $38, $F7, $82, 3, 2, $15
 		dc.b $E, $50, $39, $E, $51, $CA, $2E, $51, $80,	$8B, $94, $60, $22, $E5, $7F, $D, $CE, 5, 7, $3B
 		dc.b $78, $7D, $78, $14, $E6, $37, $A9,	$EB, $1D, $A7, $A5, $B7, $3F, $97, $DB,	$9F, $5F, $A7, 0, 0
 off_1E078:	dc.w byte_1E07A-off_1E078
-
 byte_1E07A:	dc.b 3,	$FF, 0,	$A, 0, $16, 0, $22, 0, $2E, 0, $31, $31, $31, $31, 0
-
 		dc.b 0,	$F, 0, 0, 0, 0,	0, $31,	$31, $31, $31, 0, 0, $F, 0, $10
 		dc.b 0,	0, 0, $31, $31,	$31, $31, 0, 0,	$F, 0, $20, 0, 0, 0, $31
 		dc.b $31, $31, $31, 0, 0, $F, 0, $30, 0, 0
 byte_1E0B4:	dc.b $80, $12, $80, 3, 3, $15, $19, $24, $A, $35, $1A, $46, $3A, $55, $1B, $74,	9, $81,	4, 8
-
 		dc.b $15, $18, $26, $3B, $38, $FA, $82,	3, 2, $17, $7C,	$83, 3,	0, $16,	$3C, $8C, 6, $3D, $8D
 		dc.b 3,	1, $15,	$1C, $8E, 4, $B, $FF, $E8, $FE,	$72, $8E, $3C, $C9, $F6, $FC, $86, $7D,	$BC, 8
 		dc.b $7E, $DF, $F0, $78, $D3, $FA, $10,	$30, $EF, $77, $27, $29, $86, $71, $E4,	$7C, $20, $C5, $26, $B2
@@ -36603,26 +35407,20 @@ byte_1E0B4:	dc.b $80, $12, $80, 3, 3, $15, $19, $24, $A, $35, $1A, $46, $3A, $55
 		dc.b $8D, $1C, $C0, $C0, $A8, $10, $D, $60, $1D, $B, $35, 1, $4F, $4A, $36, $A3, $F1, $F3, $33,	$BB
 		dc.b $D8, 0
 off_1E20A:	dc.w byte_1E20E-off_1E20A
-
 		dc.w byte_1E216-off_1E20A
 byte_1E20E:	dc.b 2,	$FF, 0,	$28, 0,	$1C, 0,	$10
 byte_1E216:	dc.b 2,	$FF, 0,	8, 0, $14, 0, $20, 0, $33, $33,	$33, $33, 0, $F5, 6
-
 		dc.b 0,	0, $F8,	0, 0, $33, $33,	$33, $33, 0, $F5, 6, 0,	6, $F8,	0
 		dc.b 0,	$33, $33, $33, $33, 0, $F5, 6, 0, $C, $F8, 0
 byte_1E242:	dc.b $80, $10, $80, $33, 4, $71, 0, $81, $35, $14, $75,	$1A, $85, 6, $30, $35, $15, $75, $1B, $86
-
 		dc.b 6,	$31, $87, 7, $7C, $35, $16, $75, $1C, $88, 7, $7D, $8D,	$35, $17, $75, $1D, $8E, $35, $19
 		dc.b $75, $1E, $FF, $C3, $EE, $3F, 2, $B2, $F3,	$32, $92, $C0, 2, $56, $5E, $66, $52, $58, 6, $1F
 		dc.b $71, $F8, $26, $FB, $ED, $70, 0, $6F, $BE,	$D7, 0,	6, $FB,	$ED, $70, 0, $6F, $BE, $D7, 0
 		dc.b $4C, $3E, $E3, $F0, $56, $5E, $66,	$52, $58, 0, $4A, $CB, $CC, $CA, $4B, 0, $80, 0
 off_1E2A4:	dc.w byte_1E2A6-off_1E2A4
-
 byte_1E2A6:	dc.b 0,	$FF, 0,	4, 1, $2E, $2E,	$2E, $2E, 0, $E0, $F, 0, 0, $F0, $C0
-
 		dc.b $F, 0, 0, $F0
 byte_1E2BA:	dc.b $80, $14, $80, 5, $F, $15,	$13, $25, $14, $35, $18, $45, $15, $56,	$36, $66, $37, $73, 0, $81
-
 		dc.b 4,	5, $17,	$7B, $82, 5, $12, $18, $F8, $83, 3, 1, $17, $77, $84, 7, $7A, $85, 6, $3A
 		dc.b $86, 6, $32, $87, 4, 8, $88, 5, $16, $89, 5, $1A, $28, $F9, $8A, 6, $38, $8B, 6, $3C
 		dc.b $8C, 4, 6,	$16, $39, $28, $FA, $8D, 5, $E,	$17, $76, $8E, 5, $17, $8F, 4, 4, $16, $33
@@ -36642,14 +35440,11 @@ byte_1E2BA:	dc.b $80, $14, $80, 5, $F, $15,	$13, $25, $14, $35, $18, $45, $15, $
 		dc.b $AB, $66, 0, 0, $FE, $C7, $CE, $3C, $9F, $6F, $DE,	0, 0, $18, $48,	$CA, 0,	0, 1, $5E
 		dc.b $3C, $AC, $95, $B8, 0, $C,	$39, $FD, $AB, $EE, $80, 0
 off_1E42E:	dc.w byte_1E430-off_1E42E
-
 byte_1E430:	dc.b 1,	$A, 0, 6, 0, $20, 3, $34, $34, $34, $34, 0, $D0, 0, 0, 0
-
 		dc.b 0,	$D8, 4,	0, 1, 0, $E0, 9, 0, 3, 0, $F0, 1, 0, 9,	0
 		dc.b 4,	$34, $34, $34, $34, 0, $D0, 0, 0, 0, 0,	$D8, 4,	0, $B, 0
 		dc.b $E0, 8, 0,	$D, 0, $E8, 4, 0, $10, 0, $F0, 1, 0, $12, 0, 0
 byte_1E470:	dc.b $80, $10, $80, 3, 0, $14, 6, $25, $18, $36, $36, $48, $FA,	$66, $3B, $75, $12, $81, 3, 1
-
 		dc.b $15, $16, $82, 5, $17, $83, 3, 2, $17, $7A, $28, $FB, $84,	6, $39,	$85, 6,	$37, $86, 4
 		dc.b $A, $16, $38, $87,	4, 7, $17, $7B,	$88, 5,	$19, $89, 5, $13, $8A, 4, 8, $8B, 6, $3A
 		dc.b $8C, $18, $F9, $8D, 6, $3C, $8E, 8, $F8, $8F, 5, $1A, $FF,	$FC, $F7, $E9, $7E, $C7, $53, $14
@@ -36671,13 +35466,10 @@ byte_1E470:	dc.b $80, $10, $80, 3, 0, $14, 6, $25, $18, $36, $36, $48, $FA,	$66,
 		dc.b $B8, $97, $6A, $5B, $19, $4B, $B7,	$2E, $1F, $63, $53, $FE, $81, $CE, $DC,	$17, $6C, $8D, $36, $F3
 		dc.b $AC, $7E, $7F, $F1, $82, $8A, $86,	$E0, $B6, $7F, $65, $E8, 0, 0
 off_1E60E:	dc.w byte_1E610-off_1E60E
-
 byte_1E610:	dc.b 2,	4, 0, 8, 0, $14, 0, $24, 0, $31, $31, $31, $31,	0, 0, $F, 0, 0,	0, 0
-
 		dc.b 1,	$31, $31, $31, $31, 0, 0, $D, 0, 0, 0, $12, $D,	0, 8, 0, 1, $31, $31, $31
 		dc.b $31, 0, 0,	$D, 0, 0, 0, $14, $D, 0, 8, 0
 byte_1E644:	dc.b $80, $28, $80, 4, 6, $14, 9, $24, 7, $35, $19, $45, $17, $55, $16,	$65, $18, $73, 1, $81
-
 		dc.b 3,	2, $15,	$1A, $25, $1C, $82, 4, $A, $83,	4, 8, $18, $FA,	$84, 6,	$3C, $86, 7, $7A
 		dc.b $87, 7, $7B, $88, 6, $3A, $15, $1B, $89, 3, 0, $16, $3B, $8A, 8, $F9, $FF,	$FF, $F9, $FC
 		dc.b $93, $7F, 5, $A9, $BF, $92, $DB, $6F, $DC,	$B7, $73, $C7, $1F, $B1, $33, $DD, $86,	$EC, $BA, $CC
@@ -36706,14 +35498,11 @@ byte_1E644:	dc.b $80, $28, $80, 4, 6, $14, 9, $24, 7, $35, $19, $45, $17, $55, $
 		dc.b $19, $D0, $64, $E1, $87, $53, $D, $D6, $B3, 8, $92, $49, $CF, $E8,	$EF, $F4, $61, $5A, $16, $15
 		dc.b $F5, $74, $4E, 0
 off_1E864:	dc.w byte_1E866-off_1E864
-
 byte_1E866:	dc.b 1,	$FF, 0,	6, 0, $1C, 2, $36, $36,	$36, $36, 0, 0,	$F, 0, 0
-
 		dc.b 0,	$20, 5,	0, $10,	0, $20,	5, 0, $10, $10,	0, 2, $36, $36,	$36
 		dc.b $36, 0, 0,	$F, 0, $14, 0, $20, 5, 0, $24, 0, $20, 5, 8, $24
 		dc.b $10, 0
 byte_1E898:	dc.b $80, $67, $80, 3, 1, $14, 7, $24, 8, $35, $1A, $46, $37, $56, $38,	$67, $77, $75, $15, $81
-
 		dc.b 3,	0, $16,	$36, $26, $3A, $38, $F3, $48, $F4, $82,	3, 2, $15, $18,	$27, $76, $83, 4, 6
 		dc.b $15, $17, $27, $78, $8C, 5, $19, $18, $F2,	$8D, 5,	$16, $18, $F7, $8E, 5, $14, $16, $39, $8F
 		dc.b 4,	9, $78,	$F5, $FF, $FF, $E1, $FF, $B, $B0, $5E, $1C, $31, $E9, $FC, $CF,	$E2, $3B, $D1, $C1
@@ -36807,19 +35596,16 @@ byte_1E898:	dc.b $80, $67, $80, 3, 1, $14, 7, $24, 8, $35, $1A, $46, $37, $56, $
 		dc.b $76, $BD, $6B, $5A, $F7, $6E, $1A,	$5B, $8C, $F1, $E3, $86, $AD, $6B, $B8,	$2C, $C, $ED, $70, $64
 		dc.b $DF, $63, $2F, $B3, $CF, $13, $C4,	$F1, $3C, 0
 off_1EFD2:	dc.w byte_1F000-off_1EFD2
-
 		dc.w byte_1F008-off_1EFD2
 		dc.w byte_1F010-off_1EFD2
 		dc.w byte_1EFDC-off_1EFD2
 		dc.w byte_1EFE0-off_1EFD2
 byte_1EFDC:	dc.b 0,	$FF, 0,	8
 byte_1EFE0:	dc.b 0,	$FF, 0,	$14, 1,	$37, $37, $37, $37, 0, $FC, $A,	0, 0, $E8, $FC
-
 		dc.b $A, 0, 9, 0, 0, $38, $38, $38, $38, 0, 0, 0, 0, 0,	0, 0
 byte_1F000:	dc.b 2,	4, 0, $18, 0, $2E, 0, $44
 byte_1F008:	dc.b 2,	4, 0, $52, 0, $6C, 0, $86
 byte_1F010:	dc.b 2,	4, $80,	$4A, $80, $64, $80, $7E, 2, $39, $39, $39, $39,	0, $FC,	9
-
 		dc.b 0,	$31, $F4, $C, 9, 0, $37, $EC, $C, 5, 0,	$3D, 4,	0, 2, $39
 		dc.b $39, $39, $39, 0, $FC, 9, 0, $31, $F4, $C,	9, 0, $41, $EC,	$C, 5
 		dc.b 0,	$47, 4,	0, 2, $39, $39,	$39, $39, 0, $FC, 9, 0,	$31, $F4, $C
@@ -36831,7 +35617,6 @@ byte_1F010:	dc.b 2,	4, $80,	$4A, $80, $64, $80, $7E, 2, $39, $39, $39, $39,	0, $
 		dc.b 0,	$2C, $EB, $15, 4, 0, $2F, $F3, 2, 0, $A, 0, $55, 0, 0, $A
 		dc.b 0,	$5E, $18, 0
 byte_1F0B4:	dc.b $80, $10, $80, 4, 7, $14, 8, $24, $B, $35,	$1C, $57, $7C, $63, 1, $73, 2, $81, 4, 9
-
 		dc.b $16, $3A, $82, 6, $3B, $83, 3, 0, $86, 8, $FB, $87, 4, 6, $89, 6, $3C, $8A, 5, $1A
 		dc.b $8C, 4, $A, $8E, 4, $C, $8F, 5, $1B, $26, $3D, $58, $FA, $FF, $7F,	$D2, $FE, $50, $77, $CE
 		dc.b $BF, $2C, $FF, $58, $FA, $AD, $E6,	$F3, $C8, $12, $C1, $E5, $F5, $61, $A2,	$A1, $B8, $26, $E5, $F5
@@ -36845,14 +35630,11 @@ byte_1F0B4:	dc.b $80, $10, $80, 4, 7, $14, 8, $24, $B, $35,	$1C, $57, $7C, $63, 
 		dc.b $AE, $74, $F5, $62, $C4, $4B, $8B,	$D4, $4A, $E5, $24, $92, $49, $24, $8D,	$44, $FC, $97, $17, $A8
 		dc.b $16, $39, $D3, $D1, $D3, $F5, $62,	$33, $75, $9B, $AD, $3F, $D6, $7C, $98,	0
 off_1F1B4:	dc.w byte_1F1B6-off_1F1B4
-
 byte_1F1B6:	dc.b 2,	4, 0, 8, 0, $14, 0, $2E, 0, $35, $35, $35, $35,	0, 0, $F, 0, 0,	0, 0
-
 		dc.b 3,	$35, $35, $35, $35, 0, 0, 3, 0,	0, $FC,	0, 3, 0, 4, 6, 0, 3, 0,	8
 		dc.b $12, 0, 3,	0, $C, $1C, 3, $35, $35, $35, $35, 0, 0, 3, 0, 0, $F8, 0, 3, 0
 		dc.b 4,	4, 0, 3, 0, 8, $14, 0, 3, 0, $C, $20
 byte_1F1FE:	dc.b $80, $18, $80, 3, 0, $14, 2, $25, $13, $35, $11, $46, $33,	$66, $37, $76, $2F, $81, 5, $14
-
 		dc.b $28, $F5, $82, 6, $31, $15, $16, $26, $35,	$83, 4,	3, $17,	$72, $38, $FB, $85, 5, $F, $17
 		dc.b $79, $86, 4, 6, $15, $10, $37, $75, $87, 5, $15, $88, 5, $E, $17, $7B, $89, 4, 5, $28
 		dc.b $F4, $8A, 6, $34, $17, $77, $8B, 6, $30, $16, $36,	$37, $78, $8C, 5, $12, $28, $F9, $8D, 6
@@ -36883,14 +35665,11 @@ byte_1F1FE:	dc.b $80, $18, $80, 3, 0, $14, 2, $25, $13, $35, $11, $46, $33,	$66,
 		dc.b $BC, $46, 4, $E9, $BC, $36, $E9, $99, $BD,	$33, $E4, $D9, $E9, $C,	$F4, $7F, $F4, $3B, $C2, $3D
 		dc.b $CD, $F1, $FE, $1A, $67, $6C, $B, $59, $E2, 0
 off_1F44C:	dc.w byte_1F44E-off_1F44C
-
 byte_1F44E:	dc.b 2,	4, 0, 8, 0, $13, 0, $23, 0, $3A, $3A, $3A, $3A,	0, 0, $D
-
 		dc.b 0,	$10, 0,	1, $3A,	$3A, $3A, $3A, 0, $FE, $C, 0, 8, 0, $A,	$C
 		dc.b 0,	$C, 0, 1, $3A, $3A, $3A, $3A, 0, $FC, $C, 0, 8,	0, $C, $C
 		dc.b 0,	$C, 0, 0
 byte_1F482:	dc.b 0,	8, $80,	4, 9, $15, $1C,	$26, $36, $35, $19, $46, $3A, $54, 8, $66, $3C,	$81, 6,	$3D
-
 		dc.b $85, 3, 2,	$16, $37, $86, 3, 0, $15, $16, $87, 3, 1, $15, $18, $8B, 7, $7C, $16, $3B
 		dc.b $27, $7D, $8C, 5, $1A, $8D, 4, $A,	$8E, 3,	3, $15,	$17, $FF, $84, $3C, $5E, $D, $81, $90
 		dc.b $B6, $40, $85, $C1, $BE, 7, $10, $42, $F2,	$10, $2F, $B9, $B2, $7F, $3D, $FC, $41,	$41, $3F, $C4
@@ -36901,11 +35680,8 @@ byte_1F482:	dc.b 0,	8, $80,	4, 9, $15, $1C,	$26, $36, $35, $19, $46, $3A, $54, 8
 		dc.b $F5, $32, $88, $37, $36, $C4, $EE,	$D, $8C, $8C, $C, $73, $7B, $1D, $BF, $6F, $9F,	$CE, $DF, $3F
 		dc.b $BE, $C8, $30, $C,	$55, $FA, $FD, $77, $57, $8A, $71, $4E,	$29, $C5, $38, $A7, $14, $E1, $F8, 0
 off_1F54A:	dc.w byte_1F54C-off_1F54A
-
 byte_1F54C:	dc.b 0,	$FF, 0,	4, 0, $30, $30,	$30, $30, 0, $E0, 7, 0,	0, $F8,	0
-
 byte_1F55C:	dc.b 0,	$28, $81, 6, $36, $82, 3, 2, $14, $C, $28, $F6,	$78, $F7, $83, 3, 0, $15, $16, $26
-
 		dc.b $3A, $84, 3, 3, $15, $1A, $27, $77, $37, $78, $77,	$79, $85, 4, 9,	$16, $37, $77, $7A, $86
 		dc.b 4,	$A, $17, $76, $87, 5, $17, $14,	8, $26,	$39, $8C, 3, 1,	$16, $38, $FF, $DF, $FA, $F3
 		dc.b $FF, $7F, $DB, $FE, $97, $9D, $EF,	$3C, $D4, $DF, $26, $26, $AF, $ED, $13,	$57, $F6, $89, $AB, $A2
@@ -36951,13 +35727,10 @@ byte_1F55C:	dc.b 0,	$28, $81, 6, $36, $82, 3, 2, $14, $C, $28, $F6,	$78, $F7, $8
 		dc.b $6D, 7, $81, 6, $7C, $2D, 7, $8D, $79, $63, $C0, $2B, $FC,	$2B, $FE, $7C, $BE, $5C, $DA, $7A
 		dc.b $91, $B8, $91, $21, $CF, $79, $D7,	$AF, $3E, $80
 off_1F8D6:	dc.w byte_1F8D8-off_1F8D6
-
 byte_1F8D8:	dc.b 0,	$FF, 0,	4, 5, 5, 5, 5, 5, 0, $B0, $E, 0, 0, $E0, $B0
-
 		dc.b $E, 8, 0, 0, $C8, $F, 0, $C, $E0, $C8, $F,	8, $C, 0, $E8, $E
 		dc.b 0,	$1C, $E0, $E8, $E, 8, $1C, 0
 byte_1F900:	dc.b 0,	$20, $82, 4, 8,	$16, $3C, $83, 3, 2, $15, $19, $26, $39, $36, $3A, $46,	$3B, $76, $37
-
 		dc.b $84, 2, 0,	$14, 9,	$25, $1A, $38, $F8, $85, 7, $7A, $86, 6, $36, $87, 3, 3, $14, $B
 		dc.b $27, $7B, $88, 5, $18, $14, $A, $26, $38, $FF, $E2, $CF, $CB, $55,	$CA, $8A, $72, $A1, $55, $D2
 		dc.b $38, $32, $2A, $B9, $47, $C, $62, $A6, $31, $14, $C6, $22,	$AF, $4A, $98, $C4, $70, $F4, $A9, $8C
@@ -36990,12 +35763,9 @@ byte_1F900:	dc.b 0,	$20, $82, 4, 8,	$16, $3C, $83, 3, 2, $15, $19, $26, $39, $36
 		dc.b $42, $1D, $28, $CB, $50, $77, $2F,	$A2, $9F, $26, 7, $8C, $CE, $25, $E4, $C0, $87,	$AC, $10, $AE
 		dc.b $A7, $CF, $57, $5F, $1E, $FF, $91,	$EE, $B5, $EF, 7, $3E, $C5, $13, $73, $7F, $C8,	$F7, $40, 0
 off_1FB80:	dc.w byte_1FB82-off_1FB80
-
 byte_1FB82:	dc.b 0,	$FF, 0,	4, 3, 5, 5, 5, 5, 0, $C0, $F, 0, 0, $E0, $C0
-
 		dc.b $F, 8, 0, 0, $E0, $F, 0, $10, $E0,	$E0, $F, 8, $10, 0
 byte_1FBA0:	dc.b 0,	$1C, $80, 6, $32, $15, $17, $26, $33, $36, $35,	$47, $78, $74, 6, $81, 4, 8, $16, $38
-
 		dc.b $8B, 3, 1,	$15, $18, $37, $7A, $77, $7B, $8C, 5, $15, $14,	7, $25,	$16, $36, $37, $57, $76
 		dc.b $66, $36, $76, $3A, $8D, 3, 0, $14, 9, $26, $39, $36, $34,	$77, $79, $8E, 3, 2, $15, $14
 		dc.b $27, $77, $38, $FA, $78, $F8, $FF,	$66, $66, $66, $6F, $59, $96, $66, $66,	$66, $C5, $FF, $56, $CC
@@ -37020,13 +35790,10 @@ byte_1FBA0:	dc.b 0,	$1C, $80, 6, $32, $15, $17, $26, $33, $36, $35,	$47, $78, $7
 		dc.b $39, $B8, $47, $3A, $84, $75, $70,	$8E, $76, 8, $DF, $7A, $1C, $BF, $98, $11, $9B,	4, $79,	$A8
 		dc.b $47, $20, $A5, $1B, $A3, $43, $99,	$CB, $1A, $80
 off_1FD76:	dc.w byte_1FD78-off_1FD76
-
 byte_1FD78:	dc.b 0,	$FF, 0,	4, 4, 0, 0, 0, 0, 0, $E8, 4, 0,	0, $E4,	$E8
-
 		dc.b $C, 0, 2, 4, $F0, $D, 0, 6, $D4, $F0, $D, 0, $E, $F4, $F0,	9
 		dc.b 0,	$16, $14, 0
 byte_1FD9C:	dc.b 0,	$10, $80, 5, $16, $15, $17, $25, $19, $36, $36,	$46, $39, $57, $7A, $67, $7B, $74, 7, $87
-
 		dc.b 5,	$14, $18, $F8, $88, 4, 6, $16, $37, $26, $3B, $89, 3, 0, $15, $12, $25,	$18, $38, $F9
 		dc.b $8D, 3, 2,	$15, $13, $24, 8, $36, $3A, $45, $1A, $8E, 3, 1, $15, $15, $26,	$38, $36, $3C
 		dc.b $48, $FA, $FF, $7F, $67, $D1, $1C,	$96, $1B, $1E, $F2, $58, $6F, $74, $C3,	$73, $65, $41, $4E, $D7
@@ -37043,27 +35810,21 @@ byte_1FD9C:	dc.b 0,	$10, $80, 5, $16, $15, $17, $25, $19, $36, $36,	$46, $39, $5
 		dc.b $2A, $BD, $11, $59, $D4, $71, $63,	$3E, $15, $BA, $AA, $B0, $8A, $AB, 8, $2A, $E3,	$59, $D6, $61
 		dc.b $DD, $F6, 0, 0
 off_1FECC:	dc.w byte_1FECE-off_1FECC
-
 byte_1FECE:	dc.b 1,	$FF, 0,	6, 0, $11, 0, 7, 8, 7, 8, 0, 0,	$D, 0, 0
-
 		dc.b $E0, 0, 0,	0, 0, 0, 0, $F0, 7, 0, 8, $F0
 byte_1FEEA:	dc.b 0,	4, $80,	4, $C, $13, 4, $24, $D,	$34, $A, $56, $3E, $74,	$E, $81, 3, 3, $14, $B
-
 		dc.b $8C, 2, 0,	$15, $1E, $8D, 3, 2, $FF, $8B, $CB, $51, 5, $B,	$84, $BD, $71, $D3, $85, $11
 		dc.b $10, $5A, $BC, $A8, $B3, $5D, $3C,	$30, $7A, $3C, $75, $7F, $33, $E3, $1D,	$3D, $2C, $ED, $45, $8B
 		dc.b $17, $E8, $63, $46, $3A, $F7, $C2,	$74, $D6, $22, $C5, $DD, $DA, $AD, $55,	$E3, $A7, $1D, $2B, $5D
 		dc.b $D0, 0
 off_1FF3C:	dc.w byte_1FF40-off_1FF3C
-
 		dc.w byte_1FF4A-off_1FF3C
 byte_1FF40:	dc.b 3,	8, 0, $14, 0, $20, 0, $2C, 0, $20
 byte_1FF4A:	dc.b 3,	8, 0, $2E, 0, $2E, 0, $2E, 0, $2E, 0, 0, 0, 0, 0, 0
-
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 1
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 2, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 3, 0,	0
 byte_1FF84:	dc.b $80, $16, $80, 3, 1, $15, $14, $25, $16, $35, $F, $45, $17, $55, $1A, $66,	$3C, $76, $33, $81
-
 		dc.b 3,	0, $15,	$E, $28, $F8, $82, 6, $38, $83,	5, $15,	$84, 6,	$3A, $85, 5, $18, $86, 6
 		dc.b $3B, $87, 4, 4, $88, 6, $37, $89, 4, 6, $8A, 6, $32, $18, $F9, $8B, 6, $3D, $8C, 5
 		dc.b $13, $18, $FA, $8D, 4, 8, $8E, 4, 5, $16, $39, $8F, 5, $12, $16, $36, $FF,	$CF, $5F, $92
@@ -37091,19 +35852,15 @@ byte_1FF84:	dc.b $80, $16, $80, 3, 1, $15, $14, $25, $16, $35, $F, $45, $17, $55
 		dc.b $9E, $DF, $AF, $BA, $4B, $51, $94,	$9F, $13, 7, $F3, $D, $BE, $1A,	$24, $59, $D4, $6A, $30, $BE
 		dc.b $C4, $58, $6C, $28, $24, $B4, $F8,	$52, $8E, $3C, $FC, $C7, $EB, $BE, $5C,	$40
 off_2019C:	dc.w byte_201A0-off_2019C
-
 		dc.w byte_201E2-off_2019C
 byte_201A0:	dc.b 5,	$28, 0,	$E, 0, $28, 0, $E, 0, $E, 0, $E, 0, $E,	3, $32
-
 		dc.b $32, $32, $32, 0, $D0, 8, 0, 0, 0,	$D8, 1,	0, 3, $10, $E8,	$A
 		dc.b 0,	5, 0, $D8, 4, 0, $12, 0, 3, $32, $32, $32, $32,	0, $D0,	8
 		dc.b 0,	0, 0, $D8, 1, 0, 3, $10, $E8, $A, 0, 5,	0, $D8,	4, 0
 		dc.b $E, 0
 byte_201E2:	dc.b 1,	$A, 0, 6, 0, $12, 0, $32, $32, $32, $32, 0, $E0, 4, 0, $14
-
 		dc.b 0,	0, 0, $32, $32,	$32, $32, 0, $E0, 4, 0,	$10, 0,	0
 byte_20200:	dc.b $80, $1D, $80, 3, 0, $14, 4, $25, $14, $36, $32, $45, $17,	$56, $33, $67, $7A, $75, $13, $81
-
 		dc.b 3,	1, $16,	$34, $26, $37, $82, 5, $18, $17, $78, $83, 5, $12, $17,	$79, $85, 7, $76, $86
 		dc.b 5,	$15, $17, $7B, $87, 4, 6, $16, $3A, $88, 5, $16, $89, 6, $35, $8A, 5, $11, $17,	$77
 		dc.b $8B, 7, $73, $8C, 5, $10, $16, $36, $8D, 4, 5, $16, $38, $8E, 5, $E, $17, $72, $8F, 5
@@ -37140,20 +35897,16 @@ byte_20200:	dc.b $80, $1D, $80, 3, 0, $14, 4, $25, $14, $36, $32, $45, $17,	$56,
 		dc.b $A7, $95, $15, $1D, $C8, $22, $15,	$D8, $28, $50, $A1, $F7, $C3, $C6, $E, 2, $FE, $8C, $CA, $8B
 		dc.b $FA, $30, $EA, $7E, $F8, 0
 off_204C2:	dc.w byte_204C6-off_204C2
-
 		dc.w byte_20512-off_204C2
 byte_204C6:	dc.b 4,	$1E, 0,	$C, 0, $2C, 0, $C, 0, $C, 0, $C, 4, $32, $32, $32
-
 		dc.b $32, 0, $D0, $C, 0, 0, 0, $D8, 5, 0, 4, $10, $E8, 9, 0, 8
 		dc.b 8,	$F8, $C, 0, $E,	0, $D8,	5, 0, $12, 0, 0, 4, $32, $32, $32
 		dc.b $32, 0, $D0, $C, 0, 0, 0, $D8, 5, 0, 4, $10, $E8, 9, 0, 8
 		dc.b 8,	$F8, $C, 0, $E,	0, $D8,	5, 0, $16, 0, 0
 byte_20512:	dc.b 3,	$3C, 0,	$A, 0, $16, 0, $16, 0, $16, 0, 0, 0, 0,	0, 0
-
 		dc.b $E8, 4, 0,	$1A, $F8, 0, 0,	0, 0, 0, 0, 0, $E8, 0, 0, $1C
 		dc.b 0,	0
 byte_20534:	dc.b $80, $1E, $80, 3, 0, $14, 4, $25, $13, $35, $16, $45, $14,	$56, $36, $66, $37, $75, $F, $81
-
 		dc.b 4,	2, $16,	$2F, $82, 5, $18, $18, $F8, $83, 4, 8, $16, $39, $84, 6, $33, $85, 7, $76
 		dc.b $86, 5, $E, $17, $79, $87,	4, 3, $16, $3A,	$88, 5,	$12, $17, $77, $89, 4, 5, $17, $7A
 		dc.b $8A, 6, $38, $8B, 5, $1A, $8C, 6, $32, $18, $FA, $8D, 6, $2E, $17,	$7B, $8E, 5, $15, $17
@@ -37189,17 +35942,13 @@ byte_20534:	dc.b $80, $1E, $80, 3, 0, $14, 4, $25, $13, $35, $16, $45, $14,	$56,
 		dc.b $DA, $F6, $25, $EF, $5F, $D0, $85,	$F7, $E8, $12, $7D, 6, $77, $E8, $4E, $4A, $9F,	$A9, $60, $ED
 		dc.b $88, $10, $63, $A,	$25, $32, $35, $F1, $42, $A1, $40, $3B,	$AC, $6A, $7A, $9E, $64, 0
 off_207EE:	dc.w byte_207F2-off_207EE
-
 		dc.w byte_20816-off_207EE
 byte_207F2:	dc.b 0,	$FF, 0,	4, 4, $3B, $3B,	$3B, $3B, 0, 0,	$D, 0, 0, 0, $10
-
 		dc.b 0,	0, 8, 0, $10, 0, 0, 9, $18, $18, $B, 0,	$A, 8, $38, $C
 		dc.b 0,	$16, 0,	0
 byte_20816:	dc.b 1,	$1E, 0,	6, 0, $12, 0, 0, 0, 0, 0, 0, 0,	4, 0, $1A
-
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	4, 0, $1C, 0, 0
 byte_20834:	dc.b 0,	$35, $80, 5, $14, $17, $6B, $26, $36, $37, $76,	$75, $16, $81, 5, $15, $17, $6F, $28, $F6
-
 		dc.b $82, 3, 2,	$15, $18, $27, $6E, $83, 4, 7, $16, $33, $27, $6A, $48,	$F2, $84, 3, 0,	$16
 		dc.b $32, $85, 3, 1, $15, $17, $27, $75, $37, $7A, $86,	4, 9, $17, $70,	$87, 8,	$F3, $8A, $17
 		dc.b $72, $8C, 4, 6, $17, $71, $27, $78, $38, $F7, $8D,	4, 8, $17, $74,	$8E, 6,	$34, $77, $73
@@ -37265,18 +36014,14 @@ byte_20834:	dc.b 0,	$35, $80, 5, $14, $17, $6B, $26, $36, $37, $76,	$75, $16, $8
 		dc.b $45, $DD, $9D, $84, $5D, 7, $61, $1E, $5C,	$61, $B3, $9E, $4D, $1E, $39, $34, $69,	$3E, $FD, $39
 		dc.b $E8, 0
 off_20D36:	dc.w byte_20D3A-off_20D36
-
 		dc.w byte_20D4E-off_20D36
 byte_20D3A:	dc.b 0,	$FF, 0,	4, 1, $1F, $1F,	$1F, $1F, 0, $E8, 1, 0,	0, 4, $F0
-
 		dc.b 5,	0, 2, $F4
 byte_20D4E:	dc.b 3,	$1E, 0,	$A, 0, $16, 0, $26, 0, $32, 0, $1A, $1E, $1B, $1E, 0
-
 		dc.b $E0, $F, 0, 6, $F0, 0, 1, $1B, $1E, $1B, $1E, 0, $E0, 8, 0, $16
 		dc.b $F8, $E8, $E, 0, $19, $F0,	0, $1C,	$1E, $1B, $1E, 0, $F0, $D, 0, $27
 		dc.b $F0, 0, 0,	$1D, $1E, $1B, $1E, 0, $F0, $D,	0, $2D,	$F0, 0
 byte_20D8C:	dc.b 0,	9, $80,	5, $1A,	$26, $3C, $36, $39, $48, $F9, $58, $FA,	$68, $FB, $75, $19, $81, 5, $17
-
 		dc.b $85, 4, $A, $17, $7B, $86,	3, 1, $16, $3B,	$87, 3,	3, $88,	6, $3A,	$16, $38, $89, 3
 		dc.b 2,	$16, $37, $8B, $18, $F8, $8C, 6, $36, $8D, 3, 4, $17, $7A, $8E,	3, 0, $15, $16,	$25
 		dc.b $18, $FF, $CE, $7E, $C7, $C8, $83,	$CB, $11, $34, $6A, $F5, 4, 7, $10, $10, $6A, $E4, $41,	$AB
@@ -37290,11 +36035,8 @@ byte_20D8C:	dc.b 0,	9, $80,	5, $1A,	$26, $3C, $36, $39, $48, $F9, $58, $FA,	$68,
 		dc.b $85, $E, $EA, $F3,	6, $FE,	$AC, $44, $13, $7B, $41, $BF, $4A, $CB,	$8D, $FA, $1C, $6F, $C5, $B7
 		dc.b $E1, $5B, $5C, $2B, $78, $B1, $CD,	$B3, $9C, $FD, 0, 0
 off_20E88:	dc.w byte_20E8A-off_20E88
-
 byte_20E8A:	dc.b 0,	$FF, 0,	4, 0, 6, 6, 6, 6, 0, $E8, $A, 0, 0, $F4, 0
-
 byte_20E9A:	dc.b 0,	$40, $80, 5, $11, $15, $16, $26, $33, $36, $2A,	$47, $74, $58, $F1, $77, $72, $81, 4, 6
-
 		dc.b $15, $12, $25, $14, $37, $73, $47,	$76, $83, 7, $6A, $18, $F2, $84, 5, $E,	$18, $EF, $85, 5
 		dc.b $13, $18, $F3, $86, 4, 4, $17, $6E, $87, 3, 0, $15, $F, $27, $6F, $37, $75, $48, $F7, $89
 		dc.b 6,	$2F, $18, $F6, $8B, 5, $10, $16, $2E, $26, $38,	$37, $6B, $8C, 4, 5, $16, $31, $28, $F0
@@ -37375,22 +36117,17 @@ byte_20E9A:	dc.b 0,	$40, $80, 5, $11, $15, $16, $26, $33, $36, $2A,	$47, $74, $5
 		dc.b $A, $F3, $E0, $84,	$ED, $E8, $4F, $B7, $E9, $48, $10, $8D,	$FB, $88, $10, $88, $BC, $85, $E8, $40
 		dc.b $9F, $7F, $99, 0
 off_214CA:	dc.w byte_214D0-off_214CA
-
 		dc.w byte_2150A-off_214CA
 		dc.w byte_2151E-off_214CA
 byte_214D0:	dc.b 1,	8, 0, 6, 0, $20, 3, 0, 0, 0, 0,	0, $C8,	1, 0, $2E
-
 		dc.b $FC, $E0, $D, 0, $30, $F0,	$D8, $C, 0, 0, $F0, $F0, $D, 0,	4, $F0
 		dc.b 3,	0, 0, 0, 0, 0, $C8, 1, 0, $2E, $FC, $E0, $D, 0,	$38, $F0
 		dc.b $D8, $C, 0, 0, $F0, $F0, $D, 0, 4,	$F0
 byte_2150A:	dc.b 0,	$FF, 0,	4, 1, 0, 0, 0, 0, 0, $D8, $C, 0, $C, $F0, $E0
-
 		dc.b $F, 0, $10, $F0
 byte_2151E:	dc.b 0,	$FF, $80, 4, 1,	0, 0, 0, 0, 0, $E8, $E,	0, $20,	$EC, $F0
-
 		dc.b 1,	0, $2C,	$C
 off_21532:	dc.w byte_21586-off_21532
-
 		dc.w byte_215B4-off_21532
 		dc.w byte_215E2-off_21532
 		dc.w byte_215F0-off_21532
@@ -37434,42 +36171,31 @@ off_21532:	dc.w byte_21586-off_21532
 		dc.w byte_2175A-off_21532
 byte_21586:	dc.b 0,	$FF, $81, $D8
 byte_2158A:	dc.b $13, 8, $81, $EE, $82, 4, $81, $EE, $82, 4, $82, $1E, $82,	$34, $82, $1E, $82, $34, $82, $1E
-
 		dc.b $82, $34, $82, $4E, $82, $4E, $82,	$68, $82, $82, $82, $68, $82, $82, $82,	$68, $82, $82, $82, $68
 		dc.b $82, $82
 byte_215B4:	dc.b 0,	$FF, 1,	$AA
 byte_215B8:	dc.b $13, 8, 1,	$C0, 1,	$D6, 1,	$C0, 1,	$D6, 1,	$F0, 2,	6, 1, $F0, 2, 6, 1, $F0
-
 		dc.b 2,	6, 2, $20, 2, $20, 2, $3A, 2, $54, 2, $3A, 2, $54, 2, $3A, 2, $54, 2, $3A
 		dc.b 2,	$54
 byte_215E2:	dc.b 5,	$FF, $82, $44, $82, $5A, $82, $74, $82,	$84, $82, $94, $82, $AA
-
 byte_215F0:	dc.b 5,	$FF, 2,	$36, 2,	$4C, 2,	$66, 2,	$76, 2,	$86, 2,	$9C
-
 byte_215FE:	dc.b 3,	$FF, $82, $9E, $82, $BE, $82, $D8, $82,	$F2, $83, 8, $83, $2C, $83, $46
-
 		dc.b $83, $66, $81, $60
 byte_21612:	dc.b 3,	$FF, 2,	$8A, 2,	$AA, 2,	$C4, 2,	$DE, 2,	$F4, 3,	$18, 3,	$32
-
 		dc.b 3,	$52, 1,	$4C
 byte_21626:	dc.b 0,	4, $83,	$72
 byte_2162A:	dc.b 0,	4, 3, $6E
 byte_2162E:	dc.b 1,	4, 3, $80, 3, $9A
 byte_21634:	dc.b 1,	4, $83,	$7A, $83, $94
 byte_2163A:	dc.b 5,	4, $83,	$A8, $83, $A8, $83, $BE, $83, $D4, $83,	$D4, $83, $BE
-
 byte_21648:	dc.b 5,	4, 3, $9A, 3, $9A, 3, $B0, 3, $C6, 3, $C6, 3, $B0
-
 byte_21656:	dc.b 5,	0, 3, $CE, 3, $F2, 4, $12, 4, $2C, 4, $56, 4, $70
-
 byte_21664:	dc.b 5,	0, $83,	$C0, $83, $E4, $84, 4, $84, $1E, $84, $48, $84,	$62
-
 byte_21672:	dc.b 2,	4, $84,	$74, $84, $8E, $84, $A8
 byte_2167A:	dc.b 2,	4, 4, $6C, 4, $86, 4, $A0
 byte_21682:	dc.b 1,	1, 4, $AE, 4, $CE
 byte_21688:	dc.b 1,	1, $84,	$A8, $84, $C8
 byte_2168E:	dc.b 4,	2, $84,	$E6, $84, $E6, $84, $E6, $85, 0, $85, $20
-
 byte_2169A:	dc.b 4,	2, 4, $DA, 4, $DA, 4, $DA, 4, $F4, 5, $14
 byte_216A6:	dc.b 3,	2, $85,	$28, $85, $28, $85, $28, $85, $3E
 byte_216B0:	dc.b 3,	2, 5, $1E, 5, $1E, 5, $1E, 5, $34
@@ -37488,13 +36214,10 @@ byte_21720:	dc.b 1,	4, 5, $36, 5, $56
 byte_21726:	dc.b 1,	4, $85,	$66, $85, $80
 byte_2172C:	dc.b 1,	4, 5, $60, 5, $7A
 byte_21732:	dc.b 9,	8, 5, $8E, 5, $8E, 5, $8E, 5, $9E, 5, $AE, 5, $BE, 5, $BE, 5, $BE, 5, $D4
-
 		dc.b 5,	$EE
 byte_21748:	dc.b 5,	3, 0, $DE, 0, $F4, 1, $E, 1, $1E, 1, $2E, 1, $44
-
 byte_21756:	dc.b 0,	$FF, 1,	$80
 byte_2175A:	dc.b 0,	$FF, 3,	$D6, 3,	1, 1, 2, 2, 1, $D0, 8, 0, 0, $F0, $D8, $C, 0, 3, $F0
-
 		dc.b $E0, 8, 0,	7, $F0,	$E8, $E, 0, $A,	$F0, 2,	1, 1, 2, 2, 2, $D0, 4, 0, 0
 		dc.b $F6, $D8, 8, 0, 2,	$EE, $E0, $F, 0, 5, $EE, 0, 3, 1, 1, 2,	2, 3, $D0, 4
 		dc.b 0,	0, $F6,	$D8, 8,	0, 2, $EE, $E0,	$F, 0, 5, $EE, $F8, 0, 0, $15, $E, 2, 1
@@ -37636,7 +36359,6 @@ off_21D2C:	dc.l byte_21E30
 		dc.l byte_2B870
 		dc.l byte_2BB50
 byte_21E30:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, $96, 0, 0, 9, $88, 0, 0, $99, $99
-
 		dc.b 0,	7, $77,	$99, 0,	7, $77,	$77, 0,	0, $7F,	$FF, 0,	0, 0, 0, 6, $88, $88, $90
 		dc.b $88, $97, $78, $89, $77, $99, $87,	$77, $99, $97, $77, $77, $97, $77, $96,	$68, $77, $76, $6C, $CF
 		dc.b $79, $6F, $C1, $1C, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, $96, $60, 0, 0
@@ -37673,7 +36395,6 @@ byte_21E30:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, $96, 0, 0, 9, $88, 0, 0, $99, 
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, $80, 0, 0,	0
 		dc.b $88, 0, 0,	0
 byte_220F0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	8, $80,	0, 9, $98, $88,	$88, $98, $88, $98, $8F, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, $88, $88, 0, 0, $8F, $FF, $80,	0
 		dc.b $FF, $FF, $F8, 0, 0, 0, 0,	9, 0, 0, 0, $99, 0, 0, $F, $F9,	0, 0, $F, $FF
@@ -37708,7 +36429,6 @@ byte_220F0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b $B7, $77, $BB, 0, $B7, $77, $77, $B0, $B7,	$77, $77, $70, $B7, $77, $77, $70, $77,	$77, $77, $70
 		dc.b $77, $77, $77, 0, $77, $77, $70, 0, $77, $70, 0, 0
 byte_22390:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	8, $80,	0, 9, $98, $88,	$88, $98, $88, $98, $8F, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, $88, $88, 0, 0, $8F, $FF, $80,	0
 		dc.b $FF, $FF, $F8, 0, 0, 0, 0,	9, 0, 0, 0, $99, 0, 0, $F, $F9,	0, 0, $F, $FF
@@ -37745,7 +36465,6 @@ byte_22390:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, $B0, 0, 0, 0, $7B, 0, 0, 0
 		dc.b $70, 0, 0,	0
 byte_22650:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	8, $80,	0, 9, $98, $88,	$88, $98, $88, $98, $8F, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, $88, $88, 0, 0, $8F, $FF, $80,	0
 		dc.b $FF, $FF, $F8, 0, 0, 0, 0,	9, 0, 0, 0, $99, 0, 0, $F, $F9,	0, 0, $F, $FF
@@ -37780,7 +36499,6 @@ byte_22650:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b $B7, $77, $BB, 0, $B7, $77, $77, $B0, $B7,	$77, $77, $70, $B7, $77, $77, $70, $77,	$77, $77, $70
 		dc.b $77, $77, $77, 0, $77, $77, $70, 0, $77, $70, 0, 0
 byte_228F0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	8, $80,	0, 9, $98, $88,	$88, $98, $88, $98, $8F, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, $88, $88, 0, 0, $8F, $FF, $80,	0
 		dc.b $FF, $FF, $F8, 0, 0, 0, 0,	9, 0, 0, 0, $99, 0, 0, $F, $F9,	0, 0, $F, $FF
@@ -37817,7 +36535,6 @@ byte_228F0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, $B0, 0, 0, 0, $7B, 0, 0, 0
 		dc.b $70, 0, 0,	0
 byte_22BB0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	0, 0, 9, 0, 0, $99, $88, 0, 9, $88, $88, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, $99, $99, 0, 0, $88, $89, $90,	0
 		dc.b $88, $88, $77, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0
@@ -37855,7 +36572,6 @@ byte_22BB0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b $B7, $77, $77, $77, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, $B0, 0, 0, 0, $7B, 0, 0, 0, $70, 0, 0,	0
 byte_22E90:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	0, 0, 9, 0, 0, $99, $88, 0, 9, $88, $88, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, $99, $99, 0, 0, $88, $89, $90,	0
 		dc.b $88, $88, $77, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0
@@ -37893,7 +36609,6 @@ byte_22E90:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b $B7, $77, $77, $77, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, $B0, 0, 0, 0, $7B, 0, 0, 0, $70, 0, 0,	0
 byte_23170:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	0, 0, 9, 0, 0, $99, $88, 0, 9, $88, $88, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, $99, $99, 0, 0, $88, $89, $90,	0
 		dc.b $88, $88, $77, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0
@@ -37931,7 +36646,6 @@ byte_23170:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b $B7, $77, $77, $77, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, $B0, 0, 0, 0, $7B, 0, 0, 0, $70, 0, 0,	0
 byte_23450:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 9
-
 		dc.b 0,	0, 0, $99, 0, 0, 7, $77, 0, 0, 7, $77, 0, 0, 0,	$7F, 0,	0, 0, $F
 		dc.b 0,	0, 0, $F7, 0, 0, 7, $99, 0, 0, $99, $FF, 0, 9, $FF, $FF, 0, 9, $FF, $FF
 		dc.b 0,	0, $9F,	$FF, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
@@ -37969,7 +36683,6 @@ byte_23450:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 9
 		dc.b 0,	$77, $77, $BB, $80, 0, 0, 0, $B8, 0, 0,	0, $B8,	0, 0, 0, $B8, 0, $B, $B0
 		dc.b $BB, $B, $BB, $BB,	$B7, $BB, $BB, $B8, $7B, $BB, $BB, $B8,	$88, $8B, $B8, $80
 byte_23730:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 9, 0,	0, 0, $99
-
 		dc.b 0,	0, 7, $77, 0, 0, 7, $77, 0, 0, 0, $7F, 0, 0, 0,	$F, 0, 0, 0, $F7
 		dc.b 0,	0, 7, $99, 0, 0, $99, $FF, 0, 9, $FF, $FF, 0, 9, $FF, $FF, 0, 0, $9F, $FF
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	6, $88,	$88, $96, $88, $97, $78, $88, $77, $99,	$87
@@ -38004,7 +36717,6 @@ byte_23730:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 9, 0,	0, 0, $99
 		dc.b $DD, $B0, 0, 0, $7B, $80, 0, 0, $7B, $80, 0, 0, $B8, 0, 0,	0, $B7,	$B0, 0,	0
 		dc.b $77, $BB, $BB, $80, $BB, $BB, $BB,	$B8, $88, $8B, $B8, $80
 byte_239D0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 9, 0,	0, 0, $77
-
 		dc.b 0,	0, 0, $77, 0, 0, 0, 7, 0, 0, 0,	0, 0, 0, 0, $F,	0, 0, 0, $79
 		dc.b 0,	0, 9, $9F, 0, 0, $9F, $FF, 0, 0, $9F, $FF, 0, 0, 9, $FF, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
@@ -38041,7 +36753,6 @@ byte_239D0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 9, 0,	0, 0, $77
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, $88, $BB, 0, 0
 		dc.b $BB, $BB, 0, 0
 byte_23C90:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	0, 0, 9, 0, 0, 0, $77, 0, 0, 0,	$77, 0,	0, 0, 7, 0, 0, 0, 0
 		dc.b 0,	0, 0, $F, 0, 0,	0, $79,	0, 0, 9, $9F, 0, 0, $9F, $FF, 0, 0, $9F, $FF
 		dc.b 0,	0, 9, $FF, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
@@ -38081,7 +36792,6 @@ byte_23C90:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b $BB, $BB, $8B, 0, $BB, $BB, $BB, $80, $BB,	$BB, $B8, $70, $BB, $BB, $B7, 0, $BB, $B7, $70,	0
 		dc.b $77, $70, 0, 0, 0,	0, 0, 0
 byte_23F90:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 9, 0,	0, 0, $99
-
 		dc.b 0,	0, 7, $77, 0, 0, 7, $77, 0, 0, 0, $7F, 0, 0, 0,	$F, 0, 0, 0, $F7
 		dc.b 0,	0, 7, $99, 0, 0, $99, $FF, 0, 9, $FF, $FF, 0, 9, $FF, $FF, 0, 0, $9F, $FF
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	6, $88,	$88, $96, $88, $97, $78, $88, $77, $99,	$87
@@ -38119,7 +36829,6 @@ byte_23F90:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 9, 0,	0, 0, $99
 		dc.b $70, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, $B0, 0, 0, 0
 		dc.b $88, 0, 0,	0, $88,	0, 0, 0, $B0, 0, 0, 0, 0, 0, 0,	0
 byte_24270:	dc.b 0,	0, 0, 0, 0, 0, 9, $68, 0, 0, $98, $87, 0, 9, $99, $99, 0, $77, $79, $99
-
 		dc.b 0,	$77, $77, $77, 0, 7, $FF, $F7, 0, 0, $FF, $79, 0, $F, $79, $9F,	0, $79,	$9F, $FF
 		dc.b 9,	$9F, $FF, $FD, $9F, $FF, $FF, $FD, $9F,	$FF, $FF, $FD, 9, $FF, $F0, 7, 0, 0, 0,	$B
 		dc.b 0,	0, 0, 7, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 3
@@ -38154,7 +36863,6 @@ byte_24270:	dc.b 0,	0, 0, 0, 0, 0, 9, $68, 0, 0, $98, $87, 0, 9, $99, $99, 0, $7
 		dc.b $BB, $BB, 0, 0, $BB, $B0, 0, 0, $B7, 0, 0,	0, $70,	0, 0, 0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_24510:	dc.b 0,	0, 0, 0, 0, 0, 0, 8, 0,	0, $88,	$89, 0,	8, $99,	$99, 0,	$99, $99, $98
-
 		dc.b 7,	$77, $99, $97, 7, $77, $77, $77, 0, $F7, $77, $78, 8, $89, 0, 0, $88, $88, $90,	0
 		dc.b $97, $78, $89, 0, $98, $87, $77, $99, $87,	$77, $77, $79, $77, $98, $88, $88, $78,	$8C, $CF, $79
 		dc.b $8F, $C1, $1C, $D7, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, $90, 0, 0,	0
@@ -38203,7 +36911,6 @@ byte_24510:	dc.b 0,	0, 0, 0, 0, 0, 0, 8, 0,	0, $88,	$89, 0,	8, $99,	$99, 0,	$99,
 		dc.b 0,	0, $7B,	$B0, 0,	7, $BB,	0, $B0,	0, 0, 0, $BB, 0, 0, 0, $BB, 0, 0, 0
 		dc.b $BB, 0, 0,	0, $B0,	0, 0, 0, $B0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0
 byte_248D0:	dc.b 0,	0, 0, 0, 0, 0, 8, $89, 0, 0, $88, $88, 0, 8, $89, $99, 0, $99, $99, $97
-
 		dc.b 7,	$79, $97, $77, 7, $77, $77, $77, $F, $F7, $77, $9F, 0, 0, 0, 0,	$99, $79, 0, 0
 		dc.b $89, $97, $79, $98, $97, $77, $99,	$FF, $77, $DD, $FF, $FF, $7D, $11, $DF,	$FC, $9C, $11, $1D, $CC
 		dc.b $D1, $DC, $C1, $D1, 0, 0, 0, 0, 0,	0, 0, 0, $88, $90, 0, 0, $FF, $89, 0, 0
@@ -38236,7 +36943,6 @@ byte_248D0:	dc.b 0,	0, 0, 0, 0, 0, 8, $89, 0, 0, $88, $88, 0, 8, $89, $99, 0, $9
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, $B8, $88, $80, 0, $BB, $88, $80, 0, $BB, $B8, $80,	0
 		dc.b $7B, $88, $80, 0, $7B, $8B, 0, 0, $7B, $B0, 0, 0, $70, 0, 0, 0, 0,	0, 0, 0
 byte_24B50:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 8, $89, 0, 0, $88, $88, 0, 8, $89, $99
-
 		dc.b 0,	$99, $99, $97, 7, $79, $97, $77, 7, $77, $77, $77, 0, $F, $79, $90, 0, 0, $9F, $79
 		dc.b $97, $79, $8F, $F7, $89, $97, $78,	$F7, $97, $77, $89, $FF, $77, $DD, $FF,	$FF, $7D, $11, $DF, $FC
 		dc.b $9C, $11, $1D, $CC, 0, 0, 0, 0, $90, 0, 0,	0, $99,	0, 0, 0, $79, 0, 0, 0
@@ -38269,7 +36975,6 @@ byte_24B50:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 8, $89, 0, 0, $88, $88, 0, 8, $89
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, $77, $70, 0, 0, $77, 0, 0,	0, $70,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_24DD0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, $96, 0, 0, 0, 0, 0, 0, 0,	0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 6,	$88, $88, $90
 		dc.b $88, $97, $78, $89, 0, 0, 9, $88, 0, 0, $99, $99, 0, 7, $77, $99, 0, 7, $77, $77
@@ -38304,7 +37009,6 @@ byte_24DD0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, $80, 0, 0,	0
 byte_25070:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	0, 0, 0, 0, 0, 0, 9, 0,	0, 0, $77, 0, 0, 0, 0, 0, 0, 0,	0
 		dc.b 0,	0, 0, 0, 0, 0, $88, $99, 8, $88, $99, $77, $89,	$99, $99, $88, $99, $99, $88, $77
 		dc.b $79, $99, $77, $79, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, $90, 0, 0,	0
@@ -38347,7 +37051,6 @@ byte_25070:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	$7B, $BB, $BB, 0, $7B, $BB, $B0, 0, $7B, $B0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_253B0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	0, 0, $D, 0, 0,	$DD, $DC, 0, $DD, $CC, $C1, 0, 0, 0, 0,	0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, $D, 0, 0, 0, $DC, $D0, 0, 0, $1C, $D0, 0, 0
 		dc.b $CD, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	$D, 0, 0, 0, $DC, 0, 0,	$D, $CC
@@ -38374,7 +37077,6 @@ byte_253B0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b $1F, 0, 0,	0, $1C,	0, 0, 0, $1C, $70, 0, 0, $BB, 0, 8, $80, $BB, $BB, $87,	$7B
 		dc.b $BB, $88, $77, $70, $BB, $77, $77,	0, $77,	0, 0, 0
 byte_255B0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 9
-
 		dc.b 0,	0, 0, $97, 0, 0, 9, $77, 0, 0, 7, $7F, 0, 0, $F, $FF, 0, 0, 0, $FC
 		dc.b 0,	0, 0, $C, 0, 0,	0, $C1,	0, 0, 0, $C1, 0, 0, 0, $C1, 0, 0, 0, $C1
 		dc.b 0,	$88, $87, $F1, 0, 0, 0,	0, 0, 0, 0, 0, 0, $99, $9F, $90, $99, $97, $F9,	0
@@ -38404,7 +37106,6 @@ byte_255B0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 9
 		dc.b $DF, $FF, $FF, $FF, $77, $7F, $FF,	$43, $88, $77, $FF, $44, $88, $88, $77,	$F3, $98, $88, $89, $33
 		dc.b $77, $99, $93, $3F, $77, $77, $33,	$F9, $FF, $33, $FF, $77, $FF, $FF, $FF,	$FF
 byte_257F0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 9, 0,	0, 9, $99
-
 		dc.b 0,	0, $99,	$77, 0,	0, $97,	$77, 0,	0, $77,	$FF, 0,	0, $7F,	$FF, 0,	0, $F, $FC
 		dc.b 0,	0, 0, $C, 0, 0,	0, $C1,	0, 0, 0, $C1, 0, 0, 0, $C1, 0, 0, 0, $C1
 		dc.b 0,	$88, $87, $F1, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, $99,	$F9, 0,	0
@@ -38434,7 +37135,6 @@ byte_257F0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 9, 0,	0, 9, $99
 		dc.b $DF, $FF, $FF, $FF, $77, $7F, $FF,	$43, $88, $77, $FF, $44, $88, $88, $77,	$F3, $98, $88, $89, $33
 		dc.b $97, $99, $93, $3F, $77, $77, $33,	$F9, $FF, $33, $FF, $77, $FF, $FF, $FF,	$FF
 byte_25A30:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 9
-
 		dc.b 0,	0, 0, 9, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 9, 0,	0, 9, $99
 		dc.b 0,	0, 9, $97, 0, 0, 9, $77, 0, 0, 0, 7, 0,	0, 0, 0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 9
@@ -38471,7 +37171,6 @@ byte_25A30:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 9
 		dc.b $77, $B0, 0, 0, $77, $B0, 0, 0, $77, $7B, 0, 0, $77, $77, $BB, 0, $77, $77, $7B, $B0
 		dc.b $77, $77, $BB, 0
 byte_25CF0:	dc.b 0,	0, 0, $88, 0, 8, $89, $77, 0, $87, $79,	$88, 9,	$99, $88, $99, $97, $99, $99, $99
-
 		dc.b $97, $77, $99, $97, 9, $77, $77, $77, 0, $97, $77,	$77, $87, $80, 0, 0, $98, $88, 0, 0
 		dc.b $89, $99, $89, 0, $99, $97, $77, $98, $97,	$77, $79, $99, $77, $79, $99, $98, $79,	$97, $79, $91
 		dc.b $77, $77, $DC, $1C, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, $80, 0, 0,	0
@@ -38509,7 +37208,6 @@ byte_25CF0:	dc.b 0,	0, 0, $88, 0, 8, $89, $77, 0, $87, $79,	$88, 9,	$99, $88, $9
 		dc.b $BB, $B8, $88, 0, $7B, $B8, $88, 0, $77, $88, $87,	0, $77,	$77, $70, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 byte_25FD0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, $DC, $C0, 0, $D1, $C1, $CD
-
 		dc.b 0,	$CC, $11, $D1, 0, $CC, $11, $1F, 0, $DC, $11, $CF, 0, $D, $CC, $CF, 0, 7, $79, $99
 		dc.b 0,	$77, $99, $97, 0, $77, $99, $97, 0, $77, $79, $99, 0, $77, $79,	$99, 0,	$77, $77, $99
 		dc.b 0,	$F, $77, $97, 0, $F, $F7, $77, 0, 0, $F7, $77, 0, 0, $F, $FF, 0, 0, 0, $FF
@@ -38546,7 +37244,6 @@ byte_25FD0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, $DC, $C0, 0, $D1, $C1
 		dc.b $77, $77, $70, 0, $77, $77, $70, 0, $77, $77, $70,	0, $77,	$77, $70, 0, $77, $77, 0, 0
 		dc.b $77, $70, 0, 0
 byte_26290:	dc.b 0,	0, 0, 0, 0, 9, $99, $F8, 9, $97, $7F, $80, $97,	$77, $7F, $88, $77, $77, $F8, $77
-
 		dc.b $77, $FF, $F9, $87, $F, $FF, $FF, $F8, 0, $FD, $DF, $FF, 0, 0, 0, 0, 0, 0,	0, 0
 		dc.b 0,	0, 0, 0, $77, $99, $88,	0, $99,	$88, $88, $80, $77, $99, $99, $88, $87,	$77, $99, $99
 		dc.b $F8, $77, $77, $99, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
@@ -38587,7 +37284,6 @@ byte_26290:	dc.b 0,	0, 0, 0, 0, 9, $99, $F8, 9, $97, $7F, $80, $97,	$77, $7F, $8
 		dc.b 0,	0, $F, $FF, 0, 0, 0, 0,	0, 7, $BB, $BB,	0, 7, $BB, $B0,	0, $B, $BB, 0
 		dc.b 0,	$B, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0
 byte_265B0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, $99
-
 		dc.b 0,	$CC, $D9, $77, $C, $DD,	$77, $77, $CD, $DC, $7F, $FF, $CD, $DC,	$FF, $FF, $DD, $CD, $DF, $DD
 		dc.b $DD, $DD, $CD, $1C, $D, $DD, $D1, $1C, 0, 0, $D, $1C, 0, 0, $C, $1C, 0, 0,	$C, $11
 		dc.b 0,	0, 1, $11, 0, 0, $F, $CD, $88, 0, $B, $8B, $BB,	$8B, $BB, $7B, 7, $78, $8B, $BB
@@ -38628,7 +37324,6 @@ byte_265B0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, $99
 		dc.b $77, $77, $70, 0, 0, 0, 0,	0, $DC,	$CC, $DD, 0, $DD, $DD, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_268D0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	0, 0, 0, 0, 0, 0, 9, 0,	0, 0, $77, 0, 0, 0, $FF, 0, 0, 0, $F
 		dc.b 0,	0, 0, $D, 0, 0,	0, 1, 0, 0, 0, $D, $B, $B0, 0, $C, $BF,	$FB, 0,	$C
 		dc.b $BF, $FF, $B0, 1, $BF, $FF, $FB, $F, $B, $FF, $FF,	$B8, 0,	$BB, $FF, $FB, 0, 0, $BB, $BF
@@ -38671,7 +37366,6 @@ byte_268D0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, $BB, 0, 0, 0, $BB, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_26C10:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	$CC, $DD, 0, $C, $DD, $11, $D0,	$CD, $DC, $C1, $1D, 0, 0, 0, 0,	0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	9, $99,	$F8, 9,	$99, $7F, $80, $99, $77, $7F, $88
 		dc.b $97, $77, $F8, $77, $CD, $DC, $11,	$CD, $DD, $CD, $D1, $1D, $DD, $DD, $C1,	$D0, $D, $DD, $DD, 0
@@ -38709,7 +37403,6 @@ byte_26C10:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 7,	$78, $80, 0, $FF, 0, 0,	0, $7B,	0, 0, 0, $B0, 0, 0, 0, 0, 0, 0,	0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 byte_26EF0:	dc.b 0,	0, 0, 0, 0, $C,	$CD, $D0, 0, $CD, $D1, $1D, $C,	$DD, $C9, $99, $C, $D9,	$97, $7F
-
 		dc.b $D, $97, $77, $F8,	9, $77,	$77, $F8, 7, $7F, $FF, $F8, 0, 0, 0, 0,	0, 0, 0, 0
 		dc.b 0,	0, 0, 0, $F8, 0, 0, 0, $80, 0, 0, 0, $77, $99, $88, 0, $99, $88, $88, $80
 		dc.b $77, $99, $99, $88, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
@@ -38746,7 +37439,6 @@ byte_26EF0:	dc.b 0,	0, 0, 0, 0, $C,	$CD, $D0, 0, $CD, $D1, $1D, $C,	$DD, $C9, $9
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, $B, 0, $B, $BB, $BB
 		dc.b 0,	0, $BB,	$BB
 byte_271B0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	0, 0, 0, 0, $CC, $DD, 0, $C, $DD, $11, $D0, 0, 0, 0, 0,	0, 0, 0, 0
 		dc.b 0,	0, 0, $99, 0, 0, $99, $7F, 0, $99, $7F,	$88, 9,	$77, $F8, $99, $97, $7F, $F8, $77
 		dc.b $7F, $FF, $FF, $87, 0, 0, 0, 0, 0,	0, 0, 0, $97, $7F, $88,	$88, $88, $88, 0, 0
@@ -38783,7 +37475,6 @@ byte_271B0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b $BB, $80, 0, 0, $7B, $88, 0, 0, $B8, $88, 0, 0, $88, $80, 0, 0, $88, 0, 0,	0
 		dc.b 0,	0, 0, 0
 byte_27470:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 8, $89, 0, 0, $88, $88, 0, 8, $89, $99
-
 		dc.b 0,	$99, $99, $97, 7, $79, $97, $77, 7, $77, $77, $79, 7, $FF, $77,	$9F, 0,	$F, $99, $FD
 		dc.b 9,	$99, $FF, $D1, $9F, $FF, $FF, $D1, $FF,	$F9, $99, $DC, $99, $93, $D0, $DC, $22,	$FF, $FD, $DB
 		dc.b $23, $33, $79, $BF, $77, $43, $27,	$BF, $9F, $F4, $32, $7B, $88, $9F, $42,	$77, $88, $99, $F3, $27
@@ -38823,7 +37514,6 @@ byte_27470:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 8, $89, 0, 0, $88, $88, 0, 8, $89
 		dc.b $B8, $CC, $1C, $DD, $BB, $88, $CC,	$D0, $77, $BB, $DD, 0, $CC, $DD, 0, 0, $DD, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_27770:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 8, $89, 0, 0, $88, $88, 0, 8, $89, $99
-
 		dc.b 0,	$99, $99, $97, 7, $79, $97, $77, 7, $77, $77, $99, $F, $FF, $99, $FF, 0, 9, $FF, $FD
 		dc.b 0,	$9F, $FF, $D1, $99, $FF, $FF, $D1, $FF,	$99, $99, $DC, $99, $23, $D0, $DC, $22,	$FF, $FD, $DB
 		dc.b $23, $33, $79, $BF, $77, $73, $27,	$BF, $98, $94, $32, $7B, $99, $87, $42,	$77, $89, $89, $93, $27
@@ -38863,7 +37553,6 @@ byte_27770:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 8, $89, 0, 0, $88, $88, 0, 8, $89
 		dc.b $B8, $CC, $1C, $DD, $BB, $88, $CC,	$D0, $77, $BB, $DD, 0, $CC, $DD, 0, 0, $DD, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_27A70:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 8, $89, 0, 0, $88, $88, 0, 8, $89, $99
-
 		dc.b 0,	$99, $99, $97, 7, $79, $97, $77, 7, $77, $77, $77, 7, $F7, $77,	$77, 0,	$F, $F7, $99
 		dc.b $99, $99, $99, $D1, $FF, $FF, $FF,	$D1, $9F, $FF, $99, $DC, $39, $99, $D0,	$DC, $22, $FF, $FD, $DB
 		dc.b $24, $43, $79, $BF, $77, $73, $27,	$BF, $99, $94, $32, $7B, $88, $87, $42,	$77, $88, $88, $93, $27
@@ -38900,7 +37589,6 @@ byte_27A70:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 8, $89, 0, 0, $88, $88, 0, 8, $89
 		dc.b $BB, $88, $CC, $D0, $77, $BB, $DD,	0, $CC,	$DD, 0,	0, $DD,	0, 0, 0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0
 byte_27D30:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, $33
-
 		dc.b 0,	0, 3, $33, 0, 3, $33, $42, 0, 3, $44, $44, 0, 0, 0, 0, 0, 0, 0,	0
 		dc.b 0,	0, 0, 0, 3, $33, $30, 0, $32, $22, $20,	$38, $23, $22, $22, $88, $22, $22, $29,	$99
 		dc.b $33, $22, $77, $99, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, $88, $99, $77, $80
@@ -38959,7 +37647,6 @@ byte_27D30:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, $33
 		dc.b $7B, $B8, $B7, $7D, $77, $B7, $70,	$D, $77, $70, 0, 0, $77, $70, 0, 0, $77, 0, 0, 0
 		dc.b $70, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 byte_281B0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 3, $33, 0, 0, $33, $32
-
 		dc.b 0,	$33, $33, $22, 0, $34, $44, $44, 0, $44, $44, $44, 0, $44, $42,	$24, 4,	$44, $32, $22
 		dc.b 4,	$44, $33, $22, 4, $44, $32, $22, 4, $42, $44, $33, 4, $43, $22,	$33, 0,	$44, $33, $23
 		dc.b 0,	$44, $33, $33, 0, 4, $44, $43, 0, 0, 4,	$43, 0,	0, 0, 4, 0, 0, 0, 0
@@ -39020,7 +37707,6 @@ byte_281B0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 3, $33, 0, 0, $33, $3
 		dc.b $77, $70, 0, 0, $77, $70, 0, 0, $77, $77, 0, 0, $77, 0, 0,	0, $70,	0, 0, 0
 		dc.b 0,	0, 0, 0
 byte_28650:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, $96, 0, 0, 9,	$88
-
 		dc.b 0,	0, $99,	$99, 0,	7, $77,	$99, 0,	7, $77,	$77, 0,	0, $7F,	$FF, 0,	0, $F, $F7
 		dc.b 0,	0, $F7,	$99, 0,	7, $99,	$FF, 0,	$99, $FF, $FF, 9, $FF, $FF, $FF, 9, $FF, $FF, $FF
 		dc.b 0,	$9F, $FF, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
@@ -39061,7 +37747,6 @@ byte_28650:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, $96, 0, 0, 9,	$88
 		dc.b 0,	7, $88,	$88, 0,	$78, $8B, $7B, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, $88, $B0, 0, 0, $BB, $88, $B0, 0, $88, $B7, $B8, $8B
 byte_28970:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 8, $88, 0, 0, $89, $99
-
 		dc.b 0,	9, $99,	$99, 0,	$77, $79, $99, 0, $77, $77, $77, 0, $F,	$FF, 0,	0, $F, $FF, $FF
 		dc.b $88, $88, $FF, $FF, $88, $88, $FF,	$FF, $99, $88, $7F, $FF, $88, $77, $FF,	$FF, $77, $79, $CF, $FC
 		dc.b $77, $8F, $CC, $FF, 0, 0, 0, 0, 0,	0, 0, $DD, $F0,	0, $DD,	$DC, $F0, 0, $DC, $C0
@@ -39107,7 +37792,6 @@ byte_28970:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 8, $88, 0, 0, $89, $9
 		dc.b $8B, $7B, $88, $B7, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, $B0, 0, 0,	0, $B8,	$8B, $B0, 0
 byte_28CF0:	dc.b 0,	$DC, $CD, 0, $D, $C1, $1C, $CD,	$DD, $DC, $C1, $1C, $DD, $DD, $DC, $C1,	$FF, $DD, $DD, $C8
-
 		dc.b $DD, $FF, $DD, $99, 0, 0, $77, $77, 0, 0, $F, $77,	0, 0, 0, $FF, 0, 0, 0, $F
 		dc.b $99, 0, 0,	$F9, $F, $99, $99, $9F,	0, $FF,	$FF, $FF, 0, 0,	$FF, $FF, 0, 0,	0, $FF
 		dc.b 0,	0, 0, 0, $F, $FF, $FF, $F0, 0, 0, $FF, $FF, $DD, 8, $88, $FF, $88, $88,	$88, $8F
@@ -39147,7 +37831,6 @@ byte_28CF0:	dc.b 0,	$DC, $CD, 0, $D, $C1, $1C, $CD,	$DD, $DC, $C1, $1C, $DD, $DD
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, $8B, 0, 0,	0
 		dc.b $B8, $8B, 0, 0, $8B, $7B, $88, $BB
 byte_28FF0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	0, 0, $D, 0, 0,	$DD, $DC, 0, $DD, $CC, $C1, 0, 0, 0, 0,	0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, $D, 0, 0, 0, $DC, $D0, 0, 0, $1C, $D0, 0, 0
 		dc.b $CD, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	$D, 0, 0, 0, $DC, 0, 0,	$D, $CC
@@ -39180,7 +37863,6 @@ byte_28FF0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b $CC, $CC, 0, 0, $11, $11, 0, 0, $CC, $CC, 0, 0, $DD, $DD, 0, 0, $DD, $DD, 0, 0
 		dc.b $FF, $FF, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 byte_29270:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	0, 0, $DD, 0, $D, $DD, $C1, $D,	$DC, $CC, $1C, 0, 0, 0,	0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, $D0, 0, 0,	0, $CD,	0, 0, 0, $CD, 0, 0, $D1
 		dc.b $D0, 0, 0,	$D1, 0,	0, 0, 0, 0, 0, 0, $C0, 0, 0, $D, $DC, 0, $D, $D1, $1D
@@ -39212,7 +37894,6 @@ byte_29270:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b $1D, 0, 0,	0, $11,	$10, 0,	0, $D0,	$C0, 0,	0, $BB,	$B0, 0,	$BB, $7B, $BB, $BB, $B0
 		dc.b $BB, $BB, $77, $70, $77, $77, 0, 0
 byte_294D0:	dc.b 0,	0, $F, $FF, 0, 0, 0, $FF, 0, 0,	8, $9F,	0, 0, $88, $9F,	0, 9, $89, $9F
-
 		dc.b 0,	9, $97,	$FF, 0,	$99, $79, $FF, 0, $77, $79, $FF, 0, $77, $79, $FF, 0, $77, $79,	$FF
 		dc.b 0,	7, $9F,	$FF, 0,	9, $FF,	$FF, 0,	9, $FF,	$FF, 0,	$9F, $FF, $FF, 0, $9F, $FF, $F3
 		dc.b 0,	$9F, $FF, $F3, 0, 9, $CC, 7, 0,	$C, $CD, $1C, 0, $D, $D1, $C1, 9, $9D, $C1, $11
@@ -39247,7 +37928,6 @@ byte_294D0:	dc.b 0,	0, $F, $FF, 0, 0, 0, $FF, 0, 0,	8, $9F,	0, 0, $88, $9F,	0, 9
 		dc.b $77, $70, 0, 0, $77, 0, 0,	0, $70,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_29770:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 8
-
 		dc.b 0,	0, 0, $99, 0, 0, 7, $77, 0, 0, 7, $77, 0, 0, 0,	$FF, 0,	0, 0, $FF
 		dc.b 0,	8, $88,	$8F, $88, $88, $88, $8F, $99, $99, $98,	$87, $99, $98, $87, $7F, $99, $97, $77,	$9C
 		dc.b $77, $77, $78, $FC, $F0, 0, 0, 0, $FF, $F0, 0, 0, $FF, $FF, 0, 0, $FF, $FF, 0, 0
@@ -39282,7 +37962,6 @@ byte_29770:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 8
 		dc.b $1C, $DC, $D0, 0, $11, $CC, $D0, 0, $11, $CC, $D0,	0, $CC,	$DD, 0,	0, $DD,	$D0, 0,	0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_29A10:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, $98,	$88, 0,	9, $88,	$98, 0,	$98, $89, $9F
-
 		dc.b 0,	$98, $9F, $FF, 0, $98, $9F, $FF, 9, $89, $9F, $FF, 9, $97, $FF,	$FD, $99, $79, $FF, $FD
 		dc.b $77, $79, $FF, $FD, $77, $79, $FF,	$FD, $77, $79, $FF, $FD, 7, $9F, $FF, $FD, 9, $FF, $FF,	$FF
 		dc.b 9,	$9F, $FF, $FF, 0, $9F, $FF, $FF, 0, $99, $FF, $FF, 0, 0, $99, $FF, 0, 0, 0, $99
@@ -39320,7 +37999,6 @@ byte_29A10:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, $98,	$88, 0,	9, $88,	$98, 0,	$98,
 		dc.b $8B, $88, $88, $BB, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, $80, 0, 0,	0, $88,	0, 0, 0
 byte_29CF0:	dc.b 0,	0, 0, 0, 0, 0, 0, 8, 0,	0, 0, $89, 0, 0, 9, $99, 0, 0, $77, $79
-
 		dc.b 0,	0, $77,	$77, 0,	0, 7, $77, 0, 0, 0, $77, 0, $88, $88, $89, $88,	$88, $88, $88
 		dc.b $99, $99, $88, $77, $99, $88, $77,	$77, $99, $77, $79, $88, $77, $77, $88,	$99, $77, $88, $FC, $CC
 		dc.b $79, $9F, $D1, $11, 0, 0, 0, 0, $90, 0, 0,	0, $79,	$90, 0,	0, $77,	$99, $80, 0
@@ -39350,7 +38028,6 @@ byte_29CF0:	dc.b 0,	0, 0, 0, 0, 0, 0, 8, 0,	0, 0, $89, 0, 0, 9, $99, 0, 0, $77, 
 		dc.b $88, $80, 0, $78, $FF, $FF, $77, 0, $DD, $BB, 0, 0, $7B, $B8, 0, 0, $BB, $80, 0, 0
 		dc.b $7B, 0, 0,	0, $BB,	$BB, 0,	0, $BB,	$BB, $B8, 0, $B8, $8B, $88, $88
 byte_29F30:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 8, $89, 0, 0, $88, $88, 0, 8, $89, $99
-
 		dc.b 0,	$99, $99, $97, 7, $79, $97, $77, 7, $77, $77, $77, 0, $F, $FF, $F0, 0, 0, $9F, $FF
 		dc.b $97, $78, $9F, $FF, $89, $97, $79,	$FF, $97, $77, $99, $FF, $77, $DD, $FF,	$FF, $7D, $11, $DF, $FC
 		dc.b $9C, $11, $1D, $CC, 0, 0, 0, 0, $F0, 0, 0,	0, $FF,	0, 0, 0, $FF, 0, 0, 0
@@ -39390,7 +38067,6 @@ byte_29F30:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 8, $89, 0, 0, $88, $88, 0, 8, $89
 		dc.b $77, 0, 0,	0, $70,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_2A230:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 8
-
 		dc.b 0,	0, 0, $99, 0, 0, 7, $77, 0, 0, 7, $77, 0, 0, 0,	$F7, 0,	0, 0, $F
 		dc.b 0,	9, 0, $FF, 0, 9, $FF, $99, 0, $F, $99, $FF, 0, 0, $FF, $FF, 0, 0, 0, $FF
 		dc.b 0,	0, 0, $BB, 0, $B, $B7, $77, 0, $B7, $77, $77, 0, $B7, $77, $77,	0, $B7,	$77, $77
@@ -39430,7 +38106,6 @@ byte_2A230:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 8
 		dc.b $11, $CC, $D0, 0, $11, $CC, $D0, 0, $CC, $DD, 0, 0, $DD, $D0, 0, 0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_2A530:	dc.b 0,	0, 0, $99, 0, 0, $99, $88, 0, 9, $88, $89, 0, $99, $99,	$87, 7,	$99, $99, $78
-
 		dc.b $77, $79, $97, $9F, $77, $77, $77,	$9C, $F7, $77, $79, $91, $99, 8, $88, $80, $88,	$88, $77, $78
 		dc.b $88, $77, $77, $77, $87, $77, $77,	$77, $FF, $FF, $FF, $77, $FD, $DC, $CD,	$FF, $CC, $11, $11, $DF
 		dc.b $11, $11, $F1, $1F, 0, 0, 0, 0, 0,	0, 0, 0, $80, 0, 0, 0, $78, 0, 0, 0
@@ -39463,7 +38138,6 @@ byte_2A530:	dc.b 0,	0, 0, $99, 0, 0, $99, $88, 0, 9, $88, $89, 0, $99, $99,	$87,
 		dc.b $DD, 0, 0,	0, 0, 0, 0, 0, $D7, $77, 0, 0, $77, $70, 0, 0, $77, 0, 0, 0
 		dc.b $70, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 byte_2A7B0:	dc.b 0,	0, 0, $99, 0, 0, $99, $88, 0, $99, $88,	$89, 9,	$99, $99, $88, 9, $99, $99, $87
-
 		dc.b $77, $99, $77, $9F, $77, $77, $79,	$7C, $F7, $77, $97, $F1, $99, $90, 0, 0, $88, $88, $88,	$88
 		dc.b $88, $77, $77, $77, $77, $77, $77,	$77, $FF, $FF, $FF, $77, $FD, $DC, $CD,	$FF, $CC, $11, $11, $DF
 		dc.b $11, $11, $F1, $1F, 0, 0, 0, 0, 0,	0, 0, 0, $88, 0, 0, 0, $77, $80, 0, 0
@@ -39496,7 +38170,6 @@ byte_2A7B0:	dc.b 0,	0, 0, $99, 0, 0, $99, $88, 0, $99, $88,	$89, 9,	$99, $99, $8
 		dc.b $DD, 0, 0,	0, 0, 0, 0, 0, $D7, $77, 0, 0, $77, $70, 0, 0, $77, 0, 0, 0
 		dc.b $70, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 byte_2AA30:	dc.b 0,	0, 0, 0, 0, 0, $E, 0, 0, 0, $E,	$EE, 0,	0, $E, $EE, 0, 0, $E, $EE
-
 		dc.b 0,	0, $E, $EE, 0, 0, 0, $EE, 0, 0,	0, $7E,	0, 0, $77, $77,	7, $77,	$77, $77
 		dc.b $77, $77, $77, $70, $77, $7B, $B0,	0, $77,	$BB, $BB, 0, $77, $BB, $77, $77, 7, $7B, $BB, $BB
 		dc.b 0,	$77, $BB, $BB, 0, 0, 0,	0, 0, 0, 0, $E,	$EE, $EE, $EE, $ED, $EE, $DD, $DD, $DC
@@ -39512,7 +38185,6 @@ byte_2AA30:	dc.b 0,	0, 0, 0, 0, 0, $E, 0, 0, 0, $E,	$EE, 0,	0, $E, $EE, 0, 0, $E
 		dc.b 0,	0, 0, 0, $B0, 0, 0, 0, $BB, 0, 0, 0, $BB, $BB, 0, 0, $BB, $BB, $B0, $77
 		dc.b $BB, $BB, $77, $77, $77, $77, $77,	$70
 byte_2AB50:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, $EE, 0, 0, $E, $EE
-
 		dc.b 0,	0, $E, $EE, 0, 0, $EE, $EE, 0, 0, $EE, $EE, 0, 0, 0, 0,	0, 0, 0, 0
 		dc.b 0,	0, 0, 0, $E0, 0, 0, 0, $EE, 0, 0, 0, $EE, $EE, 0, 0, $EE, $EE, $E0, 0
 		dc.b $ED, $DD, $EE, 0, 0, 0, $EE, $EE, 0, $77, $EE, $EE, 7, $77, $7E, $EE, $77,	$77, $7E, $EE
@@ -39526,7 +38198,6 @@ byte_2AB50:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, $EE, 0, 0, $E, $EE
 		dc.b 7,	$BB, 0,	0, $77,	$BB, 0,	0, $7B,	$B7, 0,	0, $B7,	$7B, 0,	0, $BB,	$BB, 0,	0
 		dc.b $BB, $BB, 0, 0, $BB, $BB, $B0, $77, $BB, $BB, $B7,	$77, $77, $77, $77, $70
 byte_2AC50:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	$EE, 0,	0, 0, $EE, $E0,	0, 0, $EE, $EE,	0, 7, $EE, $EE,	$EE, $77, $EE, $EE, $DD
 		dc.b $77, $EE, $EE, $DE, $77, $7E, $EE,	$E7, $77, $7E, $EE, $E7, 7, $77, $EE, $E7, 0, 0, $E, $EE
 		dc.b 0,	0, 0, 0, 0, 0, 0, 7, 0,	0, 0, $7B, 0, 0, 7, $BB, 0, 0, 7, $BB
@@ -39539,7 +38210,6 @@ byte_2AC50:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b $BB, $B0, 0, 0, $BB, $BB, $B0, 0, $BB, $BB, $B0, 0, $7B, $BB, 0, 0, $77, $77, 0, 0
 		dc.b $77, 0, 0,	0
 byte_2AD30:	dc.b 0,	0, $E0,	0, 0, 0, $EE, $EE, 0, 0, $EE, $EE, 0, 0, $EE, $BB, 0, 0, $E7, $7B
-
 		dc.b 0,	0, $EE,	$77, 0,	0, $E, $7B, 0, 0, 7, $7B, 0, 0,	0, $DD,	$EE, $ED, $DD, $CC
 		dc.b $EE, $DC, $CC, $11, $EE, $DC, $C1,	$11, $BE, $DC, $CC, $11, $BE, $DD, $CC,	$CC, $BE, $ED, $DD, $CC
 		dc.b $EE, $EE, $ED, $DD, $DD, $DD, $D0,	0, $CC,	$11, $CD, $D0, $11, $1C, $DE, $ED, $11,	$CD, $EB, $BB
@@ -39553,7 +38223,6 @@ byte_2AD30:	dc.b 0,	0, $E0,	0, 0, 0, $EE, $EE, 0, 0, $EE, $EE, 0, 0, $EE, $BB, 0
 		dc.b 0,	0, 7, $BB, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 		dc.b $B0, 0, 0,	0, $77,	$70, 0,	0, $BB,	$BB, $B0, 0, $BB, $BB, 0, 0
 byte_2AE30:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b 0,	0, 0, $E0, 0, 0, $E, $EE, 0, 0,	$E, $EE, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, $E0, 0, 0,	0
 		dc.b $EE, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	7
@@ -39569,7 +38238,6 @@ byte_2AE30:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b $BB, $B7, 0, 0, $77, $70, 0, 0, $B0, 0, 0,	0, $BB,	0, 0, 0, $77, $77, 0, 0
 		dc.b $BB, $BB, $BB, 0, $BB, $BB, $B0, 0
 byte_2AF50:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
-
 		dc.b $E, 0, 0, 0, $EE, $E0, 0, 0, $EE, $EE, 0, 0, $EE, $EE, $EB, $BE, $EE, $EE,	$77, $BB
 		dc.b $E, $77, $77, $7B,	7, $BB,	$B7, $7B, $7B, $BB, $7B, $BB, $7B, $BB,	$B7, $77, $7B, $BB, $BB, $B7
 		dc.b $7B, $BB, $BB, $B0, $77, $BB, $BB,	$B0, 0,	$77, $BB, $B7, 0, 0, $77, $77, 0, 0, $77, $BB
@@ -39580,7 +38248,6 @@ byte_2AF50:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 		dc.b $77, $BB, 0, 0, $BB, $B7, 0, 0, $77, $70, 0, 0, $B0, 0, 0,	0, $BB,	0, 0, 0
 		dc.b $77, $70, $77, 0, $BB, $B7, $77, 0, $77, $77, $70,	0
 byte_2B010:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 9, 0,	0, 0, $77
-
 		dc.b 0,	0, 0, $77, 0, 0, 0, $F,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, $77
 		dc.b 0,	0, 7, $77, 0, 0, $77, $7F, 0, 0, $7F, $FF, 0, 0, 7, $77, 0, 0, 0, 0
 		dc.b 0,	0, 4, $44, 0, 0, $88, $99, 8, $88, $99,	$77, $89, $99, $99, $88, $99, $99, $88,	$77
@@ -39621,7 +38288,6 @@ byte_2B010:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 9, 0,	0, 0, $77
 		dc.b 0,	$7B, $BB, $B0, 0, $7B, $B0, 0, 7, $BB, $BB, $B0, $7B, $BB, $BB,	$B0, $7B, $BB, $BB, $B0
 		dc.b $7B, $BB, $BB, 0, $7B, $BB, $B0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 byte_2B330:	dc.b 0,	0, 0, 0, 0, 0, 8, $89, 0, 0, $88, $88, 0, 8, $89, $99, 0, $99, $99, $97
-
 		dc.b 7,	$79, $97, $77, 7, $77, $77, $77, $F, $F7, $77, $9F, 0, 0, 0, 0,	$99, $79, 0, 0
 		dc.b $89, $97, $79, $98, $97, $77, $99,	$FF, $77, $DD, $FF, $FF, $7D, $11, $DF,	$FC, $9C, $11, $1C, $CC
 		dc.b $D1, $1C, $CD, $C1, 0, 0, 0, 0, 0,	0, 0, 0, $88, $90, 0, 0, $FF, $89, 0, 0
@@ -39654,7 +38320,6 @@ byte_2B330:	dc.b 0,	0, 0, 0, 0, 0, 8, $89, 0, 0, $88, $88, 0, 8, $89, $99, 0, $9
 		dc.b 0,	7, $BB,	0, 0, 0, 0, 0, $BB, $BB, 0, 0, $BB, $BB, 0, 0, $BB, $BB, 0, 0
 		dc.b $BB, $B0, 0, 0, $BB, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0
 byte_2B5B0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 8, $89, 0, 0, $88, $88, 0, 8, $89, $99
-
 		dc.b 0,	$99, $99, $97, 7, $79, $97, $77, 7, $77, $77, $77, 0, $F, $79, $90, 0, 0, $9F, $79
 		dc.b $97, $79, $8F, $F7, $89, $97, $78,	$F7, $97, $77, $89, $FF, $77, $DD, $FF,	$FF, $7D, $11, $DF, $FC
 		dc.b $DC, $11, $1D, $CC, 0, 0, 0, 0, $90, 0, 0,	0, $99,	0, 0, 0, $79, 0, 0, 0
@@ -39691,7 +38356,6 @@ byte_2B5B0:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 8, $89, 0, 0, $88, $88, 0, 8, $89
 		dc.b $70, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 		dc.b 0,	0, 0, 0
 byte_2B870:	dc.b 0,	0, 0, 0, 0, 0, 8, $89, 0, 8, $89, $99, 0, $89, $99, $98, 9, $99, $99, $89
-
 		dc.b $77, $79, $99, $77, $77, $77, $77,	$77, $F, $77, $77, $99,	0, 0, 0, $99, $90, 0, 9, $77
 		dc.b $77, $98, $99, $77, $99, $77, $89,	$F7, $77, $78, $9F, $F7, $7D, $DF, $FF,	$FF, $D1, $1D, $FF, $CF
 		dc.b $C1, $11, $DC, $CF, 0, 0, 0, 0, $90, 0, 0,	0, $79,	0, 0, 0, $79, 0, 0, 0
@@ -39729,7 +38393,6 @@ byte_2B870:	dc.b 0,	0, 0, 0, 0, 0, 8, $89, 0, 8, $89, $99, 0, $89, $99, $98, 9, 
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, $BB, 0, 0,	0
 		dc.b $77, $77, $70, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 byte_2BB50:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, $96
-
 		dc.b 0,	0, 9, $88, 0, 0, $99, $99, 0, 7, $77, $99, 0, 7, $77, $77, 0, 0, $7F, $FF
 		dc.b 0,	0, $F, $F7, 0, 0, $F7, $99, 0, 7, $99, $FF, 0, 7, $9F, $FF, 0, $79, $FF, $FF
 		dc.b 0,	$9F, $FF, $FF, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 6, $88, $88,	$90
@@ -39768,12 +38431,9 @@ off_2BDF0:	dc.w byte_2BDF8-off_2BDF0
 		dc.w byte_2BE10-off_2BDF0
 		dc.w byte_2BE1C-off_2BDF0
 byte_2BDF8:	dc.b 3,	1, 0, $30, 0, $3C, 0, $48, 0, $3C, 0, $54
-
 byte_2BE04:	dc.b 3,	1, $80,	$24, $80, $30, $80, $3C, $80, $30, $80,	$48
-
 byte_2BE10:	dc.b 3,	1, 0, $48, 0, $54, 0, $60, 0, $54, 0, $6C
 byte_2BE1C:	dc.b 3,	1, $80,	$3C, $80, $48, $80, $54, $80, $48, $80,	$60, 0,	$2B, $2B, $2C
-
 		dc.b $2C, 0, $F8, $D, 0, 0, 0, 0, 0, $2B, $2B, $2C, $2C, 0, $F8, $D
 		dc.b 0,	8, 0, 0, 0, $2B, $2B, $2C, $2C,	0, $F8,	$D, 0, $10, 0, 0
 		dc.b 0,	$28, $28, $29, $29, 0, $F8, 5, 0, $18, 0, 0, 0,	$2D, $2D, $2D
@@ -39781,13 +38441,10 @@ byte_2BE1C:	dc.b 3,	1, $80,	$3C, $80, $48, $80, $54, $80, $48, $80,	$60, 0,	$2B,
 		dc.b 0,	$24, $F8, 0, 0,	$2D, $2D, $2D, $2D, 0, 0, 7, 0,	$2C, $F8, 0
 		dc.b 0,	$23, $23, $24, $24, 0, 0, 5, 0,	$34, $F8, 0
 off_2BE88:	dc.w byte_2BE8A-off_2BE88
-
 byte_2BE8A:	dc.b 2,	8, 0, 8, 0, $14, 0, $20, 0, $25, $25, $25, $25,	0, $FC,	0
-
 		dc.b 0,	0, $FC,	0, 0, $25, $25,	$25, $25, 0, $FC, 0, 0,	1, $FC,	0
 		dc.b 0,	$25, $25, $25, $25, 0, $FC, 0, 0, 2, $FC, 0
 off_2BEB6:	dc.w byte_2BEBE-off_2BEB6
-
 		dc.w byte_2BEC6-off_2BEB6
 		dc.w byte_2BECE-off_2BEB6
 		dc.w byte_2BED6-off_2BEB6
@@ -39795,13 +38452,11 @@ byte_2BEBE:	dc.b 2,	8, $80,	$1E, $80, $2A, $80, $36
 byte_2BEC6:	dc.b 2,	8, 0, $16, 0, $22, 0, $2E
 byte_2BECE:	dc.b 2,	8, 0, $3E, 0, $4A, 0, $26
 byte_2BED6:	dc.b 1,	8, 0, $1E, 0, $2A, 0, $25, $25,	$25, $25, 0, $FC, 0, 0,	0
-
 		dc.b $FC, 0, 0,	$26, $26, $26, $26, 0, $F8, 5, 0, 1, $F8, 0, 0,	$27
 		dc.b $27, $27, $27, 0, $F4, $A,	0, 5, $F4, 0, 0, $27, $27, $27,	$27, 0
 		dc.b $F4, $A, 0, $E, $F4, 0, 0,	$25, $25, $25, $25, 0, $FC, 0, 0, $17
 		dc.b $FC, 0, 0,	$26, $26, $26, $26, 0, $F8, 5, 0, $18, $F8, 0
 byte_2BF24:	dc.b $80, $38, $80, 4, 4, $15, $11, $25, $F, $35, $14, $45, $16, $55, $10, $67,	$72, $72, 0, $81
-
 		dc.b 6,	$32, $18, $F6, $28, $F7, $83, 5, $13, $16, $36,	$27, $7A, $58, $F2, $68, $F3, $78, $EF,	$84
 		dc.b 6,	$38, $16, $33, $85, 7, $73, $17, $78, $86, 5, $15, $87,	5, $17,	$27, $75, $89, 5, $D
 		dc.b $16, $30, $8A, 5, $C, $16,	$31, $8B, 7, $76, $8C, 6, $34, $17, $6F, $8D, 6, $35, $17, $74
@@ -39838,13 +38493,11 @@ byte_2BF24:	dc.b $80, $38, $80, 4, 4, $15, $11, $25, $F, $35, $14, $45, $16, $55
 		dc.b $F4, $FC, $47, $36, $3F, $D0, $C1,	$90, $51, $59, $45, $E0, $B2, $A7, $A, $C7, $F7, $31, $F5, $5C
 		dc.b $68, $D9, $90, $9D, $60, 0
 byte_2C1E6:	dc.b 0,	3, $80,	$14, $E, $24, $D, $36, $3E, $74, $B, $81, 3, 2,	$13, 4,	$85, 3,	0, $14
-
 		dc.b $A, $86, 3, 1, $14, $C, $87, 3, 3,	$8A, 5,	$1E, $FF, $BB, $DF, $CD, $3F, $BC, $BF,	$34
 		dc.b $F7, $D9, $E7, $F2, $E, $EF, $FA, 4, $1E, $FD, $32, $AC, $A, $A5, $4F, $CB, $D6, 6, $7F, $4E
 		dc.b $7F, 1, $8C, $43, $F8, 2, $25, $69, 8, $5F, $F4, $10, $F9,	$11, $3A, $33, $5C, $33, $F4, $FA
 		dc.b $5C, $1A, $42, $17, $C0, 0
 byte_2C23C:	dc.b $80, $1C, $80, 3, 1, $14, 8, $24, 9, $34, $A, $45,	$19, $55, $1B, $66, $3B, $74, 7, $81
-
 		dc.b 3,	0, $15,	$17, $28, $FA, $8C, 3, 2, $15, $18, $27, $7C, $8D, 4, 6, $15, $1C, $26,	$3C
 		dc.b $35, $16, $46, $3D, $56, $3A, $75,	$1A, $FF, $3F, $1A, $54, $5D, $A5, $A2,	$F0, $18, $6C, $3E, $C4
 		dc.b $DE, $17, $EC, $5A, $7E, $33, $C2,	$CE, 5,	$2B, $CE, 1, 7,	$17, $21, $BE, $A4, $30, $D8, $77
@@ -39864,7 +38517,6 @@ byte_2C23C:	dc.b $80, $1C, $80, 3, 1, $14, 8, $24, 9, $34, $A, $45,	$19, $55, $1
 		dc.b $22, $AC, $55, $62, $F2, $86, $55,	$D8, $64, $30, $84, $20, $3B, $BC, $A0,	$FD, $A1, $DA, $F, $DA
 		dc.b $F, $18, $95, $CB,	$E3, $77, $5D, $84, $FD, $84, $EE, $FB,	9, $F2,	$16, $42, $7C, $84, $F4, 0
 byte_2C3B8:	dc.b 6,	0, 0, 1, 0, 1, 1, $F7, $DF, $7D, $F7, $DF, $78,	$38, $21, $85, $48, $3A, $21, $42
-
 		dc.b $F, $80, $94, $86,	$A4, $34, $50, $E8, $88, 4, $10, $E8, $8C, $1C,	1, $C4,	$E4, $39, $C7, $D2
 		dc.b $2E, $91, $74, $47, $A6, $25, $13,	$B8, $80, $3D, $32, $A0, 0, $D,	$13, $20, 0, $15, $13, $20
 		dc.b $81, $45, $3E, $C0, $26, $A1, $86,	$8E, $45, $22, $E0, $81, $44, $CE, $40,	$26, $A4, $20, $28, $A7
@@ -39875,7 +38527,6 @@ byte_2C3B8:	dc.b 6,	0, 0, 1, 0, 1, 1, $F7, $DF, $7D, $F7, $DF, $78,	$38, $21, $8
 		dc.b $2F, $A9, $7D, $2B, $F0, $E9, $46,	$F7, $DF, $7D, $F7, $DF, $7D, $F7, $DF,	$7D, $F7, $DF, $7D, $F7
 		dc.b $DF, $7D, $FF, $E0
 byte_2C470:	dc.b 6,	1, 0, 1, 0, 1, 1, $F7, $DF, $7D, $F7, $DF, $7A,	8, $38,	1, $81,	$E6, $C, $40
-
 		dc.b $30, $51, $41, $81, $DC, $30, $F0,	$E2, 3,	3, 6, $1A, $18,	$38, 1,	0, $82,	$E, $88, $7E
 		dc.b 2,	$E9, $10, $A2, $1E, $91, 0, $28, $84, $A2, $3B,	$A0, $B0, 3, 6,	$8B, 7,	$80, $BA, $61
 		dc.b $28, $8E, $A2, $1E, $88, $CE, 0, $29, $15,	$A2, $33, $B5, $CA, $D6, $C5, $87, $10,	$2E, $10, $A
@@ -39889,7 +38540,6 @@ byte_2C470:	dc.b 6,	1, 0, 1, 0, 1, 1, $F7, $DF, $7D, $F7, $DF, $7A,	8, $38,	1, $
 		dc.b $F8, $5A, $52, $5F, $85, $A5, $25,	$F8, $9A, $70, $67, $49, $7E, $16, $94,	$97, $E1, $69, $45, $7D
 		dc.b $15, $EF, $BE, $FB, $EF, $BE, $FB,	$EF, $BE, $FB, $EF, $BE, $FB, $EF, $BE,	$FB, $FF, $C0
 byte_2C572:	dc.b 7,	2, 0, 1, 0, 1, 1, $F7, $DF, $7D, $F7, $DF, $7A,	$79, $AC, $F3, $58, $26, $B4, $4D
-
 		dc.b $A8, $9B, $4D, $35, $A2, $6D, $C, $D6, $89, $B5, $13, $68,	$26, $B4, $CD, $A8, $9C, $51, $36, $A2
 		dc.b $6D, $4C, $EA, $99, $D5, $33, $6A,	$26, $D4, $CD, $A8, $9C, $53, $36, $86,	1, $44,	$E2, $89, $C5
 		dc.b $23, $EE, 0, $14, $8F, $BC, 0, $1C, $1C, $A0, $A1,	$1C, $1C, $9C, $1C, $C3, 0, $A2, $71, 4
@@ -39905,7 +38555,6 @@ byte_2C572:	dc.b 7,	2, 0, 1, 0, 1, 1, $F7, $DF, $7D, $F7, $DF, $7A,	$79, $AC, $F
 		dc.b $9E, $6B, $3C, $D6, $79, $AC, $F3,	$57, $DF, $7D, $F7, $DF, $7D, $F7, $DF,	$7D, $F7, $DF, $7D, $F7
 		dc.b $DF, $7D, $FF, $E0
 byte_2C68E:	dc.b 0,	$61, $80, 5, $F, $15, $13, $25,	$11, $36, $34, $47, $66, $57, $6F, $67,	$73, $74, 4, $81
-
 		dc.b 5,	$A, $16, $31, $28, $F4,	$82, 4,	3, $15,	$14, $27, $70, $83, 5, $E, $15,	$12, $27, $71
 		dc.b $38, $F5, $84, 6, $2E, $16, $2F, $85, 4, 2, $16, $2D, $28,	$F7, $37, $76, $76, $36, $86, 4
 		dc.b 1,	$15, $B, $26, $2B, $37,	$6A, $47, $6B, $57, $77, $68, $F2, $75,	$10, $87, 4, 0,	$16, $2C
@@ -39996,7 +38645,6 @@ byte_2C68E:	dc.b 0,	$61, $80, 5, $F, $15, $13, $25,	$11, $36, $34, $47, $66, $57
 		dc.b $16, $85, 0, $82, $D0, $23, 2, $1D, $DB, $57, $68,	$FF, $55, $11, $10, $2D, $D, 7,	$76, $D5
 		dc.b $DA, $3F, $C5, 0
 byte_2CD86:	dc.b 0,	$3F, $80, 5, $F, $14, 6, $25, $11, $35,	$16, $46, $2F, $56, $31, $67, $6F, $74,	4, $81
-
 		dc.b 5,	$10, $16, $32, $27, $78, $58, $F3, $82,	6, $2B,	$18, $F6, $83, 5, $12, $17, $6E, $84, 6
 		dc.b $2E, $18, $F2, $87, 4, 2, $15, $14, $26, $30, $37,	$72, $48, $EF, $88, 5, $13, $17, $71, $89
 		dc.b 5,	$E, $17, $6A, $28, $F7,	$8A, 6,	$36, $17, $76, $27, $74, $37, $75, $8B,	4, 0, $17, $66
@@ -40064,7 +38712,6 @@ byte_2CD86:	dc.b 0,	$3F, $80, 5, $F, $14, 6, $25, $11, $35,	$16, $46, $2F, $56, 
 		dc.b $48, $1D, $41, $25, $79, $1C, 6, $F, $A2, $E4, $6F, $C, 6,	2, $91,	$B, $C1, $E0, $F0, $B0
 		dc.b $F6, 1, $61, $E, $C1, $61,	1, $78,	$44, $1E, 9, $10
 byte_2D2BA:	dc.b 0,	$48, $80, 5, $15, $16, $32, $26, $35, $36, $39,	$46, $2D, $56, $33, $66, $34, $73, 0, $81
-
 		dc.b 5,	$17, $17, $7A, $82, 4, 3, $15, $11, $26, $36, $37, $76,	$83, 4,	2, $15,	$10, $25, $18
 		dc.b $36, $37, $77, $7B, $84, 3, 2, $14, 7, $26, $2C, $36, $3A,	$47, $78, $85, 4, 6, $15, $14
 		dc.b $27, $77, $86, 5, $13, $17, $79, $87, 5, $12, $16,	$38, $FF, 0, 0,	0, $15,	$A6, $7D, $D5
@@ -40119,7 +38766,6 @@ byte_2D2BA:	dc.b 0,	$48, $80, 5, $15, $16, $32, $26, $35, $36, $39,	$46, $2D, $5
 		dc.b $AA, $3B, $3F, $C4, $F7, $FE, $15,	$97, $35, $D9, $5E, $2E, $77, $35, $FF,	$1D, $F6, $B8, 0, 0
 		dc.b 0,	0, $F4,	$B9, $E7, $B5, $A7, $7D, $B5, $FF, $15,	$7F, $E5, $A1, $80, 0
 byte_2D6EE:	dc.b 2,	$4A, $80, 8, $F6, $81, 4, 9, $15, $17, $26, $34, $37, $72, $47,	$75, $58, $F3, $67, $74
-
 		dc.b $76, $38, $82, 3, 1, $15, $16, $26, $37, $37, $76,	$48, $F5, $78, $F4, $83, 3, 0, $14, $A
 		dc.b $26, $36, $37, $77, $84, 4, 8, $16, $32, $28, $F2,	$85, 4,	7, $15,	$18, $27, $73, $86, 3
 		dc.b 2,	$16, $33, $27, $78, $87, 4, 6, $16, $35, $FF, $FF, $87,	$FC, $3F, $E1, $FF, $F,	$F8, $7F
@@ -40715,11 +39361,9 @@ byte_2D6EE:	dc.b 2,	$4A, $80, 8, $F6, $81, 4, 9, $15, $17, $26, $34, $37, $72, $
 		dc.b $37, $7F, $F1, $3C, $1F, $E1, $BF,	$7F, $FA, $7E, $82, $3F, $E1, $FE, 3, $3D, $87,	$B7, $6A, $8F
 		dc.b $6F, $E1, $E5, $EC, $3F, $89, $F9,	$F, $2F, $F8, $7F, $C3,	$FE, $1F, $C0, 0
 byte_30566:	dc.b $80, 8, $80, $71, 0, $8A, 2, 2, $13, 6, $FF, 0, $FF, $D0, $F, $C8,	$7F, $6B, $F2, $1F
-
 		dc.b $BA, $60, $7F, $E9, $32, $45, $FA,	$F, $E5, $7E, $82, $49,	$24, $BF, $A1, $9F, $D0, $82, $4F, $D5
 		dc.b $24, $85, $F8, $F,	$F5, $7E, 2, $49, $24, $80
 byte_30598:	dc.b 9,	1, 0, 0, 0, 0, 1, $F7, $DF, $7D, $F4, $45, $C5,	3, $17,	2, $E, $2D, $51, $71
-
 		dc.b $C4, $84, $C0, $B,	$80, $80, $16, $8B, $C,	$2E, 1,	$52, $20, $47, $24, $C1, $B, $80, $80, $16
 		dc.b $89, $C, $2E, 1, $50, $20,	5, $C3,	$71, $94, $82, $E3, $C2, $80, $16, $84,	$AE, $19, $B8, $38
 		dc.b $13, $90, $18, $67, 2, $20, 5, $A6, $AB, $86, $8A,	$E5, $25, 5, $C1, $70, $1C, $A8, $B0, $B8
@@ -40727,7 +39371,6 @@ byte_30598:	dc.b 9,	1, 0, 0, 0, 0, 1, $F7, $DF, $7D, $F4, $45, $C5,	3, $17,	2, $
 		dc.b $78, $2A, $9B, 0, $2D, 2, 0, $5A, $7F, 1, $B9, $50, $A0, $23, $A0,	$40, $47, $8F, $2B, $81
 		dc.b $14, $A8, $10, 2, $E0, $21, 5, $C4, $40, $B, $8F, 3, $80, $DC, $97, $F0
 byte_30620:	dc.b $A, 3, 0, $2D, 0, 0, $4A, $88, $AB, $70, $13, $B8,	$40, $5D, $44, $56, $20, $81, $75, $71
-
 		dc.b $5A, 2, $E8, $B1, $70, 8, $A5, $68, $8B, $84, 1, $3B, 2, 8, $16, $D1, $17,	$2E, 0,	$5D
 		dc.b $60, $5D, $20, $81, $75, $C1, $7D,	$E0, $14, $8A, $F0, $43, $6A, $E3, $15,	$C0, $B, $6B, $8C, $94
 		dc.b $10, $2D, $E0, 5, $D6, $C6, $6B, $80, $52,	$2B, $C5, $14, 0, $BA, $B0, $D3, $70, 2, $DA, $E3
@@ -40769,7 +39412,6 @@ byte_30620:	dc.b $A, 3, 0, $2D, 0, 0, $4A, $88, $AB, $70, $13, $B8,	$40, $5D, $4
 		dc.b $F7, $79, $1C, $24, $7D, $DE, $47,	9, $1F,	$7D, $F7, $DF, $7D, $F7, $DF, $7D, $F7,	$DF, $7D, $F7
 		dc.b $DF, $7D, $F7, $DF, $67, $F8
 byte_30946:	dc.b 0,	$E4, $80, 4, 4,	$14, 6,	$25, $12, $36, $2C, $46, $2F, $56, $2B,	$67, $6B, $74, 5, $81
-
 		dc.b 4,	3, $16,	$34, $28, $F7, $88, 8, $DF, $16, $32, $27, $66,	$37, $6C, $47, $6D, $57, $74, $68
 		dc.b $F5, $75, $13, $89, 8, $F3, $18, $EC, $27,	$70, $78, $F2, $8A, 8, $F1, $18, $ED, $28, $E7,	$8B
 		dc.b 8,	$F0, $18, $E6, $28, $EF, $8C, 5, $F, $18, $EE, $8D, 4, 2, $17, $72, $28, $EA, $48, $F4
@@ -40929,18 +39571,14 @@ byte_30946:	dc.b 0,	$E4, $80, 4, 4,	$14, 6,	$25, $12, $36, $2C, $46, $2F, $56, $
 		dc.b $4A, $22, $2F, $88, $89, $3F, $12,	$88, $89, $44, $E2, $51, $11, $2C, $5E,	$51, $11, $7C, $44, $4A
 		dc.b $28, $22, $C2, $28
 byte_315A2:	dc.b 8,	2, 0, 0, 0, 0, 1, $F4, $83, $70, $46, 4, $6C, $2E, $31,	0, $60,	$B, 5, 0
-
 		dc.b $18, $42, $82, $40, 6, 2, $81, $E0, $28, $12, $27,	$8A, $A1, $E4, $AA, $78, $10, $4D, $60,	$36
 		dc.b $C, $13, $58, $E9,	$86, $D8, $EF, $AB, $FC, 0
 byte_315D4:	dc.b 8,	2, 0, 0, 0, 0, 1, $F4, $83, $70, $46, 4, $4A, $8A, $49,	$60, $B8, $C4, 1, $80
-
 		dc.b $2C, $14, 0, $61, $A, 9, 0, $18, $A, 7, $80, $A0, $48, $9E, $2A, $87, $92,	$A9, $E0, $41
 		dc.b $35, $80, $D8, $30, $4D, $63, $A6,	$1B, $63, $BE, $AF, $F0
 byte_31608:	dc.b 8,	0, 0, $B4, 0, 0, $3C, $4A, $76,	$87, $B8, 2, $FF, $C0
-
 byte_31616:	dc.b 8,	0, 0, $94, 0, $94, $3C,	$FF, $E0, 0
 byte_31620:	dc.b $80, $5B, $80, 4, 2, $14, 3, $24, 6, $35, $11, $45, $13, $56, $31,	$67, $67, $73, 0, $81
-
 		dc.b 4,	5, $17,	$69, $27, $6F, $82, 5, $12, $18, $E7, $27, $70,	$48, $EF, $83, 5, $E, $16, $30
 		dc.b $27, $6A, $38, $F4, $48, $F0, $78,	$E6, $84, 6, $2B, $17, $72, $86, 7, $6B, $18, $EB, $28,	$ED
 		dc.b $87, 5, $16, $18, $E8, $28, $F3, $88, 6, $2F, $38,	$F5, $89, 6, $2A, $17, $6D, $78, $F1, $8A
@@ -41016,7 +39654,6 @@ byte_31620:	dc.b $80, $5B, $80, 4, 2, $14, 3, $24, 6, $35, $11, $45, $13, $56, $
 		dc.b $7E, $2E, $91, $40, $D5, $C4, $E9,	$AE, 7,	6, $D2,	$DB, $1B, $DA, $D7, $F2, $72, $C9, $7F,	$30
 		dc.b $99, $EF, $CA, $4E, $C5, $C4, $E5,	$38, $16, $B, $3D, $2D,	9, $EC,	$60, 0
 byte_31BF8:	dc.b $80, $41, $80, 4, 7, $15, $13, $25, $16, $34, $A, $45, $17, $55, $18, $65,	$1A, $72, 0, $81
-
 		dc.b 7,	$77, $82, 5, $12, $17, $76, $84, 5, $19, $17, $7B, $86,	3, 2, $16, $3A,	$27, $7A, $37
 		dc.b $78, $48, $F8, $87, 4, 6, $14, 8, $26, $38, $35, $1B, $8C,	7, $79,	$8E, 6,	$39, $FF, 0
 		dc.b 0,	0, 3, $5C, $98,	$E4, 0,	$97, $9F, $C6, $FE, $2F, $CF, $E3, $7F,	$17, $2F, $2D, $DD, $37
@@ -41050,7 +39687,6 @@ byte_31BF8:	dc.b $80, $41, $80, 4, 7, $15, $13, $25, $16, $34, $A, $45, $17, $55
 		dc.b $75, $1D, $59, $A6, $DA, $69, $5D,	$A5, $9A, $69, $66, $9A, $59, $BB, $4B,	$38, $69, $67, $D, $2C
 		dc.b $E1, $A5, $92, $6D, $36, $96, $66,	$A2, $59, $AE, $B3, $40
 byte_31E84:	dc.b 0,	$24, $80, 6, $3A, $17, $72, $27, $76, $37, $78,	$47, $79, $57, $7A, $75, $1A, $81, 4, $A
-
 		dc.b $15, $17, $27, $77, $38, $F8, $82,	3, 2, $14, 9, $26, $38,	$83, 3,	0, $13,	3, $26,	$37
 		dc.b $84, 3, 1,	$15, $16, $85, 4, 8, $16, $33, $86, 6, $32, $17, $7B, $87, 6, $36, $88,	7
 		dc.b $73, $89, 5, $18, $FF, $D6, $B5, $AD, $6B,	$D0, $FF, 1, $1F, $E0, $C7, $A2, $35, $AD, $6B,	$D5
@@ -41096,7 +39732,6 @@ byte_31E84:	dc.b 0,	$24, $80, 6, $3A, $17, $72, $27, $76, $37, $78,	$47, $79, $5
 		dc.b $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF
 		dc.b $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF
 byte_32200:	dc.b 8,	$13, 0,	$3F, $80, $78, $86, 0, $29, $C0, $1E, $50, $A, 2, $C0, $4A, $90, $1A, $C, 8
-
 		dc.b $FD, 2, $E8, $5C, 8, $A0, $F0, $32, $84, $C0, $9E,	$19, 2,	$60, $57, $A, $A1, $30,	$32, $84
 		dc.b $C0, $9F, $DC, $32, 6, $C0, $EE, $15, $42,	$60, $75, $D, $80, $F4,	$1E, 6,	$D0, $D8, $11, 2
 		dc.b $20, $74, $E, $A3,	3, $7C,	$C0, 8,	$1F, 3,	$A0, $75, $F, $81, $F0,	$3A, $86, $D0, $F8, 1
@@ -41148,7 +39783,6 @@ byte_32200:	dc.b 8,	$13, 0,	$3F, $80, $78, $86, 0, $29, $C0, $1E, $50, $A, 2, $C
 		dc.b $9E, $7E, $B4, $14, $F2, $1F, $6A,	8, $81,	$10, $7D, $F, $A5, $96,	$F6, $DF, $D2, $7A, $19, $6F
 		dc.b $6D, $FD, 7, $2A, $7D, $50, $6A, 7, $F0, 0
 byte_325F2:	dc.b 7,	3, 0, 0, 0, $15, 2, $10, 0, 8, $A0, $10, $20, $80, $40,	$E6, $83, 0, $80, $50
-
 		dc.b $50, $80, $34, $40, $50, $40, $38,	$50, $60, $71, $81, $A0, $C0, $E3, $83,	1, $81,	1, $C, 7
 		dc.b $10, $18, $18, $F,	$C8, $30, $22, $19, 7, 3, $C1, $81, $40, $C0, $30, $3A,	$18, $C, 3, $41
 		dc.b $82, $20, $21, $82, $C2, $B, 2, 0,	$2C, 8,	8, $A0,	$20, $82, $FF, 2, $30, $C8, $A0, $4C
@@ -41176,7 +39810,6 @@ byte_325F2:	dc.b 7,	3, 0, 0, 0, $15, 2, $10, 0, 8, $A0, $10, $20, $80, $40,	$E6,
 		dc.b 8,	$1E, $30, $3C, $18, $1C, $59, $D8, $20,	$61, 0,	$40, $82, 1, $E9, $D2, 0, $D4, $9A, $40
 		dc.b $11, $B8, $35, $AB, $98, $3F, $80,	0
 byte_32802:	dc.b 7,	$13, 0,	0, 0, 0, 1, $20, $E0, $80, $50,	$40, $48, $20, $10, $1D, 8, $50, 8, $81
-
 		dc.b 1,	8, $30,	$E0, $80, $FC, $D0, $90, $24, 7, 1, $C0, $E8, $45, 0, $E4, $32,	$12, $44, $53
 		dc.b $82, $F9, $C1, $94, $5C, $1D, $46,	$D3, $83, $F9, $C2, $14, $7C, $25, $48,	$D3, $84, $F0, $D2, $98
 		dc.b $69, $6A, $30, $BD, $18, $47, $F4,	$31, $4B, $C2, $54, $8C, 3, 1, $43, $30, $D4, 5, 1, $43
@@ -41220,7 +39853,6 @@ byte_32802:	dc.b 7,	$13, 0,	0, 0, 0, 1, $20, $E0, $80, $50,	$40, $48, $20, $10, 
 		dc.b $99, $52, $35, $B5, $84, $D1, $10,	$E4, $EE, $F2, $6C, $97, $26, $C9, $72,	$5D, $95, $25, $D9, $5F
 		dc.b $C0, 0
 byte_32B4C:	dc.b $87, $1F, $29, $21, $22, $FD, $24,	$25, $26, $2D, $2F, $22, $3F, $C0, $F7,	$22, $2D, $22, $27, $28
-
 		dc.b $F5, $FE, $24, 8, $78, $26, $F7, $EE, $EC,	$30, $31, $21, 4, $C2, $E8, $F0, $F7, $FA, $CF,	8
 		dc.b $25, $33, $34, $21, $23, $CD, $F7,	$1F, $83, $E9, $25, $24, $35, $36, $21,	$D1, $25, $EF, 0, $8F
 		dc.b $F7, $FC, $F6, $FF, $26, $37, $38,	$39, $34, $7E, $E5, $F6, $29, $29, $A6,	$3A, $3B, $3C, $3D, $3E
@@ -41308,7 +39940,6 @@ byte_32B4C:	dc.b $87, $1F, $29, $21, $22, $FD, $24,	$25, $26, $2D, $2F, $22, $3F
 		dc.b $F8, $D, $AA, 0, $17, $50,	$F0, $E, $A0, $F8, $13,	0, $E8,	$4F, 0,	$F0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_3320C:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF, $FF, $F
-
 		dc.b $10, $11, $12, $13, $14, $15, $16,	$17, $18, $19, $1A, $1B, $1C, $1D, $1E,	$FF, $FF, $1F, $20, $21
 		dc.b $22, $23, $24, $25, $26, $27, $28,	$29, $2A, $2B, $2C, $2D, $2E, $FF, $FF,	$2F, $30, $31, $32, $33
 		dc.b $34, $35, $36, $37, $38, $39, $3A,	$3B, $3C, $3D, $3E, $FF, $FF, $3F, $40,	$41, $42, $43, $44, $45
@@ -41326,7 +39957,6 @@ byte_3320C:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF
 		dc.b $67, $FE, $F0, 9, $F6, $5A, $6B, $38, $72,	$73, $64, $FD, $F2, $F0, $FC, $6C, $FF,	$74, $75, $68
 		dc.b 9,	$A4, $3D, $F0, $FC, $2F, $2E, $F0, $F8,	$39, 0,	0, 0, $F0, 0, 0
 byte_3335C:	dc.b $6D, $6A, 0, $FF, $F8, $1E, $12, $FF, $F8,	9, $13,	$F0, $66, $FF, $F8, 9, $A, $DA,	$B4, $F0
-
 		dc.b $68, $69, $FE, $FF, $C, $F0, $6B, $6A, $69, $D3, $FE, $FF,	$E, $F0, $6D, $6E, $EF,	$FF, $10, $F0
 		dc.b $5B, $EE, $AA, $5C, $E0, $F8, $D, $58, $59, $E0, $F8, $1D,	$76, $77, $E0, $F8, $D,	$A0, $F8, $F
 		dc.b $F1, $F8, 9, $79, $CD, $E0, $F8, $35, $C0,	$FF, $C1, $C2, $10, $FE, $F0, $F8, $2F,	$4A, $1B, $B5
@@ -41399,7 +40029,6 @@ byte_3335C:	dc.b $6D, $6A, 0, $FF, $F8, $1E, $12, $FF, $F8,	9, $13,	$F0, $66, $F
 		dc.b $92, $FB, $D1, $31, $B8, $E, $13, $31, $B8, $E, $A, $AA, $2B, 4, $F8, $B, $FD, $8A, $24, $F8
 		dc.b $B, $BC, $F2, $F1,	$F8, $D, $6B, $10, $E0,	$F8, $F, 0, $F0, 0, 0, 0, 0, 0,	0, 0
 byte_338FC:	dc.b $FD, $FD, 1, $FF, $F8, $2E, 2, 3, 4, 1, 5,	6, $F9,	$F8, 9,	7, 8, 9, $A, $FB
-
 		dc.b $9F, $B, $C, $D, $F9, $FF,	$E, $F,	$10, $11, $12, $13, $14, $E, $15, $FF, $7F, $F8, $16, $15
 		dc.b $17, $18, $19, $1A, $1B, $1C, $1D,	$1E, $1F, $20, $1D, $21, $F8, $FF, $F7,	$22, $1D, $23, $24, $25
 		dc.b $26, $27, $28, $29, $2A, $2B, $24,	$FF, $FF, $2C, $2D, $2E, $2F, $30, $29,	$31, $32, $25, $33, $2F
@@ -41415,7 +40044,6 @@ byte_338FC:	dc.b $FD, $FD, 1, $FF, $F8, $2E, 2, 3, 4, 1, 5,	6, $F9,	$F8, 9,	7, 8
 		dc.b $1A, $E0, $F0, $1E, $F0, $F8, $E0,	$E0, $F0, $1F, $F0, $F8, $DE, 0, $F0, 0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_33A1C:	dc.b $B5, $95, 0, $FF, $F8, $FC, $FF, $F8, $80,	$16, $F1, $F8, $E, $99,	$F1, $F8, $1E, $D0, $F8, $B
-
 		dc.b $D4, $FD, $F1, $DF, $F8, $A, $F1, $F8, $3B, $FF, $F8, $4B,	$A7, $A8, $F2, $F8, $B,	$A5, $A5, $B2
 		dc.b $B3, $FD, $17, $A4, $A4, $F0, $F8,	9, $17,	$18, $19, $1A, $1B, $1C, $9B, $9C, $EE,	$F8, 9,	$B0
 		dc.b $AA, $E0, $FB, $9E, $EE, $FE, $D0,	$FF, $EE, $FD, $D0, $F8, $A, $32, $AB, $EE, $FD, $D0, $F8, $A
@@ -41464,7 +40092,6 @@ byte_33A1C:	dc.b $B5, $95, 0, $FF, $F8, $FC, $FF, $F8, $80,	$16, $F1, $F8, $E, $
 		dc.b $A, $FD, 0, $90, $A, $FD, $A2, $20, $1F, 0, 0, 0, $F0, 0, 0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0
 byte_33DCC:	dc.b $21, $8A, 1, $FF, $79, $FC, $FF, $FD, $50,	$5F, $F5, $FD, $7A, $F0, $F8, 9, $FF, $FC, $7B,	1
-
 		dc.b $7E, $7F, $E2, $FD, $57, $10, $F9,	$FD, $7C, $7D, $D0, $F8, $A, $F8, $FC, $DB, $C7, $FF, $55, $D4
 		dc.b $F5, $E2, $FE, $F9, $F8, $A, $D0, $F8, $B,	$D5, $DB, $FE, $D0, $F8, $E, $DF, $BF, 2, 3, 4
 		dc.b 1,	5, 6, $F9, $F8,	9, 7, 8, 9, $A,	$B, $C,	$D, $FF, $F9, $F9, $FF,	$E, $F,	$10
@@ -41484,7 +40111,6 @@ byte_33DCC:	dc.b $21, $8A, 1, $FF, $79, $FC, $FF, $FD, $50,	$5F, $F5, $FD, $7A, 
 		dc.b $FF, $74, $75, $68, $9D, $F0, $FC,	$64, 5,	$8F, $8E, $F0, $F8, $99, $B6, $FF, $F8,	$1E, 0,	$F0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_33F3C:	dc.b 9,	$13, 0,	$29, 0,	0, $4E,	$BC, 0,	$A1, $4A, 2, $50, $B1, 1, $94, $60, $E,	$9C, $A
-
 		dc.b $A3, $46, 6, $69, $C0, $7D, $18, $1B, $A3,	0, $E8,	$D1, $81, $DE, $54, $2D, 3, $F4, $31, $52
 		dc.b 8,	$28, $C0, $9D, $18, 3, $EF, $41, $20, 1, $41, $74, $15,	$41, $80, 1, $41, $D4, $1B, $4E
 		dc.b 8,	$68, $C0, $DD, $18, 7, $A7, 4, $A7, $83, $44, $A, $C1, $A2, 5, $E1, $E1, $23, $E0, $78
@@ -41542,7 +40168,6 @@ byte_33F3C:	dc.b 9,	$13, 0,	$29, 0,	0, $4E,	$BC, 0,	$A1, $4A, 2, $50, $B1, 1, $9
 		dc.b $F9, $A7, $1F, $48, $D2, $F, $EE, $46, 0, $20, $22, 4, $8F, $12, $FF, $10,	$34, $78, $88, $21
 		dc.b $7F, $7F
 byte_3439E:	dc.b 7,	0, 0, 0, 0, 1, 2, $10, 0, $12, $2D, $20, $11, 5, $10, $51, $80,	$44, 4,	$89
-
 		dc.b $AA, $58, $A8, 9, $40, $40, $A8, $C, $40, $80, $CC, $38, $2E, 0, $80, $E0,	$18, $E, 0, $82
 		dc.b $E0, 8, $E, 1, $40, 8, $A,	$C4, $E1, $1A, $94, $4A, $70, $C0, $A3,	$10, $E, $F2, $22, $44
 		dc.b $91, $22, $2C, $49, 0, $51, $88, 7, $78, $51, $62,	$42, $87, $16, $24, $6C, $51, $A8, $C6,	$83
@@ -41550,19 +40175,16 @@ byte_3439E:	dc.b 7,	0, 0, 0, 0, 1, 2, $10, 0, $12, $2D, $20, $11, 5, $10, $51, $
 		dc.b $8E, $1A, $14, $68, $93, $46, $A8,	$34, $6C, $9E, $3F, $7E, $1C, $F9, $75,	$E9, $BF, $B7, $14, $60
 		dc.b $AB, $83, $A, $8C,	$48, $30, $B0, $C5, $FE, 0
 byte_34420:	dc.b 7,	1, 0, 0, 0, 0, 1, $22, $F0, $C1, $61, $84, $F, $C, $76,	$19, 0,	$F0, $C9, $61
-
 		dc.b $94, $F, $C, $B6, $19, $80, $F0, $CD, $61,	$9C, 6,	4, $F0,	$18, $67, $B9, $CF, $8F, $F, $8F
 		dc.b 1,	$D0, $7E, $7A, $7E, $7E, $80, 8, $44, $3C, 1, $51, $A2,	$10, $8F, $10, $C8, $24, $78, $C1
 		dc.b $86, $A3, $C4, $42, $39, $1E, $31,	$E2, $28, $F1, $14, $92, $47, $8C, $98,	$AA, $3C, $46, $25, $91
 		dc.b $E3, $2E, $32, $8F, $11, $C9, $A4,	$78, $CD, $8E, $A3, $C4, $7E, $79, $1E,	3, $C9,	$9E, $79, $FF
 		dc.b $C0, 0
 byte_34486:	dc.b 5,	$13, $80, 1, 0,	0, $4C,	8, $14,	$20, $74, $A2, $C2, $E2, $C1, $E1, $F, $D, $26,	$1A
-
 		dc.b $60, $F0, $D4, $61, $AA, 1, 0, $3E, $45, $C0, $D0,	$C1, $51, 0, $55, $D5, $D6, $40, $D0, $C1
 		dc.b $51, 6, $8D, $18, $DE, $70, $34, $30, $54,	$48, $E1, $AE, $C3, $5D, $86, $C3, $9C,	$D, $C,	$15
 		dc.b $10, $10, $24, $40, $E9, $25, $A5,	$A5, $A3, $A3, $FC, 0
 byte_344CE:	dc.b 7,	3, 0, 0, 0, $A,	2, $10,	0, $18,	0, $10,	$60, 0,	$80, $A2, 3, $E8, 1, 2
-
 		dc.b $80, $40, $20, $30, $30, $81, $BB,	0, $C0,	$C0, $60, $28, 4, $C, 6, 2, 0, $1C, $18, $20
 		dc.b $7C, $28, $98, $20, $70, $10, 3, $B0, $24,	$16, 9,	$44, $A2, $D1, $28, $B4, $F8, $82, $C1,	$20
 		dc.b $F4, $44, $A2, $D1, $A8, $C0, $50,	8, 3, 1, $20, 7, $74, $8A, $38,	$14, $8F, 5, 1,	$C0
@@ -41576,7 +40198,6 @@ byte_344CE:	dc.b 7,	3, 0, 0, 0, $A,	2, $10,	0, $18,	0, $10,	$60, 0,	$80, $A2, 3,
 		dc.b $20, $61, $25, $92, 7, $96, $52, $2C, $14,	$8C, 5,	1, $E6,	$A8, $94, $46, $D6, $90, $1C, $7F
 		dc.b $E0, 0
 byte_345C0:	dc.b $DD, $61, 0, $FF, $F8, $88, $33, $34, $F0,	$F8, $D, $38, $39, $FC,	$D6, $D7, $87, $FB, $F1, $FF
-
 		dc.b $35, $38, $FC, $DA, $DB, $DC, $F0,	$FF, $3A, $38, $3D, $FF, $FF, 0, $E2, $E3, $DF,	0, $20,	$21
 		dc.b $22, $23, $24, $25, $26, $27, $D3,	$44, $40, $5F, $95, $E4, $E6, $E7, $E1,	1, 2, $FE, $F8,	$E
 		dc.b $FF, $F8, $E, $21,	$F8, $78, $35, $F8, $A,	$A4, $DD, $FF, $35, $F8, $B, $FF, $E0, $DB, $D1, $F8
@@ -41614,7 +40235,6 @@ byte_345C0:	dc.b $DD, $61, 0, $FF, $F8, $88, $33, $34, $F0,	$F8, $D, $38, $39, $
 		dc.b 1,	$98, $1E, 0, $C0, $AE, $C0, $EE, $AA, $A, $FE, $F8, 9, $11, $B0, $E, 6,	$98, $A, $FE
 		dc.b $FC, $E0, $F8, $F,	0, $F8,	$1F, 0,	$F0, 0,	0, 0, 0, 0, 0, 0
 byte_348A0:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF, $FF, $F
-
 		dc.b $10, $11, $12, $13, $14, $15, $16,	$17, $18, $19, $1A, $1B, $1C, $1D, $1E,	$FF, $FF, $1F, $20, $21
 		dc.b $22, $23, $24, $25, $26, $27, $28,	$29, $2A, $2B, $2C, $2D, $2E, $FF, $DF,	$2F, $30, $31, $32, $33
 		dc.b $34, $35, $36, $37, $38, $39, $3A,	$3B, 0,	$FF, $F8, $C2, $2A, $8B, 1, $FF, $F8, $35, $CB,	$F1
@@ -41627,7 +40247,6 @@ byte_348A0:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF
 		dc.b $F9, $A, 7, $FB, $3B, $3B,	$3A, 0,	$F8, $6F, 0, $F0, 0, 0,	0, 0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0
 byte_34980:	dc.b $AD, $A1, 0, $FF, $F8, $CE, $1F, $FF, $F8,	$E, $20, $F8, $CF, 2, $FF, 3, $F7, $DE,	$FE, $F8
-
 		dc.b $A, 4, $20, $21, $FE, $F8,	$C, 6, $22, $23, $FE, $F8, $C, 8, $24, $25, $FE, $F8, $C, $DB
 		dc.b $64, $A, $26, $27,	$FE, $F8, $C, $C, $45, $F8, $6A, 1, $4F, $F0, $F8, $A, 5, $32, $A1, $4F
 		dc.b $F0, $F8, $A, 7, $4F, $D9,	$90, $50, $27, $FC, $F7, 9, $4F, $D9, $27, $FC,	$48, $E8, $F7, $B
@@ -41656,7 +40275,6 @@ byte_34980:	dc.b $AD, $A1, 0, $FF, $F8, $CE, $1F, $FF, $F8,	$E, $20, $F8, $CF, 2
 		dc.b $FF, $FE, $2A, $E9, $F0, $F8, $C, $2B, $D6, $FF, $FE, $2A,	$E9, 0,	$A0, $C, $1D, $E0, $F, 2
 		dc.b 0,	$D, $B8, $F, 0,	$F0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0
 byte_34BB0:	dc.b $ED, $8A, 1, $FF, $F8, $F,	2, $FF,	$F8, $D, 1, 0, $FF, $F8, $D, $F0, $F8, $78, $CE, $CE
-
 		dc.b $65, $F0, $F8, $2C, 3, 4, $FE, $F0, $FF, 5, 6, $92, $2A, $FE, $F0,	$FD, $E4, 5, $F8, $10
 		dc.b 1,	$F8, $11, $AC, $FC, $FF, $F8, 9, 8, $2A, $CB, $F0, $F8,	$D, $AF, $51, $F8, $E, $FF, $F8
 		dc.b $80, $A, $FC, $6A,	$50, $24, $F8, $FD, $A,	$FC, 6,	$F0, $F8, $FE, $FF, $F8, $4E, $85, $55,	$95
@@ -41711,7 +40329,6 @@ byte_34BB0:	dc.b $ED, $8A, 1, $FF, $F8, $F,	2, $FF,	$F8, $D, 1, 0, $FF, $F8, $D,
 		dc.b $C2, $D8, $D, $24,	$FC, $C0, $B8, $41, $21, $80, $23, 2, 0, $FF, $F8, $19,	0, $F0,	0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_34FE0:	dc.b $61, $DF, 1, $FF, 2, 3, $FC, $F8, $A, 4, 5, 5, 6, $FC, $F8, $B, $83, $DF, 7, 8
-
 		dc.b 9,	$FF, $FB, $F8, $A, $A, $B, $C, $3F, $C,	$FB, $F8, $A, $EF, $AB,	$D, $E,	$F, $40, $11
 		dc.b $FB, $F8, $A, $12,	$13, $13, $14, $FC, $F8, $B, $A4, $F8, $B, $F4,	$D2, $A0, $F8, $13, $DC, $15
 		dc.b $16, $17, $18, $F8, $FE, $DC, $19,	$4B, $6F, $1A, $1B, $1C, $F8, $FE, $DC,	$1D, $1E, $1F, $20, $F8
@@ -41732,7 +40349,6 @@ byte_34FE0:	dc.b $61, $DF, 1, $FF, 2, 3, $FC, $F8, $A, 4, 5, 5, 6, $FC, $F8, $B,
 		dc.b $2E, $A9, $FC, $B8, $AA, $35, $31,	$32, $A4, $FE, $FC, $FE, $A4, $FE, $FC,	$FE, $AA, $4A, $A4, $FE
 		dc.b $FC, $FE, $10, $F2, $B0, $E8, $B, $10, $F5, $B0, $EF, $10,	$FD, $2C, 0, $FF, $10, 0, $F0, 0
 byte_35170:	dc.b $DD, $DF, 0, $FF, $F8, $83, $D6, $D7, $F1,	$F8, $C, $DA, $DB, $DC,	0, $D8,	$D9, $F0, $F8, 9
-
 		dc.b $1F, $FC, $E0, $DB, $DF, 0, $DD, $DE, $FC,	$FF, $FE, $E4, $E5, $E1, $E4, $F3, $AE,	$E6, $E7, $E1
 		dc.b $F4, 1, 2,	$FE, $F8, $D, $D, 5, $FE, $F8, $D, $83,	$93, $79, $F8, $2B, $2C, $2D, $FF, $F2
 		dc.b $F8, 9, $2E, $2F, $FE, $93, $93, $F0, $F8,	9, $30,	$31, $FE, $F0, $F8, 9, $32, $88, $FF, $28
@@ -41741,7 +40357,6 @@ byte_35170:	dc.b $DD, $DF, 0, $FF, $F8, $83, $D6, $D7, $F1,	$F8, $C, $DA, $DB, $
 		dc.b $F0, $FA, 0, $F8, $3F, 1, 0, 0, $F0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 		dc.b 0,	0, 0, 0
 byte_35200:	dc.b 7,	$1F, $40, $3F, $C0, 0, $4E, $A6, 0, $FE, $C0, $2C, 6, $C0, $4C,	5, $C8,	$1C, 6,	$C8
-
 		dc.b $3C, 7, $C0, $C, 8, $C0, $7C, 0, $C8, $7C,	$87, $C8, $8C, $38, $13, $D3, 2, $B2, $13, $22
 		dc.b $30, $27, 1, $29, $60, $56, $1C, 9, $46, $8E, 5, $A3, $87,	$23, $30, $E4, $67, $1C, $88, $C0
 		dc.b $9A, $98, $1B, $EB, $23, $70, $4B,	$23, $F0, $3F, 4, $30, $4F, 4, $B0, $53, $23, $F0, $57,	$24
@@ -41760,7 +40375,6 @@ byte_35200:	dc.b 7,	$1F, $40, $3F, $C0, 0, $4E, $A6, 0, $FE, $C0, $2C, 6, $C0, $
 		dc.b $23, $73, $B3, $43, $32, $33, $3B,	$32, $33, $23, $74, $33, $23, $73, $A0,	2, 0, $22, 2, $21
 		dc.b $A0, 4, 4,	0, 2, 2, $21, $FF
 byte_3535C:	dc.b 7,	3, 0, 0, 0, 1, 2, $10, 0, 4, $80, $40, 4, $81, $48, $E,	$48, $50, $A, $D
-
 		dc.b $2E, $60, $54, $30, $14, 2, 7, 4, $12, $50, 0, $A0, $C0, 3, $81, $C5, 4, $89, 3, $C2
 		dc.b $28, 8, 1,	$44, $21, $40, $28, $50, $A, $C, 4, $3A, $43, 0, $20, $34, $58,	4, $18,	0
 		dc.b $B0, $50, $E6, $8B, 0, $83, $41, $C2, $F7,	8, $A1,	$D1, $21, $50, $58, 5, $18, 1, $19, 0
@@ -41775,7 +40389,6 @@ byte_3535C:	dc.b 7,	3, 0, 0, 0, 1, 2, $10, 0, 4, $80, $40, 4, $81, $48, $E,	$48,
 		dc.b $42, $62, $55, $2A, $CC, $66, $45,	$52, $AA, $30, $A, $A0,	$71, $D9, $34, 4, $E4, $5A, $6D, $36
 		dc.b $69, $13, $B9, $CC, $49, $F5, $49,	$88, $10, $49, $F0, $4A, $A0, $70, $27,	$C3, $2A, $C1, $26, $FF
 byte_35474:	dc.b 8,	$17, 0,	0, 0, $A, 2, $10, 0, 9,	0, 0, $80, $A2,	0, $80,	$40, 0,	$61, $E8
-
 		dc.b $80, $26, $10, 7, $E0, 1, $14, $C0, 7, 8, $87, $72, $10, $41, $F, 0, $A0, $30, $88, $62
 		dc.b $1D, $80, $40, 2, $C0, $30, 2, $40, $28, $43, 4, $2C, $74,	2, $EE,	0, $A0,	$E, 0, $C0
 		dc.b $10, $23, $20, $14, $23, $62, $35,	$4C, 0,	$69, $C0, $E6, $19, $1D, $C3, $23, $F4,	$68, $7A, $8C
@@ -41803,7 +40416,6 @@ byte_35474:	dc.b 8,	$17, 0,	0, 0, $A, 2, $10, 0, 9,	0, 0, $80, $A2,	0, $80,	$40,
 		dc.b $48, $29, $84, $F,	$E1, $81, 1, 1,	$83, $30, $92, $13, $21, $42, $11, $21,	$22, $17, $21, $42
 		dc.b $15, $21, $22, $17, $21, $82, $15,	$80, $42, $DF, $C0, 0
 byte_35688:	dc.b 7,	1, 0, 0, 0, 1, 2, $10, 0, $A, 2, $88, 9, $F0, $84, $47,	$C, $1A, $10, $40
-
 		dc.b $81, $40, $14, $41, $47, $C, $52, $1D, $A1, $A2, $21, $E0,	$80, $61, $60, $92, $D,	$11, $BD, $89
 		dc.b $C9, $4A, $CA, $47, $80, $C8, $C8,	$46, $C6, 0, $C7, $23, $C2, $2D, $10, $10, 9, 1, $60, 9
 		dc.b $83, $F8, $4E, $7E, $86, $82, $72,	$6E, $7A, $76, $66, $62, $68, 6, $58, 6, $5D, $10, $10,	$33
@@ -41816,7 +40428,6 @@ byte_35688:	dc.b 7,	1, 0, 0, 0, 1, 2, $10, 0, $A, 2, $88, 9, $F0, $84, $47,	$C, 
 		dc.b $AC, $A8, $A8, $6A, $2D, $EA, $6E,	$60, $6E, $E0, 0, $98, $22, $A,	$20, $40, $60, 6, $B, 0
 		dc.b $1D, $98, $D8, $18, $38, $B8, $77,	$F7, $91, $E1, $60, $97, $F0, 0
 byte_35772:	dc.b $7D, $10, 0, $FF, $F8, $8E, $30, $31, $32,	$33, $FC, $FA, $FC, $A0, $EF, $FC, $FE,	2, $FF,	$F8
-
 		dc.b $E, $20, $21, $21,	$20, $FC, $F8, $B, $24,	$FB, $3A, $25, $26, $27, $FC, $F8, $B, $35, $36, $37
 		dc.b $34, $FC, $F8, $B,	$47, $F8, $68, $48, $48, $B5, $36, $4F,	$33, $F0, $FF, 1, $50, $FC, $F0, $FF
 		dc.b $C, $4E, $FC, 0, $10, $54,	$2C, $D8, $D3, $E, $4E,	$FC, $D9, $FD, $38, $40, $FF, $2F, $2A,	$2B
@@ -41855,7 +40466,6 @@ byte_35772:	dc.b $7D, $10, 0, $FF, $F8, $8E, $30, $31, $32,	$33, $FC, $FA, $FC, 
 		dc.b $F8, $B, $F0, $E0,	$F8, $11, $D, 3, $EB, $AA, 0, $E0, $FE,	0, $90,	$10, $FF, $88, $E, 0
 		dc.b $F8, $3F, 0, $F0, 0, 0, 0,	0, 0, 0, 0, 0
 byte_35A62:	dc.b $E1, $D1, 1, $FF, 2, 3, 4,	5, $F9,	$F8, $FD, $BF, $FF, 6, 7, 8, 9,	$A, $B,	$C
-
 		dc.b $F8, $FE, $D, $E, $F, $10,	$11, $12, $13, $FE, $FB, $14, $F8, $FE,	$15, $16, $17, $18, $19, $1A
 		dc.b $1B, $1C, $F8, $FE, $1D, $1E, $1F,	$EF, $BF, $20, $21, $22, $23, $24, $F8,	$FE, $25, $26, $27, $28
 		dc.b $29, $2A, $2B, $2C, $FF, $FE, $F8,	$FE, $2D, $2E, $2F, $30, $31, $32, $33,	$34, $F8, $FE, $35, $36
@@ -41863,7 +40473,6 @@ byte_35A62:	dc.b $E1, $D1, 1, $FF, 2, 3, 4,	5, $F9,	$F8, $FD, $BF, $FF, 6, 7, 8,
 		dc.b $45, $CA, $DC, $FF, $46, $FA, $F8,	$47, $FF, $F8, $1E, $8A, 2, 0, $FF, $F8, $3E, 0, $F8, $FC
 		dc.b $FF, 0, $F0, 0, 0,	0, 0, 0
 byte_35AE2:	dc.b $87, $13, $68, $69, $67, $FD, $18,	$1A, 0,	$FF, $2C, $1F, $F9, $67, $69, $F1, $F8,	$A, $EF, $19
-
 		dc.b $1A, $18, $C4, $2F, $FD, $F1, $FD,	$EF, $19, $22, $25, $20, $25, $F1, $FF,	$AC, $F7, $FF, $26, $21
 		dc.b $F0, $F8, $E, $E0,	$F8, $6F, 1, 2,	3, $FD,	$F8, $C, $D, $C, $2A, $BA, $24,	$FD, $F8, $C
 		dc.b $D4, $F8, $A, $FF,	$F8, $14, $11, $FD, $F8, $A, $67, $69, $98, $D0, $F1, $F8, $B, $FE, $18, 1
@@ -41927,7 +40536,6 @@ byte_35AE2:	dc.b $87, $13, $68, $69, $67, $FD, $18,	$1A, 0,	$FF, $2C, $1F, $F9, 
 		dc.b 1,	$DE, $D7, 0, $D0, $D, $CD, $D2,	0, $D0,	9, $BE,	$A2, $A4, $E9, 0, $F8, $21, 0, 0
 		dc.b 0,	$F0, 0,	0, 0, 0, 0, 0
 byte_35FC2:	dc.b $3F, $F8, 1, 1, 2,	3, 4, 5, $FA, $F8, $FF,	6, 7, 8, $FB, $EF, 9, $A, $B, $F8
-
 		dc.b $FF, $C, $D, $E, $F, $10, $11, $12, $13, $F8, $FE,	$14, $BF, $FF, $15, $16, $17, $18, $19,	$1A
 		dc.b $1B, $F8, $FE, $1C, $1D, $1E, $1F,	$20, $21, $22, $FE, $FB, $23, $F8, $FE,	$24, $25, $26, $27, $28
 		dc.b $29, $2A, $2B, $F8, $FE, $2C, $2D,	$2E, $EF, $EF, $2F, $30, $31, $32, $33,	$F8, $FF, $34, $35, $36
@@ -41936,7 +40544,6 @@ byte_35FC2:	dc.b $3F, $F8, 1, 1, 2,	3, 4, 5, $FA, $F8, $FF,	6, 7, 8, $FB, $EF, 9
 		dc.b $F8, $FE, $56, $14, $46, $FF, $F8,	$1B, 0,	$FF, $F8, $1E, 0, $F8, $FC, $FF, 0, $F0, 0, 0
 		dc.b 0,	0, 0, 0
 byte_36052:	dc.b $FD, $41, $1B, $FF, $FD, $18, $19,	$1A, $67, $68, $69, $FD, $F0, $FF, $40,	$90, $F1, $F2, $FD, $E0
-
 		dc.b $F8, $B, $2C, $A9,	$EF, $E0, $F8, $A, $68,	$D0, $F8, $C, $C0, $D0,	$F8, $B, $B1, $FC, $C0,	$7A
 		dc.b $D0, $F8, 9, $E0, $FD, $F0, $FE, $FF, $F8,	$57, 2,	3, 1, $26, $3A,	$FD, $F4, $F6, $C, $24
 		dc.b $D, $66, 0, $FD, 1, $F0, $6C, $FE,	$25, $56, $F1, $FC, $E0, $FC, $FF, $1B,	$FD, $F8, $A, $F2
@@ -41978,7 +40585,6 @@ byte_36052:	dc.b $FD, $41, $1B, $FF, $FD, $18, $19,	$1A, $67, $68, $69, $FD, $F0
 		dc.b $55, $ED, $E8, $A,	$D0, $A3, $F8, 9, $B, $F6, $A, $F8, $30, $FD, $F8, 9, 0, $F8, $1F, 1
 		dc.b 0,	0, $F0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0
 byte_36382:	dc.b $EF, $F0, $26, $2F, $21, $22, $FE,	$FC, $23, $20, $FC, $26, $27, $26, $48,	$8C, $37, $F9, $F5, $FE
-
 		dc.b 1,	$B2, $F0, $2F, $F3, $FE, $5E, $FC, $98,	$A5, $E0, $FD, $EF, $60, $FC, $E0, $FC,	$D7, $48, $56
 		dc.b $5D, $E4, $FC, $C0, $FE, $60, $FC,	$FC, $C0, $FD, $D1, 8, $E0, $F8, $16, $BC, $A0,	$FE, $63, $FA
 		dc.b $9E, $91, $FC, $E0, $FC, $2B, $5F,	$5F, $9C, $FE, $8F, $32, $C0, $33, $61,	$61, $E6, $6D, $FC, $E0
@@ -41997,7 +40603,6 @@ byte_36382:	dc.b $EF, $F0, $26, $2F, $21, $22, $FE,	$FC, $23, $20, $FC, $26, $27
 		dc.b $EC, $E0, $6C, $B3, $FE, $33, $62,	$E0, $FC, $64, $E0, $FE, $64, $E0, $2A,	0, $40,	$E8, $11, $E0
 		dc.b $EE, 0, $F8, $33, 0, $F0, 0, 0, 0,	0, 0, 0
 byte_364E2:	dc.b $85, $EB, 0, $FF, $F8, $FC, $FF, $19, $1A,	$18, $FD, $FD, $F9, $FC, $20, $DF, $63,	$21, $22, $21
-
 		dc.b $25, $20, $25, $E3, $FC, $26, $27,	$26, $F1, $22, $D1, $60, $F0, $F8, $B, $F1, $E0, $F8, $1D, $23
 		dc.b $BE, $E0, $F8, $1B, $20, $A8, $E8,	$E0, $23, $E0, $F8, $1C, $A0, $F8, $1E,	$C0, $E0, $F8, $C, 1
 		dc.b $85, $5B, 2, 3, $FD, $F8, $A, $FC,	$D, $C,	$24, $FD, $F8, $B, $24,	0, $F8,	$29, $89, $F8
@@ -42030,7 +40635,6 @@ byte_364E2:	dc.b $85, $EB, 0, $FF, $F8, $FC, $FF, $19, $1A,	$18, $FD, $FD, $F9, 
 		dc.b $EA, $E4, 0, $C8, 9, $1E, $EB, 0, $C8, $1D, $FE, $F0, $C, $23, $B0, $1F, 0, $F0, 0, 0
 		dc.b 0,	0, 0, 0
 byte_36752:	dc.b $85, $2B, 0, $FF, $F8, $FC, $FF, $67, $68,	$69, $FD, $F8, $C, $F2,	$F8, $D, $DC, $C3, $FD,	$18
-
 		dc.b $19, $1A, $FD, $F8, $C, $20, $21, $22, $FE, $28, $19, $F2,	$29, $2A, $F8, $FE, $23, $FB, $30, $E3
 		dc.b $27, $31, $32, $23, $EF, $33, $42,	$43, $44, $20, $F7, $A4, $67, $E0, $E9,	$2B, $4B, $4C, $4D, $D9
 		dc.b $A4, $47, $E0, $F8, $33, $52, $53,	$54, $E0, $80, $7C, $FE, $E0, $3E, $E0,	$57, $58, $59, $3E, $61
@@ -42089,7 +40693,6 @@ byte_36752:	dc.b $85, $2B, 0, $FF, $F8, $FC, $FF, $67, $68,	$69, $FD, $F8, $C, $
 		dc.b $FE, $F1, $F8, $E,	$67, $E0, $F8, $CF, $2A, 0, $EF, $F0, $F, $E0, $F0, $F,	$E3, $78, $DF, 0
 		dc.b $F0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 byte_36BD2:	dc.b $85, 7, 0,	$FF, $F8, $FC, $FF, $67, $68, $68, $69,	$FC, $EF, $F, $FD, $F8,	9, $18,	$19, $1A
-
 		dc.b $FD, $F8, $C, $21,	$22, $28, $29, $2A, $20, $F8, $29, $FA,	$FE, $30, $31, $31, $32, $20, $F9, $32
 		dc.b $44, $2A, $F3, $23, $ED, $F0, $21,	$E0, $FE, $F2, $48, $EF, $E0, $20, $23,	$E0, $F6, $81, $E2, $E0
 		dc.b $FC, $23, $C0, $F8, $A, $45, $46, $46, $47, $C0, $F8, $81,	$E0, $F1, $22, $4E, $4F, $4F, $E7, 2
@@ -42129,11 +40732,9 @@ byte_36BD2:	dc.b $85, 7, 0,	$FF, $F8, $FC, $FF, $67, $68, $68, $69,	$FC, $EF, $F
 		dc.b $F8, $D, $E0, $F8,	$2F, $71, $E8, $10, $62, $E8, $1A, $E0,	$F8, $63, 0, $F0, 0, 0,	0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_36ED2:	dc.b $95, $D7, 0, $FF, $F8, $FC, $FF, $F8, $FC,	$FF, $69, $67, $FE, $F8, $D, $F1, $F8, $E, $2E,	$A9
-
 		dc.b $69, $E0, $F8, $E2, $18, $1A, $F0,	$F0, $A, $EC, $E0, $F0,	$E, $E0, $F8, $DC, 0, 0, 0, $F0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_36F02:	dc.b $85, $77, 0, $FF, $F8, $FC, $FF, 3, 3, $21, $22, $FE, $FC,	$23, $25, $9A, $12, $F0, 2, 3
-
 		dc.b $F5, $20, $EF, $93, $55, $F0, $E0,	$F1, $FC, $21, $E0, $F8, 9, $ED, $FC, $E0, $F8,	$C, $B4, $20
 		dc.b $FC, $C0, $F8, $26, $20, $F1, $FC,	$FA, $E0, $FF, $A9, 6, $F3, $C0, $F8, $10, $E0,	$F8, $C, $C0
 		dc.b $F8, $C, $80, $F8,	$D, 1, $EE, $AF, $C5, $FD, $F8,	$B, $C,	$24, $D, $FD, $F8, $C, $FF, $F0
@@ -42142,7 +40743,6 @@ byte_36F02:	dc.b $85, $77, 0, $FF, $F8, $FC, $FF, 3, 3, $21, $22, $FE, $FC,	$23,
 		dc.b $FC, $E0, $FC, 0, $FD, $C0, $F8, $D, $56, $C9, $EF, $E0, $FE, $C0,	$F8, $C, $C2, $FF, $A0,	1
 		dc.b $F8, $E, $56, 0, 1, 1, $F8, $E, $24, $23, $E8, $1F, 0, $F0, 0, 0, 0, 0, 0,	0
 byte_36FA2:	dc.b 8,	$13, 0,	0, 0, 0, 1, $40, $51, $C2, $40,	$A8, $80, $1C, $2C, $B,	$B, 2, $46, $8A
-
 		dc.b 1,	$47, 9,	2, $A2,	$80, $40, $43, $BB, 3, 0, $60, 0, $81, $90, $34, 6, 0, $18, $1A
 		dc.b $3C, $10, $1A, $40, $70, 0, $88, $C1, 0, $80, $21,	4, 2, 5, 0, $84, 1, 0, $84, $83
 		dc.b 1,	5, 1, 4, 2, $40, $61, $40, $41,	0, $88,	$73, $20, $A0, $10, 2, $10, $40, $20, $80
@@ -42192,7 +40792,6 @@ byte_36FA2:	dc.b 8,	$13, 0,	0, 0, 0, 1, $40, $51, $C2, $40,	$A8, $80, $1C, $2C, 
 		dc.b $4C, $D, $51, 1, $5D, $D0,	$50, $C, 0, $80, $11, $85, 0, $D0, 8, 1, $11, $E7, 8, $69
 		dc.b $C, $24, $84, $BF,	$C0, 0
 byte_37368:	dc.b 7,	3, 0, 1, 0, 1, 1, $23, $C0, $40, 4, $F0, $80, $90, $E2,	3, 3, $23, $C4,	$E
-
 		dc.b $A, $47, $88, $2C,	$1C, $8F, $E0, $78, $4A, 9, 5, $81, $40, $E1, $10, $98,	$34, $1E, $19, $D
 		dc.b $85, $42, $E2, $1D, $62, $30, $E8,	$7C, $4C, 3, $12, $47, $80, $11, $1E, $20, $50,	$42, $3E, $C1
 		dc.b $20, $C0, $10, $C,	$1A, $10, 3, 1,	$C2, $21, $30, $50, $2C, $6E, $49, $A4,	$AA, $50, $14, $40
@@ -42214,7 +40813,6 @@ byte_37368:	dc.b 7,	3, 0, 1, 0, 1, 1, $23, $C0, $40, 4, $F0, $80, $90, $E2,	3, 3
 		dc.b $C2, $DD, $47, $B,	$6D, $1E, $2D, $92, $C2, $38, $5A, $E8,	$E1, $6A, $A3, $85, $A6, $8E, $16, $8A
 		dc.b $7C, $62, $60, $18, $60, $F, $E0, 0
 byte_37500:	dc.b 7,	$13, 0,	0, 0, 0, 1, $21, $78, $80, $84,	$1D, $48, $1F, $F5, $17, 6, $51, $94, $45
-
 		dc.b $F, $45, $51, $28,	$18, 8,	6, $81,	$C0, $23, 6, $47, $11, $B5, $20, $FE, $D4, $9C,	$29, $4A
 		dc.b $52, $14, $7D, $25, $48, $D9, 5, $78, $93,	0, $FD,	$38, $83, $D, $43, $86,	$A3, $A2, $8B, $D1
 		dc.b $45, $68, $A3, $74, $51, $9E, $8C,	$C2, $3E, $8E, $A3, $C1, $22, $34, $42,	$44, $68, $84, $A8, $D1
@@ -42234,7 +40832,6 @@ byte_37500:	dc.b 7,	$13, 0,	0, 0, 0, 1, $21, $78, $80, $84,	$1D, $48, $1F, $F5, 
 		dc.b $A1, $68, $51, $16, $6D, $15, $67,	$4A, $34, $A1, $E, $F2,	$95, $A5, $A, $52, $94,	$85, $A3, $49
 		dc.b $52, $36, $45, $3A, $22, $CD, $31,	$77, $F8, 0
 byte_37672:	dc.b 7,	3, 0, 0, 0, $32, 2, $10, 0, 8, $A0, $10, $20, $80, $40,	$84, 1,	$80, 3,	2
-
 		dc.b 8,	6, 0, $10, 8, $40, $11,	$20, $82, 1, $80, 8, 2,	8, $30,	$38, $20, $1E, $48, $60
 		dc.b 8,	$3C, 8,	$20, $C8, $20, $88, $28, $C8, $20, $8C,	$28, $CE, $60, $84, $3A, $29, $12, $C, 0
 		dc.b $40, $90, $30, $E0, $FE, 4, 6, $83, $40, $80, $42,	$51, $26, $95, 4, 6, $A0, $E0, $80, $DA
@@ -42260,7 +40857,6 @@ byte_37672:	dc.b 7,	3, 0, 0, 0, $32, 2, $10, 0, 8, $A0, $10, $20, $80, $40,	$84,
 		dc.b $64, $AC, $A0, $CC, $24, $14, $89,	$2D, 1,	$43, $5C, $AA, $28, $2C, $95, $7A, $15,	$DB, $25, $46
 		dc.b $B9, $57, $F8, 0
 byte_37856:	dc.b $BD, $76, 0, $FF, $FD, $5B, $39, $3A, $F5,	$FE, $F2, $F8, $B, $5A,	$E4, $F8, $D, $5A, $48,	$21
-
 		dc.b $6F, $D6, $F8, $C,	$F1, $48, $F2, $AF, $AF, $F1, $FC, $4E,	$18, $A7, $FD, $AA, $A8, $FF, $68, $6D
 		dc.b $FA, $98, $41, $A8, $F4, $AA, $E7,	$F0, $A4, $F8, $A, $EA,	$A6, $F0, $69, $F0, $F8, $D, $6A, $67
 		dc.b $F5, $FF, $71, $FF, $99, $D2, $6C,	$67, $F9, $FF, $7F, $FF, $77, 7, $1A, $78, $7A,	$80, $81, $F9
@@ -42325,7 +40921,6 @@ byte_37856:	dc.b $BD, $76, 0, $FF, $FD, $5B, $39, $3A, $F5,	$FE, $F2, $F8, $B, $
 		dc.b $DD, 4, $A8, $A, 5, 0, 1, $E0, $1C, $8F, 0, $F0, 0, 0, 0, 0, 0, 0,	0, 0
 		dc.b 0,	0, 0, 0
 byte_37D46:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF, $FF, $F
-
 		dc.b $10, $11, $12, $13, $14, $15, $16,	$17, $18, $19, $1A, $1B, $1C, $1D, $1E,	$FF, $FF, $1F, $20, $21
 		dc.b $22, $23, $24, $25, $26, $27, $28,	$29, $2A, $2B, $2C, $2D, $2E, $FF, $FF,	$2F, $30, $31, $32, $33
 		dc.b $34, $35, $36, $37, $38, $39, $3A,	$3B, $3C, $3D, $3E, $FF, $FF, $3F, $40,	$41, $42, $43, $44, $45
@@ -42341,7 +40936,6 @@ byte_37D46:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF
 		dc.b $1C, $F0, $C, $EC,	$FC, $16, $F0, 9, $B8, $A, $F4,	$DD, $F1, $65, $84, $98, $F8, $A, 0, $F8
 		dc.b $7F, 0, $F0, 0, 0,	0, 0, 0
 byte_37E66:	dc.b $9D, $76, 0, $FF, $FF, $6F, $69, $FA, $AB,	$AC, $FF, $FE, $66, $6D, $EA, $91, $FA,	$54, $FF, $FF
-
 		dc.b $6A, $6B, $51, $FA, $84, $90, $FC,	$FF, $FC, $E0, $3D, $F3, $51, $84, 0, $FC, $EC,	$FC, $E0, $3D
 		dc.b $F3, $C4, $41, $FD, $FC, $EF, $6F,	$E0, $FF, $FF, $8C, $58, $EF, $51, $D0,	$FF, $56, $EF, $FC, $1C
 		dc.b $27, $C7, $68, $69, $F4, $56, 0, $EF, $C0,	1, $FC,	$CB, $68, $67, $F4, 0, $38, $F1, $FF, $F3
@@ -42437,7 +41031,6 @@ byte_37E66:	dc.b $9D, $76, 0, $FF, $FF, $6F, $69, $FA, $AB,	$AC, $FF, $FE, $66, 
 		dc.b $AA, $A, $FF, $CF,	$7A, $DB, $C0, $1F, $16, $60, $B, $FF, $F8, $58, 0, $B0, $2F, 0, $F0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_385C6:	dc.b $FD, $F8, 0, $FF, $F8, $77, 1, 2, 3, 4, 5,	$F8, 6,	7, 8, $7F, $FE,	9, $A, 0
-
 		dc.b $B, $C, $D, $E, $F, $E8, $10, $11,	$12, $13, $EF, $DF, $14, $15, $16, $17,	$18, $D6, $FF, $19
 		dc.b $1A, $1B, $1C, $1D, $1E, $1F, $C4,	$F8, $A, $FF, $F3, $20,	$21, $22, $23, $24, $25, $26, 0, $27
 		dc.b $28, $29, $F0, $2A, $FF, $E1, $2B,	$2C, $2D, $2E, $2F, $30, 0, $31, $32, $33, $F3,	$34, $35, $FF
@@ -42452,7 +41045,6 @@ byte_385C6:	dc.b $FD, $F8, 0, $FF, $F8, $77, 1, 2, 3, 4, 5,	$F8, 6,	7, 8, $7F, $
 		dc.b $15, $55, 0, $F8, $3A, $FF, $F8, $E, $83, $E8, $C,	$F0, $83, $E8, $C, $50,	$F2, $83, $E8, $8E
 		dc.b 1,	0, 0, $F0, 0, 0, 0, 0, 0, 0, 0,	0
 byte_386D6:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF, $FF, $F
-
 		dc.b $10, $11, $12, $13, $14, $15, $16,	$17, $18, $19, $1A, $1B, $1C, $1D, $1E,	$FF, $FF, $1F, $20, $21
 		dc.b $22, $23, $24, $25, $26, $27, $28,	$29, $2A, $2B, $2C, $2D, $2E, $FF, $FF,	$2F, $30, $31, $32, $33
 		dc.b $34, $35, $36, $37, $38, $39, $3A,	$3B, $3C, $3D, $3E, $FF, $FF, $3F, $40,	$41, $42, $43, $44, $45
@@ -42474,7 +41066,6 @@ byte_386D6:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF
 		dc.b 8,	$3F, $FF, $8A, $F6, $8F, $8F, $90, $B2,	$B2, $98, $50, $A8, $F0, $EF, $8A, $F3,	$8F, $D4, $E8
 		dc.b $1F, 0, 0,	0, $F0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_38876:	dc.b $F7, $FF, $E, $F, $20, $FF, $F8, $C, $37, $38, $23, $20, $24, $25,	$2C, $28, $28, $29, $1F, $FE
-
 		dc.b $2A, $2B, $2C, $2D, $25, $26, $E0,	$2F, $30, $31, $32, $23, $32, $3F, $9E,	$31, $33, $34, $35, $2E
 		dc.b $32, $32, $E0, $2F, $39, 0, $8E, $51, $FF,	$3A, $3B, $3C, $FA, $3D, $E0, $F0, $FC,	$A0, $B0, $FF
 		dc.b $F8, $41, $F0, $3F, $40, $61, $83,	$F0, $F8, $A, $45, $D0,	$43, $44, $F0, $F8, $A,	$47, $E0, 6
@@ -42524,7 +41115,6 @@ byte_38876:	dc.b $F7, $FF, $E, $F, $20, $FF, $F8, $C, $37, $38, $23, $20, $24, $
 		dc.b $AA, 0, $F8, $4F, 0, $D8, $9F, $F0, $F8, $11, 0, $F8, $C, 0, $B2, 0, $F8, $B, 0, $B1
 		dc.b 0,	$F8, $1F, 0, 0,	0, $F0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 byte_38C46:	dc.b $1F, 6, 1,	1, 2, 3, 4, $FB, 5, 3, $FC, $FE, $3F, $FF, 6, 7, 8, 9, $A, $B
-
 		dc.b 6,	$C, $D,	$E, $F,	$C0, $3F, $FA, $F1, $B,	$10, $11, $12, $13, $13, $14, $10, $C, $FF, $FC
 		dc.b $15, $16, $FA, $17, $18, $14, $19,	$1A, $1B, $1B, $87, $F0, $1C, $1D, $19,	$1C, $FF, $1E, $FA, $1F
 		dc.b $20, $1D, $FF, $C3, $21, $22, $23,	$24, $25, $26, $21, $25, $25, $27, $28,	$FA, $28, $7F, $FF, $29
@@ -42549,7 +41139,6 @@ byte_38C46:	dc.b $1F, 6, 1,	1, 2, 3, 4, $FB, 5, 3, $FC, $FE, $3F, $FF, 6, 7, 8, 
 		dc.b $F0, 9, 0,	$FC, $10, $EE, $F8, $FC, $10, $E8, $A, $FC, $AB, 2, 0, $F8, $2F, 0, $FF, $F8
 		dc.b $1E, 0, $F0, $DF, 0, $F8, $1F, 0, $F0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 byte_38E26:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF, $FF, $F
-
 		dc.b $10, $11, $12, $13, $14, $15, $16,	$17, $18, $19, $1A, $1B, $1C, $1D, $1E,	$FF, $FF, $1F, $20, $21
 		dc.b $22, $23, $24, $25, $26, $27, $28,	$29, $2A, $2B, $2C, $2D, $2E, $FF, $FF,	$2F, $30, $31, $32, $33
 		dc.b $34, $35, $36, $37, $38, $39, $3A,	$3B, $3C, $3D, $3E, $FF, $FF, $3F, $40,	$41, $42, $43, $44, $45
@@ -42567,7 +41156,6 @@ byte_38E26:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF
 		dc.b $FC, $3A, $FC, $58, $41, $A1, $D0,	$F, 0, $FD, 2, $FD, $F8, $79, $E8, $1F,	1, 0, 0, $F0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 byte_38F76:	dc.b 8,	7, 0, 0, 0, $2B, 2, $10, 0, $F,	$89, 2,	0, $40,	$74, 0,	$84, 8,	$80, $80
-
 		dc.b $52, 6, $1E, $12, $F, $84,	$84, $8F, $84, $87, $E1, $22, $20, $D1,	2, $40,	$D1, 2,	$98, $48
 		dc.b $AE, $12, $2B, $84, $85, $E1, $21,	$A0, $D1, 2, $C0, $C0, 3, 2, $74, 3, 0,	$68, $C, 1
 		dc.b $A0, 0, 4,	0, $3E,	7, $42,	$3E, 0,	9, 1, $1F, 4, 0, $40, 4, $20, $61, $24,	$38
@@ -42613,7 +41201,6 @@ byte_38F76:	dc.b 8,	7, 0, 0, 0, $2B, 2, $10, 0, $F,	$89, 2,	0, $40,	$74, 0,	$84,
 		dc.b $47, $C0, 1, $20, $23, $E1, $88, $31, $81,	$60, $C8, 5, $40, $E0, $15, 3, $80, $58, $1A, $79
 		dc.b 2,	$C0, $D0, $19, 3, $30, $64, $C,	$C3, 8,	$F, $B,	$80, $73, $F8, 0
 byte_392F6:	dc.b 7,	3, 0, 0, 0, 1, 2, $10, 0, 5, $40, $47, 8, 9, 8,	0, $20,	$68, $80, $C1
-
 		dc.b $80, 4, 3,	$A8, $19, $A, 2, 0, $81, 0, $E8, $F0, 3, $A7, 0, 6, 4, 0, $30, $34
 		dc.b $41, $20, $7B, 3, $82, $91, $20, $14, $5A,	$19, $10, $8A, $44, $81, $C0, $28, $84,	$7B, $80, $C0
 		dc.b $20, $84, $28, 5, $12, 7, 0, $85, $C0, $16, $97, $50, $1A,	$20, $18, $89, 0, $A2, $D1, $FC
@@ -42638,12 +41225,10 @@ byte_392F6:	dc.b 7,	3, 0, 0, 0, 1, 2, $10, 0, 5, $40, $47, 8, 9, 8,	0, $20,	$68,
 		dc.b $C6, $51, $8A, $D1, $68, $28, $FC,	$34, $2F, $37, $9B, $C2, $8B, $B, $78, $A0, $61, $30, $9A, $9C
 		dc.b $25, 3, $53, $87, $B9, $A9, $C2, $6A, $35,	$14, $A, $E, $12, $87, $F0, 0
 byte_394D2:	dc.b 6,	$11, 0,	0, 0, 1, 2, $10, 0, 9, $80, $88, $28, $40, 2, 7, $AA, $30, $2A,	$10
-
 		dc.b 8,	$32, $12, $20, $A2, 7, $24, $70, $70, $84, $78,	$84, $A3, $A2, $3D, $10, $E0, $20, $28,	1
 		dc.b 1,	$4C, 8,	$A, $83, $E3, $5C, $C2,	$B8, $F, $11, $A5, $C0,	$78, $AD, $8C, $83, 0, $74, $A
 		dc.b $44, $3C, $97, $47, $C8, $2F, $D2,	$57, $B4, $86, $79, $FC
 byte_3951A:	dc.b $B5, $6D, 0, $FF, $F8, $FC, $FF, $F8, $90,	$11, $F1, $F8, $E, $13,	$F1, $F8, $E, $7F, $F1,	$F8
-
 		dc.b $E, $88, $F7, 6, $F1, $F8,	$D, $82, $49, $F1, $F8,	$C, $86, $87, $4E, $F4,	$FD, 2,	$FF, $BC
 		dc.b 3,	$D3, $89, $8A, $50, $E5, $FD, $43, $44,	$FE, $AC, $B8, $D3, $83, $4D, $F0, $FC,	$2E, $F8, $5C
 		dc.b $85, 2, $12, $B1, $F0, $6A, $F8, $A, $42, $84, $14, $EF, $FF, $6A,	$46, $47, $48, $45, $58, $49
@@ -42724,13 +41309,11 @@ byte_3951A:	dc.b $B5, $6D, 0, $FF, $F8, $FC, $FF, $F8, $90,	$11, $F1, $F8, $E, $
 		dc.b $F8, $4E, 7, $CF, $10, $5D, 3, $12, 1, $F9, 1, $C8, 9, $46, $6F, $70, $C8,	$C, 5, 0
 		dc.b $FF, $F8, $16, 0, $F0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_39B5A:	dc.b $B5, $B6, 0, $FF, $F8, $FC, $FF, $F8, $B1,	$BC, $FF, $F8, $E, $20,	$F8, $CF, 2, $FF, $FC, 3
-
 		dc.b $73, $E7, $F0, $FE, $44, $43, $FE,	5, $F0,	$FE, $48, $47, $FE, $CE, $D5, 8, 0, $FE, $4D, $83
 		dc.b $FE, $B, $E0, $FE,	$F0, $F8, $F, $FF, $F8,	$B7, $5A, $DB, 1, $F7, $F5, $F0, $FE, 4, $F7, $F5
 		dc.b 8,	$FE, 7,	$F8, $F4, $47, $E0, $FE, $56, 1, $A, 8,	$FC, $83, $F0, $F8, $17, $FF, $F8, $17
 		dc.b 0,	$F0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0
 byte_39BBA:	dc.b $1D, $7C, 0, $FF, $F8, $4A, $11, 2, $FF, $F1, $F8,	$B, $13, $42, $43, $44,	$DF, $F7, $F1, $F8
-
 		dc.b $B, $7F, $46, $47,	$48, $F1, $F8, $B, $82,	$49, $83, $4D, $F1, $F8, $A, $86, $87, $C5, $DF, $4E
 		dc.b $4F, $F0, $FE, $F1, $88, $89, $8A,	$50, $52, $53, $D3, $F8, $C, $7B, 4, $54, $55, $56, $D3, $F8
 		dc.b $C, $D, $E, $57, $8D, $FF,	$1F, $82, $D3, $FE, $58, $59, $F, $44, $8D, $41, $89, $D7, $DD,	$D3
@@ -42759,7 +41342,6 @@ byte_39BBA:	dc.b $1D, $7C, 0, $FF, $F8, $4A, $11, 2, $FF, $F1, $F8,	$B, $13, $42
 		dc.b $B4, $FC, $B6, 0, $B0, $1F, 0, $F0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0
 byte_39DDA:	dc.b $7D, $7F, 0, $FF, $F8, $A7, $9D, $9E, $9F,	$A0, $F1, $F8, $A, $A5,	$A6, $A7, $A8, $A9, $AA, $7F
-
 		dc.b $48, $F0, $F8, 9, $B0, $B1, $B2, $B3, $B4,	$B5, $F8, 2, $F, $69, $FF, 3, $5F, $60,	$61, $FD
 		dc.b 1,	$F5, $43, $44, $7C, $F8, $FE, 5, $63, $64, $65,	$FD, 4,	$41, $42, $43, $87, $FF, $41, 7
 		dc.b $C9, $C5, $FD, 8, $67, $68, $69, $6A, $66,	7, $45,	$AB, $22, $46, $47, $45, 0, $F8, $A8, $FF
@@ -42862,7 +41444,6 @@ byte_39DDA:	dc.b $7D, $7F, 0, $FF, $F8, $A7, $9D, $9E, $9F,	$A0, $F1, $F8, $A, $
 		dc.b $8C, 0, $B5, $E3, $7C, 6, $D9, $60, $BF, $C2, $50,	3, $F8,	$C, 3, $50, 0, $F8, $C,	5
 		dc.b $15, 0, $60, $88, $E, $FF,	$F8, $12, 0, $F0, 0, 0
 byte_3A5CA:	dc.b $DD, $F7, 1, $FF, $F8, $3A, 2, 3, $F1, $F8, $C, 4,	5, 6, 7, $F1, $F8, $A, 9, $A
-
 		dc.b $F7, $37, $B, $C, $D, 8, $DA, $F8,	9, $11,	$12, $13, 8, $14, $1C, $DA, $FD, 4, $E,	$BE
 		dc.b $E7, $1A, $1B, $F2, $DA, $FC, $E, $F, $A, $10, $FC, $A5, $CA, $FD,	$DA, $15, $16, $17, $18, $19
 		dc.b $EF, $FD, $DA, $A3, $A0, $1A, $1D,	$16, $D5, $FF, $F8, $A,	$EF, $48, $F8, $3B, $F6, $3F, $FF, $F8
@@ -42879,14 +41460,12 @@ byte_3A5CA:	dc.b $DD, $F7, 1, $FF, $F8, $3A, 2, 3, $F1, $F8, $C, 4,	5, 6, 7, $F1
 		dc.b $FF, $49, $C2, $F1, $E7, $E1, $FE,	$F1, $E1, $8A, $24, $64, $E1, $FD, $F1,	$FE, $A1, $E1, $F1, $F8
 		dc.b $A, $59, 0, $E1, $F1, $F8,	$19, $5F, 0, $F0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0
 byte_3A70A:	dc.b $7D, $75, 1, $FF, $F8, $E,	2, 3, 4, 5, $EC, $F8, $F, $E9, $F8, $16, $EC, $FD, 6, 7
-
 		dc.b $15, $47, $F1, $FC, $F8, $FE, $FF,	$F8, $E, $E9, 8, 9, $FB, $BB, $ED, $F8,	$FD, $A, $FF, $F8
 		dc.b $E, $B, $C, $FE, $F8, $D, $D, $FF,	$F8, $E, $E, $FF, $F8, $E, $F, $23, $F1, $10, $F, $11
 		dc.b $FC, $FE, $F8, $12, $38, $F1, $13,	$FE, $14, $15, $FA, $F8, $16, $6F, $AD,	$17, $18, $19, $1A, $1B
 		dc.b $FA, $F8, 9, $1C, $FF, $F8, $1E, 0, $F8, $DF, 0, $FF, $F8,	$1E, 0,	0, 0, $F0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_3A77A:	dc.b 8,	3, 0, 0, 0, 5, 2, $10, 0, 4, $40, 4, $18, $20, 8, $1C, $B0, $20, 8, 3
-
 		dc.b 1,	$E, $40, $26, 4, 2, $81, 4, 1, 3, $92, $D, 1, $20, $88,	$E1, $40, $D1, $82, 0
 		dc.b $E1, $40, $E8, $80, $3F, $90, $28,	8, 3, 1, $20, $30, $17,	2, 0, $40, $60,	$1C, 1,	0
 		dc.b $50, $64, $C, 1, $EA, 0, $A0, $40,	$10, 3,	1, 0, $60, $61,	$41, 1,	$E2, $81, 0, $20
@@ -42928,7 +41507,6 @@ byte_3A77A:	dc.b 8,	3, 0, 0, 0, 5, 2, $10, 0, 4, $40, 4, $18, $20, 8, $1C, $B0, 
 		dc.b $85, $FC, $80, $20, $17, $F5, $FC,	$69, $1A, $47, $B1, $EC, $6B, $5A, $C7,	$C5, $F0, $73, $F4, $3B
 		dc.b $8E, $63, $B8, $FE, $39, $8D, $83,	$A0, $D0, $34, $D, $23,	$4F, $F0
 byte_3AAA8:	dc.b 7,	$13, 0,	0, 0, $17, 2, $10, 0, $1E, $12,	$B, 9, 8, $D, $10, $14,	$1A, $20, $3F
-
 		dc.b $20, $20, $87, 2, $31, $10, $F8, $48, $60,	$F0, $91, $58, $48, $CF, $C8, $5B, $16,	$84, $B1, $28
 		dc.b $1B, 6, $80, $B0, $20, $49, $12, 5, $91, $60, 9, 2, 1, $F4, $20, $D0, $B4,	$31, 9,	$42
 		dc.b $B1, $B1, $98, $D8, $4A, $28, $1D,	$14, 6,	$18, $11, $CC, 7, $41, $C0, $74, $1C, $E, $44, $6A
@@ -42958,7 +41536,6 @@ byte_3AAA8:	dc.b 7,	$13, 0,	0, 0, $17, 2, $10, 0, $1E, $12,	$B, 9, 8, $D, $10, $
 		dc.b $62, $39, $20, $C,	$40, $40, $39, $40, $E6, $73, $C, $A7, $28, $CC, 7, $31, $94, $E5, $39,	$CE
 		dc.b $6F, $E0
 byte_3ACDA:	dc.b $DD, $D, 0, $FF, $F8, $16,	$6A, $6B, $F0, $F8, $D,	$6C, $6D, $F3, $F8, $A,	$6E, $73, $9E, $FD
-
 		dc.b $6F, $70, $F9, $7F, $F0, $73, $74,	7, $3E,	$FF, $75, $76, $FF, $F0, $77, $78, $79,	$D, $7C, $FE
 		dc.b $7A, $7B, $FF, $DD, $77, $7C, $7D,	$1A, $FE, $FE, $7A, $7E, $FF, $A5, $8A,	$A5, $C6, $C6, $80, $3C
 		dc.b $7C, $81, $FF, $82, $83, $FF, $C8,	$C7, $C8, $C9, $C9, $BF, $BB, $D0, $F8,	$A, $CB, $CA, $CB, $CC
@@ -43005,7 +41582,6 @@ byte_3ACDA:	dc.b $DD, $D, 0, $FF, $F8, $16,	$6A, $6B, $F0, $F8, $D,	$6C, $6D, $F
 		dc.b $FF, $F0, $FD, $64, $D0, $FC, $E0,	$66, $4A, $BD, 2, $F0, $4B, $68, $69, $4C, 0, $F0, $3F,	0
 		dc.b $F0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 byte_3B06A:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF, $FF, $F
-
 		dc.b $10, $11, $12, $13, $14, $15, $16,	$17, $18, $19, $1A, $1B, $1C, $1D, $1E,	$FF, $FF, $1F, $20, $21
 		dc.b $22, $23, $24, $25, $26, $27, $28,	$29, $2A, $2B, $2C, $2D, $2E, $FF, $FF,	$2F, $30, $31, $32, $33
 		dc.b $34, $35, $36, $37, $38, $39, $3A,	$3B, $3C, $3D, $3E, $FF, $FF, $3F, $40,	$41, $42, $43, $44, $45
@@ -43022,7 +41598,6 @@ byte_3B06A:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF
 		dc.b 0,	$F8, $FC, 0, $F8, $22, 1, 0, 0,	$F0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 		dc.b 0,	0, 0, 0
 byte_3B19A:	dc.b $FB, $7F, 7, 8, $FE, $F8, $D, 5, 6, $14, $1D, $1E,	$23, $1F, $27, $20, $1D, $14, $C6, $FF
-
 		dc.b $FF, $F0, $21, $22, $24, $25, $26,	$28, $29, $19, $C4, 7, $1A, $FE, $F0, $2B, 0, $2C, $F0,	$CE
 		dc.b $C1, $F1, $19, $F0, 0, $FF, $E0, $F8, $C, $60, $70, $2E, $FF, $E0,	$F8, $C, $34, $FF, $E0,	$F8
 		dc.b $A, $31, $32, $FA,	$69, $FF, $2F, $1A, $39, $4A, $4B, $3B,	$E0, $35, $36, $FA, $49, $FF, $33, $19
@@ -43044,7 +41619,6 @@ byte_3B19A:	dc.b $FB, $7F, 7, 8, $FE, $F8, $D, 5, 6, $14, $1D, $1E,	$23, $1F, $2
 		dc.b $6D, $C0, $E8, $B,	$64, $EB, $C0, $E8, $A,	$E3, $E6, $C0, $EE, 5, 0, 0, $F8, $2F, 0, $F0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 byte_3B33A:	dc.b $FB, $BF, 7, 8, $FE, $F8, $D, 6, $1D, $1E,	$1D, $1F, $1D, $20, $1D, $15, $17, $FF,	$8B, $FE
-
 		dc.b $FC, 6, $21, $22, $24, $25, $26, $28, $29,	$1B, $1C, $FE, $FC, 7, $63, $F0, $2B, 0, $2C, $F0
 		dc.b $F1, $FD, $1B, $F0, $2E, $30, $38,	$FF, $E0, $F8, $C, $34,	$FF, $E0, $F8, $A, $31,	$32, $75, $AA
 		dc.b $FF, $2F, $E0, $FF, $35, $36, $FF,	$33, $E0, $FF, $DB, $F0, $F7, $FD, $D, $E, $FE,	$FC, 6,	$E8
@@ -43065,7 +41639,6 @@ byte_3B33A:	dc.b $FB, $BF, 7, 8, $FE, $F8, $D, 6, $1D, $1E,	$1D, $1F, $1D, $20, 
 		dc.b $51, 0, $FA, $F4, $8D, $F0, $FF, $F3, $2F,	$4E, $52, $53, 0, $F9, $2F, $BE, $2B, $F0, $FF,	$F3
 		dc.b $33, $4E, $54, $55, 0, $F9, $33, 3, 0, $F8, $2F, 0, $F0, 0, 0, 0, 0, 0, 0,	0
 byte_3B4CA:	dc.b $2F, $2C, 3, $12, 2, 1, $FE, $F8, $B, $F0,	7, 8, $FE, $F8,	$B, $14, $4B, $F0, $13,	$FF
-
 		dc.b $F8, $C, $F0, $18,	$FF, $F8, $B, $F7, $5E,	$F0, $39, $3A, $3B, $F0, $F8, $C, $3E, $3F, $40, $F0
 		dc.b $F8, $C, $43, $44,	$45, $F0, $F8, $C, $FE,	$FB, $FF, $39, $3C, $3D, $3B, $62, $5F,	$62, $F0, $FF
 		dc.b $4C, $56, $57, $87, $E9, $4D, 3, 4, 3, $F0, $31, $32, $FF,	$2F, $4E, $F3, $F4, $58, $59, $4F
@@ -43106,7 +41679,6 @@ byte_3B4CA:	dc.b $2F, $2C, 3, $12, 2, 1, $FE, $F8, $B, $F0,	7, 8, $FE, $F8,	$B, 
 		dc.b $F8, $20, $4A, $42, $18, $D3, $F0,	$F8, $A, $FA, $F2, $F0,	9, $F2,	$F0, $31, $51, $A8, $FA, $F4
 		dc.b $F0, 9, $F2, $F0, $35, $FA, $F4, 2, 0, 0, $F0, $41, 0, $F0, 0, 0, 0, 0, 0,	0
 byte_3B7EA:	dc.b $7B, $FC, 7, 8, $FE, $F8, $D, 3, $12, $13,	$FF, $1D, $1E, $1D, $1D, $70, $C, $1F, $FD, $20
-
 		dc.b $1D, $13, $F0, $18, $FF, $FB, $FF,	$21, $22, $23, $24, $25, $26, $27, $28,	$29, $18, $F0, $FE, $2A
 		dc.b $2B, 0, 5,	$28, $2C, $2D, $F0, $F8, $A, $F1, $FF, $2C, $F0, $F8, $A, $82, $EF, $F1, $FF, $F0
 		dc.b $F8, $34, $39, $46, $47, $3B, $F0,	$F8, $B, $4C, $43, $E2,	$56, $57, $4D, $F0, $2E, $FF, $F0, $87
@@ -43155,7 +41727,6 @@ byte_3B7EA:	dc.b $7B, $FC, 7, 8, $FE, $F8, $D, 3, $12, $13,	$FF, $1D, $1E, $1D, 
 		dc.b $9A, $AC, $AA, 4, $F8, $A,	$9A, $40, $F0, $1F, $F1, $F8, $E, $23, $F8, $D,	$FF, $F8, $22, 0
 		dc.b $F8, $1F, 0, 0, 0,	$F0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0
 byte_3BBAA:	dc.b $FF, $FF, $80, $81, $80, 3, 1, $14, 4, $25, $F, $35, $12, $46, $2E, $55, $15, $FF,	$FF, $66
-
 		dc.b $2F, $73, 0, $81, 5, $E, $16, $30,	$27, $6C, $38, $E3, $48, $F6, $77, $FF,	$FF, $6F, $82, 4
 		dc.b 6,	$16, $33, $38, $E6, $48, $EC, $78, $EA,	$83, 4,	5, $16,	$1F, $FE, $34, $27, $72, $78, $ED
 		dc.b $84, $F8, $17, $74, $85, 6, $32, $18, $FF,	$FF, $F4, $86, 7, $6B, $17, $70, $87, 5, $10, $17
@@ -43183,7 +41754,6 @@ byte_3BBAA:	dc.b $FF, $FF, $80, $81, $80, 3, 1, $14, 4, $25, $F, $35, $12, $46, 
 		dc.b $A7, $9E, $A7, $18, $42, $A8, $F0,	$96, $F0, $A9, $D0, $8E, $15, 5, $E9, $F2, $FF,	$F8, $1B, 0
 		dc.b $F8, $FC, $FF, 0, $F0, 0, 0, 0
 byte_3BDBA:	dc.b $85, $C3, 0, $FF, $F8, $FC, $FF, 5, 6, $6E, $FF, $1D, $FF,	$E1, $1E, $1D, $23, $24, $26, $27
-
 		dc.b $1D, $20, $1D, $6E, $F0, $6F, $70,	$C3, $70, $6F, $71, $72, $F1, $2B, $2C,	$EF, $73, $74, $70, $80
 		dc.b 3,	$F0, $DC, $75, $21, $22, $F1, $C0, $E1,	$F9, $EF, $28, $29, $76, $F0, $77, $77,	$80, 8,	$78
 		dc.b $F0, $F1, $EF, $E1, $20, $F0, $79,	$F0, $7A, $7A, $7B, $F0, $B3, $FC, $84,	$D8, $F0, $7C, $F0, $7D
@@ -43196,7 +41766,6 @@ byte_3BDBA:	dc.b $85, $C3, 0, $FF, $F8, $FC, $FF, 5, 6, $6E, $FF, $1D, $FF,	$E1,
 		dc.b $F0, $F8, $D, $B, $F0, $F8, $D, $54, 0, $B, $F0, $F8, $D, 0, $F8, $3F, 0, $F0, 0, 0
 		dc.b 0,	0, 0, 0
 byte_3BE9A:	dc.b $85, $F6, 0, $FF, $F8, $FC, $FF, $1D, $FF,	$F8, $10, $1F, $F5, $F8, $C, $23, $24, $A7, $FC, $25
-
 		dc.b $26, $27, $20, $F3, $1E, $F5, $24,	$2B, 0,	$7F, 6,	$2C, $26, $73, $74, $14, $14, $71, $72,	$F5
 		dc.b $FC, $38, $CC, $FF, $2C, $28, $29,	$F0, $21, $22, $C, $83,	$F5, $AB, $F0, $1A, $19, $F0, $B0, $26
 		dc.b $9B, $F8, 9, $F0, $19, $1A, $F0, $F8, $D, $E0, $F8, $18, $2E, $FF,	$39, $C1, $E0, $FC, $F5, $30
@@ -43206,7 +41775,6 @@ byte_3BE9A:	dc.b $85, $F6, 0, $FF, $F8, $FC, $FF, $1D, $FF,	$F8, $10, $1F, $F5, 
 		dc.b $25, $FF, $14, $25, $F5, $E0, $F8,	$26, $FA, $F7, $F0, 5, $FF, $F5, $94, $2A, $F0,	5, $FF,	$F5
 		dc.b 3,	0, $F8,	$3F, 0,	$F0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 byte_3BF4A:	dc.b 8,	3, 0, 0, 0, $18, 2, $10, 0, $74, 0, $3C, $3A, $20, $68,	$30, $40, $D8, $20, $A7
-
 		dc.b $80, $54, $E, $44,	$80, $F4, $29, 9, $43, $10, $B0, $2C, $A, $20, $58, $1D, $C0, $B0, $5C,	$B
 		dc.b 2,	$41, $60, $2C, $C, $43,	$C0, $E6, $87, $82, $40, $80, $22, 7, $E0, $4C,	$10, 4,	$41, $94
 		dc.b $49, $16, $42, $50, $C4, $2D, $B, $45, $D0, $B4, $5D, $16,	2, $FA,	$A1, $80, $58, $16, $B,	1
@@ -43238,7 +41806,6 @@ byte_3BF4A:	dc.b 8,	3, 0, 0, 0, $18, 2, $10, 0, $74, 0, $3C, $3A, $20, $68,	$30,
 		dc.b $2A, 4, 2,	$58, $E, $43, $B9, $2C,	$3B, $85, $D0, $3A, $1B, $C6, $F0, $E8,	$3A, 2,	1, $2A
 		dc.b 6,	$12, $5B, 9, $2F, 0, $96, $FE
 byte_3C1AA:	dc.b 6,	3, 0, 0, 0, 0, 1, $21, $39, $20, $A2, $21, $89,	$C9, $19, $25, $20, $E,	$20, $E0
-
 		dc.b 0,	$71, $A, 7, 7, $AA, $3A, $5A, $60, 0, $28, $10,	$1F, $93, $C0, $23, $22, $E1, $F2, $72
 		dc.b $22, $B1, $A0, $E1, $20, $60, $A3,	$F3, $FE, $C2, $C1, $62, $61, $C2, $E0,	$C4, $44, $C3, $43, $E6
 		dc.b 0,	$63, $E5, $81, 0, $40, 8, 2, $20, $A3, $C4, $29, $18, $1E, $20,	$C9, $58, $D5, $53, $A7
@@ -43250,14 +41817,12 @@ byte_3C1AA:	dc.b 6,	3, 0, 0, 0, 0, 1, $21, $39, $20, $A2, $21, $89,	$C9, $19, $2
 		dc.b $C3, $85, $C1, $A3, $11, $4E, $1A,	$8C, $36, $1C, $9F, $B1, $58, $D9, $39,	$11, $58, $D1, $11, $30
 		dc.b $D0, $F9, $39, $11, $58, $D7, $CA,	$3F, $80, 0
 byte_3C27C:	dc.b 7,	1, 0, 0, 0, 0, 1, $20, $E0, $41, $19, $44, $18,	$18, 0,	$67, $81, $44, $54, $18
-
 		dc.b 3,	$21, $40, $82, $E, 0, $10, $3D,	$E0, $AB, $6B, $EB, $AA, $80, $AB, $2A,	$C7, $C3, $6B, $86
 		dc.b $DF, $D, $8E, $1B,	$31, $F0, $DE, $E1, $BF, $C3, $73, $86,	$EC, $28, $17, $C0, $C0, $BB, 3, $E
 		dc.b $27, $5C, $53, $BC, $1C, 3, $EC, $21, $F0,	$E5, $E1, $CD, $C3, $8F, $87, $24, 8, $19, $40,	$C0
 		dc.b $C7, $B, $F6, $8A,	$3E, $9E, $92, $56, $76, $86, $7C, $14,	$C, $24, $1C, $28, $14,	$3F, $88, $69
 		dc.b $A9, $99, $C9, $B9, $69, $59, $89,	$7F, $E0, 0
 byte_3C2EA:	dc.b 6,	$11, 0,	0, 0, 0, 1, $21, $D0, $A, 0, $50, $5D, $D3, $12, $93, $93, $52,	$40, $12
-
 		dc.b $D2, $83, $C2, $85, $85, $10, $28,	0, $81,	$40, $12, $F, $A, $D6, $15, $C0, $60, 3, $87, 0
 		dc.b $10, $5A, $24, $B4, $E0, $68, $D3,	$D1, $A5, $A5, $27, $F6, $13, $B, 7, $13, $E, $A6, $1A,	$AA
 		dc.b $22, $3E, $5E, $46, $4A, $76, $94,	$37, $28, $FA, $B9, $1A, $95, $9C, $C, $51, $E2, $62, $14, $8F
@@ -43266,7 +41831,6 @@ byte_3C2EA:	dc.b 6,	$11, 0,	0, 0, 0, 1, $21, $D0, $A, 0, $50, $5D, $D3, $12, $93
 		dc.b $6C, $97, 0, $94, $7A, $A4, $80, $23, $34,	$A4, $35, 1, 0,	$18, $E, $A1, 1, $E2, $E2, $22
 		dc.b $43, $B4, $81, $A0, 7, $81, 0, $44, 4, $B8, $C, $A3, 4, $C5, $1E, $B, $28,	$7F
 byte_3C388:	dc.b $DD, $5D, 0, $FF, $F8, $BE, 1, 2, $FE, $F8, $D, $D, 5, $FE, $F8, $D, 6, $A, $FE, $F8
-
 		dc.b $D, $5D, $57, $E0,	$F8, $F, $1C, $F8, $A3,	$14, $15, $FE, $FC, $F0, $FE, $16, $17,	$FE, $FC, 0
 		dc.b $F8, $C7, $75, $52, $22, $F8, $D, $20, $FE, $E2, $F8, 9, $18, $19,	$FE, $DE, $FE, 2, $FE, $6D
 		dc.b $6A, 0, $F8, $C9, $FF, $F8, $20, 3, $20, $FF, $CD,	$F1, 4,	$40, $F8, 9, $CE, $B2, $6D, $EA
@@ -43288,7 +41852,6 @@ byte_3C388:	dc.b $DD, $5D, 0, $FF, $F8, $BE, 1, 2, $FE, $F8, $D, $D, 5, $FE, $F8
 		dc.b $47, $60, $D0, $1D, $40, $D0, $23,	$1E, $94, $54, $FF, $40, $D0, $B, $F0, $E0, $F8, $21, 0, $F8
 		dc.b $5F, 0, $F0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_3C528:	dc.b $9B, $FA, 2, 1, $FE, $F8, $1D, 6, $FF, 7, $FE, $FD, 8, 4, 9, $FE, $FD, $E,	$FF, $F8
-
 		dc.b $A, $F, $10, $11, $12, 3, 5, $16, $FF, $FF, $17, $18, $10,	$19, $EF, $FF, $1A, $C,	3, 4
 		dc.b $60, $F1, $FC, $1B, $1C, $1D, $1E,	$1A, $1F, $20, $13, $14, $8F, $E1, $67,	$21, $22, $23, $24, $E1
 		dc.b $25, $E1, $26, $27, $FF, $18, $27,	$28, $C, $61, $2A, $2B,	$2C, $2D, $2E, $D1, $12, $E, $FF, $F2
@@ -43309,7 +41872,6 @@ byte_3C528:	dc.b $9B, $FA, 2, 1, $FE, $F8, $1D, 6, $FF, 7, $FE, $FD, 8, 4, 9, $F
 		dc.b $3E, 0, $F0, $B, 0, $F9, 0, $F0, $42, 0, $F0, 0, 0, 0, 0, 0, 0, 0,	0, 0
 		dc.b 0,	0, 0, 0
 byte_3C6A8:	dc.b $43, $87, $27, $26, $FE, 6, $FB, $F8, $A, 2, 1, $FE, $5E, $6D, 8, $FB, $F8, $A, $E, $A
-
 		dc.b 0,	$FF, $F8, $C, $F0, $F8,	$CF, 1,	$F8, $E, $26, 1, $F8, $E, 1, $6D, $C5, $D2, $F8, $D
 		dc.b $FF, $F8, $60, 9, $F1, $F8, $E, $33, $F1, $F8, $E,	$42, $F8, $C, $F1, $AE,	$BC, $E, $F1, $F8
 		dc.b $D, $2B, $2C, $E2,	$F8, $D, $F0, $F8, $A, $E2, $20, $20, $A0, $F6,	$E2, $F8, $D, $F0, 1, $F8
@@ -43373,7 +41935,6 @@ byte_3C6A8:	dc.b $43, $87, $27, $26, $FE, 6, $FB, $F8, $A, 2, 1, $FE, $5E, $6D, 
 		dc.b $F0, $F8, $10, $A2, $68, $22, $FE,	$B8, $D, 0, 0, 0, $F0, 0, 0, 0,	0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_3CB88:	dc.b $C3, 3, 2,	1, $FE,	3, 4, 5, 6, $FC, $C1, $F0, $F8,	$FC, 7,	8, $FE,	9, $A, $B
-
 		dc.b $40, $40, $C, $FC,	$F8, $FC, $20, $11, $E6, $FC, $DC, $FC,	$FA, $E6, $48, $F, $FC,	$DC, $FC, $FA
 		dc.b $D, $E, $F, $10, $40, $F4,	$FE, $FA, $F8, $FC, $11, $12, $13, 0, $44, $14,	$FE, $FA, $F8, $3F
 		dc.b $C, $FC, $15, $16,	$17, $18, $19, $1A, $FA, $1B, $1C, 0, $3F, $F8,	$FA, $F6, $1D, $1E, $1F, $20
@@ -43393,7 +41954,6 @@ byte_3CB88:	dc.b $C3, 3, 2,	1, $FE,	3, 4, 5, 6, $FC, $C1, $F0, $F8,	$FC, 7,	8, $
 		dc.b $F8, 9, 0,	$D0, $13, 0, $F0, $D1, 0, $D0, $1F, 0, 0, 0, $F0, 0, 0,	0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_3CCF8:	dc.b $DB, $A3, 3, 4, $FE, $F8, $D, 0, $FF, $F8,	$92, $B, $C, $D, $FD, $47, $3C,	$F0, $F8, 9
-
 		dc.b $28, $29, $2A, $FD, $F7, $1A, $1B,	0, $E5,	$89, $E6, $B, $FE, $39,	$3A, $FE, $F2, $A4, $E6, $28
 		dc.b $FE, $3B, $3C, $FE, $A4, $F8, $1F,	$A2, $AA, 0, $F8, $A3, $FF, $F8, $E, $A, $FA, $F8, 9, $A
 		dc.b $FC, $FE, $F8, 9, $A, $FC,	$AA, $A, $FE, $F8, 9, 0, $F8, $A7, $39,	$F4, $1A, $F0, 9, $39
@@ -43412,7 +41972,6 @@ byte_3CCF8:	dc.b $DB, $A3, 3, 4, $FE, $F8, $D, 0, $FF, $F8,	$92, $B, $C, $D, $FD
 		dc.b $F3, $FB, $F0, 9, $AA, $2A, $E0, $C4, $E0,	$F8, 9,	$E0, $C4, $30, $C8, $CF, $22, $E8, $D, $FF
 		dc.b $F8, $21, 0, $F8, $1F, 0, $F0, 0, 0, 0, 0,	0
 byte_3CE58:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF, $FF, $F
-
 		dc.b $10, $11, $12, $13, $14, $15, $16,	$17, $18, $19, $1A, $1B, $1C, $1D, $1E,	$FF, $3B, $1F, $20, $21
 		dc.b $22, $23, $24, $25, $26, $27, $28,	0, $FF,	$F8, $D5, 2, 1,	8, 4, $FE, $FF,	$F2, $FC, $F8
 		dc.b $B, 4, $FC, 7, 8, $F5, $F4, $FC, $F8, 4, $12, $FC,	$E6, $FC, $DC, $FC, $FA, $81, $24, $E6
@@ -43426,7 +41985,6 @@ byte_3CE58:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF
 		dc.b $EE, 0, $FE, $BA, $20, $F8, $B, 0,	$FA, $82, $92, $37, $EA, 0, $F8, $B, $F8, $2A, $FC, $7C
 		dc.b $FC, $FC, $92, 0, $2A, $FC, $7C, $FC, $FC,	0, $F0,	0, 0, 0, 0, 0
 byte_3CF58:	dc.b $E9, $3F, 0, $FF, 1, 8, 2,	1, 2, $26, 6, $27, $26,	$B0, $F5, $FE, $F0, $EB, $F8, 9
-
 		dc.b 1,	$F0, $F8, 9, $FF, $F8, $2C, $B,	$C, 1, $7D, $D,	$B, $FE, $FB, $F0, $FD,	$28, $29, $2A
 		dc.b $28, $40, $3F, $FE, $FB, $E2, $FC,	$D, $E,	$A, $E,	$29, $A0, $E1, $FD, $FB, $E2, $FC, $2A,	$F5
 		dc.b $2D, $2F, $C4, $70, $2C, $FD, $CA,	$F2, $2B, $2C, $20, $59, 2, $FF, $FC, $CA, $F2,	$FF, $F0, $F3
@@ -43489,7 +42047,6 @@ byte_3CF58:	dc.b $E9, $3F, 0, $FF, 1, 8, 2,	1, 2, $26, 6, $27, $26,	$B0, $F5, $F
 		dc.b $49, $FE, 0, $F8, $1F, $C0, $88, $3F, $15,	0, $C0,	$F8, $9F, 0, $C8, $1F, 0, $F0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_3D428:	dc.b $AF, $AF, $F, $10,	$D, $E,	$FE, $FC, $F6, $FC, $13, $14, $11, $12,	$FE, $FC, $3F, $80, $F6, $FC
-
 		dc.b $19, $1A, $15, $16, $1B, $1C, $FC,	$FE, $3F, $80, $F6, $FC, $21, $22, $1D,	$1E, $23, $24, $FC, $FE
 		dc.b $3F, 8, $F6, $FC, 2, 1, 5,	6, 3, 4, $FE, $FA, $FC,	$3F, 8,	$F2, 7,	8, $B, $C
 		dc.b 9,	$A, $FE, $FA, $FC, $AA,	$AA, $F2, $E4, $F8, 9, $FA, $FC, $E4, $F8, 9, $FA, $FC,	$80, $FE
@@ -43510,7 +42067,6 @@ byte_3D428:	dc.b $AF, $AF, $F, $10,	$D, $E,	$FE, $FC, $F6, $FC, $13, $14, $11, $
 		dc.b $A8, $A0, $F8, $D,	$A8, $60, $E8, $F, $A6,	$FE, $12, 9, $FA, $FC, $A8, $F6, $9E, $FA, 0, $F0
 		dc.b 0,	0, 0, 0
 byte_3D5A8:	dc.b $85, $F5, 0, $FF, $F8, $FC, $FF, $E, $A, $FE, $F8,	$E, $F1, $F8, $16, $25,	$23, 1,	$8C, $24
-
 		dc.b $20, $FF, $FA, $EF, $FD, $A, $80, $32, $F5, $EF, $FC, $E0,	$FF, $F2, $18, $49, $FC, $CF, $FE, $24
 		dc.b $F2, $FD, $F8, $FE, $DD, $B5, $FD,	$F8, $17, $E0, $F8, $3F, $B, $D, $FE, $F8, $D, 1, 2, $FE
 		dc.b $F8, $D, $E1, $F8,	$E, $B,	$51, $55, $E1, $F8, $E,	1, $2B,	$FF, $F8, $D, $17, $FC,	$F9, $FF
@@ -43526,7 +42082,6 @@ byte_3D5A8:	dc.b $85, $F5, 0, $FF, $F8, $FC, $FF, $E, $A, $FE, $F8,	$E, $F1, $F8
 		dc.b $55, $15, $E0, $FC, $6F, $EF, $DB,	$FC, $5C, $E8, $A, $A3,	$E8, $B, $FF, $F8, $43,	0, $F0,	0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_3D6C8:	dc.b $F5, $EC, 0, $FF, $F8, $FC, $FF, $F8, 9, $B, $C, $D, $FD, $F0, $FE, 1, $59, $6B, 8, 2
-
 		dc.b $FD, $E0, $FF, $E1, $FC, $D, $E0, $FF, $E1, $FC, 2, $B5, $96, $BD,	$F8, $F, $F1, $F8, $A, $C0
 		dc.b $F8, $22, $29, $C0, $FF, $80, $F8,	$16, 1,	$D0, $F8, 9, $5B, $55, $EB, $A,	$F0, $FE, $E, 8
 		dc.b $F8, $46, $69, $FD, $FD, $FF, $29,	$FD, $FD, $FF, $15, $CA, $E1, $F8, $E, $2B, $FC, $FD, $F8, $A
@@ -43536,7 +42091,6 @@ byte_3D6C8:	dc.b $F5, $EC, 0, $FF, $F8, $FC, $FF, $F8, 9, $B, $C, $D, $FD, $F0, 
 		dc.b $4E, $F0, 9, $FF, $FC, $E,	$F0, $C, $C0, $F8, $22,	$80, $F8, $30, $2A, $80, $F8, $1D, $FF,	$F8
 		dc.b $4F, 0, $F0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_3D778:	dc.b $D5, $B6, 0, $FF, $F8, $FC, $FF, $F8, $FC,	$FF, $F8, $A3, $2D, $F1, $F8, $E, $B, $F1, $F8,	$E
-
 		dc.b $A, $BB, $B2, $F1,	$F8, $D, $22, $21, $E2,	$F8, $D, $2B, $2A, $E2,	$F8, $D, $E0, $F8, $A, $E2
 		dc.b $76, $49, $E0, $F8, $B, $FF, $F8, $85, $2E, $FF, $F8, $E, $E, $F, $FE, $F8, $D, $4C, $FE, $F8
 		dc.b $B, $52, $D5, $2C,	$FE, $F8, $B, $E0, $F8,	$2F, 0,	$F8, $FC, 0, $F8, $9A, $5E, $EA, 0, $F8
@@ -43563,7 +42117,6 @@ byte_3D778:	dc.b $D5, $B6, 0, $FF, $F8, $FC, $FF, $F8, $FC,	$FF, $F8, $A3, $2D, 
 		dc.b $F8, $D, 0, $D8, $A6, 0, $E8, $FC,	0, $A8,	$FC, $FF, $F8, $FC, $12, 0, $FF, 0, $F0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0
 byte_3D978:	dc.b 8,	$13, 0,	0, 0, 4, 2, $10, 0, $B,	$A0, 3,	$20, $44, 4, 1,	$90, $30, $10, 6
-
 		dc.b $88, 5, $EA, $40, $C0, $19, 6, $20, $A4, $C, 1, $A3, $84, $83, $71, $20, $60, $C, $14, 2
 		dc.b $EC, $42, $40, $21, $B, $21, $40, $2C, 1, $80, $30, $3B, $10, $32,	$16, 1,	$C8, $18, $B, 0
 		dc.b $60, $C, $E, $24, $C, $85,	$81, 0,	$81, $89, 0, 9,	3, $84,	$88, $61, $22, $54, $48, $96
@@ -43607,7 +42160,6 @@ byte_3D978:	dc.b 8,	$13, 0,	0, 0, 4, 2, $10, 0, $B,	$A0, 3,	$20, $44, 4, 1,	$90,
 		dc.b $4C, $59, $8A, $31, $80, $8C, $C6,	$88, $90, $46, $63, $41, $18, $23, $11,	$20, $8C, $C6, $88, $9A
 		dc.b $72, $42, $A4, $F,	$EB, 4,	$A0, $A4, $15, $A2, $14, $3E, $89, $52,	$A2, $38, $68, $AF, $F0, 0
 byte_3DCD4:	dc.b 7,	3, 0, 0, 0, 1, 2, $10, 0, 4, $81, $40, $4E, $68, $30, $2A, $10,	$E, $C,	0
-
 		dc.b $40, $10, $41, 0, $41, 4, $20, 2, $14, $41, $20, $41, 4, $25, $CD,	$14, 9,	4, 2, 0
 		dc.b $80, $B, 6, 8, $34, $24, $38, 2, $11, $F8,	$14, 0,	$82, 2,	$41, $30, $90, $4C, $1E, 8
 		dc.b 8,	4, $41,	0, $10,	$60, $82, $38, $84, $42, $A1, $D1, 9, $B, $CC, $30, $1D, $D, 7,	$C1
@@ -43623,7 +42175,6 @@ byte_3DCD4:	dc.b 7,	3, 0, 0, 0, 1, 2, $10, 0, 4, $81, $40, $4E, $68, $30, $2A, $
 		dc.b $C8, $6B, $D4, $C,	$A, 6, 2, 0, $23, 4, $68, $8C, $E8, $8E, $A8, $8D, $E8,	$8F, $79, $8D
 		dc.b 6,	$E3, $B1, $EF, $F0, 0
 byte_3DDF2:	dc.b 7,	$17, 0,	0, 0, 0, 1, $21, $E8, $C0, $9E,	$10, $26, $C4, $B, $AE,	5, $29,	$C1, $CF
-
 		dc.b $D0, $14, 3, 2, 0,	$42, $20, $84, 8, $84, $10, $62, $18, $42, $88,	$81, $E, $26, $44, $C0
 		dc.b $9B, $FA, $26, $84, $A8, $94, $12,	$E2, $5A, $48, $C9, 9, $27, $24, $A4, $6C, $8C,	$91, $F2, $3A
 		dc.b $45, 1, $E4, $45, $80, $99, $C, $21, $45, 8, $A0, $93, $B2, $72, $4F, $C9,	$EA, $60, $C3, 8
@@ -43648,7 +42199,6 @@ byte_3DDF2:	dc.b 7,	$17, 0,	0, 0, 0, 1, $21, $E8, $C0, $9E,	$10, $26, $C4, $B, $
 		dc.b $30, $89, $BC, $22, $57, 8, $97, $A2, $D3,	$68, $B4, $BA, $2D, $46, $8B, $4F, $A2,	$D5, $68, $B5
 		dc.b $3E, $6D, $61, 0, $35, $74, 1, $FC
 byte_3DFC6:	dc.b 7,	1, 0, 0, 0, $38, 2, $10, 0, $10, 0, $40, $C2, 5, $44, 4, 8, $20, $20, $C1
-
 		dc.b 1,	3, $88,	$28, 8,	$F0, 3,	$81, $80, $1C, $1C, 1, $40, $60, $8A, 1, 0, $5C, 8, 3
 		dc.b 0,	$C0, $E, $E, $18, $F0, $10, $47, $81, $82, $3C,	$79, $B0, $F, $4B, $80,	$96, $C, 1, $E1
 		dc.b $A0, $F, $C, $81, $10, $CF, $60, $F, 1, 0,	$78, $45, $45, $82, $7A, 7, $13, $D1, $E0, $38
@@ -43672,7 +42222,6 @@ byte_3DFC6:	dc.b 7,	1, 0, 0, 0, $38, 2, $10, 0, $10, 0, $40, $C2, 5, $44, 4, 8, 
 		dc.b $D4, $E3, $DC, $E0, $F7, $E0, $F4,	$F7, $B5, $2F, $7F, $7E, $7D, 3, $DD, $43, $DF,	$63, $C7, 3
 		dc.b $C7, 3, $C0, $42, $7C, $FE
 byte_3E184:	dc.b 7,	$13, 0,	$15, 0,	0, $4E,	$9C, 3,	$86, $82, $C5, $42, $73, $80, $A8, $48,	$13, 3,	$A5
-
 		dc.b 2,	$F1, $A1, $78, $3C, $54, $3F, $78, $16,	$87, $81, $E0, $8A, $22, 9, $A2, $40, $A, $50, $57
 		dc.b $3A, $28, 0, $A3, $28, $B4, $6A, $C1, $B8,	$69, $C, $34, $92, $38,	$68, $EA, $30, $D, $18,	$4F
 		dc.b $DC, 5, $41, $52, $90, $A5, 5, $40, $D2, $94, $9C,	$11, $44, $41, $34, $4D, $38, 7, $D, 5
@@ -43688,7 +42237,6 @@ byte_3E184:	dc.b 7,	$13, 0,	$15, 0,	0, $4E,	$9C, 3,	$86, $82, $C5, $42, $73, $80
 		dc.b 2,	$20, $28, $7A, $4E, $40, 0, $E0, $BB, $2F, $8C,	2, $FC,	$C2, $30, $40, 3, $C, $5A, $22
 		dc.b $5C, $41, $33, $91, $96, $26, $19,	$7F, $C0, 0
 byte_3E2A6:	dc.b 6,	3, 0, 0, 0, 1, 2, $10, 0, 8, $82, $80, $30, 0, $C0, $80, 8, $C,	0, $60
-
 		dc.b $28, $83, $81, 0, $24, $14, 0, $E4, $A, 6,	2, 2, $9E, $E0,	$A1, 0,	$60, $D3, $12, $93
 		dc.b $52, $C1, $82, 1, $C2, $40, $80, $9E, 7, $85, 0, $A0, $C0,	$B0, $D0, $10, $30, $50, $E0, $D0
 		dc.b $C2, 7, $C8, $10, 6, 9, $1E, $F0, $89, $90, $69, $A9, $41,	$E9, $62, 1, $E1, $56, $C2, $B0
@@ -43710,7 +42258,6 @@ byte_3E2A6:	dc.b 6,	3, 0, 0, 0, 1, 2, $10, 0, 8, $82, $80, $30, 0, $C0, $80, 8, 
 		dc.b $43, $42, $2D, $3F, $F4, $50, $DA,	$D8, $E2, $E2, $DA, $7A, $E2, $80, $D8,	$D8, $E0, $E4, $6C, $3F
 		dc.b $D8, $C8, $68, $98, $28, $80, $11,	$95, $92, $56, $56, $58, $BC, $F8, $AF,	$E0
 byte_3E446:	dc.b $85, $3E, 0, $FF, $F8, $FC, $FF, $49, $FF,	$FF, $33, $33, $91, $91, $C4, $E, $FC, $92, $F6, $91
-
 		dc.b $F1, $FC, $34, $92, 7, $C0, $FD, $4B, $2D,	$33, $F1, $E7, $F0, $7F, 8, $7B, $58, $80, $2D,	$3D
 		dc.b $23, $49, $4B, $DB, $7B, 8, $47, $ED, $DC,	$F1, 0,	$2D, $90, $D9, $C2, $30, $C8, $F1, $33,	$F1
 		dc.b $81, $90, $10, $F,	$F5, $C7, $B2, $37, $7E, $F0, $C, $E1, $F6, $58, $3D, $91, $34,	$F0, 7,	8
@@ -43874,7 +42421,6 @@ byte_3E446:	dc.b $85, $3E, 0, $FF, $F8, $FC, $FF, $49, $FF,	$FF, $33, $33, $91, 
 		dc.b $D, $FE, $4A, $4A,	$80, $60, $B, $26, $CA,	$80, $60, $B, $E0, $80,	$60, $15, $BC, $C4, 2, 0
 		dc.b $EC, 0, $F0, 0, 0,	0, 0, 0
 byte_3F0F6:	dc.b $BF, $DF, 1, 1, 2,	3, 4, 5, $FB, $F8, 9, 6, 7, 8, 9, $A, $FB, $F8,	$A, $EF
-
 		dc.b $F7, $B, $C, $D, 1, $E, $FB, $F8, $A, $B, $F, $10,	$11, $12, $FB, $F8, $A,	$13, $14, $FB
 		dc.b $FD, $13, $15, $16, $FB, $F8, $A, $17, $18, $19, $1A, $1B,	$FB, $F8, $A, $1C, $1D,	$1E, $1F, $7E
 		dc.b $BF, $20, $FB, $F8, $A, $21, $22, $23, $24, $25, $FB, $F8,	$A, $26, 1, $27, $28, $29, $DF,	$EF
@@ -43883,7 +42429,6 @@ byte_3F0F6:	dc.b $BF, $DF, 1, 1, 2,	3, 4, 5, $FB, $F8, 9, 6, 7, 8, 9, $A, $FB, $
 		dc.b $FD, $7E, $3E, $3F, $FB, $F8, $A, $40, $41, $42, $43, $44,	$FB, $F8, $A, $45, $46,	$47, $48, $49
 		dc.b $55, 5, $FB, $F8, $A, 0, $F8, $FC,	0, $F8,	$FC, 0,	$F8, $FC, $FB, $FF, 0, $F0, 0, 0
 byte_3F196:	dc.b $7D, $9D, 0, $FF, $FD, $3C, $3D, $3E, $3F,	$F4, $FE, $FF, $F8, $19, $34, $35, $5F,	$85, $F9, $6C
-
 		dc.b $6D, $6E, $6F, $D3, $F8, $21, $BC,	$F8, $18, $C3, $F8, $25, $D8, $15, $EE,	$36, $37, $E7, $F8, $14
 		dc.b $82, $F8, $15, $D1, $39, $3A, $3B,	$72, $F8, $31, $20, $DF, $BF, $21, $22,	$23, 1,	$25, $26, $F0
 		dc.b $FF, $27, $28, $29, $2A, 2, $2C, $2D, $F7,	$AA, $E0, $F8, 9, $2E, $2F, $30, $E0, $F8, $C, $31
@@ -43904,7 +42449,6 @@ byte_3F196:	dc.b $7D, $9D, 0, $FF, $FD, $3C, $3D, $3E, $3F,	$F4, $FE, $FF, $F8, 
 		dc.b $FF, $F8, $5D, $4B, $F8, $57, $F1,	$F0, $37, 0, $F0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0
 byte_3F316:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF, $FF, $F
-
 		dc.b $10, $11, $12, $13, $14, $15, $16,	$17, $18, $19, $1A, $1B, $1C, $1D, $1E,	$FF, $FF, $1F, $20, $21
 		dc.b $22, $23, $24, $25, $26, $27, $28,	$29, $2A, $2B, $2C, $2D, $2E, $FF, $FF,	$2F, $30, $31, $32, $33
 		dc.b $34, $35, $36, $37, $38, $39, $3A,	$3B, $3C, $3D, $3E, $FF, $FF, $3F, $40,	$41, $42, $43, $44, $45
@@ -43924,7 +42468,6 @@ byte_3F316:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF
 		dc.b $81, $E1, $FF, $58, $AE, $F0, $FF,	$82, $3A, $F8, 9, $F0, $83, $F0, $F8, $39, 0, 0, 0, $F0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_3F486:	dc.b $85, $7B, 0, $FF, $F8, $FC, $FF, 1, 3, 2, $FD, $F8, $C, 4,	6, 5, $F, $E8, $FD, $F8
-
 		dc.b $C, 1, 2, $43, $FF, $E7, $FA, $FE,	4, $47,	$E1, 5,	$29, $2A, $2B, $E7, $FA, $FE, $E0, $2C
 		dc.b $2D, $28, $1C, $25, $E6, $FA, $FE,	$E0, $2E, $2F, $30, $85, $A3, $E6, $FA,	$FE, $E0, $31, $32, $33
 		dc.b $E6, $70, $74, $FA, $FE, $E0, $34,	$35, $36, $E6, $FA, $FE, 7, 7, $54, $31, $A6, $FF, $F8,	$A
@@ -43998,7 +42541,6 @@ byte_3F486:	dc.b $85, $7B, 0, $FF, $F8, $FC, $FF, 1, 3, 2, $FD, $F8, $C, 4,	6, 5
 		dc.b $35, $FD, $FF, $4C, $35, $AA, $2A,	$FD, $FF, $4C, $35, $FD, $FF, $4C, $35,	$FD, $FF, $A0, $F8, $13
 		dc.b 0,	$F8, $3F, 0, $F0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 byte_3FA36:	dc.b $FF, $30, 9, 1, 2,	3, 4, 5, 6, 2, $FF, 7, 8, $FD, $FF, $FF, 9, $A,	$B, $A
-
 		dc.b $A, $C, $A, $D, $E, $F, $E, $E, 8,	$FF, $13, $10, $10, 8, $11, $12, $13, $14, $15,	$16
 		dc.b $16, $17, $DE, $FD, $1F, $DC, 9, $18, $19,	$1A, $1B, $1C, $1D, $1E, $1F, 9, $20, $E2, $C3,	$DB
 		dc.b $B, $E0, $21, $22,	$23, $24, $F0, $25, $F,	$71, $26, $27, $21, $28, $16, $FB, $29,	$E0, $2A, $2B
@@ -44027,7 +42569,6 @@ byte_3FA36:	dc.b $FF, $30, 9, 1, 2,	3, 4, 5, 6, 2, $FF, 7, 8, $FD, $FF, $FF, 9, 
 		dc.b $DA, $E9, $30, $31, $66, $FD, $67,	$D, $F1, $25, $15, $D0,	$E6, $CC, $E4, $FF, $17, $FC, $FD, $FF
 		dc.b $11, $F8, $C, $AB,	$A, $FD, $11, $B5, $E7,	$40, $F4, $F4, $E3, 1, $F8, $1A, 0, $F0, 0, 0
 byte_3FC66:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF, $FF, $F
-
 		dc.b $10, $11, $12, $13, $14, $15, $16,	$17, $18, $19, $1A, $1B, $1C, $1D, $1E,	$FF, $FF, $1F, $20, $21
 		dc.b $22, $23, $24, $25, $26, $27, $28,	$29, $2A, $2B, $2C, $2D, $2E, $FF, $EF,	$2F, $30, $31, $32, $33
 		dc.b $34, $35, $36, $37, $38, $39, $3A,	0, $FF,	$F8, $C3, $11, $82, $DB, $11, $F2, $F8,	$B, $29, $F0
@@ -44042,7 +42583,6 @@ byte_3FC66:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF
 		dc.b $E0, $FE, $DE, $A2, $F3, $E0, $FC,	$DE, $FC, $F0, $55, 0, 2, $F8, $D, $62,	$F0, $D, $FF, $F8
 		dc.b $13, 0, $F0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 byte_3FD76:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF, $FF, $F
-
 		dc.b $10, $11, $12, $13, $14, $15, $16,	$17, $18, $19, $1A, $1B, $1C, $1D, $1E,	$FF, $FF, $1F, $20, $21
 		dc.b $22, $23, $24, $25, $26, $27, $28,	$29, $2A, $2B, $2C, $2D, $2E, $FF, $FF,	$2F, $30, $31, $32, $33
 		dc.b $34, $35, $36, $37, $38, $39, $3A,	$3B, $3C, $3D, $3E, $FF, $FF, $3F, $40,	$41, $42, $43, $44, $45
@@ -44063,12 +42603,7 @@ byte_3FD76:	dc.b $FF, $FF, 0, 1, 2,	3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $FF
 		dc.b $4B, $24, $F8, $F5, $8B, $F3, $A0,	$FC, $4E, $20, $FF, $A3, $50, $51, 2, $18, 0, $B8, 9, $FE
 		dc.b $FD, $ED, $52, $53, $A2, $48, $D4,	$FC, $F7, $F1, $FE, $E4, $F2, 7, $24, 0, $FE, $FB, 0, $F0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
-empty_block0:	dc.b [$EA]$FF
-org $40000
-empty_block1:	rorg $C0000
-org $100000
 byte_100000:	dc.b 6,	$11, 0,	0, 0, 0, 1, $50, $11, 3, $80, $12, $3C,	$90, $40, 0, $43, $80, $8C, $F
-
 		dc.b $B0, $64, $60, $80, $80, $64, $60,	$84, $74, $34, $14, $54, $41, $60, $26,	1, 4, $3A, 8, $7F
 		dc.b $80, $E4, $D0, $F0, $C4, $A4, $94,	$C4, $B0, $10, $38, $88, 0, 1, 1, $18, $F, $C8,	$E0, $E1
 		dc.b 1,	$A1, $C1, 8, $E1, $C9, $A0, $E8, $E1, $A9, $A0,	$CA, $3D, $41, $D4, $94, $10, $40, $14,	0
@@ -44084,7 +42619,6 @@ byte_100000:	dc.b 6,	$11, 0,	0, 0, 0, 1, $50, $11, 3, $80, $12, $3C,	$90, $40, 0
 		dc.b $B0, $B8, $BC, $B4, $C0, $BD, $BC,	$B1, $A5, $BD, $BB, $F1, $43, $41, $61,	$61, $49, $61, $49, $61
 		dc.b $51, $59, $69, $81, $63, $49, $67,	$26, $93, $17, $18, $E5, $9C, $4B, $DB,	$FF, $80, 0
 byte_10012A:	dc.b 7,	3, 0, 0, 0, $12, 2, $10, 0, $68, 0, $40, $39, $22, 0, $E0, $40,	$7B, $81, $C0
-
 		dc.b $80, $10, $10, $1D, 6, 5, 3, 5, $D1, $1A, 8, $44, 2, $41, $40, $D1, 0, $84, $87, $10
 		dc.b $38, $10, 4, 0, $80, 4, 2,	2, $54,	$E, 9, $64, $7C, $81, 0, $E1, $24, $98,	$11, $28
 		dc.b 9,	5, 1, 0, $E0, $F4, 3, $81, $12,	$61, $84, $98, $1D, $61, $18, $80, $6A,	$34, $2E, $93
@@ -44108,7 +42642,6 @@ byte_10012A:	dc.b 7,	3, 0, 0, 0, $12, 2, $10, 0, $68, 0, $40, $39, $22, 0, $E0, 
 		dc.b $15, $38, $4A, $1C, $87, $C1, $21,	$F0, $30, $48, $1D, $D8, $AB, $E2, 2, $F8, $25,	$F, 9, $42
 		dc.b $BF, $80
 byte_1002E4:	dc.b 8,	$1F, 0,	$11, $40, 0, $4E, $B2, 0, $78, $20, $12, $9E, 2, $39, $60, $27,	$21, $18, $B
-
 		dc.b $A7, $80, $BA, $38, $D, $FD, $80, $DD, 6, $60, $3F, 2, $19, $10, $D0, $86,	$C4, $34, $15, $A0
 		dc.b $BD, 4, $68, $27, $41, $7A, $B, $D0, $4E, $C2, $30, $E4, $36, $8E,	$43, $69, $64, $37, $86, $C3
 		dc.b $29, $90, $47, $81, 4, $A9, $10, $56, 9, 4, $A8, $90, $63,	$81, 4,	$A9, $10, $68, $38, 0
@@ -44137,7 +42670,6 @@ byte_1002E4:	dc.b 8,	$1F, 0,	$11, $40, 0, $4E, $B2, 0, $78, $20, $12, $9E, 2, $3
 		dc.b $A0, $AB, 5, $28, $29, $81, $58, $A, $70, $53, $7E, 5, $39, $29, $49, $52,	$4A, $52, $55, $16
 		dc.b $A4, $94, $E5, $AA, $25, $39, $29,	$49, $56, $4A, $52, $53, $12, $B0, $94,	$F4, $49, $4D, $FC, 0
 byte_100514:	dc.b 7,	3, 0, 0, 0, $45, 2, $10, 0, $28, 0, $10, $60, $80, $41,	$82, 1,	2, 0, 4
-
 		dc.b 8,	0, $11,	$E0, $80, $41, $86, 1, 2, 0, 4,	$28, 0,	$B0, $20, 3, $4B, $84, 1, $16
 		dc.b 0,	4, $48,	0, $10,	$E8, $8C, 7, $A2, $34, $1F, $B,	7, $B, $F, $A, $F7, $A,	$FC, $44
 		dc.b 0,	$44, 4,	$78, $32, $93, $E4, $C8, $22, $B2, $42,	$E6, $47, $24, $91, $49, $20, $24, 2, $3C
@@ -44145,7 +42677,6 @@ byte_100514:	dc.b 7,	3, 0, 0, 0, $45, 2, $10, 0, $28, 0, $10, $60, $80, $41,	$82
 		dc.b $E3, $48, $8A, $D3, $22, $B4, $59,	$2D, $16, $49, $34, $8E, $50, $23, $92,	$41, $53, $BB, $51, $92
 		dc.b $45, $6A, $D1, $88, $F4, $42, $2F,	$F0
 byte_100594:	dc.b $85, $F7, 0, $FF, $F8, $FC, $FF, $7D, $23,	$7D, $7F, $F6, $FC, $83, $29, $DF, $FF,	0, $33,	0
-
 		dc.b $2A, $23, $33, $F1, $FD, $2D, $23,	$35, $23, $23, 0, $21, $7D, $1E, $1A, $2C, $F1,	$FE, $23, $3E
 		dc.b $3F, $DF, $3C, $D2, $FE, $2D, $E0,	$FD, $FD, $E2, $4B, $7A, $7B, $23, $F0,	$FC, $83, $33, $4B, $4B
 		dc.b $9F, 1, $2A, 0, $24, $25, $26, 0, $F0, $F1, $E0, $39, $F0,	$C4, $23, $2F, $30, $31, $C1, $83
@@ -44313,7 +42844,6 @@ byte_100594:	dc.b $85, $F7, 0, $FF, $F8, $FC, $FF, $7D, $23,	$7D, $7F, $F6, $FC,
 		dc.b $6D, $3B, $60, $B8, $20, $A3, $F8,	$CD, $1E, $60, 0, 0, 0,	$F0, 0,	0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0
 byte_101294:	dc.b $85, $7A, 0, $FF, $F8, $FC, $FF, $4C, $FF,	$F8, $E, $E7, $FF, $34,	0, $38,	$F6, $93, $FE, $FF
-
 		dc.b $FD, $35, $36, $37, $39, 0, $FE, $60, $7F,	$FF, $FE, $E6, $F0, $F8, $D, $3B, $F0, $FC, $46, $3F
 		dc.b $46, $46, $40, 2, $3C, $D,	$FF, $39, 2, $3B, $FE, $4C, $44, $87, $11, $AC,	$45, 5,	7, $FE
 		dc.b $3A, 6, $FB, 0, $FE, $FE, $E2, $E1, $11, $1E, $22,	$A, $C,	$3B, 1,	$30, $B, $C, $FB, $F7
@@ -44398,7 +42928,6 @@ byte_101294:	dc.b $85, $7A, 0, $FF, $F8, $FC, $FF, $4C, $FF,	$F8, $E, $E7, $FF, 
 		dc.b 0,	$F6, $80, $FE, 0, $F6, $80, $FE, 0, $F6, $80, $FE, 0, $F6, $80,	$FE, $91, $54, 0, $F6
 		dc.b $79, $C0, $E2, $F0, $2D, 0, $B8, $3F, $C0,	$F8, $B1, 1, 0,	0, $F0,	0, 0, 0, 0, 0
 byte_101924:	dc.b $CF, $1F, 8, 9, 6,	7, $FC,	1, 2, 3, 4, 5, $9E, $FF, $F8, 2, $10, 4, $C, $FC
-
 		dc.b $B, $A, $C, $D, $E, $F, $F, $21, $C, 6, $14, $15, $12, $FC, 8, $FC, $11, 6, $C, $FC
 		dc.b $13, $FC, $D4, $18, $8F, 1, $FC, $1A, $1B,	$16, $17, $F8, $19, $FC, $B1, $7F, $E4,	$FC, $1E, $F8
 		dc.b $FC, $1C, $1D, $18, $21, $22, $23,	$24, $88, $3E, $FC, $25, $FC, $F8, $FC,	$26, $27, $28, $29, $44
@@ -44415,7 +42944,6 @@ byte_101924:	dc.b $CF, $1F, 8, 9, 6,	7, $FC,	1, 2, 3, 4, 5, $9E, $FF, $F8, 2, $1
 		dc.b 9,	$28, $FC, $FC, $F8, 9, $28, $FC, $FC, $F8, 9, $30, $F7,	$15, 5,	$FC, $FD, 0, $FF, $F8
 		dc.b $1E, 0, $F8, $FC, $FF, 0, $F0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
 byte_101A64:	dc.b $85, $EF, 0, $FF, $F8, $FC, $FF, $3D, $3E,	$3D, $3D, $A, $F0, $F8,	$A, $3E, $B7, $24, 8, 9
-
 		dc.b 9,	$B, $F0, $F8, $A, $3C, $E3, $F8, $B, $D0, $E3, $F8, $B,	$59, $49, $D0, $E0, $F8, $E, $3C
 		dc.b $E0, $F8, $E, $A3,	$F8, $C, $D0, $E0, $F8,	$E, $1D, $6D, $A0, $F8,	$7F, $FF, $F8, $A, 5, $3C
 		dc.b $FF, $F0, $F8, $A,	6, $F5,	$F1, $3D, $BB, $AA, $DD, $F8, $E, $3E, $F0, $F8, $D, 6,	$3B, $BD
@@ -44466,7 +42994,6 @@ byte_101A64:	dc.b $85, $EF, 0, $FF, $F8, $FC, $FF, $3D, $3E,	$3D, $3D, $A, $F0, 
 		dc.b $73, $ED, $55, $55, $78, $E4, $B0,	$C0, $92, 0, $C8, $AF, $FF, $F8, $45, $E1, $47,	$FF, $FD, $20
 		dc.b $F0, 9, 0,	$F0, 0,	0, 0, 0, 0, 0, 0, 0
 byte_101E44:	dc.b $85, $B8, 0, $FF, $F8, $FC, $FF, $A, $FF, $3F, $40, $D1, $A8, $F0,	$F8, 9,	$B, $FF, $F0, $F8
-
 		dc.b $B, $A, $FC, $E0, $F8, $C,	$7A, $57, $F0, $F8, $E,	$E0, $F8, $BF, $FF, $F8, $2B, $25, $26,	$27
 		dc.b $EF, $F8, $D, $51,	$52, $E6, $F8, $D, $A7,	$F8, 9,	$15, $25, $E6, $FC, $F0, $F8, 9, $F6, $FC
 		dc.b $FA, $D6, $F8, $C,	$FA, $49, $4F, $D6, $F8, $B, $FA, $F6, $F8, 9, $F0, $F8, $D, $34, $35, $36
@@ -44563,7 +43090,6 @@ byte_101E44:	dc.b $85, $B8, 0, $FF, $F8, $FC, $FF, $A, $FF, $3F, $40, $D1, $A8, 
 		dc.b $F8, $13, $C0, $F8, $18, $F0, $C0,	$F8, $A, $AB, 2, $D0, $E0, $F8,	$11, $D0, $A8, $D, $E0,	$F8
 		dc.b $F, 0, $F0, 0
 byte_1025B4:	dc.b $DB, $D, 8, 9, $FE, $F8, $D, 7, $EF, $F8, $E, $A, 0, $FF, $F8, $D,	$B, $B,	$F7, $FD
-
 		dc.b $4B, $4C, $F0, $F8, $A, $E0, $4B, $4D, $4E, $E0, $F8, $B, $20, $53, $CF, $88, $4F,	$50, $20, $20
 		dc.b $21, $FD, $FF, $43, $76, $C0, $51,	$52, $FC, $30, $FD, $C0, $FC, $3F, $40,	$D1, $5D, $F0, $F8, $A
 		dc.b $E0, $F0, $F8, $C,	$B, $3A, $FF, $F8, $D, $A, $2A,	$FF, $F8, $D, $2B, $A8,	$E0, $FF, $2A, $E0
@@ -44584,7 +43110,6 @@ byte_1025B4:	dc.b $DB, $D, 8, 9, $FE, $F8, $D, 7, $EF, $F8, $E, $A, 0, $FF, $F8,
 		dc.b $F8, $32, $E0, $AC, $C8, $96, $FE,	$FD, $33, $80, $FD, $13, $FE, $C0, $23,	$A2, $52, $3C, $4D, $24
 		dc.b $FC, $F3, $A, 0, $C, $F8, $13, $FC, $F8, $B, 0, $F0, 0, 0,	0, 0, 0, 0, 0, 0
 byte_102744:	dc.b $FF, $FE, 5, $1F, $2B, 5, 1, 2, 3,	4, $FC,	$FE, $A, $24, $2B, $A, 6, $3B, $BC, 7
-
 		dc.b 8,	9, $FC,	$FE, 5,	$29, $E0, $B, $C, 8, $D, $F4, $86, $FC,	$FE, $E0, $E, $F, $10, $11
 		dc.b $FC, $FE, $12, $C0, $21, $F2, $14,	$13, $FE, $12, $FE, $FA, 5, $2F, $85, $24, $17,	5, $1A,	5
 		dc.b $C5, $FC, $BD, $A,	$C0, $4B, 0, $A, $1F, $A, $C5, $FC, $BD, $E0, $73, 2, $B0, $24,	5, $C5
@@ -44620,7 +43145,6 @@ byte_102744:	dc.b $FF, $FE, 5, $1F, $2B, 5, 1, 2, 3,	4, $FC,	$FE, $A, $24, $2B, 
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF
 		dc.b $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF
 byte_102A00:	dc.b $80, $B8, $80, 3, 1, $14, 6, $25, $F, $35,	$10, $45, $11, $56, $2D, $66, $30, $73,	0, $81
-
 		dc.b 4,	4, $16,	$27, $27, $6D, $48, $F7, $77, $70, $82,	5, $E, $16, $32, $28, $E2, $38,	$EE, $78
 		dc.b $EB, $83, 4, 5, $15, $14, $27, $6E, $37, $6F, $58,	$F4, $78, $EA, $84, 6, $2F, $18, $ED, $85
 		dc.b 6,	$2A, $18, $E6, $86, 6, $26, $18, $EF, $87, 6, $2E, $18,	$EC, $78, $F0, $88, 7, $6C, $89
@@ -44758,7 +43282,6 @@ byte_102A00:	dc.b $80, $B8, $80, 3, 1, $14, 6, $25, $F, $35,	$10, $45, $11, $56,
 		dc.b $31, $A1, $9A, $1F, $B6, $33, 3, $34, $7B,	$ED, $77, $F9, $B5, $32, $37, $BE, $57,	$C8, $AD, $ED
 		dc.b $25, $BE, $57, $6A, $6F, $96, $7A,	$99, $67, $2D, $64, $64, $65, $99, $97,	$47, $58, $EE, $8E, $E0
 byte_1034B4:	dc.b $80, $5B, $80, 3, 0, $13, 3, $25, $13, $36, $2E, $46, $30,	$56, $35, $66, $36, $73, 2, $81
-
 		dc.b 3,	1, $15,	$14, $26, $32, $37, $72, $47, $74, $76,	$31, $82, 5, $15, $18, $F7, $78, $F4, $83
 		dc.b 5,	$11, $17, $6E, $78, $F0, $84, 8, $F5, $85, 8, $EB, $86,	6, $2F,	$87, 5,	$10, $17, $6F
 		dc.b $28, $F2, $38, $F3, $78, $E7, $88,	7, $76,	$18, $E6, $89, 7, $70, $8A, 8, $F1, $8C, 6, $34
@@ -44827,7 +43350,6 @@ byte_1034B4:	dc.b $80, $5B, $80, 3, 0, $13, 3, $25, $13, $36, $2E, $46, $30,	$56
 		dc.b $51, $E1, 5, $76, $96, $BC, $FE, $F4, $7E,	$B1, $EE, $D2, $7B, $BF, $33, $FB, $3F,	$CC, $EF, $FD
 		dc.b $CE, $F7, $E6, $95, $C0, 0
 byte_1039F6:	dc.b $80, $7D, $80, 3, 1, $14, 4, $25, $E, $35,	$15, $46, $2F, $56, $32, $66, $33, $73,	0, $81
-
 		dc.b 4,	6, $16,	$36, $28, $EE, $38, $F1, $78, $E7, $82,	5, $13,	$17, $6F, $28, $EF, $38, $F4, $77
 		dc.b $74, $83, 5, $11, $17, $72, $84, 6, $34, $85, 5, $A, $17, $70, $86, 5, $12, $78, $F6, $87
 		dc.b 5,	$B, $17, $6E, $28, $F0,	$77, $76, $88, 5, $16, $18, $F2, $89, 5, $14, $8A, 6, $31, $18
@@ -44930,7 +43452,6 @@ byte_1039F6:	dc.b $80, $7D, $80, 3, 1, $14, 4, $25, $E, $35,	$15, $46, $2F, $56,
 		dc.b $89, $F9, $BB, $69, $6D, $2B, $37,	$AF, $F5, $C5, $F9, $36, $6C, $FC, $9E,	$C9, $AA, $B0, $1A, $CB
 		dc.b $FC, $6B, $AD, $35, $BA, $28, $F1,	$7B, $D2, $19, $34, $B,	3, $14,	0, 0
 byte_1041EA:	dc.b 0,	$18, $81, 3, 1,	$15, $16, $27, $7B, $36, $35, $82, 3, 0, $15, $19, $28,	$F9, $36, $3C
-
 		dc.b $83, 4, 8,	$16, $38, $84, 7, $7A, $16, $3A, $87, 8, $F8, $8B, 3, 2, $15, $1B, $37,	$77
 		dc.b $8C, $16, $39, $25, $13, $35, $18,	$46, $34, $57, $76, $68, $FB, $74, 6, $8D, 5, $17, $14,	7
 		dc.b $25, $12, $34, $A,	$58, $FA, $FF, $66, $66, $66, $FB, $5D,	$90, $66, $6C, $77, $E7, $7E, $6F, $3A
@@ -44951,7 +43472,6 @@ byte_1041EA:	dc.b 0,	$18, $81, 3, 1,	$15, $16, $27, $7B, $36, $35, $82, 3, 0, $1
 		dc.b 8,	$FE, $6C, $17, $B7, $E8, $E4, $63, $AA,	$1D, $51, $B, $42, $16,	$97, $21, $62, $E4, $2C, $39
 		dc.b $A, $6E, $42, $9B,	$90, $A6, $E4, $29, $80, 0
 byte_104370:	dc.b $81, 5, $80, 3, 0,	$14, 3,	$25, $10, $35, $14, $46, $30, $56, $32,	$67, $6E, $75, $11, $81
-
 		dc.b 4,	2, $16,	$2B, $27, $72, $82, 5, $F, $17,	$6A, $83, 4, 4,	$16, $36, $84, 5, $12, $17
 		dc.b $71, $85, 6, $2F, $18, $EA, $86, 5, $E, $17, $6B, $28, $F2, $87, 4, 6, $16, $33, $28, $EB
 		dc.b $88, 6, $2E, $17, $73, $89, 7, $70, $18, $F1, $8A,	5, $16,	$18, $EE, $8B, 7, $6F, $8C, 6
@@ -45232,7 +43752,6 @@ byte_104370:	dc.b $81, 5, $80, 3, 0,	$14, 3,	$25, $10, $35, $14, $46, $30, $56, 
 		dc.b $F0, $FF, $65, $95, $4A, $55, $42,	$A5, $E8, $AF, $A8, $A6, $A9, $A2, $4C,	$4C, $68, $3F, $5B, $FF
 		dc.b $E8, $98
 byte_10593E:	dc.b $80, $77, $80, 3, 1, $14, 5, $24, 7, $35, $15, $46, $2E, $56, $30,	$67, $72, $74, 6, $81
-
 		dc.b 3,	0, $15,	$12, $26, $2F, $37, $76, $48, $F6, $82,	7, $70,	$84, 6,	$36, $85, 6, $33, $86
 		dc.b 5,	$13, $17, $6E, $28, $F3, $87, 4, 4, $15, $16, $27, $6F,	$37, $77, $88, 7, $73, $89, 7
 		dc.b $78, $8A, 6, $31, $18, $F2, $8B, 4, 8, $16, $35, $8C, 5, $14, $17,	$74, $28, $F4, $8D, 6
@@ -45343,7 +43862,6 @@ byte_10593E:	dc.b $80, $77, $80, 3, 1, $14, 5, $24, 7, $35, $15, $46, $2E, $56, 
 		dc.b $47, $10, $7F, $98, $3A, $3C, $AB,	$23, $95, $C, $BD, $4C,	$B7, $7E, $EF, $75, $C9, $8F, $F1, $E2
 		dc.b $59, $76, $A1, $A6, $4F, $4C, $A8,	$32, $F4, $32, $CB, $D9, $FF, $97, $D2,	$F, $72, $2C, $7B, $10
 byte_1061D6:	dc.b 0,	$52, $80, 7, $73, $78, $F6, $81, 7, $6B, $82, 4, 5, $15, $16, $27, $6A,	$38, $F3, $83
-
 		dc.b 3,	0, $14,	6, $25,	$13, $36, $31, $47, $66, $58, $EC, $84,	3, 1, $15, $12,	$26, $2B, $36
 		dc.b $34, $47, $72, $58, $ED, $85, 5, $E, $16, $2E, $27, $6E, $38, $EF,	$58, $F1, $68, $EE, $77, $67
 		dc.b $86, 6, $36, $17, $71, $87, 5, $F,	$16, $30, $27, $6F, $37, $74, $88, 4, 4, $15, $14, $26
@@ -45431,7 +43949,6 @@ byte_1061D6:	dc.b 0,	$52, $80, 7, $73, $78, $F6, $81, 7, $6B, $82, 4, 5, $15, $1
 		dc.b $28, $39, $3A, $F,	$A3, $8D, $46, $AB, $BF, $D2, $EE, $BD,	$D2, $CB, $74, $9D, $56, $E9, $78, $9E
 		dc.b $F8, $CF, $9F, $3E, $7B, $BD, $37,	$75, $F7, $E5, $DD, $19, $F3, $E7, $CF,	$FC, $50, 0
 byte_1068A0:	dc.b $80, $13, $80, 3, 0, $14, 8, $25, $16, $35, $1B, $46, $3B,	$56, $3A, $74, 9, $81, 3, 2
-
 		dc.b $15, $19, $28, $FA, $82, 4, 7, $15, $1A, $83, 3, 1, $15, $17, $84,	6, $3C,	$17, $7B, $85
 		dc.b 5,	$18, $18, $F8, $86, 4, $A, $16,	$38, $27, $7A, $87, 4, 6, $16, $39, $8B, 8, $F9, $FF
 		dc.b $99, $99, $99, $99, $E5, $FF, $82,	$30, $7B, $21, $BF, $46, $C5, $57, $83,	$92, $C1, $C3, $1F, $D2
@@ -45453,7 +43970,6 @@ byte_1068A0:	dc.b $80, $13, $80, 3, 0, $14, 8, $25, $16, $35, $1B, $46, $3B,	$56
 		dc.b $FB, $33, $D7, $E2, $97, $E2, $BB,	$33, $D7, $CD, $BE, $6D, $F4, $14, $CC,	$7C, $9D, $FC, $8C, $ED
 		dc.b $48, $33, $36, $30
 byte_106A34:	dc.b 0,	$4B, $82, 5, $F, $17, $73, $27,	$71, $83, 4, 5,	$14, 6,	$25, $16, $37, $6B, $47, $72
-
 		dc.b $58, $F6, $76, $36, $84, 6, $31, $16, $33,	$28, $ED, $85, 4, 4, $15, $11, $26, $30, $38, $F2
 		dc.b $48, $F3, $77, $78, $86, 3, 0, $15, $E, $25, $13, $36, $34, $47, $75, $68,	$F7, $77, $6F, $87
 		dc.b 3,	1, $15,	$14, $26, $2A, $37, $6E, $47, $77, $78,	$EC, $88, 6, $2F, $18, $F4, $89, 7, $70
@@ -45526,7 +44042,6 @@ byte_106A34:	dc.b 0,	$4B, $82, 5, $F, $17, $73, $27,	$71, $83, 4, 5,	$14, 6,	$25
 		dc.b $D9, $28, $30, 8, $7D, $CC, $FC, $A8, $3C,	$CC, $D0, $46, $9F, $D6, $86, $E9, $EA,	$DD, 3,	$59
 		dc.b $94, $C, 0, 0
 byte_106FC4:	dc.b 0,	$20, $81, 4, 8,	$16, $32, $25, $17, $35, $16, $68, $F8,	$82, 7,	$77, $83, 7, $7B, $68
-
 		dc.b $FA, $76, $36, $86, $15, $18, $77,	$71, $87, 6, $34, $17, $70, $77, $6E, $89, 6, $3A, $8B,	3
 		dc.b 0,	$15, $13, $26, $39, $8C, 4, 6, $17, $78, $27, $7A, $8D,	4, 3, $16, $33,	$8E, 4,	$A
 		dc.b $17, $79, $8F, 5, $12, $14, 2, $24, 7, $37, $6F, $46, $35,	$67, $76, $73, 2, $FF, $49, $2E
@@ -45554,7 +44069,6 @@ byte_106FC4:	dc.b 0,	$20, $81, 4, 8,	$16, $32, $25, $17, $35, $16, $68, $F8,	$82
 		dc.b $C, $56, $C, $57, $C, $FF,	$1B, $6D, $D7, $1D, $CB, $4C, $70, $7D,	$B, $1F, $A7, $49, $24,	$9F
 		dc.b $86, $3F, $6F, $82, $D1, $24, $90,	0
 byte_1071D4:	dc.b $80, $69, $80, 3, 0, $14, 6, $25, $13, $35, $18, $46, $32,	$56, $37, $67, $78, $75, $16, $81
-
 		dc.b 3,	1, $16,	$33, $28, $F6, $82, 5, $15, $83, 3, 2, $16, $36, $84, 5, $12, $85, 6, $34
 		dc.b $86, 4, 8,	$17, $75, $87, 5, $14, $17, $76, $88, 6, $38, $18, $F3,	$89, 7,	$77, $18, $F5
 		dc.b $8A, 7, $74, $8B, 8, $F2, $8C, 6, $35, $8D, 5, $17, $18, $F4, $8E,	4, 7, $17, $73,	$8F
@@ -45673,7 +44187,6 @@ byte_1071D4:	dc.b $80, $69, $80, 3, 0, $14, 6, $25, $13, $35, $18, $46, $32,	$56
 		dc.b $C7, $9F, $EE, $E3, $2D, $7D, $31,	$7C, $F2, $20, $EB, $8A, 3, $8B, $C3, $19, $DE,	1, $CA,	$98
 		dc.b 0,	0
 byte_107AFA:	dc.b $80, $5E, $80, 3, 0, $14, 5, $24, 8, $34, 7, $45, $14, $56, $2B, $67, $71,	$74, 4,	$81
-
 		dc.b 3,	1, $15,	$18, $27, $70, $38, $F2, $82, 6, $35, $83, 5, $13, $17,	$6F, $84, 6, $33, $85
 		dc.b 7,	$72, $86, 5, $12, $17, $73, $27, $76, $87, 4, 6, $17, $6E, $88,	6, $32,	$17, $75, $89
 		dc.b 5,	$16, $18, $EF, $8A, 6, $2F, $18, $EE, $28, $F5,	$8B, 6,	$2E, $18, $F3, $8C, 6, $34, $18
@@ -45754,7 +44267,6 @@ byte_107AFA:	dc.b $80, $5E, $80, 3, 0, $14, 5, $24, 8, $34, 7, $45, $14, $56, $2
 		dc.b $AF, $FF, $E8, $89, $C7, $F, $DF, $D7, $F7, $29, $1F, $F6,	$C5, $B, 9, $19, $19, 6, $1F, $C7
 		dc.b $76, $C, $88, $8A
 byte_10812A:	dc.b $80, $85, $80, 3, 0, $14, 2, $25, $10, $35, $14, $46, $2E,	$56, $36, $67, $6E, $75, $11, $81
-
 		dc.b 4,	5, $16,	$33, $28, $EA, $82, 5, $12, $17, $70, $83, 4, 3, $16, $35, $28,	$F0, $84, 5
 		dc.b $15, $18, $F1, $85, 4, 4, $16, $31, $27, $76, $86,	6, $2F,	$17, $74, $87, 4, 7, $18, $EB
 		dc.b $88, 5, $16, $18, $EE, $89, 7, $73, $8A, 7, $6F, $8B, 6, $30, $18,	$F6, $8C, 6, $32, $8D
@@ -45895,7 +44407,6 @@ byte_10812A:	dc.b $80, $85, $80, 3, 0, $14, 2, $25, $10, $35, $14, $46, $2E,	$56
 		dc.b $AD, $D5, $89, $57, 9, $AF, $68, $57, 2, $4B, $9E,	$BF, $D7, $30, $70, $32, $30, $60, $C1,	$B1
 		dc.b $F2, $D7, $90, $62, $6C, $8B, $3D,	$B8, $8C, $C7, $2F, $1C, $3F, $35, $87,	$88
 byte_108C16:	dc.b $80, $64, $80, 3, 1, $14, 6, $24, 7, $35, $14, $46, $32, $56, $33,	$67, $77, $74, 5, $81
-
 		dc.b 3,	0, $15,	$16, $26, $36, $38, $F7, $78, $F6, $82,	4, 8, $17, $78,	$83, 5,	$13, $16, $39
 		dc.b $84, 6, $34, $85, 6, $35, $86, 7, $7A, $87, 5, $15, $18, $F3, $8B,	6, $38,	$8C, 5,	$17
 		dc.b $17, $76, $8D, 6, $37, $8E, 5, $12, $16, $3A, $8F,	4, 4, $15, $18,	$28, $F2, $FF, $55, $55
@@ -45982,7 +44493,6 @@ byte_108C16:	dc.b $80, $64, $80, 3, 1, $14, 6, $24, 7, $35, $14, $46, $32, $56, 
 		dc.b $9B, $83, $FC, $26, $FE, $F3, $5A,	$9D, $37, $F4, $55, $57, $FF, $FF, $F2,	$FF, $97, $FF, $BD, $95
 		dc.b $54, 0
 byte_1092BC:	dc.b $80, $12, $80, 8, $FA, $81, 3, 5, $16, $3C, $25, $1B, $36,	$3B, $46, $3A, $66, $3D, $75, $18
-
 		dc.b $82, 2, 0,	$17, $7C, $83, 3, 4, $15, $19, $85, 2, 1, $15, $1A, $25, $1C, $FF, $FA,	$BF
 		dc.b $57, $EA, $FD, $63, $18, $C6, $31,	$8E, $8F, $4F, $4F, $E8, $A3, $D3, $1E,	$88, $F4, $47, $AC, $BD
 		dc.b $B0, $D6, $D8, $6B, $64, $35, $E2,	$43, $95, $C9, $CA, $64, $E5, $32, $72,	$99, $F9, $AA, $59, $4A
@@ -45998,7 +44508,6 @@ byte_1092BC:	dc.b $80, $12, $80, 8, $FA, $81, 3, 5, $16, $3C, $25, $1B, $36,	$3B
 		dc.b $22, $7F, $D6, $B7, $F8, $B4, $B1,	$35, $4C, $FC, $D5, $32, $72, $99, $39,	$5C, $9C, $A9, $E, $78
 		dc.b $43, $5B, $61, $AD, $B0, $D7, $79,	$7A, $23, $D1, $1E, $98, $F4, $8F, $F4,	$4F, $4D, $80
 byte_1093E6:	dc.b $80, $C0, $80, 3, 0, $14, 4, $25, $F, $35,	$16, $46, $31, $56, $33, $66, $35, $74,	5, $81
-
 		dc.b 4,	2, $16,	$30, $28, $EB, $38, $F6, $78, $EE, $82,	5, $15,	$18, $F4, $83, 4, 3, $16, $2E
 		dc.b $28, $E6, $38, $F0, $84, 5, $13, $17, $76,	$85, 6,	$2F, $18, $F1, $86, 5, $10, $17, $70, $87
 		dc.b 4,	6, $17,	$71, $88, 6, $36, $89, 6, $32, $8A, 5, $12, $17, $72, $8B, 8, $EA, $8C,	5
@@ -46189,7 +44698,6 @@ byte_1093E6:	dc.b $80, $C0, $80, 3, 0, $14, 4, $25, $F, $35,	$16, $46, $31, $56,
 		dc.b $8D, $4E, $7C, $F,	$B3, $7A, $18, $9A, $1E, $5C, $2E, $A1,	$C8, $7E, $66, $A3, $BC, $70, $D8, $4D
 		dc.b $A8, $21, $43, $80
 byte_10A2AE:	dc.b 0,	$64, $80, $78, $EF, $81, 6, $23, $17, $60, $27,	$5E, $38, $F2, $47, $72, $57, $6E, $68,	$F7
-
 		dc.b $74, 0, $82, 4, 3,	$16, $28, $27, $61, $37, $6C, $47, $64,	$58, $F5, $75, $D, $83,	4, 4
 		dc.b $16, $2E, $26, $2C, $37, $6D, $48,	$F3, $57, $67, $67, $65, $75, $F, $84, 5, $B, $17, $56,	$27
 		dc.b $78, $38, $EB, $77, $6A, $85, 4, 2, $17, $68, $26,	$31, $38, $E6, $47, $69, $57, $6F, $75,	$12
@@ -46259,7 +44767,6 @@ byte_10A2AE:	dc.b 0,	$64, $80, $78, $EF, $81, 6, $23, $17, $60, $27,	$5E, $38, $
 		dc.b $5B, $86, $F6, $4B, $DC, $71, $5F,	$37, $84, $AC, $FD, $A7, $1A, $64, $C1,	$40, 6,	$ED, $5B, $57
 		dc.b $9F, $24, $79, $23, $38, $CC, 0, $37, $6D,	$D8, $9E, $B1, $E1, $BD, $40, 0, 0, 0
 byte_10A810:	dc.b $80, $61, $80, 3, 0, $14, 3, $25, $14, $35, $15, $46, $30,	$56, $32, $65, $16, $75, $13, $81
-
 		dc.b 4,	7, $17,	$70, $82, 4, 8,	$17, $72, $83, 4, 2, $16, $34, $28, $EB, $84, 7, $74, $85
 		dc.b 6,	$33, $18, $F1, $28, $F3, $86, 6, $36, $18, $F2,	$87, 6,	$31, $18, $EA, $88, 8, $F0, $89
 		dc.b 7,	$6A, $8A, 7, $6E, $18, $EE, $8B, 5, $17, $17, $76, $8C,	4, 6, $17, $71,	$8D, 5,	$12
@@ -46360,7 +44867,6 @@ byte_10A810:	dc.b $80, $61, $80, 3, 0, $14, 3, $25, $14, $35, $15, $46, $30,	$56
 		dc.b $D7, $C4, $71, $C,	$35, $90, $52, $B, $45,	$40, $E1, $27, $6D, $E4, $95, $40, $55,	$8E, $6A, $52
 		dc.b $62, $FD, $E0, $65, $1E, $81, $6A,	$94, $53, $4A, $25, $90, $D0, $D0, $92,	$66
 byte_10AFDC:	dc.b $80, $5C, $80, 3, 0, $14, 6, $25, $15, $35, $16, $46, $2E,	$55, $18, $66, $33, $74, 4, $81
-
 		dc.b 3,	1, $15,	$13, $27, $73, $38, $EE, $48, $F4, $77,	$6E, $82, 5, $12, $16, $35, $83, 4, 8
 		dc.b $16, $38, $28, $EB, $84, 6, $36, $85, 6, $32, $86,	5, $14,	$17, $76, $87, 7, $74, $8A, 8
 		dc.b $F2, $18, $F1, $8B, 8, $F7, $8C, 6, $34, $18, $EF,	$8D, 6,	$2F, $18, $F0, $8E, 4, 7, $17
@@ -46436,7 +44942,6 @@ byte_10AFDC:	dc.b $80, $5C, $80, 3, 0, $14, 6, $25, $15, $35, $16, $46, $2E,	$55
 		dc.b $9D, $A5, $85, $67, $BE, $45, $96,	$CA, 8,	$7C, $5F, $BE, $4C, $B5, $32, $68, $AA,	$B1, $81, $20
 		dc.b $58, $85, $CC, $D9, $CD, $D2, $B9,	$6F, $72, $D3, $78, $5F, $3D, $DB, $B7,	$6E, $DD, $BB, $70, 0
 byte_10B5B8:	dc.b $80, $D4, $80, 3, 0, $14, 6, $25, $12, $35, $14, $46, $2F,	$55, $16, $67, $70, $74, 5, $81
-
 		dc.b 3,	1, $16,	$2E, $28, $F3, $82, 5, $13, $18, $F2, $83, 4, 4, $16, $35, $27,	$72, $84, 7
 		dc.b $6F, $85, 5, $15, $18, $F6, $86, 4, 7, $17, $75, $87, 4, 8, $17, $73, $88,	6, $33,	$17
 		dc.b $76, $89, 6, $34, $17, $77, $8A, 6, $32, $17, $78,	$8B, 6,	$36, $18, $F4, $8C, 7, $71, $8D
@@ -46623,7 +45128,6 @@ byte_10B5B8:	dc.b $80, $D4, $80, 3, 0, $14, 6, $25, $12, $35, $14, $46, $2F,	$55
 		dc.b $7F, $B4, $94, $DE, $44, $1E, 6, $F8, $2C,	$8E, $B2, $E7, $79, $5F, $34, $B2, $52,	$1C, $F9, $23
 		dc.b $B1, $7E, $65, $8B, $1B, $EE, $53,	$B, $20, 0
 byte_10C436:	dc.b $80, $71, $80, 3, 0, $15, $10, $24, 5, $34, 6, $45, $13, $55, $11,	$66, $34, $73, 1, $81
-
 		dc.b 4,	4, $15,	$16, $27, $6E, $38, $F6, $82, 6, $35, $18, $EF,	$83, 7,	$6F, $84, 6, $32, $85
 		dc.b 6,	$30, $17, $75, $86, 7, $78, $18, $F4, $87, 4, 7, $16, $2E, $26,	$33, $37, $73, $77, $74
 		dc.b $88, 5, $12, $16, $36, $28, $F2, $89, 6, $2F, $17,	$71, $8C, 6, $31, $17, $76, $8D, 5, $14
@@ -46710,7 +45214,6 @@ byte_10C436:	dc.b $80, $71, $80, 3, 0, $15, $10, $24, 5, $34, 6, $45, $13, $55, 
 		dc.b $42, $91, $70, $81, $19, $C2, 4, 9, 7, 8, $11, $AE, $B4, $6E, $23,	$FC, $C8, $4A, $1D, $C7
 		dc.b $D8, $90
 byte_10CADC:	dc.b 0,	$3D, $80, $18, $F1, $38, $F5, $75, $E, $82, 8, $E3, $18, $F3, $77, $6B,	$83, 6,	$27, $17
-
 		dc.b $65, $28, $E6, $84, 6, $26, $16, $28, $27,	$75, $85, 4, 2,	$16, $30, $27, $6C, $38, $F6, $86
 		dc.b 5,	$C, $16, $23, $27, $5C,	$38, $E7, $87, 7, $5B, $16, $2C, $26, $2B, $37,	$68, $58, $E9, $78
 		dc.b $EF, $88, 5, $A, $15, $10,	$26, $2A, $37, $63, $47, $6D, $58, $DF,	$77, $70, $89, 4, 4, $15
@@ -46768,7 +45271,6 @@ byte_10CADC:	dc.b 0,	$3D, $80, $18, $F1, $38, $F5, $75, $E, $82, 8, $E3, $18, $F
 		dc.b $3C, $29, $15, $81, $C1, $70, $38,	$26, $35, $D4, $B5, $C,	$AA, $78, $C8, $5F, $15, $AB, $56, $AD
 		dc.b $5A, $B5, $6A, $D0
 byte_10CF40:	dc.b $80, $81, $80, 3, 1, $14, 4, $25, $F, $35,	$12, $46, $2E, $55, $15, $66, $2F, $73,	0, $81
-
 		dc.b 5,	$E, $16, $30, $27, $6C,	$38, $E3, $48, $F6, $77, $6F, $82, 4, 6, $16, $33, $38,	$E6, $48
 		dc.b $EC, $78, $EA, $83, 4, 5, $16, $34, $27, $72, $78,	$ED, $84, 5, $16, $17, $74, $85, 6, $32
 		dc.b $18, $F4, $86, 7, $6B, $17, $70, $87, 5, $10, $17,	$6A, $28, $EF, $38, $F0, $88, 7, $6D, $89
@@ -46864,7 +45366,6 @@ byte_10CF40:	dc.b $80, $81, $80, 3, 1, $14, 4, $25, $F, $35,	$12, $46, $2E, $55,
 		dc.b $7F, $F9, $FB, $FF, $DD, $EB, $FD,	$23, $D8, $B3, $F3, $2B, $AF, $F4, $48,	$C7, $F6, $C6, 8, $BF
 		dc.b $A6, $84, $B9, $17, $23, $9F, $44,	0
 byte_10D6A0:	dc.b $80, $68, $80, 3, 0, $14, 5, $24, 6, $35, $14, $46, $2A, $56, $2D,	$66, $32, $74, 2, $81
-
 		dc.b 5,	$F, $17, $6E, $82, 5, $11, $17,	$6F, $28, $F4, $83, 4, 3, $15, $13, $27, $72, $38, $F5
 		dc.b $84, 5, $12, $17, $76, $85, 5, $E,	$17, $74, $86, 4, 4, $16, $2F, $27, $75, $38, $F0, $87
 		dc.b 5,	$10, $16, $30, $88, 6, $33, $18, $F2, $89, 6, $36, $18,	$EE, $8A, 6, $34, $17, $70, $8B
@@ -46964,7 +45465,6 @@ byte_10D6A0:	dc.b $80, $68, $80, 3, 0, $14, 5, $24, 6, $35, $14, $46, $2A, $56, 
 		dc.b $37, $40, $5F, $56, 3, $FC, $DF, $E1, $85,	$F0, $FD, $A, $EE, $10,	$7A, $3F, $A8, $82, $A6, $E4
 		dc.b $6D, $D8, $15, $EF, $B3, $C3, $75,	$83, $F6, $3F, $9E, $50
 byte_10DE54:	dc.b $80, $9D, $80, 3, 0, $14, 7, $24, 8, $35, $18, $46, $32, $56, $35,	$67, $73, $75, $15, $81
-
 		dc.b 3,	1, $15,	$14, $26, $33, $38, $EE, $48, $F6, $82,	5, $16,	$16, $38, $28, $F3, $83, 4, 6
 		dc.b $15, $17, $27, $72, $38, $F5, $84,	8, $F4,	$18, $F7, $85, 6, $34, $18, $F0, $86, 5, $13, $17
 		dc.b $75, $87, 3, 2, $15, $12, $26, $36, $37, $74, $88,	8, $EF,	$89, 8,	$F2, $8B, 6, $37, $18
@@ -47113,7 +45613,6 @@ byte_10DE54:	dc.b $80, $9D, $80, 3, 0, $14, 7, $24, 8, $35, $18, $46, $32, $56, 
 		dc.b $73, $51, $A5, $75, $D3, $1E, 9, $B5, $B3,	$F, $3C, $BC, $F2, $E1,	$B2, $E0, $EB, $63, $86, $B0
 		dc.b $38, $6E, $32, $6E, $32, $6B, $1C,	$9A, $C7, $26, $E0, $E4, $D6, $39, $31,	$D5, $8E, $AD, $C0, 0
 byte_10E9E4:	dc.b $80, $27, $80, 3, 0, $13, 3, $25, $16, $36, $39, $47, $78,	$58, $F7, $76, $36, $81, 3, 1
-
 		dc.b $15, $17, $26, $3A, $37, $7A, $48,	$F6, $82, 4, 8,	$16, $38, $83, 3, 2, $15, $19, $27, $79
 		dc.b $84, 5, $1A, $85, 5, $18, $86, 4, 9, $16, $37, $87, 4, $A,	$16, $3B, $FF, $DB, $6D, $B6
 		dc.b $DB, $6D, $B6, $9C, $2C, $7E, $D2,	$D2, $E7, 0, $D3, $91, $C, $EE,	$45, $58, $DA, $45, $E4, $5E
@@ -47156,7 +45655,6 @@ byte_10E9E4:	dc.b $80, $27, $80, 3, 0, $13, 3, $25, $16, $36, $39, $47, $78,	$58
 		dc.b $FC, $47, $E3, $CA, $F4, $8A, $BE,	$6E, $AE, $9A, $BD, $AF, $62, $8B, $28,	$DA, $F6, $57, $CD, $FF
 		dc.b $E6, $AE, $9A, $BD, $AF, $62, $8B,	$28, $DA, $F6, $57, $CD, $D5, $D5, $D7,	$4B, $D2, $20
 byte_10ED2A:	dc.b 0,	$54, $83, 7, $76, $84, 4, 8, $16, $38, $27, $7B, $38, $F5, $85,	3, 2, $15, $17,	$28
-
 		dc.b $F4, $86, 3, 3, $15, $16, $25, $18, $35, $1A, $46,	$36, $56, $33, $77, $72, $87, 2, 0, $14
 		dc.b $A, $26, $32, $36,	$3A, $48, $F2, $68, $F3, $77, $73, $88,	4, 9, $16, $37,	$27, $77, $77, $78
 		dc.b $FF, $FF, $87, $FC, $3F, $E1, $FF,	$F, $F8, $7F, $C3, $FE,	$1F, $F0, $E6, $F2, $75, $82, $C2, $C1
@@ -47232,7 +45730,6 @@ byte_10ED2A:	dc.b 0,	$54, $83, 7, $76, $84, 4, 8, $16, $38, $27, $7B, $38, $F5, 
 		dc.b $AA, $DF, $43, $27, $2B, $54, $E2,	$15, $86, $38, $BD, $86, $7F, $11, $8C,	$63, $E7, $CC, $F1, $E3
 		dc.b $C9, $D2, $68, $75, $3E, $A3, $A6,	$31, $F3, $E7, $5E, $3C, $48, 0
 byte_10F300:	dc.b 0,	$40, $80, 4, 8,	$15, $19, $26, $38, $36, $39, $46, $3C,	$57, $7A, $67, $7B, $74, $A, $81
-
 		dc.b 4,	9, $15,	$16, $25, $1A, $58, $F8, $89, 3, 2, $14, 7, $25, $17, $36, $37,	$46, $3A, $8A
 		dc.b 2,	0, $14,	6, $25,	$18, $36, $36, $46, $3B, $FF, $AA, $CB,	$72, $67, $BE, $48, $6F, $45, $1E
 		dc.b $35, $55, $1E, $10, $DC, $B4, $35,	$78, $57, $3B, $41, $1B, $73, $B7, 4, $77, $C3,	$22, $C, $8E
@@ -47281,7 +45778,6 @@ byte_10F300:	dc.b 0,	$40, $80, 4, 8,	$15, $19, $26, $38, $36, $39, $46, $3C,	$57
 		dc.b $58, $DC, $BB, $39, $BB, $5F, $49,	$95, $94, $97, $9E, $A7, $A1, $49, $76,	$DE, $DF, $D9, $D7, $5F
 		dc.b $B1, $17, $C3, $FC, $21, $69, $C0,	0
 byte_10F6B4:	dc.b 0,	$38, $80, 5, $18, $16, $34, $26, $33, $37, $7A,	$76, $38, $81, 4, 7, $15, $15, $27, $79
-
 		dc.b $82, 3, 2,	$15, $13, $26, $39, $83, 3, 1, $15, $14, $26, $32, $84,	3, 0, $15, $12,	$26
 		dc.b $35, $37, $75, $85, 4, 6, $15, $17, $26, $36, $86,	4, 8, $15, $16,	$26, $37, $37, $77, $88
 		dc.b 7,	$78, $17, $74, $27, $76, $37, $7B, $FF,	$E3, $8E, $38, $E3, $8E, $38, $CC, $FE,	$CB, 1,	$55
@@ -47344,7 +45840,6 @@ byte_10F6B4:	dc.b 0,	$38, $80, 5, $18, $16, $34, $26, $33, $37, $7A,	$76, $38, $
 		dc.b $15, $41, $B4, $CC, $B6, $99, $1F,	$B5, $C8, $6D, $84, $65, $B6, $29, $2B,	$E8, $3B, $8D, $3B, $B6
 		dc.b $7B, $DF, $3B, $5E, $5A, $7F, $93,	$13, $33, $96, $29, $CE, $B3, $C8, $5C,	0
 byte_10FB88:	dc.b $80, $32, $80, 3, 0, $14, 4, $25, $12, $35, $13, $46, $35,	$56, $33, $67, $79, $75, $F, $81
-
 		dc.b 3,	1, $14,	8, $27,	$73, $37, $72, $82, 4, 5, $15, $16, $28, $F7, $83, 4, 6, $15, $14
 		dc.b $27, $78, $84, 6, $32, $17, $77, $85, 6, $2E, $16,	$2A, $86, 5, $18, $17, $76, $87, 5, $E
 		dc.b $17, $6D, $88, 6, $37, $18, $F5, $89, 6, $2F, $18,	$F4, $8A, 6, $2B, $17, $6C, $8B, 8, $F6
@@ -47397,7 +45892,6 @@ byte_10FB88:	dc.b $80, $32, $80, 3, 0, $14, 4, $25, $12, $35, $13, $46, $35,	$56
 		dc.b $3D, $B4, $EA, $78, $9E, $25, $A7,	3, $B0,	$DE, $FE, $14, $7A, $69, $D5, $6A, $9E,	$BD, 5,	$7B
 		dc.b $FA, $F5, $97, $A8, $DA, $9B, $BB,	$A4, $DD, $1D, $2F, $54, $E3, $F3, $EE,	$DE, $56, $D9, $F9, $D0
 byte_10FF98:	dc.b $80, $47, $80, 3, 1, $14, 6, $24, 8, $35, $13, $45, $16, $55, $15,	$66, $31, $74, 4, $81
-
 		dc.b 4,	5, $17,	$72, $82, 5, $E, $18, $F3, $83,	3, 0, $16, $2F,	$27, $71, $84, 8, $F2, $85
 		dc.b 5,	$14, $16, $33, $28, $F4, $78, $F0, $86,	6, $30,	$87, 5,	$F, $17, $73, $28, $F6,	$88, 7
 		dc.b $6F, $18, $F5, $89, 8, $EE, $8A, 5, $12, $16, $35,	$28, $EB, $78, $F1, $8B, 6, $32, $17, $6E
@@ -47459,7 +45953,6 @@ byte_10FF98:	dc.b $80, $47, $80, 3, 1, $14, 6, $24, 8, $35, $13, $45, $16, $55, 
 		dc.b $49, $A4, $65, $9C, $8C, $8D, $DF,	$BA, $B9, $A9, $3A, $36, $AD, $A9, $BA,	$53, $95, $D9, $FE, $FF
 		dc.b $33, $FD, $52, 0
 byte_11044C:	dc.b $80, $AD, $80, 3, 0, $14, 4, $25, $11, $35, $12, $46, $2D,	$56, $2E, $66, $30, $74, 6, $81
-
 		dc.b 4,	2, $15,	$14, $28, $EE, $82, 4, 5, $17, $6F, $28, $ED, $83, 4, 3, $17, $6E, $28,	$E7
 		dc.b $38, $EF, $84, 5, $13, $17, $72, $85, 6, $2B, $18,	$E9, $86, 5, $F, $17, $71, $87,	5, $E
 		dc.b $16, $33, $28, $EA, $38, $F0, $88,	6, $2A,	$17, $70, $28, $EB, $89, 6, $35, $8A, 6, $31, $18
@@ -47635,7 +46128,6 @@ byte_11044C:	dc.b $80, $AD, $80, 3, 0, $14, 4, $25, $11, $35, $12, $46, $2D,	$56
 		dc.b $FF, $DD, $4B, $F6, $C2, $92, $24,	$A5, $D4, $BA, $97, $50, $14, $68, $84,	9, $98,	$A5, $41, $49
 		dc.b $7E, $C6, $5F, $B1, $91, $A, 2, $91, $21, 2, $64, 0
 byte_1111F0:	dc.b $80, $56, $80, 3, 1, $14, 8, $24, 9, $35, $14, $45, $16, $55, $18,	$66, $2F, $73, 0, $81
-
 		dc.b 4,	4, $16,	$32, $27, $70, $38, $F6, $82, 4, 6, $16, $34, $27, $74,	$83, 5,	$15, $17, $73
 		dc.b $28, $F2, $84, 7, $6F, $85, 6, $33, $86, 8, $EE, $87, 4, 7, $16, $35, $27,	$76, $38, $F3
 		dc.b $88, 7, $75, $89, 7, $78, $8A, 7, $72, $8B, 8, $F4, $8C, 7, $6E, $8D, 8, $EF, $8E,	6
@@ -47705,7 +46197,6 @@ byte_1111F0:	dc.b $80, $56, $80, 3, 1, $14, 8, $24, 9, $35, $14, $45, $16, $55, 
 		dc.b $4C, $6E, $FE, $8E, $F3, $95, $C7,	$F3, $22, $A0, 9, $54, $FC, $C1, $DF, $C0, $FE,	$60, $EF, $29
 		dc.b $E3, $AC, $77, $71, $EB, $45, $17,	$B8, $17, $BD, $FD, $AC
 byte_11174C:	dc.b 0,	8, $82,	4, 9, $14, 8, $26, $38,	$35, $1A, $46, $3B, $75, $19, $83, 3, 2, $14, $A
-
 		dc.b $46, $3C, $88, 2, 0, $14, $B, $26,	$39, $35, $1B, $76, $3D, $89, 3, 3, $15, $18, $26, $3A
 		dc.b $76, $3E, $FF, $CE, $54, $A8, $5C,	$2E, $EA, $2B, $55, $A,	$D4, $5F, 7, $97, $9C, $A9, $50, $B8
 		dc.b $5D, $D4, $56, $AA, $15, $A8, $BE,	$F, $2D, $6E, $68, $94,	$29, $F7, $F9, $F, $9C,	$C, $63, $B6
@@ -47714,7 +46205,6 @@ byte_11174C:	dc.b 0,	8, $82,	4, 9, $14, 8, $26, $38,	$35, $1A, $46, $3B, $75, $1
 		dc.b $5A, $8A, $D5, $C2, $BF, $A, $9D, $AB, $94, $29, $F4, $7C,	$BD, $B1, $8C, $C0, $C6, $33, $EC, $1D
 		dc.b $E, $A7, $6A, $E5,	$A, $7D, $1F, $2F, $6C,	$63, $30, $31, $8C, $FB, 7, $43, 0, 0
 byte_1117EA:	dc.b 0,	$8F, $80, 8, $F1, $78, $F5, $81, 6, $36, $84, 6, $31, $17, $74,	$85, 4,	6, $16,	$38
-
 		dc.b $28, $F2, $86, 4, 4, $15, $12, $26, $2E, $36, $32,	$47, $6E, $56, $34, $67, $6F, $76, $2F,	$87
 		dc.b 5,	$14, $18, $EE, $88, 3, 1, $15, $13, $27, $72, $38, $F0,	$89, 3,	0, $14,	5, $25,	$15
 		dc.b $37, $6A, $47, $76, $58, $F3, $78,	$F6, $8A, 4, 8,	$16, $30, $27, $6B, $38, $F4, $77, $75,	$8B
@@ -47855,7 +46345,6 @@ byte_1117EA:	dc.b 0,	$8F, $80, 8, $F1, $78, $F5, $81, 6, $36, $84, 6, $31, $17, 
 		dc.b $AE, $B6, $EB, $D7, 0, $75, $B6, 5, $35, $A4, $24,	$36, $B6, $D6, $9A, $D3, $5A, $75, $D6,	$9D
 		dc.b $7A, $C0
 byte_1122C8:	dc.b 0,	$48, $81, 5, $18, $16, $3A, $28, $F8, $83, 3, 2, $14, $B, $26, $3B, $38, $F9, $84, 2
-
 		dc.b 0,	$14, 9,	$25, $19, $37, $7A, $85, 3, 3, $14, 8, $24, $A,	$35, $1A, $45, $1C, $56, $3C
 		dc.b $67, $7B, $75, $1B, $FF, $FF, $87,	$FC, $3F, $E1, $FF, $F,	$F8, $7F, $C3, $FE, $1F, $F0, $DE, $F7
 		dc.b $BD, $EF, $7B, $E1, $B6, $6F, $7B,	$DE, $F7, 3, $3A, $51, $FC, $45, 5, $5B, $95, $86, $B1,	$5D
@@ -47912,7 +46401,6 @@ byte_1122C8:	dc.b 0,	$48, $81, 5, $18, $16, $3A, $28, $F8, $83, 3, 2, $14, $B, $
 		dc.b $52, $CD, $16, $40, $D4, $10, $32,	$A, $98, $2A, $5A, $23,	$2C, $63, $19, $6C, $73, $A1, $94, $51
 		dc.b $EE, $62, $68, $89, $A9, $66, $A7,	$C9, $D1, $BD, $EC, $81, $90, $6F, $67,	$86, $FD, $CC, $1C, 0
 byte_112728:	dc.b 0,	$4D, $80, 8, $F0, $17, $71, $28, $EF, $37, $74,	$57, $70, $76, $32, $81, 5, $17, $17, $73
-
 		dc.b $82, 4, 8,	$16, $30, $83, 3, 2, $15, $16, $27, $72, $38, $F3, $78,	$F5, $84, 3, 0,	$15
 		dc.b $14, $26, $35, $38, $F4, $58, $F6,	$85, 3,	1, $14,	9, $26,	$31, $36, $36, $48, $EE, $78, $F1
 		dc.b $86, 3, 3,	$15, $15, $26, $33, $37, $6E, $48, $F2,	$77, $6F, $87, 7, $75, $88, 6, $34, $17
@@ -47992,7 +46480,6 @@ byte_112728:	dc.b 0,	$4D, $80, 8, $F0, $17, $71, $28, $EF, $37, $74,	$57, $70, $
 		dc.b $F9, $F7, $F8, $FD, $DF, $AF, $AF,	$E3, $EB, $F9, $F7, $F8, $FD, $DF, $AF,	$DF, $BF, $7E, $FD, $FB
 		dc.b $F7, $EF, $F2, 0
 byte_112D44:	dc.b $80, $70, $80, 3, 0, $14, 4, $24, 8, $35, $14, $46, $2E, $56, $32,	$67, $6B, $74, 6, $81
-
 		dc.b 3,	1, $15,	$13, $27, $6F, $82, 5, $16, $17, $71, $83, 4, 7, $16, $2F, $27,	$75, $84, 6
 		dc.b $36, $18, $F5, $85, 7, $6A, $86, 5, $18, $18, $F3,	$87, 4,	5, $16,	$33, $27, $72, $88, 7
 		dc.b $73, $89, 8, $F2, $8A, 7, $76, $8B, 7, $70, $18, $F4, $8C,	8, $EF,	$18, $F6, $8D, 7, $74
@@ -48102,7 +46589,6 @@ byte_112D44:	dc.b $80, $70, $80, 3, 0, $14, 4, $24, 8, $35, $14, $46, $2E, $56, 
 		dc.b $DD, $87, $20, $DC, $7C, $CD, $15,	$8D, $CF, $97, $9A, $28, $54, $C0, $50,	$63, 8,	$B0, $63, $38
 		dc.b $2D, $91, $4C, $C2, $C6, $32, $20,	0
 byte_1135BC:	dc.b 0,	$7D, $80, $78, $F2, $81, 7, $63, $17, $74, $82,	6, $22,	$18, $E7, $27, $6B, $83, 4, 1
-
 		dc.b $14, 3, $26, $26, $37, $6F, $47, $6E, $77,	$72, $84, 4, 0,	$14, 4,	$25, $14, $37, $6C, $47
 		dc.b $6D, $58, $EC, $78, $EE, $87, 6, $2A, $17,	$62, $27, $71, $38, $EF, $48, $EB, $68,	$F1, $75, $D
 		dc.b $88, 5, $F, $16, $23, $26,	$32, $36, $2E, $46, $34, $56, $27, $67,	$67, $74, 2, $89, 5, $C
@@ -48188,7 +46674,6 @@ byte_1135BC:	dc.b 0,	$7D, $80, $78, $F2, $81, 7, $63, $17, $74, $82,	6, $22,	$18
 		dc.b $67, $8D, $9E, $36, $37, $C7, $DF,	$BD, $D2, $9F, $54, $F2, $22, $2C, $EC,	$CF, $56, $53, $11, $11
 		dc.b $11, $16, $71, $7B, $A5, $3E, $A9,	$E4, $44, $59, $D8, $59, $D4, $A5, $29,	$4A, $52, $80
 byte_113C5E:	dc.b $80, $35, $80, 3, 1, $13, 2, $24, 8, $35, $17, $46, $35, $56, $36,	$66, $38, $75, $16, $81
-
 		dc.b 3,	0, $15,	$14, $27, $76, $38, $F2, $82, 5, $18, $83, 5, $15, $17,	$78, $84, 5, $19, $85
 		dc.b 4,	7, $16,	$37, $28, $F6, $86, 4, 9, $17, $77, $87, 6, $34, $18, $F7, $8B,	6, $39,	$8C
 		dc.b 7,	$7A, $8E, 7, $74, $8F, 4, 6, $17, $75, $28, $F3, $FF, $B5, $AD,	$6B, $5A, $D6, $FF, $BD
@@ -48262,7 +46747,6 @@ byte_113C5E:	dc.b $80, $35, $80, 3, 1, $13, 2, $24, 8, $35, $17, $46, $35, $56, 
 		dc.b $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF
 		dc.b $FF, $FF
 byte_114200:	dc.b 0,	$46, $80, 5, $14, $16, $2E, $26, $32, $36, $34,	$47, $6E, $57, $70, $67, $73, $74, 4, $81
-
 		dc.b 4,	3, $15,	$16, $28, $EE, $38, $F3, $85, 5, $10, $16, $2F,	$27, $76, $86, 4, 6, $15, $15
 		dc.b $27, $72, $38, $F4, $87, 5, $E, $15, $12, $27, $6F, $37, $75, $88,	4, 2, $15, $B, $26, $31
 		dc.b $37, $6A, $48, $F2, $89, 3, 0, $15, $13, $27, $6B,	$8B, 5,	$A, $16, $33, $28, $F5,	$8C, 5
@@ -48336,7 +46820,6 @@ byte_114200:	dc.b 0,	$46, $80, 5, $14, $16, $2E, $26, $32, $36, $34,	$47, $6E, $
 		dc.b $74, $9C, $9A, $FA, 2, $12, $AD, 1, 7, $56, $17, 2, $95, $72, $19,	$B4, $32, $A, $20, $DA
 		dc.b 2,	$E, $CA, $64, $1D, $90,	$58, $56, $41, $61, $5A, $4D, $47, $C1,	$50, 0
 byte_1147B0:	dc.b $80, $69, $80, 3, 0, $14, 5, $25, $F, $35,	$18, $45, $16, $56, $2F, $66, $38, $74,	6, $81
-
 		dc.b 4,	2, $16,	$2E, $28, $EE, $82, 5, $11, $18, $F3, $83, 4, 4, $16, $37, $28,	$F4, $84, 5
 		dc.b $E, $17, $74, $28,	$F7, $85, 5, $15, $18, $F6, $86, 5, $10, $17, $73, $87,	4, 3, $16, $35
 		dc.b $88, 6, $32, $17, $78, $89, 6, $33, $18, $F2, $8A,	6, $36,	$8B, 6,	$34, $18, $F5, $8C, 5
@@ -48447,7 +46930,6 @@ byte_1147B0:	dc.b $80, $69, $80, 3, 0, $14, 5, $25, $F, $35,	$18, $45, $16, $56,
 		dc.b $51, $D0, $64, $A7, $A7, $EA, $27,	$25, $2F, $D1, $4A, 7, $5F, $D3, $C0, $B4, $AC,	$4B, $DB, $42
 		dc.b $94, $44, 4, $65, $68, $E3, $A0, 0
 byte_11503C:	dc.b 0,	$BB, $80, 5, $14, $15, $19, $26, $39, $35, $18,	$46, $3C, $56, $3B, $67, $7B, $75, $16,	$81
-
 		dc.b 5,	$17, $85, 3, 3,	$15, $1A, $28, $F8, $86, 3, 2, $14, 9, $26, $38, $87, 2, 0, $14
 		dc.b 8,	$26, $36, $37, $7A, $8F, 5, $15, $16, $37, $26,	$3A, $FF, $B5, $AD, $6F, $67, $B3, $B8,	$EE
 		dc.b $3B, $8F, $21, $79, $F, $1B, $2C, $A, $30,	$26, $72, $22, $79, $1A, $16, $44, $5E,	$72, $34, $35
@@ -48606,7 +47088,6 @@ byte_11503C:	dc.b 0,	$BB, $80, 5, $14, $15, $19, $26, $39, $35, $18,	$46, $3C, $
 		dc.b $27, $6B, $77, $FF, $57, $73, $E2,	$EB, $57, $3F, $8B, $2C, $E3, $FC, $EA,	$D6, $B7, $E8, $7C, $D7
 		dc.b $EC, $55, $3F, $8B, $FA, $15, $AF,	$DB, $52, $4B, $78, 0
 byte_115C8C:	dc.b 0,	$30, $80, 3, 0,	$13, 1,	$35, $14, $57, $7A, $76, $36, $81, 6, $32, $18,	$F6, $82, 5
-
 		dc.b $17, $17, $72, $83, 5, $18, $17, $76, $84,	4, 7, $17, $73,	$85, 4,	6, $16,	$34, $86, 4
 		dc.b 8,	$17, $77, $87, 6, $33, $18, $F7, $8A, 5, $15, $16, $3A,	$8B, 3,	2, $16,	$35, $8C, 4
 		dc.b 9,	$16, $37, $8D, 6, $38, $8E, 5, $16, $17, $79, $8F, 7, $78, $FF,	$FD, 6,	5, $C6,	$58
@@ -48668,7 +47149,6 @@ byte_115C8C:	dc.b 0,	$30, $80, 3, 0,	$13, 1,	$35, $14, $57, $7A, $76, $36, $81, 
 		dc.b $57, $91, $55, $2A, $DE, $F, $1D, $2F, $CF, $9B, $6B, $FA,	$E3, $E5, $58, $58, $F8, $B7, $8F, $56
 		dc.b $F1, $EA, $DB, $6D, $B7, $A0
 byte_116142:	dc.b 0,	$20, $80, 4, 8,	$15, $E, $25, $15, $36,	$33, $45, $17, $56, $38, $66, $32, $73,	0, $81
-
 		dc.b 7,	$7A, $76, $3B, $82, 5, $16, $15, $14, $38, $F8,	$78, $FA, $83, 4, 2, $15, $12, $25, $18
 		dc.b $68, $F9, $84, 4, 5, $15, $13, $25, $1B, $36, $39,	$47, $78, $57, $79, $85, 5, $F,	$16, $34
 		dc.b $27, $7B, $8B, 4, 3, $14, 4, $24, 6, $36, $35, $46, $3A, $FF, $77,	$AA, $62, $2D, $E8, $B9
@@ -48694,7 +47174,6 @@ byte_116142:	dc.b 0,	$20, $80, 4, 8,	$15, $E, $25, $15, $36,	$33, $45, $17, $56,
 		dc.b $9A, $A7, $1A, $B9, $21, $9C, $8E,	$47, $33, $8E, $AD, 7, $73, 0, $67, $2F, $11, $B4, $DA,	$6E
 		dc.b $A8, $E9, $B8, $92, $AB, $A, $40, $80, 0, 0, $2E, 0
 byte_11632E:	dc.b 0,	$15, $80, 4, 8,	$14, 7,	$24, $C, $35, $1A, $46,	$3B, $55, $14, $65, $1B, $72, 0, $82
-
 		dc.b 3,	2, $14,	9, $26,	$3A, $38, $FA, $88, 6, $3D, $8B, 4, 6, $14, $B,	$25, $15, $38, $FB
 		dc.b $47, $7C, $56, $3C, $75, $1C, $FF,	0, 0, $34, $83,	$49, $DA, $16, $2C, $9D, $7D, $64, $D7,	$6C
 		dc.b $FE, $52, $F4, $C4, $58, 1, 8, $1D, $42, $A2, $75,	$89, $BF, $C5, $58, $E7, $1F, $E4, $55,	$EC
@@ -48707,7 +47186,6 @@ byte_11632E:	dc.b 0,	$15, $80, 4, 8,	$14, 7,	$24, $C, $35, $1A, $46,	$3B, $55, $
 		dc.b $CA, $FD, $F8, $ED, $1C, $F8, $F5,	$7A, $8E, $D8, $C0, $76, $80, $8B, $A5,	$9A, $6A, $36, $DA, $8D
 		dc.b $4B, $85, $AB, $9C, $4D, $D4, $27,	$96, $E9, $D3, $7B, $26, $78, $F6, $43,	$6A, $C0, $A0
 byte_11641C:	dc.b 0,	$C, $80, 4, 4, $14, 8, $26, $3A, $34, 7, $45, $1B, $55,	$12, $67, $7D, $73, 1, $81
-
 		dc.b 5,	$1C, $15, $19, $82, 6, $3B, $83, 5, $18, $84, 4, 6, $85, 5, $14, $15, $13, $86,	6
 		dc.b $3D, $8D, 3, 0, $15, $15, $25, $1A, $8E, 4, 5, $14, $B, $26, $3C, $37, $7C, $FF, $25, $DA
 		dc.b $4D, $47, $C3, $4F, $F2, $6D, $8F,	$5A, $7E, $CF, 8, $D4, $8E, $F0, $DF, $93, $6A,	$77, $F9, $4A
@@ -48720,7 +47198,6 @@ byte_11641C:	dc.b 0,	$C, $80, 4, 4, $14, 8, $26, $3A, $34, 7, $45, $1B, $55,	$12
 		dc.b $EB, $F9, $B0, $12, $B9, $7A, $E7,	$7A, $71, 0, $F4, 9, $24, $EC, $19, $6A, 4, $72, $BC, $1D
 		dc.b $70, $4A, $B2, $D2, $E, $81, $80, $49, $2E, 0
 byte_116502:	dc.b 0,	8, $80,	3, 4, $15, $16,	$25, $1B, $38, $FB, $46, $39, $81, 5, $19, $84,	6, $3A,	$85
-
 		dc.b 4,	$A, $15, $1A, $86, 3, 1, $15, $17, $26,	$38, $35, $18, $58, $FA, $87, 3, 2, $16, $3B
 		dc.b $88, 3, 3,	$16, $3C, $89, 3, 0, $16, $3D, $27, $7C, $FF, $E7, $E6,	$C8, $6B, $36, $21, $E
 		dc.b $E1, 8, $2F, $21, $41, $3C, $AA, $6A, $93,	$D1, $61, $87, $48, $B0, $43, $F6, $E2,	$FA, $EA, $B8
@@ -48732,7 +47209,6 @@ byte_116502:	dc.b 0,	8, $80,	3, 4, $15, $16,	$25, $1B, $38, $FB, $46, $39, $81, 
 		dc.b $81, $B7, $88, $20, $62, $CB, $41,	$19, $A6, $A9, $3A, $54, $C3, $C, $FA, $C1, $C,	$F5, $AB, $8F
 		dc.b $E3, $E, $2A, $E3,	$13, $E8, $4C, $4B, $DB, $10, $D8, $C3,	$61, $F6, $3E, $C0
 byte_1165DA:	dc.b $80, $7F, $80, 3, 0, $14, 4, $25, $D, $35,	$16, $45, $17, $56, $33, $67, $74, $75,	$F, $81
-
 		dc.b 3,	1, $15,	$13, $27, $76, $38, $F4, $82, 5, $10, $17, $6E,	$83, 4,	5, $16,	$34, $28, $F6
 		dc.b $84, 6, $36, $18, $F3, $85, 8, $EE, $86, 5, $18, $18, $F2,	$87, 5,	$15, $17, $6F, $88, 5
 		dc.b $14, $17, $75, $28, $F7, $89, 6, $32, $18,	$F5, $8A, 7, $6B, $8B, 6, $38, $8C, 5, $12, $17
@@ -48866,7 +47342,6 @@ byte_1165DA:	dc.b $80, $7F, $80, 3, 0, $14, 4, $25, $D, $35,	$16, $45, $17, $56,
 		dc.b $A0, $EB, $FC, $96, $3D, $F3, $E8,	$EF, $16, $EF, $12, $B3, $86, $A6, $F7,	$F4, $EF, $6F, $7D, $E6
 		dc.b $85, $AA, $26, $E6, $94, $75, $A2,	$1D, $79, $6D, $9C, $B1, $95, $C0
 byte_117038:	dc.b $80, $2C, $80, 4, 2, $14, 4, $24, 8, $35, $14, $46, $32, $55, $15,	$66, $36, $74, 5, $81
-
 		dc.b 3,	0, $16,	$2E, $27, $78, $82, 4, 7, $17, $77, $83, 4, 6, $15, $18, $27, $7A, $84,	5
 		dc.b $13, $17, $79, $85, 6, $38, $86, 6, $33, $87, 4, 3, $16, $3A, $88,	7, $76,	$89, 6,	$37
 		dc.b $8A, 6, $35, $8B, 6, $39, $8C, 5, $16, $18, $F7, $8D, 5, $12, $18,	$F6, $8E, 6, $2F, $8F
@@ -48913,7 +47388,6 @@ byte_117038:	dc.b $80, $2C, $80, 4, 2, $14, 4, $24, 8, $35, $14, $46, $32, $55, 
 		dc.b $36, $42, $96, $BC, $1B, $64, $73,	$A4, $8A, $6B, $90, $D6, $BA, $DF, $5D,	$36, $7D, $2B, $A2, $AE
 		dc.b $CD, $9A, $D4, 0
 byte_1173C0:	dc.b $80, $21, $80, 4, 6, $14, 7, $25, $15, $35, $13, $45, $14,	$55, $19, $66, $36, $73, 0, $81
-
 		dc.b 3,	1, $15,	$18, $26, $3A, $82, 5, $17, $17, $7B, $83, 4, 8, $15, $1A, $28,	$F8, $87, 6
 		dc.b $3C, $18, $FA, $89, 6, $3B, $8C, 5, $12, $16, $38,	$8D, 3,	2, $16,	$37, $8E, 5, $16, $16
 		dc.b $39, $8F, 7, $7A, $FF, 0, 1, $B2, $9A, $E0, $B2, $E0, $B6,	$11, $6E, $9A, $1C, $BE, $9C, $B6
@@ -48938,7 +47412,6 @@ byte_1173C0:	dc.b $80, $21, $80, 4, 6, $14, 7, $25, $15, $35, $13, $45, $14,	$55
 		dc.b $33, $FA, $99, $F7, $2C, $76, $FE,	$4C, $F6, $D6, $DB, $A,	$A7, $BA, $95, $5D, $D8, $C9, $3C, $B2
 		dc.b $5A, $5B, $B4, $96, $1B, $8E, $65,	$5E, $5F, $93, $6C, $D8, $53, $E9, $FF,	$6E, $FF, $40, 0, $32
 byte_1175A0:	dc.b 0,	$2A, $80, 4, $B, $14, $C, $25, $1C, $35, $1A, $45, $1B,	$54, $A, $66, $3D, $72,	0, $81
-
 		dc.b 3,	3, $14,	8, $25,	$1D, $37, $7C, $48, $FB, $8C, 3, 2, $14, 9, $26, $3C, $38, $FA,	$FF
 		dc.b $C, $8D, $F8, $F9,	$39, $18, $F5, $1E, $C7, $AC, $D4, $EF,	$AB, $91, $2D, $5C, $71, $3B, $8D, $77
 		dc.b $70, 5, $F7, $4F, $C7, $C6, $AD, $AB, $56,	$9D, $B5, $6E, $5D, $AF, $BE, $79, $93,	$B5, $B, $4A
@@ -48958,7 +47431,6 @@ byte_1175A0:	dc.b 0,	$2A, $80, 4, $B, $14, $C, $25, $1C, $35, $1A, $45, $1B,	$54
 		dc.b $73, $51, $EB, 0, 0, 0, $B5, $6B, $5E, $42, $C5, $16, $9E,	$46, $4D, $4B, $A4, $E9, $3A, $6A
 		dc.b $9C, $D4, 0, 0, 0,	$5C, $C7, $25, $CB, $C8, $C9, $EE, $A5,	$80
 byte_117716:	dc.b 0,	$D, $80, 4, $A,	$15, $16, $25, $17, $36, $3B, $47, $7A,	$57, $7B, $68, $F8, $75, $19, $81
-
 		dc.b 4,	8, $16,	$3A, $82, 4, 9,	$83, 3,	1, $15,	$18, $84, 3, 2,	$15, $1A, $26, $36, $85
 		dc.b 4,	7, $15,	$1C, $28, $FB, $86, 3, 0, $16, $37, $87, 8, $F9, $18, $FA, $8F,	4, 6, $16
 		dc.b $3C, $FF, $CE, $73, $78, $AC, $4F,	$70, $FA, $ED, $F6, $EF, $1A, $BB, $A3,	$2F, $75, $87, $37, $51
@@ -48976,7 +47448,6 @@ byte_117716:	dc.b 0,	$D, $80, 4, $A,	$15, $16, $25, $17, $36, $3B, $47, $7A,	$57
 		dc.b $98, $89, $2A, 3, $62, $58, $2A, $62, $3C,	$C5, $11, $C, $45, $9B,	$61, $16, $6D, $8D, $A,	$60
 		dc.b $BD, $F, $80, 0
 byte_11785A:	dc.b $80, $46, $80, 3, 0, $14, 6, $25, $12, $35, $13, $45, $14,	$56, $34, $67, $77, $74, 5, $81
-
 		dc.b 3,	1, $15,	$16, $27, $78, $82, 5, $19, $18, $F6, $83, 4, 4, $15, $17, $28,	$F2, $84, 6
 		dc.b $39, $17, $7A, $85, 6, $3A, $86, 6, $36, $87, 5, $18, $88,	7, $70,	$89, 6,	$35, $8A, 7
 		dc.b $71, $8C, 4, 7, $18, $F3, $8D, 4, 8, $16, $37, $8E, 5, $15, $18, $F7, $8F,	7, $76,	$FF
@@ -49042,7 +47513,6 @@ byte_11785A:	dc.b $80, $46, $80, 3, 0, $14, 6, $25, $12, $35, $13, $45, $14,	$56
 		dc.b $52, $4E, $12, $E9, $B8, $A4, $FA,	8, $33,	$44, 6,	$86, $EB, $4C, $53, $A6, $46, $FC, $AC,	$BF
 		dc.b $4A, $AA, $B3, 0
 byte_117D5E:	dc.b $80, $14, $80, 3, 0, $14, 8, $25, $F, $35,	$12, $45, $14, $56, $2F, $66, $38, $76,	$36, $81
-
 		dc.b 4,	2, $16,	$32, $82, 5, $13, $83, 4, 6, $16, $37, $84, 4, 4, $17, $78, $27, $7A, $85
 		dc.b 5,	$15, $18, $F9, $86, 6, $2E, $18, $FA, $87, 4, 5, $16, $39, $88,	5, $1A,	$17, $79, $89
 		dc.b 5,	$E, $16, $3A, $8A, 7, $76, $8B,	4, 3, $8C, 5, $16, $17,	$7B, $8D, 5, $18, $18, $F8
@@ -49069,7 +47539,6 @@ byte_117D5E:	dc.b $80, $14, $80, 3, 0, $14, 8, $25, $F, $35,	$12, $45, $14, $56,
 		dc.b $43, $52, $DC, $9E, $6B, $90, $57,	$9F, $E9, $CB, $82, $91, $C4, $DE, $DD,	$F4, $26, $81, $B0, $31
 		dc.b $A4, $95, $B4, $9A, $51, $AC, $76,	$19, $C, $D2, $CB, $FA,	$E5, 0
 byte_117F60:	dc.b 0,	$15, $80, 5, $13, $16, $38, $26, $2B, $35, $A, $56, $36, $68, $FA, $74,	6, $81,	4, 3
-
 		dc.b $15, $18, $25, $17, $36, $2D, $46,	$33, $57, $75, $66, $37, $75, $F, $82, 6, $35, $37, $7A, $83
 		dc.b 6,	$3B, $85, 6, $3C, $88, 5, $B, $15, $10,	$27, $74, $58, $F8, $78, $FB, $89, 5, $E, $27
 		dc.b $73, $8C, 4, 4, $14, 2, $25, $12, $36, $2A, $46, $34, $58,	$F9, $67, $72, $75, $11, $8D, 3
@@ -49089,7 +47558,6 @@ byte_117F60:	dc.b 0,	$15, $80, 5, $13, $16, $38, $26, $2B, $35, $A, $56, $36, $6
 		dc.b $72, $FE, $11, $7C, $12, $FE, $57,	$3D, $17, $C5, $4B, $AD, $3A, $29, $7D,	$FE, $49, $5F, $B3, $57
 		dc.b $A5, $7E, $CD, $5E, $99, $94
 byte_1180CE:	dc.b 0,	8, $80,	6, $3A,	$14, $A, $26, $3C, $76,	$3D, $88, 4, $C, $15, $1C, $89,	6, $3B,	$8A
-
 		dc.b 3,	4, $8B,	5, $1A,	$8C, 3,	2, $14,	$B, $27, $7D, $8D, 2, 0, $75, $1B, $8E,	3, 3
 		dc.b $77, $7C, $FF, $F7, $DA, $BE, $7E,	$5F, $A6, $A7, $22, $7F, $ED, $D4, $EF,	$3F, $33, $F9, $AD, $FC
 		dc.b $F2, $E6, $4A, $FE, $EF, $FD, $EF,	$9F, $73, $7F, $CB, $FB, $BF, $9F, $CC,	$F3, $FB, $B5, $FF, $7C
@@ -49100,7 +47568,6 @@ byte_1180CE:	dc.b 0,	8, $80,	6, $3A,	$14, $A, $26, $3C, $76,	$3D, $88, 4, $C, $1
 		dc.b $A6, $22, $E9, $88, $BA, $62, $2E,	$98, $8D, $2A, $62, $31, $53, $11, $F9,	$AA, $62, $21, $4F, $F7
 		dc.b $AE, $9F, $EB, $5F, $9F, $BE, $FD,	$80
 byte_11818A:	dc.b 0,	$14, $80, $17, $78, $25, $17, $35, $19,	$46, $38, $58, $F8, $68, $F9, $74, 7, $81, 3, 1
-
 		dc.b $15, $14, $27, $79, $36, $36, $82,	3, 0, $15, $1A,	$37, $7A, $83, 3, 2, $16, $39, $84, 7
 		dc.b $76, $16, $3A, $87, 5, $18, $8B, 4, 6, $16, $37, $37, $7B,	$8D, 5,	$15, $14, 8, $24, 9
 		dc.b $35, $16, $57, $77, $68, $FA, $78,	$FB, $FF, $77, $77, $77, $F9, $6F, $86,	$1C, $30, $3C, $30, $39
@@ -49120,7 +47587,6 @@ byte_11818A:	dc.b 0,	$14, $80, $17, $78, $25, $17, $35, $19,	$46, $38, $58, $F8,
 		dc.b $B9, $12, $57, $DC, $50, $29, $D9,	$46, $B9, $2A, $A3, $CA, $22, $BB, $23,	$1B, $28, $EC, $8E, $15
 		dc.b $BA, $56, 0, 0
 byte_1182F6:	dc.b $80, $10, $80, 4, 8, $16, $36, $26, $3D, $47, $7C,	$71, 0,	$81, 5,	$18, $16, $3A, $82, 5
-
 		dc.b $19, $83, $16, $3B, $67, $7D, $76,	$37, $84, 4, $A, $15, $17, $85,	5, $16,	$86, 4,	9, $16
 		dc.b $3C, $87, 5, $1A, $15, $1C, $FF, $FF, $EC,	$EA, $AD, $7E, $2D, $AA, $B5, $F9, $15,	$36, $EA, $68
 		dc.b $8C, $47, $E3, $DF, $31, $FE, $C, $7F, $83, 4, $7E, $3C, 0, $F, $98, $7E, $E, $2F,	$98, $B4
@@ -49129,7 +47595,6 @@ byte_1182F6:	dc.b $80, $10, $80, 4, 8, $16, $36, $26, $3D, $47, $7C,	$71, 0,	$81
 		dc.b $6C, $FB, $D6, $FB, $FF, $4F, $CE,	$5F, $48, $FC, $AC, $EA, $FA, $FC, $1F,	$CC, $48, 0, 0,	7
 		dc.b $B9, $EF, $36, $8F, $B1, $F6, 0, 0
 byte_11838A:	dc.b $80, $42, $80, 3, 0, $14, 6, $25, $12, $35, $15, $45, $18,	$56, $33, $67, $73, $74, 4, $81
-
 		dc.b 4,	5, $16,	$38, $28, $F7, $82, 5, $E, $18,	$F4, $83, 3, 1,	$16, $2F, $84, 5, $1A, $85
 		dc.b 6,	$32, $18, $F6, $86, 5, $13, $17, $78, $87, 4, 8, $17, $77, $88,	6, $3A,	$89, 5,	$F
 		dc.b $16, $37, $8A, 5, $14, $8B, 6, $2E, $18, $F3, $8C,	6, $36,	$18, $F5, $8D, 7, $76, $8E, 5
@@ -49196,7 +47661,6 @@ byte_11838A:	dc.b $80, $42, $80, 3, 0, $14, 6, $25, $12, $35, $15, $45, $18,	$56
 		dc.b $9C, $F5, $99, $8C, $69, 2, $D7, $42, $17,	$9C, $4B, $52, $A3, $4D, $D8, $98, $39,	$A9, $51, $45
 		dc.b $C9, $7A, $79, $E3, $60, $EA, $31,	$A4, $5E, $CF, 5, $7C, $39, $B7, $20, 0
 byte_1188AE:	dc.b $80, $20, $80, 3, 1, $13, 2, $24, 8, $35, $13, $45, $16, $55, $19,	$66, $34, $74, $A, $81
-
 		dc.b 4,	6, $15,	$17, $26, $3A, $82, 6, $35, $17, $72, $83, 3, 0, $14, 7, $27, $73, $47,	$7A
 		dc.b $85, 7, $76, $18, $F6, $86, 5, $18, $18, $F7, $87,	5, $12,	$17, $78, $89, 6, $37, $17, $79
 		dc.b $8A, 7, $77, $8E, 6, $36, $8F, 6, $38, $FF, $AA, $AA, $AD,	$25, $59, $95, $35, $A5, $4C, $27
@@ -49227,7 +47691,6 @@ byte_1188AE:	dc.b $80, $20, $80, 3, 1, $13, 2, $24, 8, $35, $13, $45, $16, $55, 
 		dc.b $DA, $1D, $C, $64,	$4D, $C8, $D0, $51, $13, $10, $39, $4E,	$E9, $88, $B3, $1B, $CD, $B1, $E2, $3C
 		dc.b $40, 0
 byte_118AF4:	dc.b $80, $4D, $80, 3, 0, $15, $F, $25,	$16, $35, $15, $45, $1A, $56, $2F, $66,	$37, $74, 4, $81
-
 		dc.b 4,	2, $16,	$36, $27, $75, $82, 6, $33, $83, 4, 6, $17, $74, $84, 5, $13, $18, $F7,	$85
 		dc.b 7,	$72, $86, 6, $2E, $18, $F6, $87, 5, $E,	$17, $77, $88, 5, $14, $18, $F2, $89, 4, 8
 		dc.b $17, $78, $8A, 5, $18, $8B, 4, 5, $17, $73, $28, $F3, $8C,	6, $38,	$8D, 6,	$32, $8E, 5
@@ -49308,7 +47771,6 @@ byte_118AF4:	dc.b $80, $4D, $80, 3, 0, $15, $F, $25,	$16, $35, $15, $45, $1A, $5
 		dc.b $82, $CE, $95, $20, $C4, $EB, $36,	$EC, $86, 9, $DA, $20, $EB, $18, $F5, $5D, $9E,	$6E, $79, $26
 		dc.b $CF, $37, 8, $C1, $2F, $E7, $19, $D1, $E7,	$97, $19, $36, $4A, $5F, $9A, $5C, $80,	0
 byte_119132:	dc.b 0,	$F, $80, 7, $79, $26, $35, $35,	$19, $48, $FA, $75, $14, $81, 3, 3, $16, $37, $58, $FB
-
 		dc.b $82, 3, 1,	$15, $17, $27, $7B, $38, $F8, $83, 3, 2, $15, $18, $36,	$3A, $84, 3, 0,	$15
 		dc.b $15, $58, $F9, $86, 7, $7A, $87, 4, 8, $15, $16, $56, $3B,	$88, 6,	$36, $8C, $16, $38, $8D
 		dc.b 4,	9, $8E,	7, $78,	$26, $39, $8F, 6, $34, $FF, $F2, $7E, $CE, $E3,	1, $EC,	$C6, $E1, $FA
@@ -49327,7 +47789,6 @@ byte_119132:	dc.b 0,	$F, $80, 7, $79, $26, $35, $35,	$19, $48, $FA, $75, $14, $8
 		dc.b $9F, $1F, $9D, $CF, $13, $99, $E7,	$2A, $EB, $5E, $E9, $4A, $52, $94, $A5,	$3F, $21, $3C, $FD, $4F
 		dc.b $1F, $E0, $F1, $3A, $FE, $77, $C4,	$FD, $4F, $1F, $5C, $CE, $55, $D6, $BD,	$F9, 0,	0
 byte_119298:	dc.b 0,	$22, $80, 6, $33, $15, $16, $25, $12, $35, $18,	$46, $35, $76, $2E, $81, 6, $32, $82, 4
-
 		dc.b 7,	$17, $78, $83, 3, 1, $14, 6, $26, $38, $37, $73, $84, 3, 0, $15, $14, $26, $3A,	$48
 		dc.b $F5, $85, 6, $37, $17, $79, $38, $F6, $86,	4, 8, $16, $36,	$87, 5,	$13, $17, $72, $88, 6
 		dc.b $2F, $17, $77, $89, 5, $15, $17, $76, $38,	$F7, $8F, 3, 2,	$16, $34, $28, $F4, $FF, $BA, $EB
@@ -49367,7 +47828,6 @@ byte_119298:	dc.b 0,	$22, $80, 6, $33, $15, $16, $25, $12, $35, $18,	$46, $35, $
 		dc.b $AF, $AC, $D5, $FF, $A7, $BE, $B3,	$57, $C4, $FF, $52, $85, $67, $DA, $F0,	$85, $7F, $4F, $78, $43
 		dc.b $6F, $74, $3D, $EF, 9, $A7, $DE, $A1, $18,	$9F, $62, $15, $13, $F,	$FF, $AC, $FF, $BF, $60, 0
 byte_1195A4:	dc.b 0,	8, $81,	5, $1C,	$16, $3D, $82, 4, $A, $18, $FB,	$84, 3,	4, $16,	$3C, $85, 3, 2
-
 		dc.b $15, $1D, $86, 2, 0, $15, $1A, $28, $FA, $88, 3, 3, $14, $B, $27, $7C, $8A, 5, $18, $8B
 		dc.b 5,	$1B, $8C, 5, $19, $FF, $FC, $83, $D7, $E9, $3F,	0, $D5,	$7E, $C4, $55, $EF, $DC, $6A, $B9
 		dc.b $F7, $13, $5F, $A4, $EF, $D4, $A4,	$7B, $AF, $15, $72, $A,	$BB, $3A, $2A, $8B, $C4, $28, $85, $E3
@@ -49381,7 +47841,6 @@ byte_1195A4:	dc.b 0,	8, $81,	5, $1C,	$16, $3D, $82, 4, $A, $18, $FB,	$84, 3,	4, 
 		dc.b $E3, $32, $5E, $BE, $2F, $DC, $16,	$31, $9F, 6, $7F, $20, $65, $E2, $F2, $F1, $F3,	$2F, $78, $DF
 		dc.b $E6, $B3, $F9, $BC, $64, 0
 byte_11969A:	dc.b 0,	$15, $80, 4, 3,	$14, 5,	$24, 6,	$37, $7B, $46, $32, $55, $17, $66, $3A,	$75, $12, $81
-
 		dc.b 5,	$16, $16, $35, $26, $36, $36, $37, $48,	$F9, $56, $38, $65, $18, $85, 4, 2, $16, $34, $86
 		dc.b 7,	$76, $87, 6, $39, $88, 4, 7, $17, $7A, $89, 4, 4, $17, $79, $8B, 3, 0, $15, $15
 		dc.b $8C, 4, 8,	$8D, 5,	$13, $78, $FA, $8E, 5, $14, $8F, 6, $33, $17, $77, $27,	$78, $38, $F8
@@ -49405,7 +47864,6 @@ byte_11969A:	dc.b 0,	$15, $80, 4, 3,	$14, 5,	$24, 6,	$37, $7B, $46, $32, $55, $1
 		dc.b $29, $1A, $2B, $CB, $24, $32, $4E,	$89, $90, $D1, $52, $4C, $4A, $5D, $23,	$3F, $B4, $54, $7B, $A3
 		dc.b $26, $44, $69, $29, $30, 0
 byte_119858:	dc.b $80, $19, $80, 3, 0, $14, 5, $25, $E, $35,	$12, $46, $2F, $55, $15, $65, $1B, $75,	$13, $81
-
 		dc.b 4,	2, $17,	$74, $82, 6, $33, $17, $78, $83, 4, 4, $16, $38, $27, $7B, $84,	6, $3B,	$85
 		dc.b 7,	$73, $86, 5, $14, $87, 4, 8, $17, $75, $88, 6, $34, $89, 5, $16, $8A, 6, $2E, $8B
 		dc.b 6,	$32, $17, $79, $28, $F8, $8C, 5, $18, $17, $72,	$8D, 4,	6, $17,	$7A, $8E, 4, 3,	$16
@@ -49436,7 +47894,6 @@ byte_119858:	dc.b $80, $19, $80, 3, 0, $14, 5, $25, $E, $35,	$12, $46, $2F, $55,
 		dc.b $2E, $B3, $D7, $F3, $EB, $4B, $15,	7, $34,	$B9, $F0, $4A, $97, $20, $25, $E7, $6B,	$AC, $F7, $20
 		dc.b $4B, $E9, $FA, $97, $BA, 8, $12, $80
 byte_119AA4:	dc.b $80, $50, $80, 3, 0, $14, 6, $24, 9, $35, $17, $46, $37, $56, $33,	$67, $72, $73, 1, $81
-
 		dc.b 3,	2, $16,	$35, $28, $F2, $82, 8, $F6, $83, 6, $34, $17, $75, $84,	5, $16,	$17, $74, $85
 		dc.b 5,	$18, $17, $7A, $86, 6, $32, $87, 4, 7, $16, $38, $28, $F7, $8A,	7, $73,	$8B, 5,	$15
 		dc.b $17, $76, $8C, 4, 8, $16, $36, $8D, 5, $14, $18, $F3, $8E,	7, $77,	$8F, 7,	$78, $FF, $FF
@@ -49502,11 +47959,9 @@ byte_119AA4:	dc.b $80, $50, $80, 3, 0, $14, 6, $24, 9, $35, $17, $46, $37, $56, 
 		dc.b $23, $38, $34, $E5, $49, $A6, $70,	$29, $9E, $D9, $ED, $4E, $51, $BE, $DB,	$C4, $A9, $8B, $A2, $49
 		dc.b $24, $92, $49, $24, $92, $48
 off_119FAA:	dc.w byte_119FAE-off_119FAA
-
 		dc.w byte_119FB4-off_119FAA
 byte_119FAE:	dc.b 1,	$14, 0,	$C, 0, $21
 byte_119FB4:	dc.b 1,	$3C, 0,	$30, 0,	$4A, 2,	$32, $32, $32, $32, 0, $D0, $D,	0, 0
-
 		dc.b $F0, $E0, $F, 0, 8, $F0, $E0, 5, 0, $18, $F8, 2, $32, $32,	$32, $32
 		dc.b 0,	$D0, $D, 0, 0, $F0, $E0, $F, 0,	8, $F0,	$E0, 5,	0, $3F,	$F8
 		dc.b 3,	$32, $32, $32, $32, 0, $C8, 9, 0, $1C, $F4, $D8, $E, 0,	$22, $F4
@@ -49514,11 +47969,9 @@ byte_119FB4:	dc.b 1,	$3C, 0,	$30, 0,	$4A, 2,	$32, $32, $32, $32, 0, $D0, $D,	0, 
 		dc.b $C8, 9, 0,	$1C, $F4, $D8, $E, 0, $22, $F4,	$F0, $D, 0, $2E, $EC, $D8
 		dc.b $A, 0, $36, $DC
 off_11A018:	dc.w byte_11A01C-off_11A018
-
 		dc.w byte_11A022-off_11A018
 byte_11A01C:	dc.b 1,	$14, 0,	$A, 0, $60
 byte_11A022:	dc.b 0,	0, 0, $B0, $F, $56, $56, $56, $56, 0, $C0, $A, $20, 0, $F8, $D8
-
 		dc.b 5,	$20, 9,	0, $E8,	$C, $20, $D, $F0, $D8, 4, $20, $11, $F0, $E0, 8
 		dc.b $20, $13, $E8, $E8, $E, 0,	$4B, $E8, $E8, 6, 0, $57, 8, $F0, $D, $20
 		dc.b $5D, $A8, $B8, $E,	$20, $25, $20, $B8, $A,	$28, $25, $40, $D0, 0, $20, $31
@@ -49531,7 +47984,6 @@ byte_11A022:	dc.b 0,	0, 0, $B0, $F, $56, $56, $56, $56, 0, $C0, $A, $20, 0, $F8,
 		dc.b $38, $D0, 0, $20, $32, $68, $D0, $F, $20, $33, $68, $F0, $D, $20, $43, $68
 		dc.b 0,	0, 0, 0, 0, 0, $F0, 5, 0, $65, $B0, 0
 off_11A0DE:	dc.w byte_11A0EE-off_11A0DE
-
 		dc.w byte_11A0F8-off_11A0DE
 		dc.w byte_11A102-off_11A0DE
 		dc.w byte_11A10C-off_11A0DE
@@ -49547,7 +47999,6 @@ byte_11A116:	dc.b 3,	2, 0, $54, 0, $5F, $80,	$54, $80, $5F
 byte_11A120:	dc.b 3,	2, $80,	$4A, $80, $55, 0, $4A, 0, $55
 byte_11A12A:	dc.b 3,	2, 0, $56, 0, $61, $80,	$56, $80, $61
 byte_11A134:	dc.b 3,	2, $80,	$4C, $80, $57, 0, $4C, 0, $57, 0, 0, $EC, 0, $EC, 0
-
 		dc.b $F0, $F, 0, 0, $F0, 0, 0, $EC, 0, $EC, 0, $F0, $F,	0, $10,	$F0
 		dc.b 0,	0, $ED,	0, $ED,	0, $F4,	$A, 0, $20, $F4, 0, 0, $ED, 0, $ED
 		dc.b 0,	$F4, $A, 0, $29, $F4, 0, 0, $EE, 0, $EE, 0, $F8, 5, 0, $32
@@ -49555,7 +48006,6 @@ byte_11A134:	dc.b 3,	2, $80,	$4C, $80, $57, 0, $4C, 0, $57, 0, 0, $EC, 0, $EC, 0
 		dc.b $EF, 0, $FC, 0, 0,	$3A, $FC, 0, 0,	$EF, 0,	$EF, 0,	$FC, 0,	0
 		dc.b $3B, $FC
 off_11A196:	dc.w byte_11A1A2-off_11A196
-
 		dc.w byte_11A1AC-off_11A196
 		dc.w byte_11A1B6-off_11A196
 		dc.w byte_11A1C4-off_11A196
@@ -49563,14 +48013,10 @@ off_11A196:	dc.w byte_11A1A2-off_11A196
 		dc.w byte_11A1DE-off_11A196
 byte_11A1A2:	dc.b 3,	$A, 0, $DB, 0, $C1, 0, $A7, 0, $C1
 byte_11A1AC:	dc.b 3,	$A, $80, $D1, $80, $B7,	$80, $9D, $80, $B7
-
 byte_11A1B6:	dc.b 5,	4, 0, $E1, 0, $F6, 0, $E1, 1, $B, 1, $20, 1, $B
-
 byte_11A1C4:	dc.b 5,	4, $80,	$D3, $80, $E8, $80, $D3, $80, $FD, $81,	$12, $80, $FD
-
 byte_11A1D2:	dc.b 4,	8, 0, $18, 0, $32, 0, $47, 0, $5C, 0, $6C
 byte_11A1DE:	dc.b 4,	8, $80,	$C, $80, $26, $80, $3B,	$80, $50, $80, $60, 3, $A5, $A7, $A6
-
 		dc.b $A8, 0, $D0, $F, 0, 0, $EC, $F0, 9, 0, $10, $EC, $D8, 2, 0, $16
 		dc.b $C, $F8, 4, 0, $19, 4, 2, $A5, $A9, $A6, $C5, 0, $D0, 9, 0, $1B
 		dc.b $EC, $E0, $F, 0, $21, $EC,	$E8, 2,	0, $31,	$C, 2, 0, 0, 0,	0
@@ -49588,32 +48034,24 @@ byte_11A1DE:	dc.b 4,	8, $80,	$C, $80, $26, $80, $3B,	$80, $50, $80, $60, 3, $A5,
 		dc.b 0,	$A7, $EC, $E8, $C, 0, $B7, $F4,	2, $A5,	$E2, $A6, $E3, 0, $D0, 9
 		dc.b 0,	$1B, $EC, $E0, $F, 0, $A7, $EC,	$E8, $C, 0, $B7, 4, 0
 off_11A2EC:	dc.w byte_11A2F0-off_11A2EC
-
 		dc.w byte_11A2F8-off_11A2EC
 byte_11A2F0:	dc.b 2,	$A, 0, $10, 0, $1B, 0, $26
 byte_11A2F8:	dc.b 2,	$A, 0, $1E, 0, $13, 0, 8, 0, $4D, $4D, $4D, $4D, 0, $E8, $F
-
 		dc.b 0,	0, $F0,	0, $4D,	$4D, $4D, $4D, 0, $E8, $F, 0, $10, $F0,	0, $4D
 		dc.b $4D, $4D, $4D, 0, $E8, $F,	0, $20,	$F0, 0
 off_11A322:	dc.w byte_11A324-off_11A322
-
 byte_11A324:	dc.b 5,	$14, 0,	$E, 0, $E, 0, $E, 0, $1E, 0, $E, 0, $1E, 1, $A0
-
 		dc.b $A0, $A0, $A0, 0, $F0, $D,	0, 0, $E0, $F0,	$D, 0, 8, 0, 1,	$A0
 		dc.b $A0, $A0, $A0, 0, $F0, $D,	0, $10,	$E0, $F0, $D, 0, $18, 0
 off_11A352:	dc.w byte_11A356-off_11A352
-
 		dc.w byte_11A370-off_11A352
 byte_11A356:	dc.b $B, 5, 0, $2F, 0, $3A, 0, $2F, 0, $3A, 0, $2F, 0, $3A, 0, $24
-
 		dc.b 0,	$24, 0,	$45, 0,	$3A, 0,	$24, 0,	$24
 byte_11A370:	dc.b 3,	5, 0, $2B, 0, $20, 0, $A, 0, $A, 0, 0, 0, 0, 0,	0
-
 		dc.b $E0, 0, 0,	0, $F0,	0, 0, 0, 0, 0, 0, $F0, $D, 0, 1, $F0
 		dc.b 0,	0, 0, 0, 0, 0, $F0, $D,	8, 1, $F0, 0, 0, 0, 0, 0
 		dc.b 0,	$E8, $E, 0, 9, $F0
 off_11A3A6:	dc.w byte_11A3AE-off_11A3A6
-
 		dc.w byte_11A3B2-off_11A3A6
 		dc.w byte_11A3B6-off_11A3A6
 		dc.w byte_11A3BC-off_11A3A6
@@ -49621,21 +48059,16 @@ byte_11A3AE:	dc.b 0,	0, 0, $14
 byte_11A3B2:	dc.b 0,	0, $80,	$10
 byte_11A3B6:	dc.b 1,	5, 0, $17, 0, $22
 byte_11A3BC:	dc.b 1,	5, $80,	$11, $80, $1C, 0, $99, $99, $99, $99, 0, $F8, 5, 0, 0
-
 		dc.b 0,	0, $99,	$99, $99, $99, 0, $F8, 5, 0, 4,	0, 0, $99, $99,	$99
 		dc.b $99, 0, $F8, 5, 0,	8, 0, 0
 off_11A3E4:	dc.w byte_11A3E6-off_11A3E4
-
 byte_11A3E6:	dc.b 0,	0, 0, 4, 0, 0, 0, 0, 0,	0, $F0,	$D, 0, 0, $F0, 0
-
 off_11A3F6:	dc.w byte_11A3FC-off_11A3F6
-
 		dc.w byte_11A400-off_11A3F6
 		dc.w byte_11A404-off_11A3F6
 byte_11A3FC:	dc.b 0,	0, 0, $C
 byte_11A400:	dc.b 0,	0, 0, $2C
 byte_11A404:	dc.b 0,	0, 0, $56, 5, $65, $65,	$65, $65, 0, 0,	$F, 0, $10, $E0, 0
-
 		dc.b $F, 8, $10, 0, $20, $F, 0,	$20, $E0, $20, $F, 8, $20, 0, $40, $F
 		dc.b 0,	$30, $E0, $40, $F, 8, $30, 0, 7, $66, $E4, $66,	$E4, 0,	0, $F
 		dc.b 0,	$10, $E0, 0, $F, 8, $10, 0, $20, $F, 0,	$20, $E0, $20, $F, 8
@@ -49645,29 +48078,22 @@ byte_11A404:	dc.b 0,	0, 0, $56, 5, $65, $65,	$65, $65, 0, 0,	$F, 0, $10, $E0, 0
 		dc.b $40, $F, 0, 0, $E0, $40, $F, 8, 0,	0, $60,	$F, 0, 0, $E0, $60
 		dc.b $F, 8, 0, 0
 off_11A488:	dc.w byte_11A48A-off_11A488
-
 byte_11A48A:	dc.b 1,	$A, 0, 6, 0, $25, 4, $46, $46, $46, $46, 0, $C8, 9, 0, 0
-
 		dc.b $F4, $D8, 4, 0, 6,	$F4, $D8, 0, 0,	8, 4, $E0, $B, 0, 9, $F4
 		dc.b $F0, 1, 0,	$17, $C, 4, $46, $46, $46, $46,	0, $C8,	9, 0, 0, $F4
 		dc.b $D8, 4, 0,	$15, $F4, $D8, 0, 0, 8,	4, $E0,	$B, 0, 9, $F4, $F0
 		dc.b 1,	0, $17,	$C
 off_11A4CE:	dc.w byte_11A4D0-off_11A4CE
-
 byte_11A4D0:	dc.b 0,	0, 0, 4, 0, $64, $64, $64, $64,	0, 0, $D, 0, 0,	$F0, 0
-
 off_11A4E0:	dc.w byte_11A4E4-off_11A4E0
-
 		dc.w byte_11A4E8-off_11A4E0
 byte_11A4E4:	dc.b 0,	0, 0, $10
 byte_11A4E8:	dc.b 4,	5, 0, $17, 0, $22, 0, $2D, 0, $38, 0, $43, 0, 0, 0, 0
-
 		dc.b 0,	0, $F0,	5, 0, 0, $F8, 0, $41, $41, $41,	$41, 0,	$F4, 0,	0
 		dc.b 4,	$FC, 0,	$41, $41, $41, $41, 0, $F0, 5, 0, 5, $F8, 0, $41, $41
 		dc.b $41, $41, 0, $F0, 5, 0, 9,	$F8, 0,	$41, $41, $41, $41, 0, $F0, 5
 		dc.b 0,	$D, $F8, 0, $41, $41, $41, $41,	0, $F0,	5, 0, $11, $F8
 off_11A536:	dc.w byte_11A53E-off_11A536
-
 		dc.w byte_11A544-off_11A536
 		dc.w byte_11A54A-off_11A536
 		dc.w byte_11A54E-off_11A536
@@ -49675,22 +48101,18 @@ byte_11A53E:	dc.b 1,	$A, 0, $1F, 0, $2F
 byte_11A544:	dc.b 1,	$A, 0, $44, 0, $54
 byte_11A54A:	dc.b 0,	0, 0, 8
 byte_11A54E:	dc.b 0,	0, 0, $2F, 0, $61, $61,	$61, $61, 0, 0,	$A, 0, 0, $F4, 1
-
 		dc.b $60, $60, $60, $60, 0, 2, $A, 0, 0, $F4, $1A, 8, 0, 9, $F4, 1
 		dc.b $60, $60, $60, $60, 0, 0, $A, 0, 0, $F4, $18, 8, 0, $C, $F4, 0
 		dc.b $61, $61, $61, $61, 0, 0, $A, $10,	0, $F4,	1, $60,	$60, $60, $60, 0
 		dc.b 6,	$A, $10, 0, $F4, $FE, 8, $10, 9, $F4, 1, $60, $60, $60,	$60, 0
 		dc.b 8,	$A, $10, 0, $F4, 0, 8, $10, $C,	$F4
 off_11A5A8:	dc.w byte_11A5AC-off_11A5A8
-
 		dc.w byte_11A5B2-off_11A5A8
 byte_11A5AC:	dc.b 1,	5, 0, $A, 0, $15
 byte_11A5B2:	dc.b 0,	0, 0, $1A, 0, $63, $63,	$63, $63, 0, $E8, $E, 0, 0, $F0, 0
-
 		dc.b $63, $63, $63, $63, 0, $E0, $F, 0,	$C, $F0, 0, $64, $64, $64, $64,	0
 		dc.b 0,	9, 0, $1C, $F4,	0
 off_11A5D8:	dc.w byte_11A5E6-off_11A5D8
-
 		dc.w byte_11A5F0-off_11A5D8
 		dc.w byte_11A5FA-off_11A5D8
 		dc.w byte_11A5FE-off_11A5D8
@@ -49698,14 +48120,12 @@ off_11A5D8:	dc.w byte_11A5E6-off_11A5D8
 		dc.w byte_11A60C-off_11A5D8
 		dc.w byte_11A616-off_11A5D8
 byte_11A5E6:	dc.b 3,	5, $80,	$7C, $80, $91, $80, $A6, $80, $91
-
 byte_11A5F0:	dc.b 3,	5, 0, $72, 0, $87, 0, $9C, 0, $87
 byte_11A5FA:	dc.b 0,	0, $80,	$A7
 byte_11A5FE:	dc.b 0,	0, 0, $A3
 byte_11A602:	dc.b 3,	3, 0, $29, 0, $1E, 0, $29, $80,	$1E
 byte_11A60C:	dc.b 3,	5, 0, $2A, 0, $35, 0, $40, 0, $4B
 byte_11A616:	dc.b 3,	5, $80,	$20, $80, $2B, $80, $36, $80, $41, 0, $5F, $5F,	$5F, $5F, 0
-
 		dc.b $F0, 5, 0,	0, $F8,	0, $5F,	$5F, $5F, $5F, 0, $F0, 5, 0, 4,	$F8
 		dc.b 0,	$5F, $5F, $5F, $5F, 0, $F0, 5, 0, 8, $F8, 0, $5F, $5F, $5F, $5F
 		dc.b 0,	$F0, 5,	0, $C, $F8, 0, $5F, $5F, $5F, $5F, 0, $F0, 5, $18, 8
@@ -49716,20 +48136,15 @@ byte_11A616:	dc.b 3,	5, $80,	$20, $80, $2B, $80, $36, $80, $41, 0, $5F, $5F,	$5F
 		dc.b $F4, $CF, 8, 0, $32, $F4, $F0, 9, 0, $1C, $F4, 1, $5D, $5E, $5D, $5E
 		dc.b 0,	$D0, $F, 0, $35, $F0, $F0, $D, 0, $45, $F0, 0
 off_11A6B2:	dc.w byte_11A6B4-off_11A6B2
-
 byte_11A6B4:	dc.b 3,	3, 0, $15, 0, $A, 0, $15, $80, $A, 0, $5C, $5C,	$5C, $5C, 0
-
 		dc.b $F8, 5, 0,	0, $F8,	0, $5C,	$5C, $5C, $5C, 0, $F8, 5, 0, 4,	$F8
 off_11A6D4:	dc.w byte_11A6D8-off_11A6D4
-
 		dc.w byte_11A6DE-off_11A6D4
 byte_11A6D8:	dc.b 1,	$E, 0, $C, 0, $1C
 byte_11A6DE:	dc.b 1,	$E, $80, 6, $80, $16, 1, $58, $59, $5A,	$5B, 0,	$E4, $D, 0, 0
-
 		dc.b $F0, $F4, $E, 0, 8, $F0, 1, $58, $59, $5A,	$5B, 0,	$E4, $D, 0, 0
 		dc.b $F0, $F4, $E, 0, $14, $F0
 off_11A704:	dc.w byte_11A710-off_11A704
-
 		dc.w byte_11A718-off_11A704
 		dc.w byte_11A720-off_11A704
 		dc.w byte_11A724-off_11A704
@@ -49741,7 +48156,6 @@ byte_11A720:	dc.b 0,	0, $80,	$48
 byte_11A724:	dc.b 0,	0, 0, $44
 byte_11A728:	dc.b 2,	8, $80,	$4B, $80, $5B, $80, $4B
 byte_11A730:	dc.b 2,	8, 0, $43, 0, $53, 0, $43, 1, $53, $53,	$54, $54, 0, $D7, $D
-
 		dc.b 0,	0, $F4,	$E7, $E, 0, 8, $F4, 1, $53, $53, $54, $54, 0, $D9, $D
 		dc.b 0,	0, $F4,	$E9, $E, 0, $14, $F4, 1, $53, $53, $54,	$54, 0,	$D8, $D
 		dc.b 0,	0, $F4,	$E8, $E, 0, $20, $F4, 0, $55, $55, $55,	$55, 0,	$F0, $D
@@ -49749,42 +48163,31 @@ byte_11A730:	dc.b 2,	8, 0, $43, 0, $53, 0, $43, 1, $53, $53,	$54, $54, 0, $D7, $
 		dc.b 0,	$2C, $EC, 2, $55, $9C, $55, $9D, 0, $E0, 5, 0, $38, $D9, $F0, 9
 		dc.b 0,	$3C, $E1, $F0, $D, 0, $2C, $EC
 off_11A798:	dc.w byte_11A79A-off_11A798
-
 byte_11A79A:	dc.b 0,	0, 0, 4, 0, 0, 0, 0, 0,	0, $E0,	$F, 0, 0, $F0, 0
-
 off_11A7AA:	dc.w byte_11A7AC-off_11A7AA
-
 byte_11A7AC:	dc.b 2,	$14, 0,	8, 0, $13, 0, $23, 0, 0, 0, 0, 0, 0, $E0, $F
-
 		dc.b 0,	0, $F0,	1, 0, 0, 0, 0, 0, $E8, 4, 0, $10, $F8, $E0, $F
 		dc.b 0,	0, $F0,	1, 0, 0, 0, 0, 0, $E8, 4, 0, $12, $F8, $E0, $F
 		dc.b 0,	0, $F0,	0
 off_11A7E0:	dc.w byte_11A7E4-off_11A7E0
-
 		dc.w byte_11A7EA-off_11A7E0
 byte_11A7E4:	dc.b 1,	0, 0, $C, 0, $17
 byte_11A7EA:	dc.b 1,	0, 0, 6, $80, $11, 0, $62, $62,	$62, $62, 0, 0,	$C, 0, 0
-
 		dc.b $F0, 0, 0,	0, 0, 0, 0, $E8, 3, 0, 4, $C
 off_11A806:	dc.w byte_11A80A-off_11A806
-
 		dc.w byte_11A80E-off_11A806
 byte_11A80A:	dc.b 0,	0, $80,	8
 byte_11A80E:	dc.b 0,	0, 0, 4, 1, 0, 0, 0, 0,	0, $E8,	$E, 0, 0, $E4, $E8
-
 		dc.b $A, 0, $C,	4
 off_11A822:	dc.w byte_11A828-off_11A822
-
 		dc.w byte_11A82C-off_11A822
 		dc.w byte_11A830-off_11A822
 byte_11A828:	dc.b 0,	0, 0, $C
 byte_11A82C:	dc.b 0,	0, 0, $13
 byte_11A830:	dc.b 0,	0, 0, $1A, 0, $48, $48,	$48, $48, 0, $E8, $B, 0, 0, $F4, 0
-
 		dc.b $49, $49, $49, $49, 0, $F8, 5, 0, $C, $F8,	0, $49,	$49, $49, $49, 0
 		dc.b $F8, 5, 0,	$10, $F8, 0
 off_11A856:	dc.w byte_11A860-off_11A856
-
 		dc.w byte_11A86A-off_11A856
 		dc.w byte_11A874-off_11A856
 		dc.w byte_11A878-off_11A856
@@ -49794,7 +48197,6 @@ byte_11A86A:	dc.b 3,	2, $80,	$16, $80, $35, $80, $54, $80, $73
 byte_11A874:	dc.b 0,	0, 0, $88
 byte_11A878:	dc.b 0,	0, $80,	$84
 byte_11A87C:	dc.b 0,	0, 0, $8B, 4, $4C, $4D,	$4C, $4D, 0, $D0, $A, 0, 0, $F4, $E4
-
 		dc.b 5,	0, 9, $F8, $E4,	5, 0, 9, $EC, $E4, 5, 0, 9, 4, $F0, 5
 		dc.b 0,	9, $F8,	4, $4C,	$4D, $4C, $4D, 0, $D0, $A, 0, 0, $F4, $E4, 5
 		dc.b 0,	9, $F8,	$E4, 5,	0, 9, $EC, $E4,	5, 0, 9, 4, $F0, 5, 0
@@ -49805,7 +48207,6 @@ byte_11A87C:	dc.b 0,	0, 0, $8B, 4, $4C, $4D,	$4C, $4D, 0, $D0, $A, 0, 0, $F4, $E
 		dc.b 0,	$4E, $4E, $4E, $4E, 0, $E8, $A,	0, 0, $F4, 0, $41, $41,	$41, $41
 		dc.b 0,	$F0, 5,	0, 9, $F8
 off_11A912:	dc.w byte_11A930-off_11A912
-
 		dc.w byte_11A93A-off_11A912
 		dc.w byte_11A944-off_11A912
 		dc.w byte_11A94E-off_11A912
@@ -49821,23 +48222,16 @@ off_11A912:	dc.w byte_11A930-off_11A912
 		dc.w byte_11A95C-off_11A912
 		dc.w byte_11A962-off_11A912
 byte_11A930:	dc.b 3,	$A, 0, $60, 0, $75, 0, $8A, 0, $75
-
 byte_11A93A:	dc.b 3,	$A, $80, $56, $80, $6B,	$80, $80, $80, $6B
-
 byte_11A944:	dc.b 3,	$A, 0, $90, 0, $AA, 0, $C4, 0, $AA
 byte_11A94E:	dc.b 3,	$A, $80, $86, $80, $A0,	$80, $BA, $80, $A0
-
 byte_11A958:	dc.b 0,	0, 0, $CF
-
 byte_11A95C:	dc.b 1,	1, 0, $D6, 0, $E1
-
 byte_11A962:	dc.b 1,	1, $80,	$D0, $80, $DB
-
 byte_11A968:	dc.b 3,	$A, 0, $E0, 0, $FA, 1, $14, 0, $FA
 byte_11A972:	dc.b 3,	$A, $80, $D6, $80, $F0,	$81, $A, $80, $F0
 byte_11A97C:	dc.b 3,	$A, 1, $1F, 1, $3E, 1, $5D, 1, $3E
 byte_11A986:	dc.b 3,	$A, $81, $15, $81, $34,	$81, $53, $81, $34, 2, $4F, $50, $51, $52, 0
-
 		dc.b $E2, $E, 0, $11, $FF, $E8,	0, 0, 0, $F8, $F0, $D, 0, 1, $F0, 2
 		dc.b $4F, $50, $51, $52, 0, $E1, $E, 0,	$1D, $FF, $E8, 0, 0, 0,	$F8, $F0
 		dc.b $D, 0, 1, $F0, 3, $4F, $50, $51, $52, 0, $E4, $A, 0, $29, 7, $FC
@@ -49862,7 +48256,6 @@ byte_11A986:	dc.b 3,	$A, $81, $15, $81, $34,	$81, $53, $81, $34, 2, $4F, $50, $5
 		dc.b 0,	$29, 7,	$FC, 8,	0, $32,	$FF, $F0, 6, 0,	$37, $FC, $E8, 0, 0
 		dc.b 0,	$F8, $F0, $D, 0, 1, $F0, 0
 off_11AAFE:	dc.w byte_11AB1C-off_11AAFE
-
 		dc.w byte_11AB26-off_11AAFE
 		dc.w byte_11AB30-off_11AAFE
 		dc.w byte_11AB3A-off_11AAFE
@@ -49878,24 +48271,16 @@ off_11AAFE:	dc.w byte_11AB1C-off_11AAFE
 		dc.w byte_11AB48-off_11AAFE
 		dc.w byte_11AB4E-off_11AAFE
 byte_11AB1C:	dc.b 3,	$A, 0, $60, 0, $7A, 0, $94, 0, $7A
-
 byte_11AB26:	dc.b 3,	$A, $80, $56, $80, $70,	$80, $8A, $80, $70
-
 byte_11AB30:	dc.b 3,	$A, 0, $9F, 0, $BE, 0, $DD, 0, $BE
 byte_11AB3A:	dc.b 3,	$A, $80, $95, $80, $B4,	$80, $D3, $80, $B4
-
 byte_11AB44:	dc.b 0,	0, 0, $ED
-
 byte_11AB48:	dc.b 1,	1, 0, $F4, 0, $FF
-
 byte_11AB4E:	dc.b 1,	1, $80,	$EE, $80, $F9
-
 byte_11AB54:	dc.b 3,	$A, 0, $FE, 1, $1D, 1, $3C, 1, $1D
 byte_11AB5E:	dc.b 3,	$A, $80, $F4, $81, $13,	$81, $32, $81, $13
-
 byte_11AB68:	dc.b 3,	$A, 1, $4C, 1, $70, 1, $94, 1, $70
 byte_11AB72:	dc.b 3,	$A, $81, $42, $81, $66,	$81, $8A, $81, $66, 3, $4F, $50, $51, $52, 0
-
 		dc.b $E6, $A, 0, $3D, 7, $E2, $E, 0, $11, $FF, $E8, 0, 0, 0, $F8, $F0
 		dc.b $D, 0, 1, $F0, 3, $4F, $50, $51, $52, 0, $E5, $A, 0, $3D, 7, $E1
 		dc.b $E, 0, $1D, $FF, $E8, 0, 0, 0, $F8, $F0, $D, 0, 1,	$F0, 4,	$4F
@@ -49924,19 +48309,14 @@ byte_11AB72:	dc.b 3,	$A, $81, $42, $81, $66,	$81, $8A, $81, $66, 3, $4F, $50, $5
 		dc.b 8,	0, $32,	$FF, $F0, 6, 0,	$37, $FC, $E8, 0, 0, 0,	$F8, $F0, $D
 		dc.b 0,	1, $F0,	0
 off_11AD26:	dc.w byte_11AD2C-off_11AD26
-
 		dc.w byte_11AD38-off_11AD26
 		dc.w byte_11AD44-off_11AD26
 byte_11AD2C:	dc.b 4,	$A, 0, $27, 0, $1C, 0, $27, 0, $1C, 0, $1C
-
 byte_11AD38:	dc.b 4,	$A, $80, $1B, $80, $10,	$80, $1B, $80, $10, $80, $10
-
 byte_11AD44:	dc.b 0,	0, 0, $1A, 0, 0, 0, 0, 0, 0, $E8, $A, 0, 0, $F0, 0
-
 		dc.b 0,	0, 0, 0, 0, $E8, $E, 0,	9, $F0,	0, $42,	$42, $42, $42, 0
 		dc.b $E8, $E, 0, $15, $F0, 0
 off_11AD6A:	dc.w byte_11AD74-off_11AD6A
-
 		dc.w byte_11AD7A-off_11AD6A
 		dc.w byte_11AD80-off_11AD6A
 		dc.w byte_11AD86-off_11AD6A
@@ -49946,13 +48326,11 @@ byte_11AD7A:	dc.b 1,	2, 0, $2E, 0, $39
 byte_11AD80:	dc.b 1,	2, $80,	$28, $80, $33
 byte_11AD86:	dc.b 1,	2, 0, $38, 0, $43
 byte_11AD8C:	dc.b 1,	2, $80,	$32, $80, $3D, 0, $43, $43, $43, $43, 0, $FC, $C, 0, 0
-
 		dc.b $F0, 0, $43, $43, $43, $43, 0, $FC, $C, 0,	4, $F0,	0, $44,	$44, $44
 		dc.b $44, 0, $F4, $A, 0, 8, $F4, 0, $44, $44, $44, $44,	0, $F4,	$A, 0
 		dc.b $11, $F4, 0, $45, $45, $45, $45, 0, $F8, $D, 0, $1A, $F0, 0, $45, $45
 		dc.b $45, $45, 0, $F8, $D, 0, $22, $F0
 off_11ADD4:	dc.w byte_11ADE4-off_11ADD4
-
 		dc.w byte_11ADF2-off_11ADD4
 		dc.w byte_11AE00-off_11ADD4
 		dc.w byte_11AE0E-off_11ADD4
@@ -49961,18 +48339,13 @@ off_11ADD4:	dc.w byte_11ADE4-off_11ADD4
 		dc.w byte_11AE24-off_11ADD4
 		dc.w byte_11AE2A-off_11ADD4
 byte_11ADE4:	dc.b 5,	3, 0, $4C, 0, $66, 0, $80, 0, $80, 0, $66, 0, $66
-
 byte_11ADF2:	dc.b 5,	3, $80,	$3E, $80, $58, $80, $72, $80, $72, $80,	$58, $80, $58
-
 byte_11AE00:	dc.b 5,	3, 0, $7E, 0, $93, 0, $93, 0, $93, 0, $93, 0, $7E
-
 byte_11AE0E:	dc.b 5,	3, $80,	$70, $80, $85, $80, $85, $80, $85, $80,	$85, $80, $70
-
 byte_11AE1C:	dc.b 0,	0, 0, $8C
 byte_11AE20:	dc.b 0,	0, $80,	$88
 byte_11AE24:	dc.b 1,	0, 0, $84, 0, $8F
 byte_11AE2A:	dc.b 1,	0, 0, $7E, $80,	$89, 3,	$3C, $3C, $3D, $3D, 0, $D0, 4, 0, 0
-
 		dc.b $F4, $D8, $F, 0, 2, $EC, $E0, 2, 0, $12, $C, $F8, $C, 0, $15, $EC
 		dc.b 3,	$3C, $3C, $3D, $3D, 0, $D0, $C,	0, $19,	$F4, $D8, $F, 0, $1D, $EC
 		dc.b $D8, 2, 0,	$2D, $C, $F8, $C, 0, $15, $EC, 3, $3C, $3C, $3D, $3D, 0
@@ -49983,19 +48356,16 @@ byte_11AE2A:	dc.b 1,	0, 0, $7E, $80,	$89, 3,	$3C, $3C, $3D, $3D, 0, $D0, 4, 0, 0
 		dc.b $40, $40, $40, 0, $F8, 0, 0, $6D, $FC, 0, 0, 0, 0,	0, 0, $F4
 		dc.b 1,	0, $6E,	$FC
 off_11AEBE:	dc.w byte_11AEC4-off_11AEBE
-
 		dc.w byte_11AEC8-off_11AEBE
 		dc.w byte_11AECC-off_11AEBE
 byte_11AEC4:	dc.b 0,	0, 0, $C
 byte_11AEC8:	dc.b 0,	0, 0, $13
 byte_11AECC:	dc.b 0,	0, 0, $29, 0, $41, $41,	$41, $41, 0, $F0, 5, 0,	0, $F8,	3
-
 		dc.b $4A, $4A, $4B, $4B, 0, $D0, $E, 0,	4, $EC,	$E8, $D, 0, $10, $EC, $F8
 		dc.b $C, 0, $18, $EC, $D8, 3, 0, $1C, $C, 3, $4A, $4A, $4B, $4B, 0, $D0
 		dc.b $E, 0, 4, $EC, $E8, $D, 0,	$20, $EC, $F8, $C, 0, $18, $EC,	$D8, 3
 		dc.b 0,	$28, $C, 0
 byte_11AF10:	dc.b 0,	$18, $80, 5, $14, $16, $36, $26, $3A, $37, $72,	$46, $33, $54, 6, $76, $2B, $81, 6, $34
-
 		dc.b $85, 5, $12, $16, $31, $86, 4, 5, $87, 4, 4, $15, $F, $27,	$6F, $37, $7A, $88, 6, $30
 		dc.b $89, 6, $35, $17, $79, $8C, 5, $16, $16, $38, $77,	$78, $8D, 4, 3,	$16, $2E, $8E, 4, 2
 		dc.b $14, 8, $26, $2A, $36, $32, $47, $76, $57,	$7B, $67, $6E, $8F, 3, 0, $15, $E, $25,	$13, $37
@@ -50021,7 +48391,6 @@ byte_11AF10:	dc.b 0,	$18, $80, 5, $14, $16, $36, $26, $3A, $37, $72,	$46, $33, $
 		dc.b $19, $4C, $C5, $81, $28, $20, $6E,	$A2, $A0, $29, $D3, $17, $17, $A9, $96,	$AF, $94, $C9, $35, $49
 		dc.b $FF, $FB, $B5, $FF, $ED, $F0, 0, 0
 byte_11B0F8:	dc.b 0,	$18, $80, 5, $15, $16, $35, $26, $32, $37, $75,	$47, $70, $76, $33, $81, 5, $18, $17, $77
-
 		dc.b $27, $79, $38, $F5, $85, 4, 9, $37, $71, $46, $37,	$86, 4,	8, $17,	$74, $25, $16, $38, $F1
 		dc.b $48, $FB, $87, 5, $14, $15, $17, $8C, 4, 6, $16, $39, $37,	$76, $8D, 3, 0,	$16, $34, $27
 		dc.b $7B, $38, $F9, $8E, 3, 2, $16, $36, $28, $F0, $8F,	3, 1, $14, 7, $28, $F4,	$FF, $AF, $4D
@@ -50050,7 +48419,6 @@ byte_11B0F8:	dc.b 0,	$18, $80, 5, $15, $16, $35, $26, $32, $37, $75,	$47, $70, $
 		dc.b $18, $1E, $1A, $B0, $5C, 2, $FE, $82, $CF,	$3C, $F3, $FF, 7, $DE, $5F, $E6, $AC, $FF, $9B,	$8F
 		dc.b $8F, $5E, $20, 0
 byte_11B318:	dc.b 0,	$36, $80, 5, $13, $15, $15, $26, $34, $35, $16,	$44, 8,	$56, $35, $66, $39, $74, 5, $81
-
 		dc.b 6,	$38, $82, 4, 7,	$15, $19, $27, $79, $83, 3, 0, $15, $14, $28, $F7, $84,	4, 6, $15
 		dc.b $18, $85, 4, 4, $16, $37, $27, $77, $86, 3, 1, $17, $76, $27, $7A,	$87, 5,	$12, $88, 5
 		dc.b $17, $89, 6, $36, $8C, 8, $F6, $8D, 7, $78, $8F, 6, $3A, $FF, $D4,	$36, $B4, $81, $C7, $B4
@@ -50101,7 +48469,6 @@ byte_11B318:	dc.b 0,	$36, $80, 5, $13, $15, $15, $26, $34, $35, $16,	$44, 8,	$56
 		dc.b $19, $7B, $1A, $9D, $A5, $F9, $C3,	$5F, $CB, $FE, $70, $E9, $FA, $19, $5B,	$F2, $32, $36, $E2, $46
 		dc.b $3B, $6A
 byte_11B6EE:	dc.b 0,	$1C, $80, 6, $35, $16, $32, $26, $38, $35, $16,	$46, $36, $56, $3A, $66, $3B, $75, $14,	$81
-
 		dc.b 4,	8, $82,	4, 6, $83, 4, 2, $16, $33, $28,	$F6, $84, 3, 2,	$15, $18, $26, $39, $85
 		dc.b 4,	3, $16,	$34, $86, 3, 0,	$15, $13, $87, 5, $12, $16, $37, $28, $F7, $88,	5, $15,	$18
 		dc.b $F2, $89, 4, 7, $15, $17, $27, $78, $8C, 7, $7A, $8D, 8, $F3, $FF,	$A7, $51, $D4, $E, $14
@@ -50135,7 +48502,6 @@ byte_11B6EE:	dc.b 0,	$1C, $80, 6, $35, $16, $32, $26, $38, $35, $16,	$46, $36, $
 		dc.b $E3, $C, $9B, $2C,	$32, $62, $C9, $66, $B3, $D5, $16, $D8,	$C8, $39, $3A, $B4, $F5, $5D, $E3, $A4
 		dc.b $4B, $64, $C4, $AC, $C9, $97, $64,	$B8, 0,	0
 byte_11B978:	dc.b 0,	$60, $82, 4, 9,	$16, $37, $83, 3, 2, $15, $18, $26, $35, $84, 2, 0, $14, $B, $26
-
 		dc.b $36, $56, $3A, $85, 3, 3, $14, 8, $25, $19, $36, $39, $57,	$7B, $67, $7A, $86, 4, $A, $16
 		dc.b $34, $27, $78, $37, $79, $76, $38,	$87, 7,	$76, $88, 7, $77, $FF, $8D, $72, $44, $89, $CF,	$72
 		dc.b $27, $5E, $E7, $67, $71, $5D, $FB,	$4C, $11, $5D, $FB, $4C, $11, $5D, $FB,	$4D, $73, $53, $DA, $6A
@@ -50227,7 +48593,6 @@ byte_11B978:	dc.b 0,	$60, $82, 4, 9,	$16, $37, $83, 3, 2, $15, $18, $26, $35, $8
 		dc.b $DB, $30, $34, $33, $12, $C4, $CD,	$44, $33, $5B, $4C, $D5, $A1, $98, $1D,	$B3, $1B, $26, $60, $76
 		dc.b $CC, $E, $D9, $89,	$62, $A3, $51, $8C, $D4, $65, $1A, $BA,	$74, $60, $7E, $1D, $C7, $9C, $F1, $40
 byte_11C094:	dc.b $80, $30, $80, 2, 0, $14, 8, $25, $18, $36, $38, $48, $F7,	$78, $F6, $81, 3, 2, $15, $19
-
 		dc.b $26, $3A, $47, $77, $82, 4, 9, $17, $79, $83, 3, 3, $15, $1A, $27,	$7A, $84, 7, $78, $85
 		dc.b 6,	$39, $86, 4, $B, $15, $1B, $87,	4, $A, $17, $76, $FF, $FC, $AF,	$F4, $C4, $29, $52, $9C
 		dc.b $31, $8F, $86, $3E, $1A, $63, $C7,	$42, $11, $DE, $11, $91, $42, $C2, $C2,	$84, $28, $BC, $28, $CD
@@ -50278,7 +48643,6 @@ byte_11C094:	dc.b $80, $30, $80, 2, 0, $14, 8, $25, $18, $36, $38, $48, $F7,	$78
 		dc.b $63, $FA, $31, $FD, $34, $26, $9A,	$6A, $3F, $65, $93, $A9, $32, $3C, $92,	$28, $71, $39, $84, $28
 		dc.b $50, $A3, $A3, $A8, $CC, $2E, $14,	$21, $7B, $A1, $7B, $7B, $70, 0
 byte_11C476:	dc.b 0,	$C, $80, 4, $B,	$16, $39, $25, $15, $47, $78, $75, $14,	$81, 5,	$1D, $16, $3D, $77, $7C
-
 		dc.b $82, 4, 8,	$15, $18, $83, 3, 2, $84, 4, 6,	$14, 9,	$25, $1B, $77, $7D, $85, 2, 0
 		dc.b $15, $19, $86, 4, 7, $15, $1A, $88, $17, $79, $76,	$38, $FF, $A5, $29, $4F, $9F, $78, $E2,	$B1
 		dc.b $39, $AA, $F3, $AA, $8E, $7B, $CB,	$91, $D8, $2C, $6C, $D,	$DB, $7C, $18, $CA, $DC, $10, $F2, $31
@@ -50292,7 +48656,6 @@ byte_11C476:	dc.b 0,	$C, $80, 4, $B,	$16, $39, $25, $15, $47, $78, $75, $14,	$81
 		dc.b $3D, $C1, $1B, $59, $81, $89, $7D,	$A9, $4E, $C3, $29, $4E, $32, $10, $86,	$42, $19, $EF, $2C, $32
 		dc.b $7B, $91, $93, $F3, $BD, $57, $47,	$80
 byte_11C56E:	dc.b $80, $10, $80, 4, 6, $15, $13, $24, $A, $45, $12, $56, $37, $72, 0, $81, 4, 7, $15, $1D
-
 		dc.b $75, $19, $82, 6, $38, $83, 4, 8, $75, $16, $85, 5, $1A, $86, 5, $17, $76,	$36, $89, $76
 		dc.b $3C, $8C, $15, $18, $8D, 3, 2, $17, $7C, $36, $39,	$77, $7D, $8E, $76, $3D, $FF, $AF, $C6,	$1B
 		dc.b $A6, $52, $76, $7D, $D4, $95, $2A,	$7A, $72, $6A, $4A, $93, $20, 0, $92, $64, $52,	$7A, $74, $4E
@@ -50304,7 +48667,6 @@ byte_11C56E:	dc.b $80, $10, $80, 4, 6, $15, $13, $24, $A, $45, $12, $56, $37, $7
 		dc.b $87, $6E, $7B, $D,	$D9, $FE, $7F, $F3, $DF, $3B, $BF, $DF,	$99, $FF, $68, $BF, $C1, $F5, $B3, $F4
 		dc.b $C2, $FF, 3, $E1, $4F, $96, $7C, $72, $CF,	$89, $BE, $14, $F0, $89, 0, 0
 byte_11C646:	dc.b 0,	$15, $80, 4, 4,	$14, 6,	$24, 5,	$36, $34, $46, $32, $55, $15, $66, $37,	$74, 9,	$81
-
 		dc.b 6,	$3A, $16, $38, $26, $33, $36, $35, $48,	$F8, $56, $36, $65, $16, $85, 3, 1, $16, $31, $58
 		dc.b $FB, $86, 6, $30, $18, $FA, $87, 6, $2F, $88, 4, 8, $17, $79, $89,	4, 7, $17, $72,	$8B
 		dc.b 3,	0, $15,	$14, $8D, 7, $73, $8E, 6, $2E, $17, $7A, $8F, 8, $F9, $17, $76,	$37, $7B, $47
@@ -50326,7 +48688,6 @@ byte_11C646:	dc.b 0,	$15, $80, 4, 4,	$14, 6,	$24, 5,	$36, $34, $46, $32, $55, $1
 		dc.b $99, $47, $68, $9C, $9D, $B, $EE, $55, $D1, $D9, $E5, $4B,	$1D, $DD, $63, $47, $67, $8A, $BA, $BE
 		dc.b $45, $1E, $65, $40
 byte_11C7DA:	dc.b 0,	$4A, $80, 5, $14, $15, $10, $25, $12, $36, $2E,	$46, $34, $55, $13, $66, $33, $74, 3, $81
-
 		dc.b 4,	5, $16,	$2F, $27, $73, $85, 7, $79, $87, 4, 6, $16, $38, $28, $EE, $88,	4, 1, $15
 		dc.b $11, $26, $36, $37, $72, $89, 4, 0, $15, $16, $27,	$74, $38, $F6, $8B, 5, $18, $15, $15, $27
 		dc.b $6E, $38, $F7, $8C, 5, $F,	$16, $35, $27, $7A, $8D, 4, 4, $17, $6F, $8E, 5, $E, $17, $76
@@ -50397,7 +48758,6 @@ byte_11C7DA:	dc.b 0,	$4A, $80, 5, $14, $15, $10, $25, $12, $36, $2E,	$46, $34, $
 		dc.b $7B, $4A, $F7, $B5, $DA, $F7, $4A,	$D1, $69, $7F, $21, $A0, $1C, $9A, $1D,	$36, $68, $20, $A7, $86
 		dc.b 1,	$41, 1,	$E, $C9, $AE, $FE, $C0
 byte_11CD46:	dc.b 0,	$C, $80, $44, 6, $54, 4, $65, $E, $81, 5, $1B, $77, $7D, $82, 5, $10, $15, $11,	$26
-
 		dc.b $3B, $75, $14, $83, 4, 3, $76, $3C, $84, $14, 5, $25, $19,	$75, $15, $85, 4, 1, $14, 9
 		dc.b $25, $18, $35, $1C, $76, $3D, $86,	4, 0, $14, $B, $25, $1A, $77, $7C, $8A,	4, 2, $16, $3A
 		dc.b $75, $F, $FF, $45,	$6E, $D3, $F0, $9B, $70, $24, $5C, $2D,	$97, $12, $4B, $63, $F6, 0, $20, $2D
@@ -50409,7 +48769,6 @@ byte_11CD46:	dc.b 0,	$C, $80, $44, 6, $54, 4, $65, $E, $81, 5, $1B, $77, $7D, $8
 		dc.b $B6, $DF, $E1, $10, $1D, $14, $17,	$65, $89, $D2, $98, $61, 1, $F,	$D8, $69, $80, $90, $9D, $D2
 		dc.b $7E, $A9, $80, 0
 byte_11CE12:	dc.b $80, $88, $80, 3, 2, $14, 8, $25, $16, $35, $18, $46, $34,	$56, $33, $67, $7A, $73, 0, $81
-
 		dc.b 3,	1, $16,	$32, $27, $76, $82, 5, $17, $83, 3, 3, $16, $35, $28, $F3, $37,	$77, $84, 6
 		dc.b $38, $85, 6, $36, $86, 4, $A, $87,	4, 9, $16, $39,	$88, 7,	$75, $8B, 8, $F2, $18, $F7
 		dc.b $8D, 7, $78, $8E, 7, $74, $8F, 6, $37, $18, $F6, $FF, $B7,	$E5, $BF, $2B, $75, $F9, $67, $C7
@@ -50500,7 +48859,6 @@ byte_11CE12:	dc.b $80, $88, $80, 3, 2, $14, 8, $25, $16, $35, $18, $46, $34,	$56
 		dc.b $C5, $41, 5, $5D, $56, 8, $57, $A7, $82, $2E, $30,	$F0, $F4, $71, $C3, $BF, $B2, $AB, $74,	$8D
 		dc.b $D7, $4C, $DC, $3F, $40, 0
 byte_11D50C:	dc.b 0,	8, $80,	7, $7C,	$83, 3,	2, $84,	3, 4, $85, 3, 1, $15, $1D, $78,	$FB, $86, 3
-
 		dc.b 0,	$16, $3C, $87, 4, $A, $15, $1C,	$26, $3D, $88, 3, 3, $14, $C, $24, $D, $89, 4, $B
 		dc.b $18, $FA, $FF, $F9, $FE, $38, $BF,	$B2, $BE, $95, $AB, $FD, $9C, $53, $F4,	$70, $FE, $D3, $F2, $66
 		dc.b $77, $F4, $8A, $18, $67, $57, $D8,	$20, $83, $E1, 4, $10, $58, $61, $87, $E6, $86,	$36, $B6, $B2
@@ -50512,7 +48870,6 @@ byte_11D50C:	dc.b 0,	8, $80,	7, $7C,	$83, 3,	2, $84,	3, 4, $85, 3, 1, $15, $1D, 
 		dc.b $CF, $F6, $86, $2F, $D2, $76, $15,	$D8, $61, $8B, $FC, $A8, $10, $41, $1D,	4, $10,	$7C, $61, $86
 		dc.b $30, $31, $A1, $D6, $D6, $56, $71,	$D3, $E3, $A7, $CD, $F7, $3E, 0
 byte_11D5E2:	dc.b $80, $54, $80, 3, 0, $14, 5, $25, $13, $35, $E, $45, $12, $56, $35, $66, $33, $74,	4, $81
-
 		dc.b 4,	2, $15,	$14, $28, $F2, $82, 5, $11, $17, $75, $83, 4, 3, $16, $37, $28,	$F5, $84, 5
 		dc.b $18, $85, 5, $15, $18, $EF, $86, 4, 6, $17, $73, $87, 5, $10, $18,	$EE, $88, 5, $16, $17
 		dc.b $76, $89, 6, $34, $8A, 6, $38, $8B, 7, $72, $18, $F3, $8C,	6, $2F,	$18, $F6, $8D, 5, $F
@@ -50594,7 +48951,6 @@ byte_11D5E2:	dc.b $80, $54, $80, 3, 0, $14, 5, $25, $13, $35, $E, $45, $12, $56,
 		dc.b $BF, $D7, $A0, $E8, $93, $E8, $3F,	$5E, $8B, $FA, $FD, $7A, $4B, $A2, $DC,	$F1, $94, $F2, $28, $F4
 		dc.b $9E, $4B, $90, $C8, $64, $3A, $24,	$80
 byte_11DC2A:	dc.b $80, $A6, $80, 3, 0, $14, 4, $25, $E, $35,	$10, $45, $13, $55, $16, $66, $32, $74,	5, $81
-
 		dc.b 3,	1, $15,	$15, $27, $72, $38, $F2, $82, 6, $35, $17, $75,	$83, 4,	6, $16,	$31, $28, $EE
 		dc.b $84, 6, $38, $86, 6, $33, $18, $F6, $87, 5, $F, $16, $36, $28, $F4, $88, 5, $12, $17, $73
 		dc.b $89, 6, $30, $17, $76, $8A, 7, $78, $8B, 7, $74, $8C, 6, $2F, $18,	$EF, $8D, 6, $2E, $18
@@ -50738,7 +49094,6 @@ byte_11DC2A:	dc.b $80, $A6, $80, 3, 0, $14, 4, $25, $E, $35,	$10, $45, $13, $55,
 		dc.b $BA, $23, $D2, $30, $7D, $50, $BC,	$5F, $54, $78, $E9, $3F, $CD, $CE, $23,	$97, $57, $72, $C7, $59
 		dc.b $D5, $B2, $2A, $23, $3D, $C7, $F3,	$D5, 0,	0
 byte_11E74C:	dc.b $80, $30, $80, 3, 0, $14, 5, $25, $11, $35, $18, $46, $35,	$56, $39, $66, $34, $74, 4, $81
-
 		dc.b 3,	1, $16,	$38, $82, 6, $37, $18, $F7, $83, 5, $13, $17, $76, $28,	$F6, $84, 5, $16, $85
 		dc.b 6,	$36, $86, 5, $F, $17, $78, $87,	5, $E, $17, $75, $88, 5, $10, $17, $7A,	$89, 5,	$12
 		dc.b $18, $F3, $8A, 5, $17, $8B, 5, $15, $18, $F2, $8C,	6, $32,	$8D, 4,	6, $17,	$77, $8E, 5
@@ -50788,7 +49143,6 @@ byte_11E74C:	dc.b $80, $30, $80, 3, 0, $14, 5, $25, $11, $35, $18, $46, $35,	$56
 		dc.b $FD, $91, $11, $13, $FE, $BF, $F3,	$FF, $B2, $22, $62, $15, $85, $63, $F, $6A, $FE, $95, $A8, $D4
 		dc.b $77, $B7, $EC, $87, $E9, $B3, $CB,	$3C, $9D, $18, $7B, $57, $10, $AC, $2A,	0
 byte_11EB1C:	dc.b 0,	$18, $80, 6, $32, $15, $15, $25, $12, $36, $3A,	$48, $FA, $81, 5, $1A, $85, 5, $11, $86
-
 		dc.b 6,	$38, $17, $7A, $87, 5, $13, $16, $39, $47, $7B,	$58, $F8, $88, 5, $F, $89, 5, $10, $15
 		dc.b $17, $8C, 3, 1, $15, $14, $25, $18, $36, $33, $46,	$3C, $56, $37, $75, $E,	$8D, 3,	0, $14
 		dc.b 4,	$24, 6,	$36, $3B, $8E, 4, 5, $15, $16, $26, $36, $38, $F9, $FF,	$CA, $FF, $4F, $87, $1F
@@ -50814,7 +49168,6 @@ byte_11EB1C:	dc.b 0,	$18, $80, 6, $32, $15, $15, $25, $12, $36, $3A,	$48, $FA, $
 		dc.b $30, $7F, $C3, $E1, $FE, $F7, $FF,	$9E, $A, $36, $92, $8B,	$75, $60, $BD, $59, $3A, $8E, $DD, $43
 		dc.b $9E, $27, $27, $FE, $3E, $7F, $9F,	$94, $39, $E2, $72, 0
 byte_11ED08:	dc.b 0,	$18, $80, 3, 4,	$15, $18, $25, $19, $35, $1A, $46, $3A,	$58, $F9, $67, $7B, $73, 3, $8B
-
 		dc.b 5,	$16, $17, $7A, $8C, 3, 2, $15, $1B, $28, $F8, $8D, 3, 1, $15, $17, $28,	$FA, $8E, 3
 		dc.b 0,	$14, $A, $25, $1C, $36,	$3B, $46, $3C, $FF, $7E, $C4, $1A, $E6,	$B8, $46, $3C, $C7, $D0, $22
 		dc.b $15, $61, $B8, $51, $A, $C0, $A2, $15, $81, 4, $1A, $35, $B0, $41,	$B, $FF, $DC, $41, $16,	$DB
@@ -50834,7 +49187,6 @@ byte_11ED08:	dc.b 0,	$18, $80, 3, 4,	$15, $18, $25, $19, $35, $1A, $46, $3A,	$58
 		dc.b $73, $FB, $D8, $61, $B0, $32, $8D,	$85, $EA, $58, $58, $D6, $3D, $1A, $CD,	$8D, $68, $D7, $54, $DB
 		dc.b $F9, 0
 byte_11EE72:	dc.b 0,	$49, $80, 5, $14, $16, $32, $26, $36, $37, $72,	$47, $78, $57, $73, $66, $38, $74, 2, $81
-
 		dc.b 5,	$17, $17, $76, $86, 7, $7B, $87, 4, 3, $15, $10, $26, $3A, $38,	$F4, $88, 5, $E, $16
 		dc.b $33, $27, $79, $89, 4, 4, $16, $34, $27, $77, $8D,	5, $18,	$28, $F5, $8E, 5, $F, $15, $16
 		dc.b $26, $37, $8F, 4, 6, $14, 5, $25, $12, $35, $13, $45, $11,	$55, $15, $66, $35, $73, 0, $FF
@@ -50881,7 +49233,6 @@ byte_11EE72:	dc.b 0,	$49, $80, 5, $14, $16, $32, $26, $36, $37, $72,	$47, $78, $
 		dc.b $DF, $34, $13, $27, $A9, $E9, $92,	$9F, $7A, $2F, $A3, $77, $E9, $7F, $93,	6, $77,	$F6, $4D, $DF
 		dc.b $D9, $37, $7F, $64, $FF, $D3, $D, $D, $92,	0
 byte_11F200:	dc.b 0,	$34, $80, 6, $33, $15, $18, $26, $36, $36, $38,	$46, $2E, $56, $2F, $66, $3B, $74, 3, $81
-
 		dc.b 4,	5, $15,	$14, $82, 3, 0,	$15, $12, $27, $79, $37, $7B, $83, 4, 6, $16, $3A, $84,	4
 		dc.b 2,	$15, $11, $85, 5, $15, $18, $F8, $86, 4, 4, $15, $13, $27, $7A,	$87, 5,	$10, $16, $37
 		dc.b $8C, 5, $16, $17, $78, $8D, 4, 7, $15, $1A, $8E, 6, $32, $16, $39,	$FF, $CA, $AD, $2F, $D0
@@ -50931,7 +49282,6 @@ byte_11F200:	dc.b 0,	$34, $80, 6, $33, $15, $18, $26, $36, $36, $38,	$46, $2E, $
 		dc.b $7B, $53, $65, $B8, $76, $E7, $71,	$B, $DC, $19, $9E, $61,	$73, $47, $D8, $AC, $B7, $39, $59, $78
 		dc.b $7B, $10, $33, $33, $E0, 0
 byte_11F5C6:	dc.b $80, $48, $80, 3, 2, $14, 7, $25, $13, $35, $17, $45, $19,	$55, $1A, $67, $77, $73, 0, $81
-
 		dc.b 3,	1, $16,	$39, $27, $7A, $82, 5, $15, $18, $F7, $83, 6, $38, $86,	7, $79,	$87, 6,	$36
 		dc.b $88, 5, $14, $89, 5, $18, $8B, 7, $76, $8C, 5, $16, $16, $3A, $8D,	4, 6, $16, $37,	$8E
 		dc.b 4,	8, $17,	$78, $8F, 5, $12, $18, $F6, $FF, 0, $67, $F5, $D3, $F0,	$BB, $4E, $27, $D9, $E0
@@ -50985,7 +49335,6 @@ byte_11F5C6:	dc.b $80, $48, $80, 3, 2, $14, 7, $25, $13, $35, $17, $45, $19,	$55
 		dc.b $98, $93, $99, $D0, $5C, $CC, $8A,	$4F, $F9, $DE, $F1, $96, 0, 0, 0, 1, $E2, $ED, $60, $8C
 		dc.b $D, 0
 byte_11F9D8:	dc.b $80, $3F, $80, 3, 0, $14, 4, $25, $E, $35,	$12, $45, $16, $56, $33, $66, $37, $74,	3, $81
-
 		dc.b 4,	2, $16,	$36, $28, $F7, $82, 5, $F, $18,	$F2, $83, 4, 6,	$15, $18, $27, $78, $84, 5
 		dc.b $13, $17, $76, $85, 6, $38, $86, 6, $32, $87, 5, $A, $18, $F6, $88, 5, $15, $17, $7A, $89
 		dc.b 5,	$10, $17, $73, $8A, 5, $11, $17, $72, $8B, 5, $14, $17,	$74, $8C, 5, $17, $18, $F3, $8D
@@ -51051,7 +49400,6 @@ byte_11F9D8:	dc.b $80, $3F, $80, 3, 0, $14, 4, $25, $E, $35,	$12, $45, $16, $56,
 		dc.b $A3, $D2, $A4, $8F, $FC, $B5, $41,	7, $C3,	$AF, $E9, $E9, $C, $FF,	$4F, $97, $B2, $C7, $E8, $81
 		dc.b 5,	$86, $C, 9, $4E, $60, $4A, $96,	$CA, $91, $7B, $59, $47, $B8
 byte_11FEE6:	dc.b 0,	$3D, $80, 6, $35, $16, $37, $26, $38, $37, $78,	$47, $7A, $57, $79, $76, $32, $81, 5, $16
-
 		dc.b $16, $33, $82, 3, 2, $13, 3, $24, $A, $36,	$34, $47, $74, $57, $77, $68, $F9, $77,	$7B, $83
 		dc.b 3,	0, $14,	9, $25,	$17, $36, $36, $47, $75, $84, 3, 1, $14, 8, $25, $18, $36, $39,	$47
 		dc.b $76, $78, $F8, $FF, $DF, $B0, $E3,	$13, $E3, 3, $CC, $7F, $80, $E5, $96, $41, $5F,	$1B, $73, $3F
@@ -51103,7 +49451,6 @@ byte_11FEE6:	dc.b 0,	$3D, $80, 6, $35, $16, $37, $26, $38, $37, $78,	$47, $7A, $
 		dc.b $E, $6C, 8, $42, $C2, $C0,	$84, $2D, $B3, $BD, $4D, $4E, $18, $87,	$61, $F, $32, $BF, $62,	$47
 		dc.b $3B, $1D, $90, $28, $3B, $A0
 byte_1202D4:	dc.b 0,	$14, $80, 5, $13, $15, $17, $25, $16, $36, $32,	$45, $18, $56, $38, $74, 4, $81, 5, $1A
-
 		dc.b $18, $FA, $85, 4, 6, $15, $12, $26, $37, $86, 3, 1, $14, $A, $26, $33, $87, 3, 0, $14
 		dc.b 8,	$26, $39, $37, $7B, $88, 6, $3B, $18, $F9, $89,	4, 5, $16, $36,	$27, $7A, $8E, 6, $3C
 		dc.b $8F, 4, 7,	$16, $3A, $38, $F8, $FF, $44, $FF, 3, $F0, $EB,	$87, $B, $6E, $B6, $EE,	$EF, $FB
@@ -51124,7 +49471,6 @@ byte_1202D4:	dc.b 0,	$14, $80, 5, $13, $15, $17, $25, $16, $36, $32,	$45, $18, $
 		dc.b $71, $BE, $33, $C7, $3C, $42, $22,	$23, $1F, $77, $F7, $94, $22, $22, $22,	$22, $22, $61, $B1, $23
 		dc.b $69, $18, $9C, $8F, $BB, $18, $C8,	$F3, $66, $31, $66, $3C, $D8, $F3, $97,	$38, $84, $E0
 byte_120462:	dc.b 0,	$2C, $80, 5, $13, $15, $11, $25, $12, $35, $17,	$45, $18, $55, $1A, $66, $37, $74, 5, $81
-
 		dc.b 5,	$16, $18, $F8, $87, 6, $38, $88, 5, $19, $17, $7B, $89,	4, 6, $17, $78,	$8C, 6,	$36
 		dc.b $8D, 4, 4,	$16, $3A, $8E, 3, 0, $15, $10, $26, $3B, $8F, 3, 1, $14, 7, $25, $14, $35
 		dc.b $15, $46, $39, $57, $79, $77, $7A,	$FF, $98, $B8, $89, $11, 6, $2C, $60, $5A, $22,	$A2, $60, $DB
@@ -51162,7 +49508,6 @@ byte_120462:	dc.b 0,	$2C, $80, 5, $13, $15, $11, $25, $12, $35, $17,	$45, $18, $
 		dc.b $34, $13, $50, $D4, $35, $DE, $3B,	$C7, $78, $EF, $1D, $E2, 9, $82, $13, 6, $1D, $48, $89,	$C2
 		dc.b $E4, $60
 byte_120734:	dc.b 0,	9, $80,	$73, 3,	$83, 4,	$B, $26, $3D, $47, $7D,	$84, 4,	$A, $14, 9, $85, 6, $3A
-
 		dc.b $86, 4, 8,	$16, $38, $87, 3, 1, $15, $1A, $27, $7C, $88, 5, $19, $89, 3, 0, $16, $3B
 		dc.b $8C, 3, 2,	$15, $18, $26, $39, $8F, 5, $1B, $16, $3C, $FF,	$6D, $B6, $DB, $6D, $B6, $DB, $9B
 		dc.b $9C, $66, $6E, $46, $4A, $94, $E, $4E, $F9, 4, $1F, $10, $D7, $7E,	3, $C1,	$5B, $43, $27, $F4
@@ -51174,7 +49519,6 @@ byte_120734:	dc.b 0,	9, $80,	$73, 3,	$83, 4,	$B, $26, $3D, $47, $7D,	$84, 4,	$A,
 		dc.b $44, 5, $F9, $81, 3, $85, $A1, $D1, $82, $BE, 3, 1, $6A, $10, $38,	$D6, $3B, $57, 7, $1E
 		dc.b $AF, $9F, $40, 0
 byte_120800:	dc.b $80, $1B, $80, 4, 7, $14, 8, $25, $17, $35, $1A, $45, $1C,	$56, $3C, $65, $12, $72, 0, $81
-
 		dc.b 4,	6, $28,	$F9, $82, 5, $16, $83, 4, $A, $16, $3A,	$84, 6,	$3B, $18, $F8, $85, 6, $36
 		dc.b $86, 5, $19, $87, 3, 2, $16, $37, $88, 5, $18, $8A, 8, $FA, $8C, 5, $13, $8D, 6, $3D
 		dc.b $FF, 0, 0,	2, $53,	$3C, $9E, $E, $4F, 7, $27, $87,	$5E, $2D, $4F, 9, $DB, $4B, $F2, $3A
@@ -51194,7 +49538,6 @@ byte_120800:	dc.b $80, $1B, $80, 4, 7, $14, 8, $25, $17, $35, $1A, $45, $1C,	$56
 		dc.b $FA, $3F, $8D, $FB, $FD, $1F, $C2,	$FF, $8C, $7F, $DC, $F3, $FE, $FF, $36,	$6F, $D1, $7C, $D9, $BF
 		dc.b $45, $FF, $8F, $FF, $FF, $E0
 byte_12096E:	dc.b 0,	$47, $80, 4, 7,	$14, 9,	$25, $1B, $35, $1C, $46, $3B, $56, $3C,	$67, $7A, $74, 8, $81
-
 		dc.b 5,	$17, $18, $F8, $85, 4, 6, $15, $1A, $27, $7B, $86, 2, 0, $14, $A, $87, 3, 2, $15
 		dc.b $16, $8F, 4, $C, $16, $3A,	$FF, $88, $EF, $F4, $FC, $4C, $2E, $22,	$E7, $68, $BF, $13, $23, $68
 		dc.b $D5, $F6, $AB, $5C, $FD, $39, $E5,	$BD, $28, $88, $F4, $BC, $5E, $27, $38,	$9C, $5C, $42, $E2, $17
@@ -51256,7 +49599,6 @@ byte_12096E:	dc.b 0,	$47, $80, 4, 7,	$14, 9,	$25, $1B, $35, $1C, $46, $3B, $56, 
 		dc.b $36, $30, $DC, $61, $DA, $22, $22,	$22, $21, $D9, $53, $12, $86, $AB, $B5,	$59, $8B, $97, $42, $64
 		dc.b $CB, $4E, $9A, $D2, $D2, $B8, $D1,	$11, $E8, 0
 byte_120E28:	dc.b $80, $2C, $80, 3, 1, $14, 7, $25, $15, $36, $32, $45, $17,	$55, $18, $66, $33, $75, $13, $81
-
 		dc.b 4,	6, $16,	$3A, $28, $F8, $82, 5, $12, $16, $36, $83, 3, 0, $15, $14, $28,	$F9, $84, 4
 		dc.b 4,	$15, $16, $26, $37, $36, $38, $47, $7B,	$56, $39, $66, $3C, $74, 8, $85, 7, $76, $86, 5
 		dc.b $1A, $17, $7A, $87, 4, 5, $17, $77, $FF, $9D, $E9,	$95, $3A, $E, $1A, $42,	$FA, $FC, $AF, $44
@@ -51292,7 +49634,6 @@ byte_120E28:	dc.b $80, $2C, $80, 3, 1, $14, 7, $25, $15, $36, $32, $45, $17,	$55
 		dc.b $4F, $35, $49, $A4, $F0, $A5, $30,	$A5, $32, $59, $95, $C7, $72, $8E, $B7,	$49, $CD, $27, $39, $CE
 		dc.b $73, $9E, $68, $B3, $5C, $D7, $24,	$2B, $9F, $E9, $F3, $57, $47, $EE, $E9,	$54, $CC, 0
 byte_1210E2:	dc.b 0,	$11, $80, 5, $13, $15, $1B, $26, $3B, $36, $32,	$48, $F8, $58, $F9, $76, $38, $85, 5, $16
-
 		dc.b $16, $39, $86, 4, 7, $15, $14, $27, $78, $8C, 4, 8, $16, $33, $27,	$79, $38, $FA, $8D, 3
 		dc.b 1,	$15, $15, $26, $34, $37, $7A, $8E, 3, 0, $15, $12, $26,	$35, $37, $7B, $8F, 3, 2, $14
 		dc.b 6,	$25, $17, $35, $18, $56, $3A, $FF, $D8,	$A8, $EC, $7E, 6, $4D, $31, 3, $61, 2, $32, $84
@@ -51312,7 +49653,6 @@ byte_1210E2:	dc.b 0,	$11, $80, 5, $13, $15, $1B, $26, $3B, $36, $32,	$48, $F8, $
 		dc.b $74, $E1, $3A, $76, $7B, $BF, $FB,	$DD, $3D, $E8, $A8, $A6, $9D, $51, $A6,	$D4, $BC, $D5, $2F, $B5
 		dc.b $E1, $B6, $A8, $87, $74, $E7, $2F,	$D2, $FC, $73, $F2, $38, $E3, $FC, 0, 0
 byte_12125A:	dc.b $80, $10, $80, 2, 0, $14, 8, $26, $32, $34, 9, $45, $1A, $56, $36,	$77, $78, $81, 3, 2
-
 		dc.b $15, $16, $82, 4, 6, $16, $37, $83, 4, 7, $16, $38, $85, 8, $F9, $86, 5, $15, $87,	5
 		dc.b $14, $28, $F8, $88, 6, $39, $89, 6, $3A, $18, $FA,	$8A, 6,	$3B, $17, $7B, $8B, 6, $33, $8C
 		dc.b 7,	$79, $8D, 7, $7A, $8E, 5, $17, $8F, 5, $18, $FF, $DA, $F8, $D6,	6, $9B,	$AE, $25, $71
@@ -51334,7 +49674,6 @@ byte_12125A:	dc.b $80, $10, $80, 2, 0, $14, 8, $26, $32, $34, 9, $45, $1A, $56, 
 		dc.b $1B, $34, $7D, $73, $D9, $9A, $87,	$61, $A1, $A, $18, $EB,	$93, $73, $DF, $85, $E3, $F8, $2D, $8F
 		dc.b $D9, $C7, $A0, 0
 byte_1213EE:	dc.b $80, $C, $80, 3, 2, $14, $A, $25, $17, $35, $18, $45, $1A,	$56, $3C, $66, $3A, $73, 1, $81
-
 		dc.b 4,	8, $82,	6, $3B,	$83, 5,	$1B, $16, $3D, $84, 3, 3, $17, $7C, $86, 5, $1C, $87, 3
 		dc.b 0,	$15, $16, $38, $FA, $48, $FB, $8B, 4, 9, $15, $19, $FF,	$24, $9E, $B7, $AF, $71, $EA, $8E
 		dc.b $E9, $D4, $6E, $98, $BE, $FB, $C0,	$FC, $B0, $61, $A, $CE,	$33, $71, $53, $E5, $B2, $9A, $B2, $B7
@@ -51346,12 +49685,9 @@ byte_1213EE:	dc.b $80, $C, $80, 3, 2, $14, $A, $25, $17, $35, $18, $45, $1A,	$56
 		dc.b $4D, $E6, $D2, $75, $92, $49, $D4,	$FF, $B3, $9F, $D7, $51, $FD, $4F, $4B,	$E8, $3E, $83, $D0, $36
 		dc.b $78, $92, $68, $33, $79, $50, $46,	7, $23,	$51, $77, $78, $E0, $78, 0, 0
 off_1214C6:	dc.w byte_1214C8-off_1214C6
-
 byte_1214C8:	dc.b 0,	0, 0, 4, 1, $47, $47, $47, $47,	0, $E0,	$F, 0, 0, $E8, $E0
-
 		dc.b 7,	0, $10,	8
 off_1214DC:	dc.w byte_1214EC-off_1214DC
-
 		dc.w byte_1214FA-off_1214DC
 		dc.w byte_121508-off_1214DC
 		dc.w byte_121516-off_1214DC
@@ -51360,18 +49696,13 @@ off_1214DC:	dc.w byte_1214EC-off_1214DC
 		dc.w byte_12152C-off_1214DC
 		dc.w byte_121532-off_1214DC
 byte_1214EC:	dc.b 5,	3, 0, $4C, 0, $66, 0, $80, 0, $80, 0, $66, 0, $66
-
 byte_1214FA:	dc.b 5,	3, $80,	$3E, $80, $58, $80, $72, $80, $72, $80,	$58, $80, $58
-
 byte_121508:	dc.b 5,	3, 0, $7E, 0, $93, 0, $93, 0, $93, 0, $93, 0, $7E
-
 byte_121516:	dc.b 5,	3, $80,	$70, $80, $85, $80, $85, $80, $85, $80,	$85, $80, $70
-
 byte_121524:	dc.b 0,	0, 0, $8C
 byte_121528:	dc.b 0,	0, $80,	$88
 byte_12152C:	dc.b 1,	0, 0, $84, 0, $8F
 byte_121532:	dc.b 1,	0, 0, $7E, $80,	$89, 3,	$3C, $3C, $3D, $3D, 0, $D0, 4, 0, 0
-
 		dc.b $F4, $D8, $F, 0, 2, $EC, $E0, 2, 0, $12, $C, $F8, $C, 0, $15, $EC
 		dc.b 3,	$3C, $3C, $3D, $3D, 0, $D0, $C,	0, $19,	$F4, $D8, $F, 0, $1D, $EC
 		dc.b $D8, 2, 0,	$2D, $C, $F8, $C, 0, $15, $EC, 3, $3C, $3C, $3D, $3D, 0
@@ -51382,18 +49713,14 @@ byte_121532:	dc.b 1,	0, 0, $7E, $80,	$89, 3,	$3C, $3C, $3D, $3D, 0, $D0, 4, 0, 0
 		dc.b $40, $40, $40, 0, $F8, 0, 0, $6D, $FC, 0, 0, 0, 0,	0, 0, $F4
 		dc.b 1,	0, $6E,	$FC
 off_1215C6:	dc.w byte_1215C8-off_1215C6
-
 byte_1215C8:	dc.b 1,	1, 0, 6, 0, $11, 0, $4D, $4D, $4D, $4D,	0, $E8,	$E, 0, 0
-
 		dc.b $F0, 0, $4D, $4D, $4D, $4D, 0, $E8, $E, 0,	$C, $F0
 off_1215E4:	dc.w byte_1215EA-off_1215E4
-
 		dc.w byte_1215F0-off_1215E4
 		dc.w byte_1215F6-off_1215E4
 byte_1215EA:	dc.b 1,	$A, $80, $16, $80, $26
 byte_1215F0:	dc.b 1,	$A, 0, $10, 0, $20
 byte_1215F6:	dc.b 3,	$A, 0, $34, 0, $44, 0, $54, 0, $44, 1, $95, $9E, $95, $9F, 0
-
 		dc.b $E0, 7, 0,	0, $F0,	$E8, 6,	0, 8, 0, 3, $94, $94, $94, $94,	0
 		dc.b $E8, 4, 0,	$E, $E4, $F0, $C, 0, $10, $E4, $E8, 0, 0, $B, $14, $F0
 		dc.b 9,	0, $14,	4, 1, $F9, $F9,	$F9, $F9, 0, $F0, 5, 0,	$32, $F3, $D3
@@ -51401,54 +49728,40 @@ byte_1215F6:	dc.b 3,	$A, 0, $34, 0, $44, 0, $54, 0, $44, 1, $95, $9E, $95, $9F, 
 		dc.b 7,	0, $22,	$F8, 1,	$F9, $F9, $F9, $F9, 0, $F0, 5, 0, $32, $F8, $D3
 		dc.b 7,	0, $2A,	$F8
 off_12165A:	dc.w byte_12165E-off_12165A
-
 		dc.w byte_121664-off_12165A
 byte_12165E:	dc.b 1,	5, 0, $C, 0, $21
 byte_121664:	dc.b 1,	5, $80,	6, $80,	$1B, 2,	$81, $81, $81, $81, 0, $E0, 8, 0, 0
-
 		dc.b $F0, $E8, $D, 0, 3, $F0, $F8, 8, 0, $B, $F0, 2, $81, $81, $81, $81
 		dc.b 0,	$E0, 8,	0, $E, $F0, $E8, $D, 0,	$11, $F0, $F8, 8, 0, $19, $F0
 off_121694:	dc.w byte_121696-off_121694
-
 byte_121696:	dc.b 0,	0, 0, 4, 5, $80, $E5, $80, $E5,	0, $A0,	$F, 0, 0, $E0, $A0
-
 		dc.b $F, 0, $10, 0, $C0, $F, 0,	$20, $E0, $C0, $F, 0, $30, 0, $E0, $F
 		dc.b 0,	$40, $E0, $E0, $F, 0, $50, 0
 off_1216BE:	dc.w byte_1216C0-off_1216BE
-
 byte_1216C0:	dc.b 0,	0, 0, 4, 7, $80, $E5, $80, $E5,	0, $A0,	$F, 0, 0, $E0, $A0
-
 		dc.b $F, 0, 0, 0, $C0, $D, 0, $10, $E0,	$C0, $D, 0, $18, 0, $D0, $D
 		dc.b 0,	$14, $E0, $D0, $D, 0, $14, 0, $E0, $F, 0, $20, $E0, $E0, $F, 8
 		dc.b $20, 0
 off_1216F2:	dc.w byte_1216F4-off_1216F2
-
 byte_1216F4:	dc.b 0,	0, 0, 4, 0, 0, 0, 0, 0,	0, $E8,	$E, 0, 0, $F0, 0
-
 off_121704:	dc.w byte_12170C-off_121704
-
 		dc.w byte_12170C-off_121704
 		dc.w byte_121710-off_121704
 		dc.w byte_121714-off_121704
 byte_12170C:	dc.b 0,	0, 0, $C
-
 byte_121710:	dc.b 0,	0, 0, $18
 byte_121714:	dc.b 0,	0, $80,	$14, 1,	$7E, $7E, $7E, $7E, 0, $C0, 3, 0, 0, $FC, $E0
-
 		dc.b 3,	0, 4, $FC, 1, $A1, $A1,	$A2, $A2, 0, $FC, $C, 0, 8, 0, $FC
 		dc.b $C, 0, $C,	$20
 off_121738:	dc.w byte_12173C-off_121738
-
 		dc.w byte_121740-off_121738
 byte_12173C:	dc.b 0,	0, 0, $10
 byte_121740:	dc.b 4,	5, 0, $17, 0, $22, 0, $2D, 0, $38, 0, $43, 0, $41, $41,	$41
-
 		dc.b $41, 0, $F0, 5, 0,	0, $F8,	0, $41,	$41, $41, $41, 0, $F4, 0, 0
 		dc.b 4,	$FC, 0,	$41, $41, $41, $41, 0, $F0, 5, 0, 5, $F8, 0, $41, $41
 		dc.b $41, $41, 0, $F0, 5, 0, 9,	$F8, 0,	$41, $41, $41, $41, 0, $F0, 5
 		dc.b 0,	$D, $F8, 0, $41, $41, $41, $41,	0, $F0,	5, 0, $11, $F8
 off_12178E:	dc.w byte_12179C-off_12178E
-
 		dc.w byte_1217A6-off_12178E
 		dc.w byte_1217B0-off_12178E
 		dc.w byte_1217B4-off_12178E
@@ -51456,14 +49769,12 @@ off_12178E:	dc.w byte_12179C-off_12178E
 		dc.w byte_1217C2-off_12178E
 		dc.w byte_1217CC-off_12178E
 byte_12179C:	dc.b 3,	5, $80,	$7C, $80, $91, $80, $A6, $80, $91
-
 byte_1217A6:	dc.b 3,	5, 0, $72, 0, $87, 0, $9C, 0, $87
 byte_1217B0:	dc.b 0,	0, $80,	$B1
 byte_1217B4:	dc.b 0,	0, 0, $AD
 byte_1217B8:	dc.b 3,	3, 0, $29, 0, $1E, 0, $29, $80,	$1E
 byte_1217C2:	dc.b 3,	5, 0, $2A, 0, $35, 0, $40, 0, $4B
 byte_1217CC:	dc.b 3,	5, $80,	$20, $80, $2B, $80, $36, $80, $41, 0, $5F, $5F,	$5F, $5F, 0
-
 		dc.b $F0, 5, 0,	0, $F8,	0, $5F,	$5F, $5F, $5F, 0, $F0, 5, 0, 4,	$F8
 		dc.b 0,	$5F, $5F, $5F, $5F, 0, $F0, 5, 0, 8, $F8, 0, $5F, $5F, $5F, $5F
 		dc.b 0,	$F0, 5,	0, $C, $F8, 0, $5F, $5F, $5F, $5F, 0, $F0, 5, $18, 8
@@ -51475,22 +49786,17 @@ byte_1217CC:	dc.b 3,	5, $80,	$20, $80, $2B, $80, $36, $80, $41, 0, $5F, $5F,	$5F
 		dc.b $E8, $E, 0, $28, $F0, 1, $5D, $5E,	$5D, $5E, 0, $D0, 9, 0,	$34, $F8
 		dc.b $E0, $F, 0, $3A, $F0, 0
 off_121872:	dc.w byte_121874-off_121872
-
 byte_121874:	dc.b 0,	0, 0, 4, 1, $8A, $8A, $8A, $8A,	0, $F0,	9, 0, 0, $E8, $F0
-
 		dc.b 9,	0, 6, 0
 off_121888:	dc.w byte_121892-off_121888
-
 		dc.w byte_121892-off_121888
 		dc.w byte_121896-off_121888
 		dc.w byte_12189A-off_121888
 		dc.w byte_12189E-off_121888
 byte_121892:	dc.b 0,	0, 0, $10
-
 byte_121896:	dc.b 0,	0, 0, $3A
 byte_12189A:	dc.b 0,	0, 0, $64
 byte_12189E:	dc.b 0,	0, 0, $6B, 7, $66, $E4,	$66, $E4, 0, 0,	$F, 0, 0, $E0, 0
-
 		dc.b $F, 0, $10, 0, $20, $F, 0,	$20, $E0, $20, $F, 0, $30, 0, $40, $F
 		dc.b 0,	$40, $E0, $40, $F, 0, $50, 0, $60, $F, 0, $40, $E0, $60, $F, 0
 		dc.b $50, 0, 7,	$66, $E4, $66, $E4, 0, 0, $F, 0, $40, $E0, 0, $F, 0
@@ -51499,11 +49805,8 @@ byte_12189E:	dc.b 0,	0, 0, $6B, 7, $66, $E4,	$66, $E4, 0, 0,	$F, 0, 0, $E0, 0
 		dc.b 0,	$64, $64, $64, $64, 0, 0, $F, 0, $60, $F0, 1, $7D, $7D,	$7D, $7D
 		dc.b 0,	0, $F, 0, $70, $E8, 0, 7, 0, $80, 8, 0
 off_12191A:	dc.w byte_12191C-off_12191A
-
 byte_12191C:	dc.b 0,	0, 0, 4, 0, $8A, $8A, $8A, $8A,	0, $F0,	$D, 0, 0, $F0, 0
-
 off_12192C:	dc.w byte_12193E-off_12192C
-
 		dc.w byte_121948-off_12192C
 		dc.w byte_121952-off_12192C
 		dc.w byte_12195C-off_12192C
@@ -51513,17 +49816,14 @@ off_12192C:	dc.w byte_12193E-off_12192C
 		dc.w byte_121976-off_12192C
 		dc.w byte_12197A-off_12192C
 byte_12193E:	dc.b 3,	$F, $80, $40, $80, $40,	$80, $40, $80, $55
-
 byte_121948:	dc.b 3,	$F, 0, $36, 0, $36, 0, $36, 0, $4B
 byte_121952:	dc.b 3,	$F, $80, $56, $80, $56,	$80, $56, $80, $66
-
 byte_12195C:	dc.b 3,	$F, 0, $4C, 0, $4C, 0, $4C, 0, $5C
 byte_121966:	dc.b 1,	$F, $80, $62, $80, $72
 byte_12196C:	dc.b 1,	$F, 0, $5C, 0, $6C
 byte_121972:	dc.b 0,	0, 0, $80
 byte_121976:	dc.b 0,	0, 0, $87
 byte_12197A:	dc.b 0,	0, 0, $8E, 2, $8B, $8C,	$8B, $8C, 0, $C8, $F, 0, 0, $F4, $E8
-
 		dc.b $E, 0, $10, $EC, $E8, 2, 0, $1C, $C, 2, $8B, $8C, $8B, $8C, 0, $CC
 		dc.b $F, 0, 0, $F0, $EC, $A, 0,	$1F, $E8, $EC, $A, 0, $28, 0, 1, 0
 		dc.b 0,	0, 0, 0, $C0, $C, 0, $31, $EC, $C8, 4, 0, $35, $EC, 1, 0
@@ -51534,7 +49834,6 @@ byte_12197A:	dc.b 0,	0, 0, $8E, 2, $8B, $8C,	$8B, $8C, 0, $C8, $F, 0, 0, $F4, $E
 		dc.b 0,	$51, $FC, 0, 0,	0, 0, 0, 0, $F8, 0, 0, $52, $FC, 0, 0
 		dc.b 0,	0, 0, 0, $F8, 0, 0, $53, $FC, 0
 off_121A14:	dc.w byte_121A20-off_121A14
-
 		dc.w byte_121A26-off_121A14
 		dc.w byte_121A2C-off_121A14
 		dc.w byte_121A30-off_121A14
@@ -51546,7 +49845,6 @@ byte_121A2C:	dc.b 0,	0, 0, $10
 byte_121A30:	dc.b 0,	0, $80,	$C
 byte_121A34:	dc.b 0,	0, 0, $22
 byte_121A38:	dc.b 0,	0, $80,	$1E, 3,	$89, $89, $89, $89, 0, $C0, $F,	0, 0, $E2, $C0
-
 		dc.b $B, 0, $10, 2, $E0, $B, 0,	$1C, $EA, $E0, 7, 0, $28, 2, 4,	$89
 		dc.b $89, $89, $89, 0, $C0, $D,	0, $30,	$F3, $D0, $B, 0, $38, $EB, $D0,	$B
 		dc.b 0,	$44, 3,	$F0, 9,	0, $50,	$EB, $F0, 5, 0,	$56, 3,	3, $89,	$89
@@ -51555,7 +49853,6 @@ byte_121A38:	dc.b 0,	0, $80,	$1E, 3,	$89, $89, $89, $89, 0, $C0, $F,	0, 0, $E2, 
 		dc.b $72, $E4, $E0, $B,	0, $82,	4, $C4,	$B, 0, $8E, $EC, $C4, $B, 0, $9A
 		dc.b 4,	0
 off_121AAA:	dc.w byte_121AB8-off_121AAA
-
 		dc.w byte_121ABC-off_121AAA
 		dc.w byte_121AC0-off_121AAA
 		dc.w byte_121AC6-off_121AAA
@@ -51569,7 +49866,6 @@ byte_121AC6:	dc.b 1,	$1E, 0,	$30, $80, $30
 byte_121ACC:	dc.b 0,	0, $80,	$10
 byte_121AD0:	dc.b 0,	0, 0, $C
 byte_121AD4:	dc.b 0,	4, 0, $3D, 0, $48, 0, $62, 3, $87, $87,	$87, $87, 0, $D0, 6
-
 		dc.b 0,	0, $E1,	$E8, 5,	0, 6, $E1, $D0,	$F, 0, $A, $F1,	$F0, $D, 0
 		dc.b $1A, $F1, 1, 0, 0,	0, 0, 0, $D4, 4, 0, $22, $F8, $DC, $D, 0
 		dc.b $24, $F0, 0, $88, $88, $88, $88, 0, $F8, $C, 0, $2C, $F0, 0, $7F, $7F
@@ -51578,37 +49874,27 @@ byte_121AD4:	dc.b 0,	4, 0, $3D, 0, $48, 0, $62, 3, $87, $87,	$87, $87, 0, $D0, 6
 		dc.b $3C, $C, 3, $7F, $7F, $7F,	$7F, 0,	$E0, 3,	0, $30,	$E8, $E0, 3, 0
 		dc.b $34, $F4, $E0, 3, 0, $38, 4, $E0, 3, 0, $3C, $10
 off_121B50:	dc.w byte_121B52-off_121B50
-
 byte_121B52:	dc.b 0,	0, 0, 4, 1, $86, $86, $86, $86,	0, $F8,	8, 0, $12, $E8,	$F8
-
 		dc.b 8,	0, $15,	0
 off_121B66:	dc.w byte_121B6A-off_121B66
-
 		dc.w byte_121B6E-off_121B66
 byte_121B6A:	dc.b 0,	0, 0, 8
 byte_121B6E:	dc.b 0,	0, 0, $F, 0, $84, $84, $84, $84, 0, $E0, $A, 0,	0, $E8,	0
-
 		dc.b $85, $85, $85, $85, 0, $E0, $A, 0,	9, 0
 off_121B88:	dc.w byte_121B8C-off_121B88
-
 		dc.w byte_121B90-off_121B88
 byte_121B8C:	dc.b 0,	0, 0, 8
 byte_121B90:	dc.b 0,	0, 0, $F, 0, $7C, $7C, $7C, $7C, 0, $F8, $D, 0,	0, $F0,	0
-
 		dc.b 0,	0, 0, 0, 0, 0, $F, 0, 8, $F0
 off_121BAA:	dc.w byte_121BAE-off_121BAA
-
 		dc.w byte_121BB8-off_121BAA
 byte_121BAE:	dc.b 3,	$A, $80, $3E, $80, $29,	$80, $3E, $80, $14
-
 byte_121BB8:	dc.b 3,	$A, 0, $34, 0, $1F, 0, $34, 0, $A, 2, $8D, $8E,	$8F, $90, 0
-
 		dc.b $D8, $D, 0, 0, $E8, $E8, $A, 0, 8,	$F0, $E8, $A, 0, $11, 8, 2
 		dc.b $91, $91, $91, $91, 0, $E8, $C, 0,	$1A, $F0, $F0, $D, 0, $1E, $E0,	$F0
 		dc.b $D, 0, $26, 0, 2, $8D, $92, $8F, $93, 0, $E0, $E, 0, $2E, $E0, $E8
 		dc.b $E, 0, $3A, 0, $F8, 8, 0, $46, $E8, 0
 off_121C02:	dc.w byte_121C0A-off_121C02
-
 		dc.w byte_121C0E-off_121C02
 		dc.w byte_121C14-off_121C02
 		dc.w byte_121C18-off_121C02
@@ -51616,7 +49902,6 @@ byte_121C0A:	dc.b 0,	0, 0, $14
 byte_121C0E:	dc.b 1,	$A, 0, $20, 0, $30
 byte_121C14:	dc.b 0,	0, 0, $3A
 byte_121C18:	dc.b 1,	$A, 0, $46, 0, $56, 1, $78, $79, $78, $79, 0, 0, $D, 0,	0
-
 		dc.b $E0, $10, 5, 0, 8,	$F0, 1,	0, 0, 0, 0, 0, 0, $D, 0, $1A
 		dc.b $E0, $10, 5, 0, $22, $F0, 1, 0, 0,	0, 0, 0, 0, $E,	0, $26
 		dc.b $E0, $18, 4, 0, $32, $F0, 1, $7A, $7B, $7A, $7B, 0, 0, 4, 0, $C
@@ -51624,14 +49909,11 @@ byte_121C18:	dc.b 1,	$A, 0, $46, 0, $56, 1, $78, $79, $78, $79, 0, 0, $D, 0,	0
 		dc.b $E0, 8, 5,	0, $22,	$F0, 1,	0, 0, 0, 0, 0, $F8, $E,	0, $26
 		dc.b $E0, $10, 4, 0, $32, $F0
 off_121C7E:	dc.w byte_121C80-off_121C7E
-
 byte_121C80:	dc.b 1,	5, 0, 6, 0, $20, 3, $71, $71, $71, $71,	0, $D0,	$F, 0, 0
-
 		dc.b $E8, $D0, 7, 0, $10, 8, $F0, $D, 0, $18, $E8, $F0,	5, 0, $20, 8
 		dc.b 3,	$71, $71, $71, $71, 0, $D0, $F,	0, $24,	$E8, $D0, 7, 0,	$34, 8
 		dc.b $F0, $D, 0, $3C, $E8, $F0,	5, 0, $44, 8
 off_121CBA:	dc.w byte_121CCA-off_121CBA
-
 		dc.w byte_121CD0-off_121CBA
 		dc.w byte_121CD6-off_121CBA
 		dc.w byte_121CDA-off_121CBA
@@ -51647,18 +49929,15 @@ byte_121CDE:	dc.b 0,	0, $80,	$3B
 byte_121CE2:	dc.b 0,	0, 0, $37
 byte_121CE6:	dc.b 0,	0, $80,	$43
 byte_121CEA:	dc.b 0,	0, 0, $3F, 0, $72, $72,	$72, $72, 0, $E0, $F, 0, 0, $F0, 0
-
 		dc.b $72, $72, $72, $72, 0, $E0, $B, 0,	$10, $F5, 2, $75, $74, $73, $74, 0
 		dc.b $E0, 4, 0,	$1C, $ED, $E8, 5, 0, $1E, $E5, $E8, $A,	0, $22,	$F5, 1
 		dc.b $76, $76, $76, $76, 0, $F0, $D, 0,	$2B, $EC, $F0, 1, 0, $33, $C, 2
 		dc.b $77, $77, $77, $77, 0, $EB, 8, 0, $35, $F8, $F3, $C, 0, $38, $F0, $FB
 		dc.b 8,	0, $3C,	$F0
 off_121D3E:	dc.w byte_121D42-off_121D3E
-
 		dc.w byte_121D48-off_121D3E
 byte_121D42:	dc.b 1,	0, $80,	$C, $80, $3F
 byte_121D48:	dc.b 1,	0, 0, 6, 0, $39, 8, 0, 0, 0, 0,	0, $F0,	8, 0, 0
-
 		dc.b $E8, $F0, 8, 0, 3,	0, $D8,	$E, 0, 6, $E0, $D8, $E,	0, $12,	0
 		dc.b $D0, 4, 0,	$1E, $E8, $B8, 2, 0, $20, $F0, $B8, 5, 0, $23, 8, $C8
 		dc.b 9,	0, $27,	8, $B8,	7, 0, $2D, $F8,	8, 0, 0, 0, 0, 0, $F0
@@ -51666,7 +49945,6 @@ byte_121D48:	dc.b 1,	0, 0, 6, 0, $39, 8, 0, 0, 0, 0,	0, $F0,	8, 0, 0
 		dc.b 0,	$12, 0,	$D0, 4,	0, $1E,	$E8, $B8, 2, 0,	$20, $F0, $B8, 5, 0
 		dc.b $23, 8, $C8, 9, 0,	$27, 8,	$B8, 7,	0, $35,	$F8
 off_121DB4:	dc.w byte_121DC0-off_121DB4
-
 		dc.w byte_121DC8-off_121DB4
 		dc.w byte_121DD0-off_121DB4
 		dc.w byte_121DD4-off_121DB4
@@ -51677,9 +49955,7 @@ byte_121DC8:	dc.b 2,	3, 0, $42, 0, $37, 0, $2C
 byte_121DD0:	dc.b 0,	0, 0, $45
 byte_121DD4:	dc.b 0,	0, $80,	$41
 byte_121DD8:	dc.b 5,	3, 0, $48, 0, $48, 0, $5D, 0, $5D, 0, $48, 0, $48
-
 byte_121DE6:	dc.b 5,	3, $80,	$3A, $80, $3A, $80, $4F, $80, $4F, $80,	$3A, $80, $3A, 0, 0
-
 		dc.b 0,	0, 0, 0, $E9, 5, 0, 0, $C, 0, 0, 0, 0, 0, 0, $EB
 		dc.b 5,	0, 0, $C, 0, 0,	0, 0, 0, 0, $EA, 5, 0, 0, $C, 0
 		dc.b 0,	0, 0, 0, 0, $E8, 6, 0, 4, $F8, 2, 0, 0,	0, 0, 0
@@ -51687,7 +49963,6 @@ byte_121DE6:	dc.b 5,	3, $80,	$3A, $80, $3A, $80, $4F, $80, $4F, $80,	$3A, $80, $
 		dc.b 0,	0, 0, 0, 0, $E0, 6, 0, $A, $E0,	$E8, 4,	0, $10,	$F0, $E0
 		dc.b 4,	0, $12,	$F8
 off_121E4A:	dc.w byte_121E5A-off_121E4A
-
 		dc.w byte_121E68-off_121E4A
 		dc.w byte_121E76-off_121E4A
 		dc.w byte_121E84-off_121E4A
@@ -51696,18 +49971,13 @@ off_121E4A:	dc.w byte_121E5A-off_121E4A
 		dc.w byte_121E9A-off_121E4A
 		dc.w byte_121EA0-off_121E4A
 byte_121E5A:	dc.b 5,	3, 0, $4C, 0, $6B, 0, $8A, 0, $8A, 0, $6B, 0, $6B
-
 byte_121E68:	dc.b 5,	3, $80,	$3E, $80, $5D, $80, $7C, $80, $7C, $80,	$5D, $80, $5D
-
 byte_121E76:	dc.b 5,	3, 0, $8D, 0, $A7, 0, $A7, 0, $A7, 0, $A7, 0, $8D
-
 byte_121E84:	dc.b 5,	3, $80,	$7F, $80, $99, $80, $99, $80, $99, $80,	$99, $80, $7F
-
 byte_121E92:	dc.b 0,	0, 0, $A5
 byte_121E96:	dc.b 0,	0, $80,	$A1
 byte_121E9A:	dc.b 1,	0, 0, $9D, 0, $A8
 byte_121EA0:	dc.b 1,	0, 0, $97, $80,	$A2, 4,	$3C, $3C, $3D, $3D, 0, $CB, 9, 0, $79
-
 		dc.b $F2, $D0, 4, 0, 0,	$F4, $D8, $F, 0, 2, $EC, $E0, 2, 0, $12, $C
 		dc.b $F8, $C, 0, $15, $EC, 4, $3C, $3C,	$3D, $3D, 0, $CD, 9, 0,	$79, $F1
 		dc.b $D0, $C, 0, $19, $F4, $D8,	$F, 0, $1D, $EC, $D8, 2, 0, $2D, $C, $F8
@@ -51719,7 +49989,6 @@ byte_121EA0:	dc.b 1,	0, 0, $97, $80,	$A2, 4,	$3C, $3C, $3D, $3D, 0, $CB, 9, 0, $
 		dc.b $5E, $FC, $F8, 8, 0, $6A, $FC, 0, $40, $40, $40, $40, 0, $F8, 0, 0
 		dc.b $6D, $FC, 0, 0, 0,	0, 0, 0, $F4, 1, 0, $6E, $FC, 0
 off_121F4E:	dc.w byte_121F5E-off_121F4E
-
 		dc.w byte_121F6C-off_121F4E
 		dc.w byte_121F7A-off_121F4E
 		dc.w byte_121F88-off_121F4E
@@ -51728,18 +49997,13 @@ off_121F4E:	dc.w byte_121F5E-off_121F4E
 		dc.w byte_121F9E-off_121F4E
 		dc.w byte_121FA4-off_121F4E
 byte_121F5E:	dc.b 5,	3, 0, $4C, 0, $6B, 0, $8A, 0, $8A, 0, $6B, 0, $6B
-
 byte_121F6C:	dc.b 5,	3, $80,	$3E, $80, $5D, $80, $7C, $80, $7C, $80,	$5D, $80, $5D
-
 byte_121F7A:	dc.b 5,	3, 0, $8D, 0, $A7, 0, $A7, 0, $A7, 0, $A7, 0, $8D
-
 byte_121F88:	dc.b 5,	3, $80,	$7F, $80, $99, $80, $99, $80, $99, $80,	$99, $80, $7F
-
 byte_121F96:	dc.b 0,	0, 0, $A5
 byte_121F9A:	dc.b 0,	0, $80,	$A1
 byte_121F9E:	dc.b 1,	0, 0, $9D, 0, $A8
 byte_121FA4:	dc.b 1,	0, 0, $97, $80,	$A2, 4,	$3C, $3C, $3D, $3D, 0, $CD, $A,	0, $70
-
 		dc.b $F0, $D0, 4, 0, 0,	$F4, $D8, $F, 0, 2, $EC, $E0, 2, 0, $12, $C
 		dc.b $F8, $C, 0, $15, $EC, 4, $3C, $3C,	$3D, $3D, 0, $CD, $A, 0, $70, $F0
 		dc.b $D0, $C, 0, $19, $F4, $D8,	$F, 0, $1D, $EC, $D8, 2, 0, $2D, $C, $F8
@@ -51751,30 +50015,23 @@ byte_121FA4:	dc.b 1,	0, 0, $97, $80,	$A2, 4,	$3C, $3C, $3D, $3D, 0, $CD, $A,	0, 
 		dc.b $5E, $FC, $F8, 8, 0, $6A, $FC, 0, $40, $40, $40, $40, 0, $F8, 0, 0
 		dc.b $6D, $FC, 0, 0, 0,	0, 0, 0, $F4, 1, 0, $6E, $FC, 0
 off_122052:	dc.w byte_122058-off_122052
-
 		dc.w byte_122060-off_122052
 		dc.w byte_122066-off_122052
 byte_122058:	dc.b 2,	5, 0, $14, 0, $1F, 0, $2A
 byte_122060:	dc.b 1,	4, $80,	$2D, $80, $38
 byte_122066:	dc.b 1,	4, 0, $27, 0, $32, 0, 0, 0, 0, 0, 0, $F8, 1, 0,	0
-
 		dc.b $FC, 0, 0,	0, 0, 0, 0, $F8, $D, 0,	2, $F0,	0, 0, 0, 0
 		dc.b 0,	0, $F4,	$A, 0, $A, $F4,	0, $70,	$70, $70, $70, 0, $EE, $F, 0
 		dc.b $13, $F5, 0, $70, $70, $70, $70, 0, $F4, $A, 0, $23, $F5, 0
 off_1220A4:	dc.w byte_1220A6-off_1220A4
-
 byte_1220A6:	dc.b 3,	$1E, 0,	$15, 0,	$A, 0, $20, 0, $A, 0, 0, 0, 0, 0, 0
-
 		dc.b $F8, 0, 0,	0, $FC,	0, 0, 0, 0, 0, 0, $F0, 5, 0, 1,	$F4
 		dc.b 0,	0, 0, 0, 0, 0, $F0, 5, 0, 5, $F4, 0
 off_1220D2:	dc.w byte_1220D4-off_1220D2
-
 byte_1220D4:	dc.b 0,	0, 0, 4, 5, 0, 0, 0, 0,	0, $B0,	$B, 0, 0, $E8, $D0
-
 		dc.b $A, 0, $C,	$E8, $E8, 6, 0,	$15, $F0, $B0, $B, 8, 0, 0, $D0, $A
 		dc.b 8,	$C, 0, $E8, 6, 8, $15, 0
 off_1220FC:	dc.w byte_12210A-off_1220FC
-
 		dc.w byte_122114-off_1220FC
 		dc.w byte_12211E-off_1220FC
 		dc.w byte_122124-off_1220FC
@@ -51788,7 +50045,6 @@ byte_122124:	dc.b 1,	$A, $80, $3E, $80, $53
 byte_12212A:	dc.b 3,	5, 0, $62, 0, $6D, 0, $78, 0, $83
 byte_122134:	dc.b 3,	5, $80,	$58, $80, $63, $80, $6E, $80, $79
 byte_12213E:	dc.b 0,	0, 0, $7A, 1, $67, $68,	$67, $68, 0, $DA, $D, 0, $3F, $F7, $E8
-
 		dc.b $A, 0, 0, $F0, 1, $67, $68, $67, $68, 0, $DA, $D, 0, $3F, $F6, $E8
 		dc.b 6,	0, 9, $F3, 2, $67, $68,	$67, $68, 0, $DA, $D, 0, $3F, $F7, $E8
 		dc.b $A, 0, $F,	$F0, $F8, 0, 0,	$18, 8,	2, $69,	$6A, $69, $6A, 0, $D2
@@ -51798,7 +50054,6 @@ byte_12213E:	dc.b 0,	0, 0, $7A, 1, $67, $68,	$67, $68, 0, $DA, $D, 0, $3F, $F7, 
 		dc.b $41, $41, $41, $41, 0, $F0, 5, $18, $32, $F8, 1, 0, 0, 0, 0, 0
 		dc.b $C8, $B, 0, $19, $F4, $E8,	$A, 0, $25, $F4
 off_1221C8:	dc.w byte_1221D6-off_1221C8
-
 		dc.w byte_1221DE-off_1221C8
 		dc.w byte_1221E6-off_1221C8
 		dc.w byte_1221F0-off_1221C8
@@ -51812,7 +50067,6 @@ byte_1221F0:	dc.b 3,	8, 0, $46, 0, $56, 0, $66, 0, $76
 byte_1221FA:	dc.b 2,	8, $80,	$3C, $80, $31, $80, $26
 byte_122202:	dc.b 2,	8, 0, $34, 0, $29, 0, $1E
 byte_12220A:	dc.b 9,	8, 0, $6C, 0, $6C, 0, $16, 0, $21, 0, $2C, 0, $2C, 0, $2C
-
 		dc.b 0,	$21, 0,	$16, 0,	$6C, 0,	0, 0, 0, 0, 0, $E0, $B,	0, 8
 		dc.b $F4, 0, 0,	0, 0, 0, 0, $E0, $B, 0,	$14, $F4, 1, $6B, $6B, $6B
 		dc.b $6B, 0, $EA, $D, 0, 0, $EF, $E0, $B, 0, $20, $F4, 1, $6B, $6B, $6B
@@ -51821,18 +50075,13 @@ byte_12220A:	dc.b 9,	8, 0, $6C, 0, $6C, 0, $16, 0, $21, 0, $2C, 0, $2C, 0, $2C
 		dc.b $6B, 0, $EB, $D, 0, 0, $EF, $E0, $B, 0, $20, $F4, 0, 0, 0,	0
 		dc.b 0,	0, 0, 0, 0, $2C, 0, 0
 off_122282:	dc.w byte_122286-off_122282
-
 		dc.w byte_12228A-off_122282
 byte_122286:	dc.b 0,	0, 0, 8
 byte_12228A:	dc.b 0,	0, 0, $F, 0, 0,	0, 0, 0, 0, $FC, 0, 0, 0, $FC, 0
-
 		dc.b $6C, $6D, $6C, $6D, 0, $F0, $F, 0,	1, $F0
 off_1222A4:	dc.w byte_1222A6-off_1222A4
-
 byte_1222A6:	dc.b 0,	0, 0, 4, 0, $6E, $6E, $6E, $6E,	0, $E0,	$F, 0, 0, $F0, 0
-
 off_1222B6:	dc.w byte_1222C4-off_1222B6
-
 		dc.w byte_1222CA-off_1222B6
 		dc.w byte_1222CA-off_1222B6
 		dc.w byte_1222CA-off_1222B6
@@ -51841,18 +50090,14 @@ off_1222B6:	dc.w byte_1222C4-off_1222B6
 		dc.w byte_1222CA-off_1222B6
 byte_1222C4:	dc.b 1,	8, 0, $C, 0, $17
 byte_1222CA:	dc.b 1,	8, 0, 6, 0, $11, 0, $6F, $6F, $6F, $6F,	0, $F0,	9, 0, 0
-
 		dc.b $F4, 0, $6F, $6F, $6F, $6F, 0, $F0, 9, 0, 6, $F4, 0, $6F, $6F, $6F
 		dc.b $6F, 0, $F0, 9, $10, 6, $F4, 0
 off_1222F2:	dc.w byte_1222F4-off_1222F2
-
 byte_1222F4:	dc.b 2,	$1E, 0,	8, 0, $18, 0, $28, 1, 0, 0, 0, 0, 0, $C8, 7
-
 		dc.b 0,	0, $F8,	$E8, 6,	0, 8, $F8, 1, 0, 0, 0, 0, 0, $C8, 7
 		dc.b 0,	$E, $F8, $E8, 6, 0, $16, $F8, 1, 0, 0, 0, 0, 0,	$C8, 7
 		dc.b 0,	$1C, $F8, $E8, 6, 0, $24, $F8
 off_12232C:	dc.w byte_12233C-off_12232C
-
 		dc.w byte_122344-off_12232C
 		dc.w byte_12234C-off_12232C
 		dc.w byte_122354-off_12232C
@@ -51868,7 +50113,6 @@ byte_12235C:	dc.b 2,	5, 0, $80, 0, $9A, 0, $B4
 byte_122364:	dc.b 2,	5, $80,	$78, $80, $92, $80, $AC
 byte_12236C:	dc.b 0,	0, 0, $BE
 byte_122370:	dc.b 0,	0, $80,	$BA, 3,	0, $83,	0, $83,	0, $CC,	$D, 0, $38, $F0, $DC
-
 		dc.b $F, 0, 0, $F0, $C0, $F, 0,	$40, $F0, $E0, $F, 0, $50, $F0,	3, 0
 		dc.b $83, 0, $83, 0, $CC, $D, 0, $38, $F0, $DC,	$F, 0, $10, $F0, $C0, $F
 		dc.b 0,	$40, $F0, $E0, $F, 0, $50, $F0,	3, 0, $83, 0, $83, 0, $CC, $D
@@ -51885,23 +50129,19 @@ byte_122370:	dc.b 0,	0, $80,	$BA, 3,	0, $83,	0, $83,	0, $CC,	$D, 0, $38, $F0, $D
 		dc.b 0,	$92, 6,	$C8, $A, 0, $9A, 6, $C8, 7, 0, $A3, $1E, $C0, $F, 0
 		dc.b $40, $F0, $E0, $F,	0, $50,	$F0, 0
 off_122468:	dc.w byte_122474-off_122468
-
 		dc.w byte_122474-off_122468
 		dc.w byte_12247C-off_122468
 		dc.w byte_122482-off_122468
 		dc.w byte_122488-off_122468
 		dc.w byte_122488-off_122468
 byte_122474:	dc.b 2,	8, 0, $1C, 0, $27, 0, $32
-
 byte_12247C:	dc.b 1,	4, $80,	$35, $80, $40
 byte_122482:	dc.b 1,	4, 0, $2F, 0, $3A
 byte_122488:	dc.b 2,	8, 0, $1E, 0, $13, 0, 8, 0, 0, 0, 0, 0,	0, $F8,	1
-
 		dc.b 0,	0, $FC,	0, 0, 0, 0, 0, 0, $F8, $D, 0, 2, $F0, 0, 0
 		dc.b 0,	0, 0, 0, $F4, $A, 0, $A, $F4, 0, $70, $70, $70,	$70, 0,	$EE
 		dc.b $F, 0, $13, $F5, 0, $70, $70, $70,	$70, 0,	$F4, $A, 0, $23, $F5, 0
 byte_1224C8:	dc.b $80, $2A, $80, 3, 1, $15, $13, $25, $17, $35, $18,	$45, $12, $56, $37, $65, $14, $74, 5, $81
-
 		dc.b 4,	8, $82,	5, $16,	$83, 4,	4, $16,	$3C, $84, 6, $38, $87, 5, $15, $17, $7A, $88, $17
 		dc.b $7B, $8B, 6, $3A, $8C, 4, 7, $16, $3B, $8D, 3, 0, $15, $1A, $8E, 4, 6, $16, $36, $28
 		dc.b $F8, $8F, 5, $19, $16, $39, $FF, $5C, $3D,	$3B, $90, $2E, $24, $37, $89, $89, $40,	$97, $60, $D4
@@ -51939,7 +50179,6 @@ byte_1224C8:	dc.b $80, $2A, $80, 3, 1, $15, $13, $25, $17, $35, $18,	$45, $12, $
 		dc.b $5D, $FF, $5B, $26, $22, $4C, $BA,	$23, $B8, $A0, $A3, $49, $15, $4A, $4A,	$A8, $B4, $6D, $F8, $FC
 		dc.b $4D, $38, $55, $55, $5A, 5, $5A, 5, $DF, $F5, $B2,	5, $B7,	$C
 byte_1227A6:	dc.b $80, $B3, $80, 3, 2, $14, 7, $25, $12, $35, $13, $45, $14,	$55, $16, $65, $17, $73, 0, $81
-
 		dc.b 3,	1, $15,	$18, $28, $F6, $82, 6, $37, $83, 5, $1A, $18, $F2, $84,	4, 6, $16, $32,	$85
 		dc.b 7,	$75, $86, 7, $77, $87, 8, $F3, $88, 7, $78, $8A, 7, $76, $8B, 5, $15, $17, $74,	$8C
 		dc.b 6,	$36, $18, $F7, $8D, 6, $33, $8E, 6, $38, $17, $7A, $8F,	4, 8, $16, $39,	$FF, $E7, $D7
@@ -52058,7 +50297,6 @@ byte_1227A6:	dc.b $80, $B3, $80, 3, 2, $14, 7, $25, $12, $35, $13, $45, $14,	$55
 		dc.b $C8, $CB, $F8, $39, $19, $19, $FE,	$C6, $4D, $2C, $A5, $FA, $40, $F9, $5B,	$BF, $1F, $DA, $8A, $DB
 		dc.b $CE, $B6, $E4, $45, $30, $A2, $D8,	$81, $46, $46, $1D, $83, 0, $E6, $8C, $1E, $24,	$C8, $CC, 0
 byte_1230DE:	dc.b 1,	8, $80,	5, $F, $16, $27, $26, $2E, $36,	$31, $46, $34, $57, $6E, $67, $72, $75,	$B, $81
-
 		dc.b 5,	$E, $16, $2C, $27, $66,	$37, $71, $48, $ED, $58, $F6, $78, $F1,	$82, 6,	$26, $16, $30, $27
 		dc.b $70, $38, $F0, $83, 4, 3, $16, $2B, $27, $6B, $38,	$F4, $84, 4, 0,	$15, $10, $27, $6F, $38
 		dc.b $EB, $85, 4, 2, $15, $11, $27, $67, $38, $EE, $86,	5, $C, $16, $2F, $28, $EA, $87,	4, 4
@@ -52326,7 +50564,6 @@ byte_1230DE:	dc.b 1,	8, $80,	5, $F, $16, $27, $26, $2E, $36,	$31, $46, $34, $57,
 		dc.b $96, $33, $47, $5F, $A7, $56, $8C,	$E4, $CE, $57, $EE, $63, $99, $A6, $66,	$63, $99, $98, $D9, $7E
 		dc.b $2E, $62, $68, $CB, $74, $45, $AF,	$90
 off_1245AE:	dc.w unk_1245BE-off_1245AE
-
 		dc.w unk_1245C2-off_1245AE
 		dc.w unk_1245C6-off_1245AE
 		dc.w unk_1245D8-off_1245AE
@@ -52382,7 +50619,6 @@ byte_1245EA:	dc.b 1,	0, 0, $B6, 0, $DA
 byte_1245F0:	dc.b 1,	0, $80,	$B0, $80, $D4
 byte_1245F6:	dc.b 2,	8, 0, $F2, 0, $10, 1, $11
 byte_1245FE:	dc.b 2,	8, $80,	$EA, $80, 8, $81, 9, 6,	$F4, $F3, $F6, $F2, 0, $D0, 9
-
 		dc.b $20, $44, $12, $E0, 4, $20, $4A, $1A, $D8,	$A, $20, $65, $10, $E0,	4, $20
 		dc.b $6E, 0, $E8, 8, $20, $70, $F8, $F0, $D, $20, $73, $F8, $F0, 0, $20, $7B
 		dc.b $18, 6, $F4, $F3, $F6, $F2, 0, $D0, 8, $20, $4C, $15, $D8,	$C, $20, $4F
@@ -52403,7 +50639,6 @@ byte_1245FE:	dc.b 2,	8, $80,	$EA, $80, 8, $81, 9, 6,	$F4, $F3, $F6, $F2, 0, $D0,
 		dc.b 0,	0, 0, 0, $D8, $C, $20, $F2, $F0, $E0, $F, $20, $F6, $E8, $E0, 1
 		dc.b $21, 6, 8,	0
 off_124732:	dc.w byte_12477E-off_124732
-
 		dc.w byte_124788-off_124732
 		dc.w byte_12476A-off_124732
 		dc.w byte_124774-off_124732
@@ -52428,7 +50663,6 @@ byte_12476A:	dc.b 3,	2, 0, $54, 0, $5F, $80,	$54, $80, $5F
 byte_124774:	dc.b 3,	2, $80,	$4A, $80, $55, 0, $4A, 0, $55
 byte_12477E:	dc.b 3,	2, 0, $56, 0, $61, $80,	$56, $80, $61
 byte_124788:	dc.b 3,	2, $80,	$4C, $80, $57, 0, $4C, 0, $57, 0, 0, $EC, 0, $EC, 0
-
 		dc.b $F0, $F, 0, 0, $F0, 0, 0, $EC, 0, $EC, 0, $F0, $F,	0, $10,	$F0
 		dc.b 0,	0, $ED,	0, $ED,	0, $F4,	$A, 0, $20, $F4, 0, 0, $ED, 0, $ED
 		dc.b 0,	$F4, $A, 0, $29, $F4, 0, 0, $EE, 0, $EE, 0, $F8, 5, 0, $32
@@ -52436,20 +50670,15 @@ byte_124788:	dc.b 3,	2, $80,	$4C, $80, $57, 0, $4C, 0, $57, 0, 0, $EC, 0, $EC, 0
 		dc.b $EF, 0, $FC, 0, 0,	$3A, $FC, 0, 0,	$EF, 0,	$EF, 0,	$FC, 0,	0
 		dc.b $3B, $FC
 off_1247EA:	dc.w byte_1247EE-off_1247EA
-
 		dc.w byte_1247F2-off_1247EA
 byte_1247EE:	dc.b 0,	0, $80,	8
 byte_1247F2:	dc.b 0,	0, 0, 4, 0, 0, $F5, 0, $F5, 0, $F0, $D,	0, $3C,	$F0, 0
-
 off_124802:	dc.w byte_124806-off_124802
-
 		dc.w byte_12480A-off_124802
 byte_124806:	dc.b 0,	$FF, 0,	8
 byte_12480A:	dc.b 0,	$FF, $80, 4, 2,	0, 0, 0, 0, 0, $D8, 9, 0, 0, $F4, $E0
-
 		dc.b 1,	0, 6, $C, $E8, $E, 0, 8, $EC, 0
 byte_124824:	dc.b 0,	$14, $80, 6, $27, $16, $2E, $25, $16, $36, $34,	$46, $35, $57, $76, $66, $30, $74, 2, $81
-
 		dc.b 5,	$10, $16, $32, $26, $2F, $38, $F8, $82,	5, $12,	$17, $78, $83, 5, $14, $16, $31, $27, $7A
 		dc.b $84, 6, $36, $86, 7, $73, $17, $79, $87, 4, 1, $15, $11, $26, $3A,	$38, $F9, $88, 5, $E
 		dc.b $15, $C, $28, $F6,	$89, 4,	3, $14,	5, $26,	$37, $38, $FA, $8B, 6, $26, $16, $38, $28, $F7
@@ -52474,18 +50703,15 @@ byte_124824:	dc.b 0,	$14, $80, 6, $27, $16, $2E, $25, $16, $36, $34,	$46, $35, $
 		dc.b $7D, $C7, $FF, $7F, $F7, $FE, $5F,	$5B, $76, $76, 7, $83, $B0, $76, 7, $81, $91, $60, $18,	6
 		dc.b 0,	$5F, $CB, $BA, $6F, $E3, $CD, $3F, $F5,	$EE, 0,	0
 off_1249FC:	dc.w byte_124A00-off_1249FC
-
 		dc.w byte_124A04-off_1249FC
 byte_124A00:	dc.b 0,	0, 0, 8
 byte_124A04:	dc.b 0,	0, 0, $2D, 6, 0, 0, 0, 0, 0, $A0, $F, 0, 0, $E0, $C0
-
 		dc.b $F, 0, $10, $E0, $E0, $F, 0, $20, $E0, $A0, $B, 0,	$30, 0,	$C0, 8
 		dc.b 0,	$3C, 0,	$C8, $E, 0, $3F, 0, $E0, $F, 0,	$4B, 0,	6, 0, 0
 		dc.b 0,	0, 0, $A0, 7, 0, $5B, $E8, $C0,	4, 0, $63, $E8,	$C8, 2,	0
 		dc.b $65, $F0, $E0, 3, 0, $68, $F0, $A0, $F, 8,	0, $F8,	$C0, $F, 0, $6C
 		dc.b $F8, $E0, $F, 0, $7C, $F8
 byte_124A5A:	dc.b $80, $8C, $80, 3, 1, $13, 3, $25, $17, $35, $18, $46, $36,	$56, $3A, $66, $38, $74, 9, $81
-
 		dc.b 3,	0, $15,	$16, $26, $3B, $37, $7B, $82, 5, $19, $83, 3, 2, $15, $1A, $27,	$7A, $85, 6
 		dc.b $39, $86, 4, $A, $17, $78,	$87, 4,	8, $16,	$37, $88, 7, $79, $FF, $FF, $B4, $FF, $CF, $FE
 		dc.b $3F, $F7, $FF, $BF, $FC, $67, $D9,	$5E, $2E, $1F, $35, $85, $F9, $25, $8C,	$EF, $9D, $B7, $C7, $F0
@@ -52600,19 +50826,16 @@ byte_124A5A:	dc.b $80, $8C, $80, 3, 1, $13, 3, $25, $17, $35, $18, $46, $36,	$56
 		dc.b $F7, $36, $DD, $83, $FA, $71, $50,	$E2, $85, $11, $71, $46, $2F, $B9, $81,	$B4, $C, $45, $D, $87
 		dc.b 0,	0
 off_125330:	dc.w byte_125336-off_125330
-
 		dc.w byte_12533A-off_125330
 		dc.w byte_125340-off_125330
 byte_125336:	dc.b 0,	0, 0, $2E
 byte_12533A:	dc.b 1,	$3C, 0,	$A, 0, $1A
 byte_125340:	dc.b 0,	0, 0, $34, 1, 0, 0, 0, 0, 0, $F0, $D, 0, 0, $E8, $F0
-
 		dc.b 5,	0, 8, 8, 1, 0, 0, 0, 0,	0, $E0,	$F, 0, $C, $DD,	$E0
 		dc.b 3,	0, $1C,	$FD, 1,	0, 0, 0, 0, 0, $E8, $E,	0, $20,	$E8, $E8
 		dc.b 6,	0, $2C,	8, 1, 0, 0, 0, 0, 0, $D0, $B, 0, $32, $F4, $F0
 		dc.b 9,	0, $3E,	$F4
 byte_125384:	dc.b $80, $44, $80, 3, 0, $14, 6, $25, $16, $35, $15, $46, $37,	$56, $33, $66, $36, $74, 7, $81
-
 		dc.b 3,	1, $15,	$18, $27, $7A, $82, 5, $12, $17, $78, $83, 4, 4, $16, $32, $28,	$ED, $38, $F2
 		dc.b $76, $38, $84, 5, $17, $85, 5, $14, $17, $73, $86,	4, 5, $16, $35,	$28, $F7, $77, $75, $87
 		dc.b 4,	8, $17,	$72, $89, 7, $77, $8A, 8, $F3, $8C, 6, $34, $8D, 5, $13, $17, $74, $8F,	8
@@ -52677,7 +50900,6 @@ byte_125384:	dc.b $80, $44, $80, 3, 0, $14, 6, $25, $16, $35, $15, $46, $37,	$56
 		dc.b $54, $B4, $C1, $A9, 4, $23, $10, $72, $69,	$76, $BB, $BE, $FE, $D2, $FE, $73, $B4,	$DF, $69, $BE
 		dc.b $73, $7C, $D1, $DC, $8D, $2A, $8E,	$E, $68, $E, $69, $3D, $FF, $3D, $B8, 0
 off_125880:	dc.w byte_12588E-off_125880
-
 		dc.w byte_12588E-off_125880
 		dc.w byte_12588E-off_125880
 		dc.w byte_12588E-off_125880
@@ -52685,11 +50907,9 @@ off_125880:	dc.w byte_12588E-off_125880
 		dc.w byte_125898-off_125880
 		dc.w byte_12589E-off_125880
 byte_12588E:	dc.b 1,	$A, 0, $C1, 0, $E0
-
 byte_125894:	dc.b 0,	0, 0, $A6
 byte_125898:	dc.b 1,	1, $80,	$A, $80, $56
 byte_12589E:	dc.b 0,	$A, 0, $A6, $D,	0, 0, 0, 0, 0, $D0, 2, 0, $D, $D0, $D0
-
 		dc.b $B, 0, $20, $F0, $D0, $B, 0, $20, 8, $C8, $C, 0, $2C, $E0,	$D0, 0
 		dc.b 0,	$30, $E8, $D8, $A, 0, $31, $D8,	$E8, 0,	0, $3A,	$D0, $F0, $D, 0
 		dc.b $3B, $D8, $F0, $D,	0, $43,	$F8, $F0, 5, 0,	$4B, $18, $D8, 9, 0, $4F
@@ -52706,7 +50926,6 @@ byte_12589E:	dc.b 0,	$A, 0, $A6, $D,	0, 0, 0, 0, 0, $D0, 2, 0, $D, $D0, $D0
 		dc.b $D0, $F, 0, $28, $FC, $D8,	6, 0, $38, $EC,	$C0, $A, 0, $3E, $E4, $B8
 		dc.b $A, 0, $47, $FC
 off_125992:	dc.w byte_1259A4-off_125992
-
 		dc.w byte_1259AA-off_125992
 		dc.w byte_1259AE-off_125992
 		dc.w byte_1259B4-off_125992
@@ -52724,7 +50943,6 @@ byte_1259C0:	dc.b 1,	$A, $80, $7C, $80, $9B
 byte_1259C6:	dc.b 0,	0, 0, $CE
 byte_1259CA:	dc.b 0,	0, 0, $B0
 byte_1259CE:	dc.b 0,	0, $80,	$AC, 1,	$AC, $AC, $AC, $AC, 0, $E0, $F,	0, 0, $E0, $E0
-
 		dc.b $F, 0, $10, 0, 2, $AC, $AC, $AC, $AC, 0, $F0, 9, 0, $20, $F4, $E0
 		dc.b $F, 0, 0, $E0, $E0, $F, 0,	$10, 0,	1, $AD,	$AD, $AD, $AD, 0, $F0
 		dc.b $D, 0, $26, $E0, $F0, $D, 0, $2E, 0, 0, 3,	$AA, $AB, $AA, $AB, 0
@@ -52739,7 +50957,6 @@ byte_1259CE:	dc.b 0,	0, $80,	$AC, 1,	$AC, $AC, $AC, $AC, 0, $E0, $F,	0, 0, $E0, 
 		dc.b $E8, $E8, $A, 0, $3F, 0, 0, 0, 0, 0, 0, 0,	$E0, 7,	0, $8C
 		dc.b $F8, 0
 off_125AA0:	dc.w byte_125AE6+$E-off_125AA0
-
 		dc.w byte_125AE6+$16-off_125AA0
 		dc.w byte_125AE6+$1E-off_125AA0
 		dc.w byte_125AE6+$26-off_125AA0
@@ -52796,17 +51013,13 @@ unk_125AD8:	dc.b   5
 		dc.b   1
 		dc.b $83
 byte_125AE6:	dc.b 5,	$A, $81, $75, $81, $94,	$81, $B3, $81, $B3, $81, $D2, $81, $F1,	2, $A
-
 		dc.b 0,	$60, 0,	$7F, 0,	$9E, 2,	$A, $80, $58, $80, $77,	$80, $96, 2, 6
 		dc.b 0,	$8E, 0,	$AD, 0,	$D1, 2,	6, $80,	$86, $80, $A5, $80, $C9, 2, $A
 		dc.b 0,	$7E, 0,	$5F, 0,	$40, 2,	$A, $80, $76, $80, $57,	$80, $38
 byte_125B24:	dc.b 4,	$A, 1, $18, 1, $18, 1, $18, 0, $D5, 0, $F9
-
 byte_125B30:	dc.b 4,	$A, $81, $C, $81, $C, $81, $C, $80, $C9, $80, $ED
-
 byte_125B3C:	dc.b 4,	$A, 0, $E1, 0, $BD, 1, 0, 1, 0,	1, 0
 byte_125B48:	dc.b 4,	$A, $80, $D5, $80, $B1,	$80, $F4, $80, $F4, $80, $F4, 4, $BB, $C0, $BB
-
 		dc.b $C0, 0, $D2, 5, 0,	$3C, $E8, $D1, 6, 0, $40, 7, $C3, $B, 0, 0
 		dc.b $F2, $E3, 8, 0, $C, $F2, $E8, $E, 0, $F, $F0, 4, $BB, $C0,	$BB, $C0
 		dc.b 0,	$D2, 5,	0, $46,	$E9, $D1, 5, 0,	$4A, 7,	$C3, $B, 0, 0, $F2
@@ -52834,7 +51047,6 @@ byte_125B48:	dc.b 4,	$A, $80, $D5, $80, $B1,	$80, $F4, $80, $F4, $80, $F4, 4, $B
 		dc.b $BB, $C0, $BB, $C0, 0, $D2, 5, 0, $3C, $E8, $D1, 5, 0, $52, 7, $C3
 		dc.b $B, 0, 0, $F2, $E3, 8, 0, $C, $F2,	$E8, $E, 0, $F,	$F0
 off_125CF6:	dc.w byte_125D18-off_125CF6
-
 		dc.w byte_125D06-off_125CF6
 		dc.w byte_125D3C-off_125CF6
 		dc.w byte_125D2A-off_125CF6
@@ -52843,28 +51055,20 @@ off_125CF6:	dc.w byte_125D18-off_125CF6
 		dc.w byte_125D72-off_125CF6
 		dc.w byte_125D84-off_125CF6
 byte_125D06:	dc.b 7,	4, 0, $90, 0, $A5, 0, $BA, $80,	$A5, $80, $90, $80, $CF, 0, $E4
-
 		dc.b 0,	$CF
 byte_125D18:	dc.b 7,	4, 0, $7E, 0, $BD, 0, $D2, $80,	$BD, $80, $7E, $80, $93, 0, $A8
-
 		dc.b 0,	$93
 byte_125D2A:	dc.b 7,	$A, 0, $D5, 0, $EA, 0, $FF, $80, $EA, $80, $D5,	$81, $14, 1, $29
-
 		dc.b 1,	$14
 byte_125D3C:	dc.b 7,	$A, 0, $C3, 1, 2, 1, $17, $81, 2, $80, $C3, $80, $D8, 0, $ED
-
 		dc.b 0,	$D8
 byte_125D4E:	dc.b 7,	$A, 1, $1A, 1, $25, 1, $30, $81, $25, $81, $1A,	$81, $3B, 1, $46
-
 		dc.b 1,	$3B
 byte_125D60:	dc.b 7,	$A, 1, $50, 1, $71, 1, $7C, $81, $71, $81, $50,	$81, $5B, 1, $66
-
 		dc.b 1,	$5B
 byte_125D72:	dc.b 7,	4, 1, $2D, 1, $42, 1, $57, $81,	$42, $81, $2D, $81, $6C, 1, $81
-
 		dc.b 1,	$6C
 byte_125D84:	dc.b 7,	4, 1, $1B, 1, $5A, 1, $6F, $81,	$5A, $81, $1B, $81, $30, 1, $45
-
 		dc.b 1,	$30, 2,	$AE, $AE, $AF, $AF, 0, $FC, $C,	0, 0, $E4, $F4,	2, 0
 		dc.b 4,	4, $FC,	4, 0, 7, $C, 2,	$B0, $B1, $B2, $B3, 0, $EC, 9, 0
 		dc.b 9,	$EC, $FC, 0, 0,	$A, $F4, $FC, $A, 0, $F, $FC, 2, $B4, $B4, $B4
@@ -52890,7 +51094,6 @@ byte_125D84:	dc.b 7,	4, 1, $1B, 1, $5A, 1, $6F, $81,	$5A, $81, $1B, $81, $30, 1,
 		dc.b $B9, $B9, $B9, $B9, 0, $C,	3, $10,	$18, $FC, 4, 8,	$10, $1C, $F4, $F4
 		dc.b 1,	$10, $1F, $FC
 byte_125F08:	dc.b $80, $54, $80, 3, 1, $14, 6, $24, 7, $35, $14, $46, $2F, $56, $33,	$66, $36, $74, 5, $81
-
 		dc.b 3,	0, $15,	$12, $27, $70, $38, $F6, $82, 6, $2E, $18, $F2,	$83, 4,	4, $15,	$18, $27, $78
 		dc.b $84, 7, $73, $85, 7, $77, $86, 7, $6E, $87, 6, $35, $18, $F4, $88,	5, $15,	$18, $F3, $89
 		dc.b 5,	$16, $17, $71, $8A, 7, $6F, $8B, 7, $74, $8C, 6, $34, $17, $76,	$8D, 6,	$32, $8E, 4
@@ -52968,7 +51171,6 @@ byte_125F08:	dc.b $80, $54, $80, 3, 1, $14, 6, $24, 7, $35, $14, $46, $2F, $56, 
 		dc.b $60, $F1, $3C, $A2, $93, $FC, $D1,	$93, $74, $1C, $D8, $11, $F9, $B3, $C0,	$8E, $BE, $CD, $29, $90
 		dc.b $C3, $94, $49, $87, $50, $FF, $C1,	$32, $EB, $CA, $27, $D7, $F3, $40
 byte_126506:	dc.b $80, $94, $80, 3, 1, $14, 7, $25, $11, $35, $10, $46, $33,	$56, $2F, $66, $36, $73, 2, $81
-
 		dc.b 3,	0, $15,	$16, $27, $74, $82, 6, $34, $18, $F6, $83, 4, 6, $17, $73, $84,	8, $F0,	$85
 		dc.b 8,	$F2, $86, 6, $35, $18, $F7, $87, 6, $2E, $17, $77, $88,	5, $13,	$18, $F4, $89, 6, $32
 		dc.b $18, $F1, $8A, 7, $76, $8B, 6, $37, $8C, 5, $18, $17, $75,	$8D, 5,	$12, $16, $38, $8E, 5
@@ -53092,7 +51294,6 @@ byte_126506:	dc.b $80, $94, $80, 3, 1, $14, 7, $25, $11, $35, $10, $46, $33,	$56
 		dc.b $18, $41, $83, 8, $30, $61, 6, $C,	$20, $C1, $84, $18, $30, $83, 6, $10, $60, $C2,	$C, $58
 		dc.b $41, $88
 byte_126E90:	dc.b $80, $71, $80, 3, 1, $14, 5, $25, $11, $35, $14, $45, $15,	$55, $16, $66, $35, $74, 7, $81
-
 		dc.b 3,	0, $15,	$18, $27, $72, $82, 4, 6, $17, $73, $83, 4, 4, $15, $19, $28, $F5, $84,	6
 		dc.b $38, $18, $F7, $85, 7, $78, $86, 7, $76, $87, 5, $12, $16,	$36, $88, 8, $F4, $89, 8, $F3
 		dc.b $8A, 6, $3A, $8B, 6, $37, $18, $F2, $8C, 6, $34, $8D, 5, $17, $8E,	5, $13,	$8F, 5,	$10
@@ -53197,7 +51398,6 @@ byte_126E90:	dc.b $80, $71, $80, 3, 1, $14, 5, $25, $11, $35, $14, $45, $15,	$55
 		dc.b 7,	$20, $A7, $25, $4C, $10, $42, $28, $4B,	$90, $87, $33, $21, $F,	$EB, $95, $C, $DE, $D2,	$B6
 		dc.b $8F, $A8, $4D, $7A, $B5, $F5, $47,	$D6, $EE, $FA, $80, 0
 byte_1276A8:	dc.b $80, $64, $80, 4, 4, $14, 7, $25, $14, $35, $18, $46, $33,	$56, $37, $66, $38, $73, 1, $81
-
 		dc.b 3,	0, $16,	$32, $27, $78, $48, $F7, $78, $F6, $82,	5, $16,	$18, $F5, $83, 4, 8, $17, $72
 		dc.b $84, 5, $1A, $18, $F3, $85, 5, $17, $86, 4, 5, $17, $76, $87, 4, 6, $16, $36, $88,	7
 		dc.b $73, $89, 6, $3A, $8A, 8, $F2, $8C, 5, $15, $18, $F4, $8D,	4, 9, $17, $77,	$FF, $CF, $F5
@@ -53278,7 +51478,6 @@ byte_1276A8:	dc.b $80, $64, $80, 4, 4, $14, 7, $25, $14, $35, $18, $46, $33,	$56
 		dc.b $E1, $D8, $52, $1D, $85, $97, 3, $B2, $2C,	$3F, $85, $48, $7D, $95, 3, $C6, $CA, $CB, $EA,	$DE
 		dc.b $EB, $17, 0, 0
 byte_127CD8:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $72, $93, $99, $77, $3B, $3B, $3B,	$3B
-
 		dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $93, $78, $7D, $7B, $3B, $3B, $3B,	$3B
 		dc.b $3B, $3B, $3B, $3B, $3B, $3D, $3B,	$3B, $85, $98, $9F, $7D, $9A, $8B, $87,	$72
 		dc.b $3D, $3B, $3B, $3B, $3D, $3B, $3B,	$3B, $8B, $73, $78, $9F, $79, $4D, $6D,	$3B
@@ -53288,20 +51487,15 @@ byte_127CD8:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $72, $93, $99, $77, $3
 		dc.b $3B, $3D, $3B, $3B, $3B, $3B, $3B,	$3B, $72, $7D, $85, $3B, $3B, $3B, $3B,	$3B
 		dc.b $3B, $3B, $3B, $3D, $3B, $3B, $3B,	$3B, $4F, $45, $66, $4B, $5E, $3B, $3B,	$3B
 off_127D68:	dc.w byte_127D6A-off_127D68
-
 byte_127D6A:	dc.b 0,	0, 0, 4, 0, 0, 0, 0, 0,	0, 0, $B, 0, 0,	0, 0
-
 off_127D7A:	dc.w byte_127D80-off_127D7A
-
 		dc.w byte_127D84-off_127D7A
 		dc.w byte_127D88-off_127D7A
 byte_127D80:	dc.b 0,	0, 0, $C
 byte_127D84:	dc.b 0,	0, $80,	8
 byte_127D88:	dc.b 0,	0, 0, $F, 0, 0,	0, 0, 0, 0, $F0, 5, 0, 0, $F8, 0
-
 		dc.b 0,	0, 0, 0, 0, $F8, 5, 0, 4, $F0
 byte_127DA2:	dc.b 0,	$C, $80, 4, $A,	$15, $17, $26, $3A, $36, $3B, $75, $1A,	$88, 5,	$1B, $15, $1C, $89, 3
-
 		dc.b 0,	$14, 9,	$28, $F8, $38, $FB, $8A, 3, 1, $15, $16, $25, $19, $8B,	3, 2, $16, $3D,	$8C
 		dc.b 3,	3, $18,	$F9, $28, $FA, $8D, 4, 8, $16, $3C, $8E, 5, $18, $FF, $FE, 4, $FF, $80,	$1A
 		dc.b $9E, $AC, $2C, $2B, $35, $3F, $CA,	$B8, $A0, $58, $A0, $59, $76, $AC, $C2,	$8C, $88, $41, $41, $65
@@ -53317,7 +51511,6 @@ byte_127DA2:	dc.b 0,	$C, $80, 4, $A,	$15, $17, $26, $3A, $36, $3B, $75, $1A,	$88
 		dc.b 3,	$A, $1D, $EC, $99, $E8,	$6F, $E3, $BC, $F6, $78, $F, $42, $38, $D, $E3,	$89, $AB, $8F, $4A
 		dc.b $92, $8A, $23, $66, $BE, $A, $B7, $DF, $67, $5A, 0, 0
 byte_127EC6:	dc.b $80, 8, $80, 4, 6,	$14, 2,	$24, 8,	$34, 5,	$45, $1E, $55, $12, $73, 0, $81, 5, $19
-
 		dc.b $16, $3B, $83, 5, $1B, $15, $18, $27, $7C,	$86, 5,	$16, $87, 4, 3,	$88, 6,	$35, $8A, 5
 		dc.b $1C, $16, $34, $8B, 5, $17, $15, $13, $8C,	4, 7, $14, 4, $27, $7D,	$8E, 6,	$3A, $8F, 4
 		dc.b $A, $FF, 2, $3F, $51, $32,	$D7, $E2, $EB, $7F, $CA, $4C, $BF, $3B,	$9D, $C7, $E3, $7B, $DD, $D1
@@ -53328,7 +51521,6 @@ byte_127EC6:	dc.b $80, 8, $80, 4, 6,	$14, 2,	$24, 8,	$34, 5,	$45, $1E, $55, $12,
 		dc.b $85, $5F, $9D, $2F, $EB, $80, 0, $8E, $D2,	$FD, $20, $A, $92, $FC,	$EF, $D8, $E3, $7F, $37, $A2
 		dc.b $FB, $8E, $AC, $FF, $3F, $3C, $D8,	$FD, $74, $7E, $78, 0, 0, $90
 byte_127F88:	dc.b 5,	3, 0, 0, 0, 0, 1, $D0, $9F, $4C, $34, 1, $7A, 0, $10, $D4, 1, $BE, $81,	1
-
 		dc.b $B, $F, 5,	$70, $18, $E6, $28, $28, $61, $AD, $C0,	$52, 2,	$B0, 1,	$82, $DF, $40, $21, 1
 		dc.b 5,	6, $B7,	$48, $21, $C5, $8A, 2, $97, $70, $82, $81, 5, $C, $30, $38, $D4, $41, $63, $B4
 		dc.b $10, $E0, $C3, $C,	$1B, 5,	$8E, 0,	$E1, $8B, $E0, $D, $6E,	$23, 5,	$34, 3,	$9C, $60, $85
@@ -53336,10 +51528,8 @@ byte_127F88:	dc.b 5,	3, 0, 0, 0, 0, 1, $D0, $9F, $4C, $34, 1, $7A, 0, $10, $D4, 
 		dc.b $A2, $4D, $F4, $B8, $8D, 4, $95, $11, $F, $A9, $CC, $30, $10, 3, $DF, $5B,	$88, $70, $40, $3E
 		dc.b $C7, 0, $6A, $FF
 byte_128004:	dc.b 4,	2, 0, 1, 0, 0, $E2, $35, 0, $DF, $10, $90, 8, 5, 1, $E,	$91, $3A, $D4, $14
-
 		dc.b $80, $E2, $A1, 3, 1, $80, $70, $6A, $DD, $A2, $71,	$99, $8D, $8B, $1F, $C0
 byte_128028:	dc.b 0,	$17, $80, 6, $3A, $17, $7C, $28, $FA, $35, $1B,	$43, 4,	$55, $1C, $68, $FB, $72, 0, $82
-
 		dc.b 6,	$3D, $83, 7, $79, $84, 6, $3B, $8B, 2, 1, $14, $A, $8C,	5, $1A,	$8E, 7,	$78, $8F
 		dc.b 4,	$B, $14, $C, $FF, 0, 0,	0, 3, $EA, $80,	$39, $51, $D5, $BB, $71, $95, $3F, $7F,	$F5
 		dc.b $7F, $B4, $BE, $AF, $BF, $3E, $F9,	$EF, $C6, $77, $EF, $E0, $7D, $EF, $C6,	$77, $E7, $DF, $3D, $F8
@@ -53351,7 +51541,6 @@ byte_128028:	dc.b 0,	$17, $80, 6, $3A, $17, $7C, $28, $FA, $35, $1B,	$43, 4,	$55
 		dc.b 7,	$C7, $8E, $B8, $DF, $DA, 0, $FD, $DB, $CB, $78,	$80, $1D, $54, $75, $6E, $DC, $65, 0, $15
 		dc.b $1D, $5B, $B7, $19, $41, $F0
 byte_1280F6:	dc.b $80, $BA, $80, 3, 0, $14, 5, $25, $12, $35, $13, $45, $17,	$55, $16, $66, $38, $74, 2, $81
-
 		dc.b 4,	4, $16,	$33, $28, $F5, $82, 4, 7, $17, $77, $83, 4, 3, $16, $35, $84, 6, $34, $85
 		dc.b 6,	$39, $86, 6, $32, $87, 4, 6, $17, $76, $28, $F7, $88, 5, $10, $17, $78,	$89, 5,	$11
 		dc.b $17, $79, $8A, 5, $18, $8B, 6, $3A, $8C, 6, $37, $8D, 6, $36, $18,	$F6, $8E, 5, $15, $18
@@ -53516,7 +51705,6 @@ byte_1280F6:	dc.b $80, $BA, $80, 3, 0, $14, 5, $25, $12, $35, $13, $45, $17,	$55
 		dc.b $E7, $3F, $DC, $50, $97, $F9, $14,	$97, $EF, $E5, $42, $22, $22, $22, $2E,	$2B, $C1, $ED, $6E, $FB
 		dc.b $70, $7B, $15, $D2, $D4, $A9, $ED,	$6D, $88, $88, $88, $88, $88, $88, $88,	$88, $88, $8A, $E0, 0
 off_128DC6:	dc.w unk_128DD8-off_128DC6
-
 		dc.w unk_128DE6-off_128DC6
 		dc.w unk_128E18-off_128DC6
 		dc.w unk_128E22-off_128DC6
@@ -53622,9 +51810,7 @@ unk_128E2C:	dc.b   3
 byte_128E36:	dc.b 3,	0, 2, $70, $82,	$70, 2,	$80, $82, $80
 byte_128E40:	dc.b 3,	0, 2, $86, $82,	$86, 2,	$91, $82, $91
 byte_128E4A:	dc.b 5,	$14, 0,	$48, 0,	$EC, 0,	$BE, $80, $48, $80, $EC, $80, $BE
-
 byte_128E58:	dc.b $1B, 8, 0,	$8C, 1,	$B0, 0,	$8C, 1,	$B0, 0,	$8C, 1,	$B0, 0,	$8C
-
 		dc.b $80, $8C, $81, $B0, $80, $8C, $81,	$B0, $80, $8C, $81, $B0, $80, $8C, 1, $8C
 		dc.b 1,	$D4, 1,	$8C, 1,	$D4, 1,	$8C, 1,	$D4, 1,	$8C, $81, $8C, $81, $D4
 		dc.b $81, $8C, $81, $D4, $81, $8C, $81,	$D4, $81, $8C, 7, $CE, $C8, $CF, $C9, 0
@@ -53666,37 +51852,29 @@ byte_128E58:	dc.b $1B, 8, 0,	$8C, 1,	$B0, 0,	$8C, 1,	$B0, 0,	$8C, 1,	$B0, 0,	$8C
 		dc.b $CC, 0, $CD, 0, $F, $B, $20, $62, $F0, 0, 0, $CC, 0, $CD, 0, $17
 		dc.b $B, $20, $62, $F0
 off_1290DC:	dc.w byte_1290E0-off_1290DC
-
 		dc.w byte_1290F2-off_1290DC
 byte_1290E0:	dc.b 7,	2, 0, $59, 0, $49, 0, $39, 0, $29, 0, $1E, $80,	$29, $80, $39
-
 		dc.b $80, $49
 byte_1290F2:	dc.b 4,	2, $80,	$C, $80, $17, $80, $27,	$80, $37, $80, $47, 0, 0, $CA, 0
-
 		dc.b $CA, 0, $F0, $B, 0, 0, $F4, 1, 0, $CA, 0, $CA, 0, $F0, $A,	0
 		dc.b $C, $EC, $F8, 5, 0, $15, 4, 1, 0, $CA, 0, $CA, 0, $F6, 6, 0
 		dc.b $19, $EC, $F6, 9, 0, $1F, $FC, 1, 0, $CA, 0, $CA, 0, $F8, $A, 0
 		dc.b $25, $EC, $F0, 5, 0, $2E, 4, 0, 0,	$CA, 0,	$CA, 0,	$EF, $F, 0
 		dc.b $32, $F0
 byte_129144:	dc.b $AF, $E0, $21, 0, $21, 1, $FC, $F8, $4C, $B2, $F8,	$4D, $FC, $60, $F8, $A9, 2, $D,	$DE, $21
-
 		dc.b 3,	$FE, $F8, $35, $29, $C6, $60, $F8, $13,	4, $21,	5, $FE,	$F8, $35, $A0, $AA, $29, $C6, $60
 		dc.b $F8, $13, $B0, $F8, $3B, $60, $F8,	$FC, $60, $F8, $FC, $60, $F8, $FC, $6F,	$55, $60, $F8, $8B, $31
 		dc.b 2,	$31, 3,	$FE, $F8, $35, $39, $A0, $D8, $15, $60,	$D0, $EF, $60, $F8, $FC, $60, $F8, $FC,	$15
 		dc.b 0,	$60, $F8, $FC, $FC, $F8, $1D, 0, $F0, 0, 0, 0, 0, 0, 0,	0
 byte_1291A4:	dc.b $80, 6, $80, $71, 0, $FF, $FF, $98, $F, $FB, $80, $FF, $C7, $E0, $3F, $C2,	$7E, $83, $F1, $9F
-
 		dc.b $83, $FE, $87, $E3, $FF, $C1, $F9,	$37, $EC, $3F, $E3, $FE, $10, $7F, $CF,	$F0, $5F, $D3, 1, $F8
 		dc.b $F, $C1, $FF, $4B,	$F0, $20, 0, 0
-empty_block2:	dc.b [$B2C]$FF
-org $129D00
 
+    org $129D00
 sub_129D00:
 		lea	off_129D08(pc),a1
-		jmp	sub_12A5D8(pc)
-
+		jmp	sub_12A5D8(pc)	; a1 = funcs table
 off_129D08:	dc.w sub_129D0C-off_129D08
-
 		dc.w locret_129D32-off_129D08
 
 sub_129D0C:
@@ -53713,10 +51891,8 @@ locret_129D32:
 
 sub_129D34:
 		lea	off_129D3C(pc),a1
-		jmp	sub_12A5D8(pc)
-
+		jmp	sub_12A5D8(pc)	; a1 = funcs table
 off_129D3C:	dc.w sub_129D4A-off_129D3C
-
 		dc.w sub_129D78-off_129D3C
 		dc.w sub_129D86-off_129D3C
 		dc.w locret_129D98-off_129D3C
@@ -53784,10 +51960,8 @@ locret_129DF4:
 
 sub_129DF6:
 		lea	off_129DFE(pc),a1
-		jmp	sub_12A5D8(pc)
-
+		jmp	sub_12A5D8(pc)	; a1 = funcs table
 off_129DFE:	dc.w sub_129E08-off_129DFE
-
 		dc.w sub_129E34-off_129DFE
 		dc.w sub_129E4C-off_129DFE
 		dc.w locret_129E64-off_129DFE
@@ -53829,10 +52003,8 @@ sub_129E66:
 
 sub_129E74:
 		lea	off_129E7C(pc),a1
-		jmp	sub_12A5D8(pc)
-
+		jmp	sub_12A5D8(pc)	; a1 = funcs table
 off_129E7C:	dc.w sub_129E8C-off_129E7C
-
 		dc.w sub_129ECA-off_129E7C
 		dc.w sub_129EE6-off_129E7C
 		dc.w nullsub_26-off_129E7C
@@ -53886,10 +52058,8 @@ nullsub_28:
 
 sub_129F02:
 		lea	off_129F0A(pc),a1
-		jmp	sub_12A5D8(pc)
-
+		jmp	sub_12A5D8(pc)	; a1 = funcs table
 off_129F0A:	dc.w sub_129F12-off_129F0A
-
 		dc.w loc_129F54-off_129F0A
 		dc.w sub_129F84-off_129F0A
 		dc.w nullsub_29-off_129F0A
@@ -53934,10 +52104,8 @@ nullsub_29:
 
 sub_129F96:
 		lea	off_129F9E(pc),a1
-		jmp	sub_12A5D8(pc)
-
+		jmp	sub_12A5D8(pc)	; a1 = funcs table
 off_129F9E:	dc.w sub_129FAE-off_129F9E
-
 		dc.w sub_129FEE-off_129F9E
 		dc.w sub_12A028-off_129F9E
 		dc.w sub_12A03E-off_129F9E
@@ -53974,7 +52142,6 @@ sub_129FEE:
 		move.w	#$3C,$38(a0)
 
 locret_12A026:
-
 		rts
 
 sub_12A028:
@@ -54018,10 +52185,8 @@ locret_12A0A8:
 
 sub_12A0AA:
 		lea	off_12A0B2(pc),a1
-		jmp	sub_12A5D8(pc)
-
+		jmp	sub_12A5D8(pc)	; a1 = funcs table
 off_12A0B2:	dc.w sub_12A0BC-off_12A0B2
-
 		dc.w sub_12A0EE-off_12A0B2
 		dc.w locret_12A0FC-off_12A0B2
 		dc.w sub_12A0FE-off_12A0B2
@@ -54063,10 +52228,8 @@ sub_12A124:
 
 sub_12A130:
 		lea	off_12A138(pc),a1
-		jmp	sub_12A5D8(pc)
-
+		jmp	sub_12A5D8(pc)	; a1 = funcs table
 off_12A138:	dc.w sub_12A13C-off_12A138
-
 		dc.w sub_12A156-off_12A138
 
 sub_12A13C:
@@ -54085,10 +52248,8 @@ sub_12A156:
 
 sub_12A170:
 		lea	off_12A178(pc),a1
-		jmp	sub_12A5D8(pc)
-
+		jmp	sub_12A5D8(pc)	; a1 = funcs table
 off_12A178:	dc.w sub_12A17C-off_12A178
-
 		dc.w loc_12A196-off_12A178
 
 sub_12A17C:
@@ -54107,10 +52268,8 @@ loc_12A196:
 
 sub_12A1B0:
 		lea	off_12A1B8(pc),a1
-		jmp	sub_12A5D8(pc)
-
+		jmp	sub_12A5D8(pc)	; a1 = funcs table
 off_12A1B8:	dc.w sub_12A1BC-off_12A1B8
-
 		dc.w locret_12A1EC-off_12A1B8
 
 sub_12A1BC:
@@ -54136,7 +52295,6 @@ locret_12A1F6:
 		rts
 
 off_12A1F8:	dc.w byte_12A226-off_12A1F8
-
 		dc.w byte_12A22A-off_12A1F8
 		dc.w byte_12A22E-off_12A1F8
 		dc.w byte_12A232-off_12A1F8
@@ -54179,12 +52337,10 @@ byte_12A26E:	dc.b 1,	1, 1, $CC, 2, $1E
 byte_12A274:	dc.b 0,	$FF, 2,	$6A
 byte_12A278:	dc.b 3,	$F, 2, $72, 2, $96, 2, $AC, 2, $B8
 byte_12A282:	dc.b 9,	5, 2, $DA, 2, $E6, 0, $24, 0, $24, $82,	$DA, $82, $E6, 0, $24
-
 		dc.b 0,	$24, 0,	$24, 0,	$24
 byte_12A298:	dc.b 0,	$FF, 2,	$DC
 byte_12A29C:	dc.b 0,	$FF, 3,	$D
 byte_12A2A0:	dc.b 1,	2, 2, $DF, 2, $F4, $FF,	0, 1, 0, 0, 0, 0, 0, $E0, $F
-
 		dc.b 1,	$9F, $E8, $E0, 7, 1, $AF, 8, 3,	0, 0, 0, 0, 0, $D8, 4
 		dc.b 0,	$75, $FC, $E0, $D, 0, $77, $F4,	$E8, 0,	0, $7F,	$EC, $F0, $D, 0
 		dc.b $80, $EC, 3, 0, 0,	0, 0, 0, $D0, 4, 0, $88, $FC, $D8, $D, 0
@@ -54235,18 +52391,16 @@ byte_12A2A0:	dc.b 1,	2, 2, $DF, 2, $F4, $FF,	0, 1, 0, 0, 0, 0, 0, $E0, $F
 		dc.b 4,	0, $DC,	$F4, $E8, $A, 0, $DE, 4, 3, 0, 0, 0, 0,	0, $D8
 		dc.b 4,	1, $22,	$F8, $D0, 4, 1,	7, $F8,	$D8, $E, 1, 9, $F0, $F0, 9
 		dc.b 1,	$15, $F0, 0
-
 sub_12A5C4:
-
 		addq.w	#1,2(a0)
 		move.w	d0,4(a0)
 		moveq	#0,d0
 		move.w	d0,6(a0)
 		move.b	d0,8(a0)
 		rts
+; a1 = funcs table
 
 sub_12A5D8:
-
 		moveq	#0,d0
 		move.w	2(a0),d0
 		add.w	d0,d0
@@ -54255,7 +52409,6 @@ sub_12A5D8:
 		jmp	(a1)
 
 sub_12A5E8:
-
 		move.l	$18(a0),d0
 		add.l	d0,$10(a0)
 		move.l	$1C(a0),d0
@@ -54263,7 +52416,6 @@ sub_12A5E8:
 		rts
 
 byte_12A5FA:	dc.b $80, $27, $80, 4, 9, $14, $A, $25,	$16, $36, $33, $45, $17, $55, $1A, $66,	$3A, $74, 8, $81
-
 		dc.b 3,	2, $16,	$37, $27, $79, $38, $F6, $82, 5, $18, $17, $7A,	$83, 3,	1, $16,	$38, $84, 3
 		dc.b 0,	$16, $32, $85, 7, $78, $86, 6, $39, $87, 3, 3, $16, $36, $26, $3B, $38,	$F7, $FF, $AF
 		dc.b $EA, $48, $FE, $B8, $7F, $D1, $97,	$ED, $42, $7D, $D5, $7F, $11, $AD, 7, $1F, $E4,	$9F, $FB, $FF
@@ -54296,12 +52448,10 @@ byte_12A5FA:	dc.b $80, $27, $80, 4, 9, $14, $A, $25,	$16, $36, $33, $45, $17, $5
 		dc.b $C, $66, $8E, $18,	$D2, $7A, $2A, $CA, $C6, $CA, $7F, $47,	$21, $CF, $B5, $F, $E3,	$C8, $3F, $95
 		dc.b $E5, $C8, $6A, $ED, $19, $29, $CA,	$37, 6,	$8E, $7F, $A3, $94, $C4, $FB, $31, $5E,	$E2, $C0, 0
 word_12A87A:	dc.w $2300, $2301, $2302, $2303, $2304,	$2305, $2306, $2307, $2308, $2309
-
 		dc.w $230A, $230B, $230C, $230D, $230E,	$230F, $2310, $2311, $2312, $2313
 		dc.w $2314, $2315, $2316, $2317, $2318,	$2319, $231A, $231B, $231C, $231D
 		dc.w $231E, $231F, $2320, $2321, $2322,	$2323, $2324, $2325, $2326
 tbl_ram_vram_send:ram_vram_send	M68K_RAM, $40000003, $1F, $1B
-
 		ram_vram_send unk_FF0800, $40400003, $1F, $1B
 		ram_vram_send M68K_RAM, $40800003, $1F, $1B
 		ram_vram_send unk_FF0800, $40C00003, $1F, $1B
@@ -54314,7 +52464,6 @@ tbl_ram_vram_send:ram_vram_send	M68K_RAM, $40000003, $1F, $1B
 		ram_vram_send M68K_RAM, $43080003, $1F, 8
 		ram_vram_send unk_FF2000, $58140003, $14, 2
 		ram_vram_send unk_FF4000, $4B280003, $F, 1
-
 sub_12A964:
 		movem.l	d0-d2/a1-a3,-(sp)
 		add.w	d1,d1
@@ -54344,7 +52493,6 @@ loc_12A99E:
 		rts
 
 off_12A9A8:	dc.w word_12AA08-off_12A9A8
-
 		dc.w word_12AA0E-off_12A9A8
 		dc.w word_12AA14-off_12A9A8
 		dc.w word_12AA1A-off_12A9A8
@@ -54401,7 +52549,6 @@ word_12AA14:	dc.w 0
 word_12AA1A:	dc.w 0
 		struc_12A9A8 byte_12AB70-off_12A9A8, $560A
 word_12AA20:	dc.w 3
-
 		struc_12A9A8 byte_12AB90-off_12A9A8, $5406
 		struc_12A9A8 byte_12AB90-off_12A9A8, $5506
 		struc_12A9A8 byte_12AB90-off_12A9A8, $5606
@@ -54480,124 +52627,84 @@ word_12AB20:	dc.w 2
 		struc_12A9A8 byte_12AEE4-off_12A9A8, $4B12
 byte_12AB2E:	dc.b $D, $B, $1C, $1D, $FF, 0
 byte_12AB34:	dc.b $E, 1, $18, $B, $16, $E, 0, $E, $1E, $D, $15, 0, 0, 0, 0, 0
-
 		dc.b 0,	0, $E, $B, $13,	$1C, $22, 0, $E, $1E, $D, $15, $FF, 0
 byte_12AB52:	dc.b $12, $1E, $F, $22,	$27, 0,	$E, $F,	$20, $F, $22, $27, 0, $34, 0, $16
-
 		dc.b 1,	$1E, $13, $F, 0, 0, 0, 0, $11, 1, 1, $10, $22, $FF
 byte_12AB70:	dc.b $1E, $18, $D, $16,	$F, 0, $1C, $D,	$1B, 1,	1, $11,	$F, 0, 0, 0
-
 		dc.b 0,	$11, $22, $1B, 1, 0, $11, $F, $B, $1B, $16, 1, 1, $1C, $F, $FF
 byte_12AB90:	dc.b 1,	1, 1, 1, 1, 1, 1, 1, 1,	1, 1, 1, 1, 1, 1, 1
-
 		dc.b 1,	1, 1, 1, 1, 1, 1, 1, 1,	1, 1, 1, 1, 1, 1, 1
 		dc.b 1,	1, 1, 1, $FF, 0
 byte_12ABB6:	dc.b $28, $E, 1, $18, $B, $16, $E, $25,	0, $13,	$1D, $2D, $1C, 0, $18, $13
-
 		dc.b $D, $F, 0,	$1D, 1,	0, $1C,	$F, $F,	0, $22,	1, $1E,	$26, $FF, 0
 byte_12ABD6:	dc.b $20, $12, $F, $1B,	$F, $2D, $1C, 0, $17, $22, 0, $19, $1B,	$F, $1C, $F
-
 		dc.b $18, $1D, $24, $29, $FF, 0
 byte_12ABEC:	dc.b $28, $1D, $12, $13, $1C, 0, $13, $1C, 0, $13, $1D,	$2A, $2A, $1D, $12, $F
-
 		dc.b 0,	$11, $1B, $F, $B, $1D, 0, $E, $1E, $D, $15, 0, $1D, $1B, $F, $B
 		dc.b $1C, $1E, $1B, $F,	$FF, 0
 byte_12AC12:	dc.b 1,	$10, 0,	$15, $13, $18, $11, 0, $11, $B,	$1B, $1E, $23, $13, $B,	$26
-
 		dc.b $29, $FF
 byte_12AC24:	dc.b $28, $1D, $12, $13, $1C, 0, $13, $1C, 0, $17, $22,	0, $19,	$1B, $F, $1C
-
 		dc.b $F, $18, $1D, $24,	0, $13,	$1C, 0,	$1D, $12, $B, $1D, 0, $B, $16, $16
 		dc.b $24, $25, $25, $29, $FF, 0
 byte_12AC4A:	dc.b $11, $B, $17, $F, $40, $E,	$F, $1C, $13, $11, $18,	$F, $E,	$40, $34, $40
-
 		dc.b $E, $13, $1B, $F, $D, $1D,	$F, $E,	$40, $C, $22, $FF
 byte_12AC66:	dc.b $F, $17, $13, $1B,	$13, $18, $FF, 0
 byte_12AC6E:	dc.b $B, $1B, $1D, $40,	$E, $13, $1B, $F, $D, $1D, 1, $1B, $FF,	0
-
 byte_12AC7C:	dc.b $1D, $12, 1, $17, $B, $1C,	$40, $22, $1E, $1E, $E,	$B, $FF, 0
-
 byte_12AC8A:	dc.b $B, $1B, $1D, $13,	$1C, $1D, $1C, $FF
 byte_12AC92:	dc.b $1B, $13, $D, $F, $40, $40, $40, $17, $13,	$15, $B, $1B, $13, $18,	$40, $40
-
 		dc.b $40, $1D, $12, 1, $17, $B,	$1C, $40, $22, $1E, $1E, $E, $B, $FF
 byte_12ACB0:	dc.b $19, $1B, 1, $11, $1B, $B,	$17, $17, $F, $1B, $1C,	$FF
-
 byte_12ACBC:	dc.b $17, $1E, $13, $17, $1E, $13, $40,	$40, $40, $40, $40, $22, $B, $17, $B, 2
-
 		dc.b $FF, 0
 byte_12ACCE:	dc.b $17, $1E, $1C, $13, $D, $40, $D, 1, $17, $19, 1, $1C, $F, $E, $40,	$C
-
 		dc.b $22, $FF
 byte_12ACE0:	dc.b $15, $B, $17, $13,	$22, $B, $40, $1C, $1D,	$1E, $E, $13, 1, $FF
-
 byte_12ACEE:	dc.b $1C, 1, $1E, $18, $E, $40,	$19, $1B, 1, $E, $1E, $D, $F, $1B, $FF,	0
-
 byte_12ACFE:	dc.b $C, 1, $FF, 0
 byte_12AD02:	dc.b $1C, $19, $F, $D, $13, $B,	$16, $40, $1D, $12, $B,	$18, $15, $1C, $40, $1D
-
 		dc.b 1,	$FF
 byte_12AD14:	dc.b $C, $F, $1B, $1D, $40, $40, $40, $40, $40,	$14, $B, $D, $15, $1C, 1, $18
-
 		dc.b $40, $22, 1, $1E, $FF, 0
 byte_12AD2A:	dc.b $12, $1E, $11, $12, $40, $40, $40,	$40, $40, 1, $12, $1C, $B, $18,	$FF, 0
-
 byte_12AD3A:	dc.b $17, $B, $13, $18,	$40, $19, $1B, 1, $11, $1B, $B,	$17, $17, $F, $1B, $40
-
 		dc.b $34, $FF
 byte_12AD4C:	dc.b $20, $B, $16, $1D,	$40, $E, $13, $1C, $18,	$F, $22, $2D, $1C, $40,	$19, $1B
-
 		dc.b 1,	$E, $1E, $D, $F, $1B, $FF, 0
 byte_12AD64:	dc.b $14, $13, $17, $40, $1C, $13, $17,	$17, 1,	$18, $1C, $FF
-
 byte_12AD70:	dc.b $19, $1B, 1, $11, $1B, $B,	$17, $40, $D, 1, 1, $1B, $E, $13, $18, $B
-
 		dc.b $1D, 1, $1B, $FF
 byte_12AD84:	dc.b $1C, $B, $1D, $17,	$B, $18, $FF, 0
 byte_12AD8C:	dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
-
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0, $FF, 0
 byte_12ADB2:	dc.b $40, $40, $40, $40, $40, $40, $40,	$40, $40, $40, $40, $40, $40, $40, $40,	$40
-
 		dc.b $40, $40, $40, $40, $40, $40, $40,	$40, $40, $40, $40, $40, $40, $40, $40,	$40
 		dc.b $40, $40, $40, $40, $FF, 0
 byte_12ADD8:	dc.b $17, 1, $17, 1, $18, $11, $B, $40,	$17, 1,	$17, 1,	$40, $40, $40, $40
-
 		dc.b $40, $1B, $22, $1E, $1E, $FF
 byte_12ADEE:	dc.b $17, $2F, 1, $12, $17, 1, $1B, $13, $40, $40, $40,	$40, $40, $40, $40, $1D
-
 		dc.b $B, $1D, $1C, $1E,	$22, $B, $18, $FF
 byte_12AE06:	dc.b $3B, $3D, $3B, $3B, $3D, $3B, $3B,	$3B, $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3E
-
 		dc.b $3B, $3D, $3B, $3B, $3B, $3D, $FF,	0
 byte_12AE1E:	dc.b $3F, $85, $86, $9A, $85, $3B, $40,	$41, $4F, $45, $6E, $4F, $6B, $25, $3B,	$8D
-
 		dc.b $9B, $7F, $9F, $85, $59, $53, $49,	$24, $A9, $FF
 byte_12AE38:	dc.b $3B, $3B, $3B, $3B, $3B, $3D, $3B,	$3D, $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3D
-
 		dc.b $FF, 0
 byte_12AE4A:	dc.b $3F, $49, $69, $54, $6D, $4F, $48,	$53, $2F, $2F, $2F, $4D, $41, $54, $68,	$81
-
 		dc.b $A0, $79, $58, $4F, $45, $66, $4A,	$2F, $2F, $2F, $A9, $FF
 byte_12AE66:	dc.b $3B, $3B, $3B, $3D, $3E, $3B, $3D,	$3B, $3B, $3B, $3B, $3B, $3B, $3D, $FF,	0
-
 byte_12AE76:	dc.b $3F, $49, $69, $45, $8D, $9B, $7F,	$9F, $85, $24, $3B, $49, $69, $4F, $48,	$54
-
 		dc.b $58, $24, $25, $A9, $FF, 0
 byte_12AE8C:	dc.b $28, $B, $3B, $11,	1, $16,	$E, $3B, $B, $18, $E, $3B, $14,	$F, $20, $F
-
 		dc.b $16, $3B, $18, $F,	$D, $15, $16, $B, $D, $F, $25, $FF
 byte_12AEA8:	dc.b $1D, $12, $B, $18,	$15, $3B, $22, 1, $1E, $27, $3B, $E, 1,	$18, $B, $16
-
 		dc.b $E, $25, $29, $FF
 byte_12AEBC:	dc.b $3F, $5E, $40, $3B, $4C, $52, $46,	$25, $3B, $46, $69, $41, $54, $3B, $5D,	$42
-
 		dc.b $4D, $46, $58, $3B, $89, $A0, $79,	$9B, $7E, $25, $FF, 0
 byte_12AED8:	dc.b $3B, $3B, $3D, $3B, $3B, $3B, $3D,	$3B, $3B, $3D, $FF, 0
-
 byte_12AEE4:	dc.b $40, $67, $45, $53, $42, $3B, $85,	$86, $9A, $85, $25, $A9, $FF, 0
-
 word_12AEF2:	dc.w 7
 		struc_12A9A8 byte_12B00E-off_12A9A8, $688C
 		struc_12A9A8 byte_12B022-off_12A9A8, $690C
@@ -54675,175 +52782,121 @@ word_12AFEC:	dc.w 7
 		struc_12A9A8 byte_12B58E-off_12A9A8, $6B8C
 		struc_12A9A8 byte_12B598-off_12A9A8, $6C0C
 byte_12B00E:	dc.b $3B, $3B, $3B, $3B, $3B, $3D, $3B,	$3B, $3D, $3B, $3B, $3B, $3B, $3B, $3B,	$3D
-
 		dc.b $3B, $3D, $FF, 0
 byte_12B022:	dc.b $3B, $40, $68, $5A, $3B, $85, $86,	$9A, $85, $59, $3B, $7E, $79, $9A, $3C,	$7D
-
 		dc.b $44, $4B, $4A, $6D, $58, $3B, $4B,	$71, $4A, $41, $58, $FF
 byte_12B03E:	dc.b $3B, $3B, $3B, $3B, $3D, $FF
 byte_12B044:	dc.b $45, $4F, $4C, $5F, $52, $3B, 2, $4A, $51,	$58, $3B, $5D, $6D, $6C, $3B, $5F
-
 		dc.b $51, $48, $5E, $4B, $4F, $3E, $FF,	0
 byte_12B05C:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $3B, $3B, $3B, $3B, $3B, $3B, $3D,	$3B
-
 		dc.b $3D, $FF
 byte_12B06E:	dc.b $4E, $58, $5D, $6D, $58, $3B, $5A,	$71, $42, $4B, $55, $59, $3B, $3F, $79,	$9A
-
 		dc.b $7D, $72, $44, $42, $53, $3B, $45,	$47, $4A, $69, $4F, $FF
 byte_12B08A:	dc.b $3D, $FF
 byte_12B08C:	dc.b $81, $A0, $79, $58, $5A, $5D, $42,	$A9, $3B, $53, $3B, $45, $45, $69, $52,	$3B
-
 		dc.b $41, $5E, $4B, $4F, $3E, $FF
 byte_12B0A2:	dc.b $3B, $3B, $3B, $3B, $3B, $3D, $3B,	$3B, $3B, $3B, $3B, $3B, $3B, $3D, $3B,	$3D
-
 		dc.b $3B, $3B, $3B, $3B, $3B, $3D, $FF,	0
 byte_12B0BA:	dc.b $4E, $69, $55, $65, $69, $59, $3B,	$4E, $58, $60, $45, $4B, $3B, $79, $9A,	$7D
-
 		dc.b $72, $44, $42, $59, $3B, $81, $A0,	$79, $44, $42, $49, $47, $FF, 0
 byte_12B0D8:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B
-
 		dc.b $3D, $FF
 byte_12B0EA:	dc.b $53, $41, $42, $3B, $44, $44, $46,	$54, $47, $55, $58, $3B, $44, $42, $4A,	$5E
-
 		dc.b $52, $4B, $4F, $3E, $3B, $45, $69,	$59, $3B, $4B, $56, $5E, $43, $55, $FF,	0
 byte_12B10A:	dc.b $3B, $3B, $3D, $3B, $3B, $3D, $3B,	$3D, $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B
-
 		dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $3B, $3D, $FF, 0
 byte_12B126:	dc.b $41, $50, $59, $6D, $3B, $4F, $41,	$4B, $55, $3B, $4B, $52, $41, $4F, $3B,	$4F
-
 		dc.b $45, $66, $3B, $3F, $4D, $41, $54,	$68, $3B, $81, $A0, $79, $58, $FF
 byte_12B144:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3D, $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B
-
 		dc.b $3B, $3B, $3B, $3B, $3B, $3D, $FF,	0
 byte_12B15C:	dc.b $5A, $5D, $42, $A9, $3B, $6C, $3B,	$53, $49, $45, $55, $3B, $45, $47, $4B,	$4F
-
 		dc.b $53, $3B, $41, $42, $58, $52, $4C,	$3E, $FF, 0
 byte_12B176:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $3B, $3B, $3B, $3D, $3B, $3B, $3B,	$3B
-
 		dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3D,	$3B, $3B, $3B, $3B, $3B, $3D, $3D, $FF,	0
 byte_12B196:	dc.b $4E, $4B, $52, $3B, $4E, $58, $5D,	$6D, $55, $59, $3B, $81, $A0, $79, $58,	$3B
-
 		dc.b $5A, $5D, $42, $58, $3B, $52, $45,	$45, $67, $58, $3B, $50, $4C, $45, $FF,	0
 byte_12B1B6:	dc.b $FF, 0
 byte_12B1B8:	dc.b $59, $4A, $5E, $69, $52, $3B, $41,	$5E, $4B, $4F, $3E, $FF
-
 byte_12B1C4:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $3B, $3B, $3B, $3B, $3D, $3B, $3B,	$3B
-
 		dc.b $3B, $3B, $3B, $3B, $3D, $3B, $3B,	$3B, $3B, $3B, $3D, $FF
 byte_12B1E0:	dc.b $3F, $20, 1, $20, $25, $3B, $49, $58, $3B,	$4F, $45, $66, $45, $3B, $52, $55
-
 		dc.b $3B, $59, $41, $69, $59, $3B, $7E,	$79, $9A, $3C, $7D, $FF
 byte_12B1FC:	dc.b $3B, $3B, $3D, $3B, $3B, $3B, $3B,	$3B, $3B, $3B, $3B, $3D, $3B, $3B, $3B,	$3B
-
 		dc.b $3B, $3B, $3B, $3B, $3D, $FF
 byte_12B212:	dc.b $3B, $44, $4B, $4A, $6D, $65, $67,	$62, $3B, $44, $44, $45, $57, $62, $50,	$55
-
 		dc.b $3B, $54, $69, $68, $4E, $25, $A9,	$FF
 byte_12B22A:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $3B, $3B, $3B, $3E, $3B, $3B, $3D,	$3B
-
 		dc.b $3B, $3D, $3D, $FF
 byte_12B23E:	dc.b $4B, $45, $4B, $3B, $4E, $58, $65,	$42, $4C, $6C, $3B, $8C, $3C, $85, $78,	$A1
-
 		dc.b $9F, $79, $4F, $6D, $53, $41, $42,	$3B, $4D, $45, $41, $52, $46, $54, $FF,	0
 byte_12B25E:	dc.b $3D, $3B, $3B, $3D, $3D, $3B, $3B,	$3B, $3B, $3B, $3B, $3D, $3B, $3B, $3D,	$3B
-
 		dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3D, $FF, 0
 byte_12B278:	dc.b $78, $A1, $9F, $79, $4F, $6D, $58,	$3B, $41, $50, $5F, $45, $3B, $5E, $53,	$45
-
 		dc.b $66, $3B, $5F, $52, $41, $4F, $58,	$52, $4B, $4F, $3E, $FF
 byte_12B294:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3D, $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B
-
 		dc.b $3B, $3B, $3B, $3B, $3D, $3D, $FF,	0
 byte_12B2AC:	dc.b $4E, $42, $53, $59, $3B, $4B, $66,	$4C, $3B, $4E, $58, $5D, $6D, $6C, $3B,	$62
-
 		dc.b $6E, $52, $3B, $53, $5A, $4F, $4B,	$52, $FF, 0
 byte_12B2C6:	dc.b $3B, $3B, $3D, $3B, $3B, $3D, $FF,	0
 byte_12B2CE:	dc.b $41, $47, $85, $86, $9A, $85, $25,	$FF
 byte_12B2D6:	dc.b $3E, $3B, $3B, $3D, $3B, $3B, $3D,	$3D, $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B
-
 		dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3D,	$3B, $3B, $3B, $3D, $FF
 byte_12B2F2:	dc.b $8C, $3C, $85, $78, $A1, $9F, $79,	$4F, $6D, $58, $3B, $41, $50, $5F, $59,	$3B
-
 		dc.b $4F, $45, $66, $58, $3B, $50, $4C,	$6C, $3B, $42, $59, $44, $42, $53, $FF,	0
 byte_12B312:	dc.b $3D, $3B, $3B, $3D, $3B, $3B, $3B,	$3B, $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B
-
 		dc.b $3B, $3B, $3D, $3B, $3D, $3B, $3B,	$3D, $3D, $3B, $3D, $FF
 byte_12B32E:	dc.b $85, $86, $9A, $85, $58, $3B, $40,	$53, $6C, $3B, $51, $48, $52, $41, $46,	$5E
-
 		dc.b $4B, $4F, $45, $3B, $85, $86, $9A,	$85, $45, $53, $5A, $49, $43, $4F, $FF,	0
 byte_12B34E:	dc.b $FF, 0
 byte_12B350:	dc.b $90, $9F, $8F, $3C, $9A, $58, $3B,	$40, $54, $55, $3B, $44, $50, $52, $3B,	$4B
-
 		dc.b $5E, $41, $5E, $4B, $4F, $3E, $FF,	0
 byte_12B368:	dc.b $3D, $3B, $3B, $3D, $3B, $3B, $3B,	$3B, $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B
-
 		dc.b $3D, $FF
 byte_12B37A:	dc.b $85, $86, $9A, $85, $59, $3B, $4A,	$6E, $4E, $47, $3B, $8C, $A2, $3C, $73,	$3B
-
 		dc.b $84, $A2, $3C, $73, $3B, $9A, $3C,	$73, $58, 4, $55, $6D, $58, $FF
 byte_12B398:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $3B, $3B, $3B, $3B, $3B, $3B, $3D,	$3B
-
 		dc.b $3B, $3B, $3B, $3D, $3B, $3B, $3D,	$FF
 byte_12B3B0:	dc.b $44, $41, $6E, $49, $6C, $3B, $51,	$69, $52, $3B, $4F, $45, $66, $4A, $45,	$4B
-
 		dc.b $58, $3B, $4F, $5A, $55, $3B, $52,	$68, $49, $53, $55, $FF
 byte_12B3CC:	dc.b $FF, 0
 byte_12B3CE:	dc.b $4B, $5E, $4B, $4F, $3E, $FF
 byte_12B3D4:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $3B, $3B, $3B, $3B, $3B, $3D, $3B,	$3D
-
 		dc.b $3B, $3D, $3B, $3B, $3B, $3B, $3B,	$3B, $3B, $3D, $FF, 0
 byte_12B3F0:	dc.b $4B, $45, $4B, $3B, $4E, $49, $55,	$3B, $44, $49, $6E, $4F, $3B, $84, $73,	$7D
-
 		dc.b $3C, $45, $3B, $63, $6E, $52, $46,	$4F, $58, $52, $4C, $3E, $FF, 0
 byte_12B40E:	dc.b $3B, $3D, $3B, $3B, $3D, $3B, $3B,	$3B, $3B, $3B, $3B, $3B, $3D, $3B, $3B,	$3B
-
 		dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $3B, $3D, $FF, 0
 byte_12B42A:	dc.b $3F, $85, $86, $9A, $85, $25, $3B,	$41, $6E, $4F, $41, $3B, $53, $49, $55,	$3B
-
 		dc.b $41, $47, $58, $24, $3B, $51, $41,	$3B, 2,	$4B, $45, $6D, $FF, 0
 byte_12B448:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3D
-
 		dc.b $FF, 0
 byte_12B45A:	dc.b $3B, $5E, $43, $55, $59, $3B, $41,	$6E, $4B, $71, $55, $3B, $4B, $71, $47,	$4B
-
 		dc.b $3B, $4B, $65, $42, $6E, $52, $FF,	0
 byte_12B472:	dc.b $3B, $3B, $3B, $3B, $3B, $3D, $FF,	0
 byte_12B47A:	dc.b $3B, $41, $6E, $52, $4F, $4B, $6F,	$54, $41, $25, $A9, $FF
-
 byte_12B486:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3D,	$3B, $3D, $3B, $3B, $3B, $3B, $3D, $3D,	$3B
-
 		dc.b $3D, $3B, $3B, $3B, $3D, $3B, $3B,	$3B, $3D, $3B, $3B, $3B, $3D, $FF
 byte_12B4A4:	dc.b $3F, $50, $71, $6E, $53, $3B, $4F,	$41, $4B, $54, $3B, $65, $42, $4B, $45,	$3B
-
 		dc.b $52, $46, $4F, $6D, $4F, $65, $3E,	$3B, $52, $62, $3B, $4C, $49, $41, $FF,	0
 byte_12B4C4:	dc.b $3B, $3E, $3B, $3D, $FF, 0
 byte_12B4CA:	dc.b $3B, $8D, $9B, $7F, $9F, $85, $6C,	$3B, $62, $6E, $52, $45, $43, $68, $45,	$66
-
 		dc.b $3B, $4F, $58, $4B, $5F, $55, $3B,	$5E, $6E, $52, $52, $65, $25, $A9, $FF,	0
 byte_12B4EA:	dc.b $3B, $3D, $3B, $3B, $3D, $3B, $3B,	$3B, $3B, $3B, $3D, $3B, $3B, $3B, $3B,	$3B
-
 		dc.b $3B, $3B, $3B, $3D, $FF, 0
 byte_12B500:	dc.b $3F, $85, $86, $9A, $85, $3B, $5E,	$6E, $52, $3B, $85, $86, $72, $72, $72,	$72
-
 		dc.b $72, $72, $9A, $85, $25, $A9, $FF,	0
 byte_12B518:	dc.b $3B, $3B, $3B, $3B, $3B, $3D, $3B,	$3D, $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3D
-
 		dc.b $3B, $3B, $3D, $3B, $3B, $3B, $3D,	$FF
 byte_12B530:	dc.b $44, $49, $6E, $4F, $3B, $84, $73,	$7D, $3C, $6C, $3B, $44, $41, $52, $3B,	$85
-
 		dc.b $86, $9A, $85, $59, $3B, $53, $5A,	$4F, $6E, $52, $FF, 0
 byte_12B54C:	dc.b $FF, 0
 byte_12B54E:	dc.b $41, $46, $5E, $4B, $4F, $3E, $FF,	0
 byte_12B556:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $3D, $3B, $3B, $3B, $3B, $3B, $3B,	$3B
-
 		dc.b $3E, $3B, $3B, $3D, $3B, $3B, $3D,	$3D, $3B, $3D, $FF, 0
 byte_12B572:	dc.b $4B, $45, $4B, $3B, $49, $67, $62,	$4D, $4C, $3B, $4E, $58, $40, $53, $6C,	$3B
-
 		dc.b $8C, $3C, $85, $78, $A1, $9F, $79,	$4F, $6D, $45, $FF, 0
 byte_12B58E:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3D, $FF, 0
-
 byte_12B598:	dc.b $44, $6E, $52, $41, $6E, $4F, $58,	$52, $4B, $4F, $3E, $FF
-
 word_12B5A4:	dc.w 2
 		struc_12A9A8 byte_12B684-off_12A9A8, $6910
 		struc_12A9A8 byte_12B6A0-off_12A9A8, $6A0C
@@ -54908,148 +52961,101 @@ word_12B676:	dc.w 2
 		struc_12A9A8 byte_12BB80-off_12A9A8, $6B08
 		struc_12A9A8 byte_12BB9A-off_12A9A8, $6C08
 byte_12B684:	dc.b 1,	$18, $F, 0, $E,	$B, $22, $27, 0, $E, 1,	$18, $B, $16, $E, 0
-
 		dc.b $D, $B, $17, $F, 0, $B, $D, $1B, 1, $1C, $1C, $FF
 byte_12B6A0:	dc.b $B, $18, 0, 1, $16, $E, 0,	$C, 1, 1, $15, 0, $13, $18, 0, $1E
-
 		dc.b $18, $D, $16, $F, 0, $1C, $D, $1B,	1, 1, $11, $F, $2D, $1C, $FF, 0
 byte_12B6C0:	dc.b $1C, $1D, $1E, $E,	$22, $26, $FF, 0
 byte_12B6C8:	dc.b $1D, $12, $F, 0, $1D, $13,	$1D, $16, $F, 0, 1, $10, 0, $1D, $12, $F
-
 		dc.b 0,	$C, 1, 1, $15, 0, $20, $B, $1C,	$FF
 byte_12B6E2:	dc.b $28, $15, $13, $18, $11, 0, $11, $B, $1B, $1E, $23, $13, $B, $2D, $1C, 0
-
 		dc.b $11, $1B, $F, $B, $1D, 0, $E, $1E,	$D, $15, $FF, 0
 byte_12B6FE:	dc.b $1D, $1B, $F, $B, $1C, $1E, $1B, $F, $26, $29, $FF, 0
-
 byte_12B70A:	dc.b $B, $D, $D, 1, $1B, $E, $13, $18, $11, 0, $1D, 1, 0, $1D, $12, $F
-
 		dc.b 0,	$C, 1, 1, $15, $27, 0, $11, $B,	$1B, $1E, $23, $13, $B,	$FF, 0
 byte_12B72A:	dc.b $20, $B, $1C, 0, 1, $18, $D, $F, 0, $1D, $12, $F, 0, $16, $F, $B
-
 		dc.b $E, $F, $1B, 0, 1,	$10, 0,	$B, 0, $11, $1B, $F, $B, $1D, $FF, 0
 byte_12B74A:	dc.b $E, $1E, $D, $15, 0, $15, $13, $18, $11, $E, 1, $17, $26, $FF
-
 byte_12B758:	dc.b $14, $1E, $1C, $1D, 0, $C,	$F, $10, 1, $1B, $F, 0,	$12, $F, 0, $E
-
 		dc.b $13, $F, $E, $27, 0, $15, $13, $18, $11, 0, $11, $B, $1B, $1E, $23, $13
 		dc.b $B, $FF
 byte_12B77A:	dc.b $12, $13, $E, 0, $12, $13,	$1C, 0,	$17, 1,	$1C, $1D, 0, $19, $1B, $13
-
 		dc.b $23, $F, $E, 0, $19, 1, $1C, $1C, $F, $1C,	$1C, $13, 1, $18, $FF, 0
 byte_12B79A:	dc.b $13, $18, 0, $B, 0, $1C, $F, $D, $1B, $F, $1D, 0, $16, 1, $D, $B
-
 		dc.b $1D, $13, 1, $18, $26, $FF
 byte_12B7B0:	dc.b $1D, $1E, $D, $15,	$F, $E,	0, $13,	$18, $1C, $13, $E, $F, 0, $1D, $12
-
 		dc.b $F, 0, $C,	1, 1, $15, $27,	0, $E, 1, $18, $B, $16,	$E, $FF, 0
 byte_12B7D0:	dc.b $10, 1, $1E, $18, $E, 0, $B, 0, $17, $B, $19, 0, $1C, $12,	1, $20
-
 		dc.b $13, $18, $11, 0, $D, $16,	$1E, $F, $1C, 0, $1D, 1, $FF, 0
 byte_12B7EE:	dc.b $20, $12, $F, $1B,	$F, 0, $1D, $12, $F, 0,	$1D, $1B, $F, $B, $1C, $1E
-
 		dc.b $1B, $F, 0, $D, 1,	$1E, $16, $E, 0, $C, $F, $FF
 byte_12B80A:	dc.b $10, 1, $1E, $18, $E, $26,	$FF, 0
 byte_12B812:	dc.b $28, $20, 1, $20, $25, $29, 0, $E,	1, $18,	$B, $16, $E, 0,	$F, $21
-
 		dc.b $D, $16, $B, $13, $17, $F,	$E, $26, $FF, 0
 byte_12B82C:	dc.b $28, $13, $10, 0, $13, 0, $D, 1, $1E, $16,	$E, 0, $10, $13, $18, $E
-
 		dc.b 0,	$B, 0, $1D, $1B, $F, $B, $1C, $1E, $1B,	$F, 0, $16, $13, $15, $F
 		dc.b $FF, 0
 byte_12B84E:	dc.b $1D, $12, $13, $1C, $27, 0, $13, $2D, $E, 0, $C, $F, 0, $1B, $13, $D
-
 		dc.b $12, $F, $1B, 0, $1D, $12,	$B, $18, 0, $1E, $18, $D, $16, $F, $FF,	0
 byte_12B86E:	dc.b $1C, $D, $1B, 1, 1, $11, $F, $26, $29, $FF
 byte_12B878:	dc.b $C, $1E, $1D, 0, 1, $18, $F, 0, 1,	$10, 0,	$19, $F, $1D, $F, $2D
-
 		dc.b $1C, 0, $11, $B, $18, $11,	0, $12,	$B, $E,	0, $C, $F, $F, $18, $FF
 byte_12B898:	dc.b $1C, $19, $22, $13, $18, $11, 0, $1D, $12,	$1B, 1,	$1E, $11, $12, 0, $1D
-
 		dc.b $12, $F, 0, $20, $13, $18,	$E, 1, $20, 0, $B, $18,	$E, $FF
 byte_12B8B6:	dc.b $1C, $B, $20, 0, $F, $1F, $F, $1B,	$22, $1D, $12, $13, $18, $11, $26, 0
-
 		dc.b $E, 1, $18, $B, $16, $E, 0, $1D, 1, 1, $15, 0, $1D, $12, $F, $FF
 byte_12B8D6:	dc.b $17, $B, $19, 0, $20, $13,	$1D, $12, 0, $12, $13, $17, 0, $B, $1C,	0
-
 		dc.b $12, $F, 0, $1C, $1D, $B, $1B, $1D, $F, $E, 0, $1D, 1, $FF
 byte_12B8F4:	dc.b $12, $F, $B, $E, 0, $12, 1, $17, $F, $26, $FF, 0
-
 byte_12B900:	dc.b $19, $F, $1D, $F, $2D, $1C, 0, $11, $B, $18, $11, 0, $D, $12, $B, $1C
-
 		dc.b $F, $E, 0,	$B, $10, $1D, $F, $1B, 0, $E, 1, $18, $B, $16, $E, $FF
 byte_12B920:	dc.b $B, $18, $E, 0, $1D, $12, $F, 0, $1D, $1B,	$F, $B,	$1C, $1E, $1B, $F
-
 		dc.b 0,	$17, $B, $19, $26, 0, $E, 1, $18, $B, $16, $E, 0, $D, 1, $1E
 		dc.b $16, $E, $FF, 0
 byte_12B944:	dc.b $1C, $F, $F, 0, $B, $18, 0, 1, $19, $F, $18, 0, $17, $B, $18, $12
-
 		dc.b 1,	$16, $F, 0, $B,	$12, $F, $B, $E, 0, $B,	$18, $E, $FF
 byte_12B962:	dc.b $14, $1E, $17, $19, $F, $E, 0, 1, $1F, $F,	$1B, 0,	$13, $1D, $27, 0
-
 		dc.b $C, $1E, $1D, 0, $19, $F, $1D, $F,	$2D, $1C, 0, $11, $B, $18, $11,	$FF
 byte_12B982:	dc.b $B, $16, $16, 0, $10, $F, $16, $16, 0, $13, $18, $26, $FF,	0
-
 byte_12B990:	dc.b $E, 1, $18, $B, $16, $E, 0, $1D, 1, 1, $15, 0, $12, $1E, $F, $22
-
 		dc.b $27, 0, $E, $F, $20, $F, $22, $27,	0, $B, $18, $E,	0, $16,	1, $1E
 		dc.b $13, $F, $FF, 0
 byte_12B9B4:	dc.b $1D, 1, 0,	$1D, $12, $F, 0, $19, $16, $B, $18, $F,	0, $1D,	1, 0
-
 		dc.b $1D, $B, $15, $F, 0, 1, $10, $10, 0, 1, $18, 0, $1D, $12, $F, $FF
 byte_12B9D4:	dc.b $11, $1B, $F, $B, $1D, 0, $1D, $1B, $F, $B, $1C, $1E, $1B,	$F, 0, $12
-
 		dc.b $1E, $18, $1D, $26, $FF, 0
 byte_12B9EA:	dc.b $C, $1E, $1D, 0, $14, $1E,	$1C, $1D, 0, $1D, $12, $F, $18,	$27, 0,	$E
-
 		dc.b $B, $13, $1C, $22,	0, $B, $19, $19, $F, $B, $1B, $F, $E, $26, $FF,	0
 byte_12BA0A:	dc.b $28, $E, 1, $18, $B, $16, $E, 0, $20, $12,	$F, $1B, $F, 0,	$B, $1B
-
 		dc.b $F, 0, $22, 1, $1E, 0, $11, 1, $13, $18, $11, $24,	0, $22,	1, $1E
 		dc.b $FF, 0
 byte_12BA2C:	dc.b $20, $F, $1B, $F, 0, $1C, $1E, $19, $19, 1, $1C, $F, $E, 0, $1D, 1
-
 		dc.b 0,	$C, $F,	0, $B, $1D, 0, $17, $22, 0, $12, 1, $1E, $1C, $F, $FF
 byte_12BA4C:	dc.b $10, 1, $1B, 0, $E, $13, $18, $18,	$F, $1B, 0, $B,	$18, 0,	$12, 1
-
 		dc.b $1E, $1B, 0, $B, $11, 1, $25, $29,	$FF, 0
 byte_12BA66:	dc.b $28, $E, $B, $13, $1C, $22, $27, 0, $1C, 1, $17, $F, $1D, $12, $13, $18
-
 		dc.b $11, 0, $1F, $F, $1B, $22,	0, $13,	$17, $19, 1, $1B, $1D, $B, $18,	$1D
 		dc.b $FF, 0
 byte_12BA88:	dc.b $12, $B, $1C, 0, $D, 1, $17, $F, 0, $1E, $19, $26,	0, $13,	$2D, $17
-
 		dc.b 0,	$11, 1,	$13, $18, $11, 0, $1D, 1, 0, $10, $13, $18, $E,	$FF, 0
 byte_12BAA8:	dc.b $1C, 1, $17, $F, $1D, $12,	$13, $18, $11, 0, $1C, $19, $F,	$D, $13, $B
-
 		dc.b $16, 0, $10, 1, $1B, 0, $22, 1, $1E, 0, $B, $18, $E, 0, $13, $FF
 byte_12BAC8:	dc.b $20, $B, $18, $1D,	0, $13,	$1D, 0,	$1D, 1,	0, $C, $F, 0, $B, 0
-
 		dc.b $1C, $1E, $1B, $19, $1B, $13, $1C,	$F, $26, $29, $FF, 0
 byte_12BAE4:	dc.b $28, $E, 1, $18, $B, $16, $E, 0, $20, $B, $13, $1D, $2F, $2F, $2F,	$2F
-
 		dc.b $D, 1, $17, $F, 0,	$C, $B,	$D, $15, $27, $FF, 0
 byte_12BB00:	dc.b $E, 1, $18, $B, $B, $B, $B, $B, $B, $B, $B, $16, $E, $25, $29, $FF
-
 byte_12BB10:	dc.b $E, 1, $18, $B, $16, $E, 0, $B, $18, $E, 0, $12, $13, $1C,	0, $18
-
 		dc.b $F, $19, $12, $F, $20, $1C, 0, $1D, 1, 1, $15, 0, 1, $10, $10, $FF
 byte_12BB30:	dc.b $13, $18, 0, $1D, $12, $F,	$13, $1B, 0, $19, $16, $B, $18,	$F, $27, 0
-
 		dc.b $16, $F, $B, $1F, $13, $18, $11, 0, $B, 0,	$10, $1E, $1B, $13, 1, $1E
 		dc.b $1C, $FF
 byte_12BB52:	dc.b $E, $B, $13, $1C, $22, 0, $C, $F, $12, $13, $18, $E, $26, $FF
-
 byte_12BB60:	dc.b $17, 1, $17, $F, $18, $1D,	$1C, 0,	$16, $B, $1D, $F, $1B, $27, 0, $19
-
 		dc.b $F, $1D, $F, $2D, $1C, 0, $11, $B,	$18, $11, 0, $10, $16, $F, $20,	$FF
 byte_12BB80:	dc.b $B, $10, $1D, $F, $1B, 0, $1D, $12, $F, $17, 0, $13, $18, 0, $B, 0
-
 		dc.b $19, $16, $B, $18,	$F, 0, 1, $10, $FF, 0
 byte_12BB9A:	dc.b $1D, $12, $F, $13,	$1B, 0,	1, $20,	$18, $26, $FF, 0
-
 byte_12BBA6:	dc.b 0,	8, $80,	4, 9, $15, $1E,	$24, 8,	$37, $7C, $57, $7D, $72, 0, $81
-
 		dc.b 2,	1, $82,	4, $A, $83, 4, $D, $86,	5, $19,	$87, 5,	$1C, $88, 4
 		dc.b $B, $89, 5, $1D, $8E, 5, $18, $FF,	$F6, $E6, $37, $CF, $E2, $E3, $33, $C9
 		dc.b $BA, $FC, $2F, $E3, $25, $B9, $AF,	$BF, $8B, $BF, $E0, $3F, $84, 1, $9B, $E5
@@ -55058,22 +53064,18 @@ byte_12BBA6:	dc.b 0,	8, $80,	4, 9, $15, $1E,	$24, 8,	$37, $7C, $57, $7D, $72, 0,
 		dc.b $4F, $E6, $9B, $FF, 3, $F8, $5C, $FF, 1, $9C, $7C,	$FD, $7E, 3, $BF, $9C
 		dc.b $A0, 2, $3F, $14, $7C, 0
 word_12BC1C:	dc.w $8008, $8008, $8008, $8008, $C00C,	$C00C, $C00C, $C00C
-
 		dc.w $E00E, $E00E, $E00E, $E00E, $F00F,	$F00F, $F00F, $F00F
 		dc.w $F88F, $F88F, $F88F, $F88F, $FCCF,	$FCCF, $FCCF, $FCCF
 		dc.w $FEEF, $FEEF, $FEEF, $FEEF, $FFFF,	$FFFF, $FFFF, $FFFF
 byte_12BC5C:	dc.b 0,	0, 0, $FF, 0, 0, 0, 0, 0, 0, 0,	$FF, $FF, 0, 0,	0
-
 		dc.b 0,	0, $FF,	$FF, $FF, 0, 0,	0, 0, 0, $FF, $FF, $FF,	$FF, 0,	0
 		dc.b 0,	$FF, $FF, $FF, $FF, $FF, 0, 0, 0, $FF, $FF, $FF, $FF, $FF, $FF,	0
 		dc.b $FF, $FF, $FF, $FF, $FF, $FF, $FF,	0, $FF,	$FF, $FF, $FF, $FF, $FF, $FF, $FF
 byte_12BC9C:	dc.b $FF, $FF, $FF, $FF, $FF, $FF, $FF,	0, 0, $FF, $FF,	$FF, $FF, $FF, $FF, 0
-
 		dc.b 0,	$FF, $FF, $FF, $FF, $FF, 0, 0, 0, 0, $FF, $FF, $FF, $FF, 0, 0
 		dc.b 0,	0, $FF,	$FF, $FF, 0, 0,	0, 0, 0, 0, $FF, $FF, 0, 0, 0
 		dc.b 0,	0, 0, $FF, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0
 byte_12BCDC:	dc.b 0,	$3F, $80, $78, $EC, $81, $17, $66, $27,	$70, $82, $78, $ED, $83, 6, $31, $15, $10, $36,	$34
-
 		dc.b $77, $67, $84, 5, $12, $15, $14, $27, $72,	$48, $F6, $77, $6D, $85, 5, $13, $17, $6F, $27,	$6B
 		dc.b $38, $F3, $47, $6C, $58, $E9, $75,	$F, $86, 6, $2F, $18, $E3, $87,	6, $2A,	$17, $78, $27, $75
 		dc.b $78, $F7, $89, 5, $11, $8A, 3, 2, $16, $2E, $8B, 3, 0, $15, $E, $26, $2B, $36, $32, $78
@@ -55135,7 +53137,6 @@ byte_12BCDC:	dc.b 0,	$3F, $80, $78, $EC, $81, $17, $66, $27,	$70, $82, $78, $ED,
 		dc.b $E1, $4C, $69, $CF, $87, $A5, $27,	$E9, $49, $FA, $51, $EF, $9E, $DC, $F9,	$F3, $E7, $CF, $9F, $3E
 		dc.b $7C, $F9, $F3, $E7, $CE, 0
 byte_12C192:	dc.b 6,	0, 0, 1, 0, 1, 1, $F7, $DF, $7D, $F7, $DF, $78,	9, $E1,	$4F, $A, 8, $40, $CD
-
 		dc.b $A, $88, $71, $42,	$A2, $1C, $20, $86, $80, $10, $10, 2, $13, $80,	$55, $85, $E0, $15, $61, $60
 		dc.b 4,	$7D, $74, $AB, $A4, $1D, $38, $A9, $C5,	$4E, $2A, $71, $53, $8A, $9C, $54, $E2,	$E, $9C, $D4
 		dc.b $E6, $A7, $35, $39, $A9, $CD, $4E,	$6A, $73, 7, $4E, $AA, $75, $53, $AA, $9D, $54,	$EA, $A7, $55
@@ -55144,7 +53145,6 @@ byte_12C192:	dc.b 6,	0, 0, 1, 0, 1, 1, $F7, $DF, $7D, $F7, $DF, $78,	9, $E1,	$4F
 		dc.b 4,	$FF, $A7, $FD, $3F, $E9, $FF, $4F, $FA,	$77, $CF, $BE, $FB, $EF, $BE, $FB, $EF,	$BE, $FB, $EF
 		dc.b $BE, $FB, $EF, $BE, $FB, $FF, $C0,	0
 byte_12C226:	dc.b $81, $B7, $80, 3, 0, $14, 3, $25, $E, $35,	$12, $45, $15, $56, $2E, $66, $37, $74,	4, $81
-
 		dc.b 4,	2, $16,	$31, $28, $EF, $82, 5, $11, $18, $ED, $83, 5, $F, $17, $72, $84, 6, $34, $85
 		dc.b 6,	$38, $86, 5, $16, $87, 5, $10, $17, $73, $88, 6, $30, $18, $EC,	$89, 6,	$33, $18, $F4
 		dc.b $8A, 6, $35, $18, $F1, $8B, 5, $14, $18, $EA, $8C,	4, 5, $16, $32,	$28, $EB, $38, $F2, $8D
@@ -55559,7 +53559,6 @@ byte_12C226:	dc.b $81, $B7, $80, 3, 0, $14, 3, $25, $E, $35,	$12, $45, $15, $56,
 		dc.b $13, $72, $44, $DC, $93, $F7, $12,	$E4, $78, $55, $FD, $87, $7F, $EA, $D1,	$11, $12, $5F, $DE, $3F
 		dc.b $EF, $21, $F4, $49, $EF, $3A, $F4,	$B8
 off_12E272:	dc.w byte_12E286-off_12E272
-
 		dc.w byte_12E28A-off_12E272
 		dc.w byte_12E294-off_12E272
 		dc.w byte_12E29A-off_12E272
@@ -55579,7 +53578,6 @@ byte_12E2BA:	dc.b 1,	1, 1, $14, 1, $74
 byte_12E2C0:	dc.b 1,	1, $81,	$E, $81, $6E
 byte_12E2C6:	dc.b 0,	$FF, 1,	$C8
 byte_12E2CA:	dc.b 0,	$FF, 1,	$DE, $FF, 0, 1,	0, 0, 0, 0, 0, $E0, 8, 0, 1
-
 		dc.b $F0, $E8, $E, 0, 4, $F0, 0, 0, 0, 0, 0, 0,	$E8, 6,	0, $10
 		dc.b $F8, 0, 0,	0, 0, 0, 0, 0, $E8, 6, 0, $16, $F8, 0, 0, 0
 		dc.b 0,	0, 0, 0, $F8, 0, 0, $3E, $FC, 0, 2, 0, 0, 0, 0,	0
@@ -55612,7 +53610,6 @@ byte_12E2CA:	dc.b 0,	$FF, 1,	$DE, $FF, 0, 1,	0, 0, 0, 0, 0, $E0, 8, 0, 1
 		dc.b 0,	0, 0, 0, $D8, 5, 0, 0, $E8, $E0, $C, 0,	4, $F8,	$D0, 5
 		dc.b 0,	8, 8, $E8, $E, 0, $C, $E0, $E8,	$E, 0, $18, 0, 0
 byte_12E4C8:	dc.b $81, $4A, $80, 3, 0, $14, 3, $25, $A, $35,	$14, $46, $2F, $56, $2E, $66, $35, $74,	4, $81
-
 		dc.b 4,	2, $16,	$32, $27, $75, $82, 5, $12, $18, $EE, $83, 5, $F, $17, $70, $84, 5, $13, $17
 		dc.b $73, $85, 5, $18, $17, $76, $86, 5, $15, $17, $72,	$87, 5,	$E, $17, $71, $28, $F4,	$88, 6
 		dc.b $36, $18, $F3, $89, 6, $34, $18, $F2, $8A,	5, $16,	$18, $F0, $8B, 6, $33, $18, $F1, $8C, 5
@@ -55944,23 +53941,18 @@ byte_12FE5C:	dc.b 7,	0, 0, 4, 0, 0, $44, $16, 2, $64
 		dc.b 4,	$C1, $48, $14, $84, $44, $34, 4, $44, $94
 		dc.b $8A, $40, $14, 1, $40, $25, $C5, $50, $6F,	$E0
 byte_12FE7A:	dc.b $B, 0, 0, $45, 0, 0, $78, $E, $21,	$18, $23, $A3, $4E, $24, $23, $4C
-
 		dc.b $26, $23, $4E, $28, $23, $4C, $2A,	$23, $4E, $2C, $23, $4C, $2E, $23, $4E,	$30
 		dc.b $25, $48, $32, $23, $46, $33, $C1,	$89, 8,	$53, $D, $2B, $D4, $D, $AB, $D3
 		dc.b $E, $4F, $A3, $FC
 byte_12FEAE:	dc.b $B, 0, 0, $76, 4, 0, $86, 0, 0, $82, 0, $14, $17, $80, 0, $50
-
 		dc.b $44, $69, $48, $24, $69, $88, $5E,	0, 1, $1A, $52,	$25, $1A, $82, $31, $1A
 		dc.b $52, $45, $1E, 0, 2, $98, $94, $AD, $26, $10, $BF,	$27, $EA, $CA, $F4, $29
 		dc.b $CB, $54, $2B, $4B, $95, $2B, $4C,	$F, $E0, 0
 byte_12FEE8:	dc.b 9,	0, 0, $C7, 0, 0, $40, $35, $84,	$58, $25, 1, $44, $24, 6, $40
-
 		dc.b $14, $46, $48, $84, $88, $48, $94,	$8F, $13, $F8
 byte_12FF02:	dc.b 9,	0, 1, $19, 0, 0, $6C, $35, $C4,	$5C, $26, $40, $6C, 4, $C3, $4C
-
 		dc.b 4,	$83, $54, $54, 3, $40, $54, 3, $40, $5F, $E0, 0
 byte_12FF1E:	dc.b 2,	3, 0, 1, 0, 0, 6, $51, $40, $50, $1B, $E2, $E6,	$DF, $17, $36, $F8, $B9, $B7, $C5
-
 		dc.b $CD, $BE, $2E, $6D, $F1, $73, $6F,	$8B, $9B, $7C, $5C, $DB, $E2, $E6, $DF,	$17, $99, $75, 3, $7F
 		dc.b $80, 0, $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF
 		dc.b $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF,	$FF, $FF, $FF, $FF, $FF
@@ -57674,7 +55666,6 @@ byte_12FF1E:	dc.b 2,	3, 0, 1, 0, 0, 6, $51, $40, $50, $1B, $E2, $E6,	$DF, $17, $
 		dc.b 0,	0, 0, 0, $C, 0,	0, $F7,	0, 0, $C, 0, 0,	0, 0, 0, 0, $F4, $F4, 0
 		dc.b 0,	$C
 smps_driver_part1:dc.b $F3, $F3, $ED, $56, $18,	$4D, 0,	0, $3A,	0, $40,	$CB, $7F, $20, $F9, $C9
-
 		dc.b $DD, $CB, 1, $7E, $C0, $C3, $EA, 3, $C3, $F8, 3, 0, 0, 0, 0, 0
 		dc.b $2A, 2, $1C, 6, 0,	$C3, $C4, 3, $4F, 6, 0,	9, 9, 0, 0, 0
 		dc.b $7E, $23, $66, $6F, $C9, 0, 0, 0, $F5, $C5, $D5, $E5, $21,	$FF, $1F, $7E
@@ -57896,7 +55887,6 @@ smps_driver_part1:dc.b $F3, $F3, $ED, $56, $18,	$4D, 0,	0, $3A,	0, $40,	$CB, $7F
 		dc.b $3E, $1F, $DD, $86, 1, $B7, $F0, $32, $11,	$7F, $DD, $CB, 0, $46, $C8, $3E
 		dc.b $FF, $32, $11, $7F, $C9, 0
 smps_driver_part2:dc.b $72, $E,	$A1, $E, $DF, $E, $13, $F, $40,	$F, $7E, $F, $C0, $F, $DB, $F
-
 		dc.b $A, $10, $37, $10,	$52, $10, $7C, $10, $C2, $10, $5F, $11,	$9E, $11, $CD, $11
 		dc.b $F8, $11, $35, $12, $7B, $12, $88,	$12, $D4, $12, $1F, $13, $49, $13, $9F,	$13
 		dc.b $C4, $13, $F8, $13, $14, $14, $43,	$14, $72, $14, $8D, $14, $B5, $14, $C9,	$14
@@ -58124,7 +56114,6 @@ smps_driver_part2:dc.b $72, $E,	$A1, $E, $DF, $E, $13, $F, $40,	$F, $7E, $F, $C0
 		dc.b $1F, $1F, $15, $1F, $19, $C, $B, $C, 8, $12, 9, $10, $7F, $7F, $5F, $5F
 		dc.b 3,	$19, $10, $80
 smps_driver_part3:dc.b 0, $80, 7, 2, 1,	0, $2E,	$F, 0, 0, $AC, $F, $F4,	$10, $71, $10
-
 		dc.b $F4, $10, $3F, $11, $F4, $10, $DD,	$11, $F4, $10, $6D, $12, $F4, $10, $8B,	$13
 		dc.b $F4, $10, $CA, $14, $F4, 8, 0, 4, $2B, $15, $F4, $B, 0, 4,	$EA, $82
 		dc.b 1,	$60, $EA, $7B, 1, $60, $30, $EA, $5D, 1, $30, $EA, $7B,	1, $60,	$60
@@ -58234,10 +56223,9 @@ smps_driver_part3:dc.b 0, $80, 7, 2, 1,	0, $2E,	$F, 0, 0, $AC, $F, $F4,	$10, $71
 		dc.b $10, $D5, 8, $F9, $EF, 2, $D3, $9E, $16, $EF, 3, 2, $D2, $9E, $E, $EF
 		dc.b 2,	2, $D5,	$9E, 8,	$D3, $9E, $D5, $9E, $D3, $9E, $F9, $D4,	$9E, $10, $D5
 		dc.b 8,	$9E, $D4, $9E, $D3, $9E, 6, $F9
-empty_block3:	dc.b [$85E]$FF
-org $13B000
-byte_13B000:	dc.b $FF, $E3, 0, 4, 1,	0, 0, 2, 1, $56, 0, 7, $FC, $E,	$E1, $87, 2, $64, $F8, 2
 
+    org $13B000
+byte_13B000:	dc.b $FF, $E3, 0, 4, 1,	0, 0, 2, 1, $56, 0, 7, $FC, $E,	$E1, $87, 2, $64, $F8, 2
 		dc.b $DA, 0, 9,	3, $FA,	$F8, $61, $F8, 5, $8E, $F8, 6, $10, $F8, 7, $36, 0, $A,	$F0, $87
 		dc.b 7,	$F4, $A, $A, 4,	0, $B, $A, $A2,	$EC, $1F, $86, $A, $D8,	0, 8, $B, $46, $E8, $D
 		dc.b $2C, $F8, $61, $18, $D, $72, $F8, $F, $9E,	$EC, $F, $F8, $C6, $F8,	$F8, $12, 6, $FC, $5A, $FC
@@ -58408,7 +56396,6 @@ byte_13B000:	dc.b $FF, $E3, 0, 4, 1,	0, 0, 2, 1, $56, 0, 7, $FC, $E,	$E1, $87, 2
 		dc.b $5D, $43, $8E, $61, $AE, $4C, $F8,	$18, $ED, $7A, $B6, $D8, $12, $8D, $A, $E5, $43, 9, $CC, $1B
 		dc.b 5,	$6C, $D8, $21, 0, $F0, 0, 0, 0,	0, 0, 0
 byte_13BD40:	dc.b $FF, $D3, 0, 4, 1,	0, 0, 2, 1, $50, 0, 7, $FC, 2, $F8, $61, $46, $FC, $B0,	0
-
 		dc.b 9,	3, $A2,	$F8, 4,	$F6, $18, $FE, $F8, 5, $6E, $F8, 6, $58, 0, $B,	6, $B8,	$7F, $18
 		dc.b 0,	$A, 9, 4, 0, 5,	9, $62,	$F0, 9,	$C2, $86, $61, $E8, $A,	$30, $F8, $D, 2, $F8
 		dc.b $D, $4E, $F8, $E1,	$F8, $F, $7C, 0, 8, $F,	$BE, $F8, $11, $F2, $87, $F8, 0, $D, $12, $72
@@ -58578,7 +56565,6 @@ byte_13BD40:	dc.b $FF, $D3, 0, 4, 1,	0, 0, 2, 1, $50, 0, 7, $FC, 2, $F8, $61, $4
 		dc.b $58, $E5, $EC, $FA, $AA, 0, $A0, $10, $F1,	$E1, $14, $4A, $53, $3B, $40, $45, $F2,	$E0, $D, $F3
 		dc.b $E5, $DF, $A8, $17, 0, 0, 0, $F0, 0, 0, 0,	0, 0, 0, 0, 0
 word_13CA70:	dc.w	 0, $EEE, $8C8,	$484, $262, $8CE, $48A,	$246
-
 		dc.w  $8AE, $46A,  $EE,	$24E, $ECA, $A86, $642,	$222
 		dc.w	 0, $EEE, $EAA,	$A66, $844, $CCA, $886,	$442
 		dc.w  $8AE, $46A,  $26,	   0, $CCA, $886, $442,	$222
@@ -58625,10 +56611,8 @@ word_13CA70:	dc.w	 0, $EEE, $8C8,	$484, $262, $8CE, $48A,	$246
 		dc.w	 0,  $26,  $48,	 $6A,  $AE,  $EE, $B22,	$E64
 		dc.w	 0,    0, $ACE,	$4AE, $48E, $26E, $24E,	   0
 word_13CD50:	dc.w	 0, $ACE, $8AC,	$68A, $468, $446, $66A,	$488
-
 		dc.w   $2E,  $4E,  $6E,	 $8E,  $AE,  $CE,  $EE,	$222
 word_13CD70:	dc.w	 0,    0,    0,	   0,	 0,    0,    0,	   0
-
 		dc.w	 0,    0,    0,	   0,	 0,    0,    0,	   0
 		dc.w	 0, $EEE,    0,	   0,	 0, $8CE, $48A,	$246
 		dc.w	 0,    0, $2A2,	   0, $ECA,    0, $442,	   0
@@ -58653,7 +56637,6 @@ word_13CD70:	dc.w	 0,    0,    0,	   0,	 0,    0,    0,	   0
 		dc.w	 0, $EEE, $8CE,	$48E, $24E, $8CE, $48A,	$246
 		dc.w  $8AE, $46A, $68E,	$24E, $CCA, $886, $442,	$222
 word_13CEF0:	dc.w  $886, $EEE, $EEA,	$CC6, $CA4, $C80, $A60,	$842
-
 		dc.w  $622, $EC8, $C86,	$A64, $A44, $824, $422,	   0
 		dc.w  $E00, $EEE, $EEC,	$ECC, $EAA, $E6C, $C88,	$C68
 		dc.w  $A46, $824, $C86,	$EA8, $C4A, $A28, $824,	$EAE
@@ -58702,7 +56685,6 @@ word_13CEF0:	dc.w  $886, $EEE, $EEA,	$CC6, $CA4, $C80, $A60,	$842
 		dc.w	 0,    0,    0,	   0,	 0,    0,    0,	   0
 		dc.w	 0,    0,    0,	   0,	 0,    0,    0,	   0
 word_13D1F0:	dc.w	 0, $CEC,    0,	$882, $AA4, $CC8, $6A6,	$8C8
-
 		dc.w  $8CC, $688, $464,	$440, $220, $66C, $24C,	$22A
 		dc.w	 0, $EEE, $8C8,	$484, $262, $8CE, $48A,	$246
 		dc.w  $8AE, $46A,    0,	$24E, $ECA, $A86, $642,	   0
@@ -59031,19 +57013,15 @@ stru_13D670:	struc_64 0, 0, 0, 0
 		struc_64 0, 0, 0, 0
 		struc_64 0, 0, 0, 0
 stru_13DA70:	struc_65_v2 dword_FF6000, 0, %1000010,	$E, 0, 3, 2, 4,	byte_13DACA
-
 		struc_65_v2 dword_FF6000, 0, %1000010,	$E, 0, 1, 1, 9,	byte_13DACE
 		struc_65_v2 dword_FF6000, 0, %1000010,	$E, 0, 3, 4, 4,	byte_13DACA
 		struc_65_v2 dword_FF6000, 0, %1000010,	$A, 0, 1, 2, 2,	byte_13DACE
 		struc_65_v2 dword_FF6000, 0, %1000010,	$14, 0,	4, 2, 4, byte_13DAD0
 byte_13DACA:	dc.b   0,  1,  2,  3
-
 byte_13DACE:	dc.b   0,  1
-
 byte_13DAD0:	dc.b   0,  0,  1,  2,  0
 		align 2
 byte_13DAD6:	dc.b $FF, $87, $A, $52,	8, $2E,	5, $32,	2, $86,	0, $A, 0, $FF, 3, $1E, $9F, 8, 8, $FB
-
 		dc.b $FD, $75, $28, $20, $22, $C6, $FB,	$28, $F5, $F4, $64, $E8, $C6, 3, $1F, $E8, $FD,	$10, $F4, $11
 		dc.b 2,	2, $FB,	$C6, $11, $FD, $19, $F4, $F, $20, $D8, $E3, $88, $FD, 3, $F4, $1A, $10,	$E2, $B1
 		dc.b $4D, $FD, 6, $F4, 9, $D0, $FD, $12, $B8, $FD, $B, $58, 4, $AC, $E8, $13, $C4, $FD,	$EA, $DC
@@ -59112,7 +57090,6 @@ byte_13DAD6:	dc.b $FF, $87, $A, $52,	8, $2E,	5, $32,	2, $86,	0, $A, 0, $FF, 3, $
 		dc.b $F8, $E, $27, $BB,	$EB, $D9, 3, $F4, $BC, $DA, $1A, $E8, $FD, $59,	$15, $F4, $D0, $EA, $22, $8C
 		dc.b $C6, $C, $F0, $A, $A0, $B7, 0, $F0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0
 byte_13E026:	dc.b $FF, $FF, 0, 8, 5,	$1C, $B, $86, $1B, $EC,	0, $14,	0, $16,	0, $24,	0, $FF,	$FF, $34
-
 		dc.b 0,	$46, 0,	$56, 0,	$68, 0,	$7E, 0,	$94, 0,	$9E, 0,	$92, 0,	$FF, $FF, $90, 0, $A0
 		dc.b 0,	$B0, 0,	$C0, 0,	$D0, 0,	$E0, 0,	$F0, 0,	$F2, 1,	$FF, $8F, 2, 1,	$12, 1,	$22
 		dc.b 1,	$32, 1,	$42, 1,	$52, 1,	$62, $FF, $FF, $FE, $72, 1, $82, 1, $92, 1, $A2, 1, $B2
@@ -59252,14 +57229,11 @@ byte_13E026:	dc.b $FF, $FF, 0, 8, 5,	$1C, $B, $86, $1B, $EC,	0, $14,	0, $16,	0, 
 		dc.b $FF, $F8, $C, $4D,	$F8, $C, $92, $D0, 9, 1, 5, $2F, $E1, $1B, $E9,	$41, $11, $D8, 9, $14
 		dc.b $21, $22, $23, $24, $DE, 0, $F0, 0
 word_13EAF6:	dc.w  $EC0, $EA0, $E80,	$E60, $E40, $E20, $E00,	$C00
-
 		dc.w  $A00, $600, $800,	$A00, $C00, $E00, $E20,	$E40
 		dc.w  $E60, $E80, $EA0,	$EC0, $EA0, $E80, $E60,	$E40
 		dc.w  $E20, $E00, $C00,	$A00, $800
 byte_13EB30:	dc.b 6,	0, 0, 1, 0, 0, $3C, $94, $4C, $40, $C4,	$3F, $80, 0
-
 byte_13EB3E:	dc.b $80, $35, $80, 4, 2, $14, 3, $24, 4, $35, $10, $45, $11, $56, $2C,	$67, $6C, $74, 5, $81
-
 		dc.b 3,	0, $16,	$2B, $78, $E7, $82, 6, $31, $17, $6F, $27, $6B,	$38, $F7, $83, 4, 7, $17, $70
 		dc.b $28, $F5, $84, 6, $33, $17, $72, $85, 7, $65, $28,	$F6, $86, 5, $14, $18, $F3, $27, $71, $87
 		dc.b 5,	$12, $18, $EF, $28, $EC, $88, 5, $13, $17, $6A,	$89, 6,	$2E, $18, $EA, $27, $6E, $38, $F2
@@ -59311,9 +57285,8 @@ byte_13EB3E:	dc.b $80, $35, $80, 4, 2, $14, 3, $24, 4, $35, $10, $45, $11, $56, 
 		dc.b $79, $8B, $FF, $92, $6D, $FC, $8B,	$8B, $B9, $38, $6B, $10, $A, $11, $BC, $A6, $5F, $E1, $ED, $17
 		dc.b $F5, $7E, $EC, $99, $CB, $B8, $3E,	$BF, $D8, $C1, $D5, $D3, $F9, $1F, $AB,	$E7, $B8, $6C, $98, $58
 		dc.b $B9, $4C, $45, $D5, $E3, $FA, $B8,	$FE, $C6, 0
-empty_block4:	dc.b [$EBC]$FF
-org $13FE00
 
+    org $13FE00
 sub_13FE00:
 		move.w	#$100,(IO_Z80RES).l
 		jsr	sub_13FF0E(pc)
@@ -59408,7 +57381,6 @@ loc_13FF0A:
 		rts
 
 sub_13FF0E:
-
 		move	sr,(word_FF8F82).w
 		move	#$2700,sr
 		move.w	#$100,(IO_Z80BUS).l
@@ -59425,4 +57397,3 @@ sub_13FF2A:
 
 		dc.b [$C7]$FF
 unk_13FFFF:	dc.b $FF
-
