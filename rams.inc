@@ -30,7 +30,6 @@ byte_FFEE5A: equ $FFEE5A
 byte_FFEE5C: equ $FFEE5C
 byte_FFEE5B: equ $FFEE5B
 word_FF852C: equ $FF852C
-Z80_YM2612: equ $A04000
 dword_FF8520: equ $FF8520
 unk_FFF620: equ $FFF620
 word_FFF700: equ $FFF700
@@ -41,7 +40,7 @@ word_FF9040: equ $FF9040
 word_FF928A: equ $FF928A
 word_FF928C: equ $FF928C
 dword_FFFC40: equ $FFFC40
-word_FF8F3C: equ $FF8F3C
+dword_FF8F86: equ $FF8F86
 word_FF8F58: equ $FF8F58
 word_FFFF10: equ $FFFF10
 dword_FFF5DC: equ $FFF5DC
@@ -134,7 +133,7 @@ unk_FFA000: equ $FFA000
 unk_FFF200: equ $FFF200
 unk_FFFB00: equ $FFFB00
 unk_FF1000: equ $FF1000
-unk_A00F00: equ $A00F00
+byte_A00F00: equ $A00F00
 dword_FF8514: equ $FF8514
 dword_FFFC8A: equ $FFFC8A
 dword_FF8510: equ $FF8510
@@ -279,7 +278,7 @@ word_FFF5F2: equ $FFF5F2
 unk_FF9FC0: equ $FF9FC0
 word_FF8F82: equ $FF8F82
 word_FF8F3E: equ $FF8F3E
-dword_FF8F86: equ $FF8F86
+word_FF8F3C: equ $FF8F3C
 word_FF8F3A: equ $FF8F3A
 word_FF9142: equ $FF9142
 word_FF9140: equ $FF9140
@@ -367,7 +366,7 @@ word_FFFF18: equ $FFFF18
 dword_FF8570: equ $FF8570
 dword_FFF5EE: equ $FFF5EE
 unk_FFB000: equ $FFB000
-unk_A01BFE: equ $A01BFE
+byte_A01BFE: equ $A01BFE
 byte_FFEEF0: equ $FFEEF0
 byte_A01C0A: equ $A01C0A
 word_FFA050: equ $FFA050
@@ -403,7 +402,7 @@ word_FF8F96: equ $FF8F96
 word_FF8F90: equ $FF8F90
 word_FF8F92: equ $FF8F92
 word_FF9154: equ $FF9154
-unk_A00DD0: equ $A00DD0
+byte_A00DD0: equ $A00DD0
 word_FF9150: equ $FF9150
 dword_FF9014: equ $FF9014
 word_FF9010: equ $FF9010
