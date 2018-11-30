@@ -653,9 +653,9 @@ sub_8AE:
 		move.l	#$50000003,(a5)
 		move.w	d0,(a6)
 		move.l	#$2000000,d1
-		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram (d1 = indexes)
+		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram
 		move.l	#$7000000,d0
-		trap	#RAW_COPY_DATA	; do_raw_copy_data (d0 = indexes)
+		trap	#RAW_COPY_DATA	; do_raw_copy_data
 		moveq	#0,d0
 		move.w	#$802E,d1
 		move.w	#$8000,d2
@@ -987,12 +987,12 @@ loc_D20:
 		bmi.s	loc_D4E
 		beq.s	loc_D46
 		move.l	#$22000000,d0
-		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram (d0 = indexes)
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		bra.s	loc_D9C
 
 loc_D46:
 		move.l	#$21000000,d0
-		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram (d0 = indexes)
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 
 loc_D4E:
 		bra.s	loc_D9C
@@ -4286,16 +4286,16 @@ word_3526:	dc.w 0
 		struc_8 $3D0, $FFFF, 0, $FFFF,	3
 sub_3532:
 		move.l	#$7000000,d1
-		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram (d1 = indexes)
+		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram
 		move.l	#$2000000,d0
-		trap	#RAW_COPY_DATA	; do_raw_copy_data (d0 = indexes)
+		trap	#RAW_COPY_DATA	; do_raw_copy_data
 		move.l	#$5D2E0003,(a5)
 		move.w	#$802E,(a6)
 		move.b	#1,(byte_FFEE5B).w
 		jsr	sub_F36(pc)
 		jsr	sub_407C(pc)
 		move.l	#$4C000000,d0
-		trap	#DECOMP_KOSINSKI_RAM ; do_decompress_kosinski_to_ram (d0 = indexes)
+		trap	#DECOMP_KOSINSKI_RAM ; do_decompress_kosinski_to_ram
 		jsr	sub_3F48(pc)
 		lea	(unk_FFA402).w,a0
 		adda.w	(a0),a0
@@ -4375,25 +4375,25 @@ off_3652:	dc.w sub_3658
 sub_3658:
 		move.w	#sub_29C4,(word_FFEF48).w
 		move.l	#$6050000,d1
-		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram (d1 = indexes)
+		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram
 		move.l	#$5041E00,d0
 		trap	#5		; Trap5
 		move.l	#$6053A36,d0
-		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram (d0 = indexes)
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		move.l	#$2010000,d0
-		trap	#DECOMP_KOSINSKI_RAM ; do_decompress_kosinski_to_ram (d0 = indexes)
+		trap	#DECOMP_KOSINSKI_RAM ; do_decompress_kosinski_to_ram
 		rts
 
 sub_3680:
 		move.w	#sub_29CE,(word_FFEF48).w
 		move.l	#$6080000,d1
-		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram (d1 = indexes)
+		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram
 		move.l	#$5062300,d0
 		trap	#5		; Trap5
 		move.l	#$8070036,d0
-		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram (d0 = indexes)
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		move.l	#$4030000,d0
-		trap	#DECOMP_KOSINSKI_RAM ; do_decompress_kosinski_to_ram (d0 = indexes)
+		trap	#DECOMP_KOSINSKI_RAM ; do_decompress_kosinski_to_ram
 		rts
 
 sub_36A8:
@@ -4401,13 +4401,13 @@ sub_36A8:
 		seq	(byte_FFEEF7).w
 		move.w	#sub_29D8,(word_FFEF48).w
 		move.l	#$6080000,d1
-		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram (d1 = indexes)
+		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram
 		move.l	#$1D1C1E00,d0
 		trap	#5		; Trap5
 		move.l	#$8074137,d0
-		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram (d0 = indexes)
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		move.l	#$25240000,d0
-		trap	#DECOMP_KOSINSKI_RAM ; do_decompress_kosinski_to_ram (d0 = indexes)
+		trap	#DECOMP_KOSINSKI_RAM ; do_decompress_kosinski_to_ram
 		moveq	#3,d0
 		jsr	sub_4462(pc)
 		jsr	sub_3FB8(pc)
@@ -4417,7 +4417,7 @@ sub_36A8:
 		move.w	#$AF,(a1)+
 		move.w	#$8B00,(a1)
 		moveq	#5,d0
-		trap	#DECOMP_NEMESIS_RAM ; do_decompress_nemesis_to_ram (d0 = indexes)
+		trap	#DECOMP_NEMESIS_RAM ; do_decompress_nemesis_to_ram
 		move.l	#$4600,(dword_FFEF28).w
 		move.l	#unk_FF6020,(dword_FF6000).l
 		moveq	#0,d7
@@ -4432,38 +4432,38 @@ off_3716:	dc.w sub_371E
 sub_371E:
 		move.w	#sub_2A00,(word_FFEF48).w
 		move.l	#$A090000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$8071F00,d0
 		trap	#5		; Trap5
 		move.l	#$A090000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$6050000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		st	(byte_FFEE74).w
 		bra.s	loc_379C
 
 sub_374A:
 		move.w	#sub_2A10,(word_FFEF48).w
 		move.l	#$A0F0000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$F0D2D00,d0
 		trap	#5		; Trap5
 		move.l	#$A100000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$60B0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		bra.s	loc_379C
 
 sub_3772:
 		move.w	#sub_2A6C,(word_FFEF48).w
 		move.l	#$A090000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$80E1F00,d0
 		trap	#5		; Trap5
 		move.l	#$A095539,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$60C0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		st	(byte_FFEE74).w
 
 loc_379C:
@@ -4478,15 +4478,15 @@ loc_379C:
 sub_37B6:
 		move.w	#sub_2A1C,(word_FFEF48).w
 		move.l	#$E0D0000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$C0B2000,d0
 		trap	#5		; Trap5
 		move.l	#$F0E3650,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$A090000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		moveq	#1,d0
-		trap	#2		; Trap2
+		trap	#2		; do_decompress_nemesis_to_ram
 		move.l	#$4360,(dword_FFEF28).w
 		move.l	#unk_FF6020,(dword_FF6000).l
 		moveq	#0,d7
@@ -4504,37 +4504,37 @@ off_37FC:	dc.w sub_380A
 sub_380A:
 		move.w	#sub_2A80,(word_FFEF48).w
 		move.l	#$C0B0000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$A092300,d0
 		trap	#5		; Trap5
 		move.l	#$C0B0000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$8070000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		rts
 
 sub_3832:
 		move.w	#sub_2B32,(word_FFEF48).w
 		move.l	#$13120000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$11102100,d0
 		trap	#5		; Trap5
 		move.l	#$1E1D0051,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$E0D0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		rts
 
 sub_385A:
 		move.w	#sub_2B3C,(word_FFEF48).w
 		move.l	#$14120000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$13122200,d0
 		trap	#5		; Trap5
 		move.l	#$1D5B0000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$100F0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		lea	(unk_FF5000).l,a1
 		move.w	#$3FF,d7
 
@@ -4543,7 +4543,7 @@ loc_388A:
 		adda.w	#2,a1
 		dbf	d7,loc_388A
 		moveq	#2,d0
-		trap	#2		; Trap2
+		trap	#2		; do_decompress_nemesis_to_ram
 		move.l	#$3120,(dword_FFEF28).w
 		move.l	#unk_FF6020,(dword_FF6000).l
 		moveq	#0,d7
@@ -4556,49 +4556,49 @@ loc_388A:
 sub_38BE:
 		move.w	#sub_2B46,(word_FFEF48).w
 		move.l	#$13120000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$1B1A2100,d0
 		trap	#5		; Trap5
 		move.l	#$1E1D4151,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$E110000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		rts
 
 sub_38E6:
 		move.w	#sub_2B50,(word_FFEF48).w
 		move.l	#$15120000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$1B1A2100,d0
 		trap	#5		; Trap5
 		move.l	#$1D000051,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$13120000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		rts
 
 sub_390E:
 		move.w	#sub_2BCC,(word_FFEF48).w
 		move.l	#$14120000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$1B1A2100,d0
 		trap	#5		; Trap5
 		move.l	#$1D005141,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$10140000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		rts
 
 sub_3936:
 		move.w	#sub_2BD6,(word_FFEF48).w
 		move.l	#$13120000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$11122C00,d0
 		trap	#5		; Trap5
 		move.l	#$1E1D0041,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$E230000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		st	(byte_FFEE6C).w
 		tst.b	(byte_FFEEF3).w
 		bne.s	locret_396C
@@ -4615,66 +4615,66 @@ off_396E:	dc.w sub_3978
 sub_3978:
 		move.w	#sub_2BE8,(word_FFEF48).w
 		move.l	#$1A190000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$29281F00,d0
 		trap	#5		; Trap5
 		move.l	#$1C1B0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$2827003C,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		st	(word_FFEE56+1).w
 		rts
 
 sub_39A4:
 		move.w	#sub_2C0E,(word_FFEF48).w
 		move.l	#$1A190000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$29282300,d0
 		trap	#5		; Trap5
 		move.l	#$1E1D0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$28273D37,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		st	(byte_FFEE78).w
 		rts
 
 sub_39D0:
 		move.w	#sub_2C18,(word_FFEF48).w
 		move.l	#$1A190000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$29281F00,d0
 		trap	#5		; Trap5
 		move.l	#$1C320000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$2827004D,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		st	(word_FFEE56+1).w
 		rts
 
 sub_39FC:
 		move.w	#sub_2C2A,(word_FFEF48).w
 		move.l	#$1C1B0000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$2B2A2100,d0
 		trap	#5		; Trap5
 		move.l	#$201F0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$413C3600,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$2A290000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		rts
 
 sub_3A2C:
 		move.w	#sub_2C34,(word_FFEF48).w
 		move.l	#$1C1B0000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$2B2A3100,d0
 		trap	#5		; Trap5
 		move.l	#$20210000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$2A290041,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		st	(byte_FFEE80).w
 		tst.b	(byte_FFEEED).w
 		bne.s	locret_3A62
@@ -4690,11 +4690,11 @@ off_3A64:	dc.w sub_3A6C
 sub_3A6C:
 		move.w	#sub_2C46,(word_FFEF48).w
 		move.l	#$25240052,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$17160000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$16150000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$25241F00,d0
 		trap	#5		; Trap5
 		st	(byte_FFEE65).w
@@ -4703,11 +4703,11 @@ sub_3A6C:
 sub_3A98:
 		move.w	#sub_2CCC,(word_FFEF48).w
 		move.l	#$25240000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$17160000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$16170000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$255C1F00,d0
 		trap	#5		; Trap5
 		st	(byte_FFEE65).w
@@ -4716,11 +4716,11 @@ sub_3A98:
 sub_3AC4:
 		move.w	#sub_2CF8,(word_FFEF48).w
 		move.l	#$26240000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$18160000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$19180000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$27265D00,d0
 		trap	#5		; Trap5
 		st	(byte_FFEE65).w
@@ -4735,13 +4735,13 @@ sub_3AC4:
 sub_3B08:
 		move.w	#sub_2DBA,(word_FFEF48).w
 		move.l	#$3B353400,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$25240057,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$17160000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$161A0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$25241F00,d0
 		trap	#5		; Trap5
 		st	(byte_FFEE65).w
@@ -4764,40 +4764,40 @@ off_3B50:	dc.w sub_3B62
 sub_3B62:
 		move.w	#sub_2E66,(word_FFEF48).w
 		move.l	#$1E090000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$35345800,d0
 		trap	#5		; Trap5
 		move.l	#$2C090000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$2F2E0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		st	(byte_FFEE74).w
 		rts
 
 sub_3B8E:
 		move.w	#sub_2ECC,(word_FFEF48).w
 		move.l	#$3D310000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		bra.s	loc_3BBC
 
 sub_3B9E:
 		move.w	#sub_2E90,(word_FFEF48).w
 		move.l	#$3D390000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		bra.s	loc_3BBC
 
 sub_3BAE:
 		move.w	#sub_2E9A,(word_FFEF48).w
 		move.l	#$3D3A0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 
 loc_3BBC:
 		move.l	#$1E260000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$42402F00,d0
 		trap	#5		; Trap5
 		move.l	#$2C3E0000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.w	#8,(word_FF8F74).w
 		rts
 
@@ -4810,7 +4810,7 @@ sub_3BE4:
 
 loc_3BEA:
 		move.l	#$3D3B0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		bra.s	loc_3BBC
 
 sub_3BF4:
@@ -4822,26 +4822,26 @@ sub_3BFC:
 
 loc_3C02:
 		move.l	#$1E260000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$42412F00,d0
 		trap	#5		; Trap5
 		move.l	#$2C3E0000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$3D3C0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		move.w	#8,(word_FF8F74).w
 		rts
 
 sub_3C2A:
 		move.w	#sub_2EE6,(word_FFEF48).w
 		move.l	#$1E260000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$56553000,d0
 		trap	#5		; Trap5
 		move.l	#$2C3E0041,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$3D300000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		st	(byte_FFEE6C).w
 		rts
 
@@ -4854,54 +4854,54 @@ off_3C56:	dc.w sub_3C62
 sub_3C62:
 		move.w	#sub_2EF8,(word_FFEF48).w
 		move.l	#$1D090000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$33325800,d0
 		trap	#5		; Trap5
 		move.l	#$2B090056,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$27260000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		st	(byte_FFEE74).w
 		rts
 
 sub_3C8E:
 		move.w	#sub_2F2A,(word_FFEF48).w
 		move.l	#$201F0000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$37361F00,d0
 		trap	#5		; Trap5
 		move.l	#$2E2D0036,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$29280000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		bra.s	loc_3D04
 
 sub_3CB6:
 		move.w	#sub_2F38,(word_FFEF48).w
 		move.l	#$201F0000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$37362D00,d0
 		trap	#5		; Trap5
 		move.l	#$2E2D0000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$2B2A0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		bra.s	loc_3D04
 
 sub_3CDE:
 		move.w	#sub_2F46,(word_FFEF48).w
 		move.l	#$201F0000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$37361F00,d0
 		trap	#5		; Trap5
 		move.l	#$2E2D0000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$2D2C0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 
 loc_3D04:
 		moveq	#3,d0
-		trap	#2		; Trap2
+		trap	#2		; do_decompress_nemesis_to_ram
 		move.l	#$2500,(dword_FFEF28).w
 		move.l	#unk_FF6020,(dword_FF6000).l
 		moveq	#0,d7
@@ -4912,15 +4912,15 @@ loc_3D04:
 sub_3D24:
 		move.w	#sub_2F7E,(word_FFEF48).w
 		move.l	#$25240000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$37361F00,d0
 		trap	#5		; Trap5
 		move.l	#$2E2D3836,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$48000000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$37360000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		move.w	#6,(word_FF89E2).w
 		move.b	#1,(byte_FF8A2F).w
 		sf	(byte_FFEE70).w
@@ -4929,13 +4929,13 @@ sub_3D24:
 sub_3D64:
 		move.w	#sub_30B8,(word_FFEF48).w
 		move.l	#$20210000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$37381F00,d0
 		trap	#5		; Trap5
 		move.l	#$2E330011,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$2D350000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		st	(byte_FFEE5E).w
 		move.w	#0,(word_FF8D20).w
 		move.b	#0,(byte_FFEE75).w
@@ -4951,13 +4951,13 @@ sub_3DA6:
 		move.l	#$5B5A2E00,d0
 		trap	#5		; Trap5
 		move.l	#$2F2E0000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$4A490037,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$45460000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		moveq	#4,d0
-		trap	#2		; Trap2
+		trap	#2		; do_decompress_nemesis_to_ram
 		move.l	#$3200,(dword_FFEF28).w
 		move.l	#unk_FF6020,(dword_FF6000).l
 		moveq	#0,d7
@@ -4968,51 +4968,51 @@ sub_3DA6:
 sub_3DEC:
 		move.w	#sub_3114,(word_FFEF48).w
 		move.l	#$2C2B0000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$49471E00,d0
 		trap	#5		; Trap5
 		move.l	#$47460011,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$42410000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		move.b	#0,(byte_FFEE75).w
 		rts
 
 sub_3E1A:
 		move.w	#sub_314A,(word_FFEF48).w
 		move.l	#$28270000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$44432000,d0
 		trap	#5		; Trap5
 		move.l	#$403F0000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$3E430000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		move.w	#$F0,(word_FFA342).w
 		rts
 
 sub_3E48:
 		move.w	#sub_3158,(word_FFEF48).w
 		move.l	#$28270000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$44435700,d0
 		trap	#5		; Trap5
 		move.l	#$403F0000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$3E470000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		rts
 
 sub_3E70:
 		move.w	#sub_3184,(word_FFEF48).w
 		move.l	#$28270000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$44435F00,d0
 		trap	#5		; Trap5
 		move.l	#$403F0000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$3E330000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		st	(byte_FFEE6C).w
 		rts
 
@@ -5023,50 +5023,50 @@ off_3E9C:	dc.w sub_3EA4
 sub_3EA4:
 		move.w	#sub_319E,(word_FFEF48).w
 		move.l	#$2F2E0000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$4B4A1F00,d0
 		trap	#5		; Trap5
 		move.l	#$4A490000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$45440000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		rts
 
 sub_3ECC:
 		move.w	#sub_31E2,(word_FFEF48).w
 		move.l	#$2A290000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$46451F00,d0
 		trap	#5		; Trap5
 		move.l	#$43420037,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$49480000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		st	(byte_FFEE78).w
 		rts
 
 sub_3EF8:
 		move.w	#sub_31EC,(word_FFEF48).w
 		move.l	#$31300000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$4D4C1F00,d0
 		trap	#5		; Trap5
 		move.l	#$4C4B0000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$4B4A0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		rts
 
 sub_3F20:
 		move.w	#nullsub_2,(word_FFEF48).w
 		move.l	#$2A290000,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$46455E00,d0
 		trap	#5		; Trap5
 		move.l	#$43420000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$403F0000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		rts
 
 sub_3F48:
@@ -5736,9 +5736,9 @@ loc_460C:
 		jsr	sub_13FED8
 		move.w	#0,(vblank_sub_index).w
 		moveq	#$D,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		moveq	#$11,d1
-		trap	#3		; do_decompress_enigma
+		trap	#3		; do_decompress_enigma_to_ram
 		moveq	#1,d0
 		trap	#0		; do_raw_copy_data
 		move.w	#$28,(word_FF8F78).w
@@ -5794,9 +5794,9 @@ sub_46A0:
 		move.w	#$9700,(a3)+
 		move.l	#$70000083,(a3)
 		move.l	#$4030201,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$201F0000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		moveq	#$22,d0
 		move.w	(weapon_index).w,d1
 		subq.w	#2,d1
@@ -5804,7 +5804,7 @@ sub_46A0:
 		moveq	#$21,d0
 
 loc_471A:
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.w	(word_FF8F34).w,d0
 		lea	(unk_FFEEBF).w,a1
 		tst.b	(a1,d0.w)
@@ -5835,11 +5835,11 @@ loc_476A:
 		jsr	sub_2592(pc)
 		jsr	sub_969E(pc)
 		move.l	#$4E000000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		tst.b	(byte_FFFF1C).w
 		bne.s	loc_47A0
 		move.l	#$4F000000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 
 loc_47A0:
 		move.w	(word_FFFF0A).w,(a5)
@@ -6020,7 +6020,7 @@ sub_4992:
 		sf	(byte_FFEE01).w
 		jsr	sub_20AC(pc)
 		move.l	#$1000000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$1000000,d0
 		trap	#5		; Trap5
 		move.l	#$16000000,d0
@@ -6033,7 +6033,7 @@ sub_4992:
 
 sub_49CE:
 		move.l	#$38000000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		subq.w	#1,(word_FFFF20).w
 		bpl.s	loc_49E2
 		move.w	#4,(word_FFFF20).w
@@ -6059,7 +6059,7 @@ loc_49E2:
 		jsr	sub_46A0(pc)
 		move.w	#7,(word_FFFF18).w
 		move.l	#$38000000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		rts
 
 byte_4A4C:	dc.b 1,	1, 1, 0, 0, 0
@@ -6378,7 +6378,7 @@ sub_4F36:
 		move.w	#$9A,(word_FF9000).w
 		clr.b	(byte_FFEE01).w
 		move.l	#$4F2001,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		lea	(kosinski_129144).l,a0
 		lea	(M68K_RAM).l,a1
 		jsr	(decompress_kosinski_to_ram).l ; a0 = source
@@ -6543,7 +6543,7 @@ sub_5108:
 		moveq	#$5A,d0
 
 loc_5112:
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		rts
 
 sub_5116:
@@ -11447,7 +11447,7 @@ loc_88A2:
 		jsr	sub_961A
 		move.l	a0,-(sp)
 		move.l	#$59000000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		movea.l	(sp)+,a0
 
 loc_88EC:
@@ -13318,9 +13318,9 @@ sub_9CB2:
 		move.l	#$17161500,d0
 		trap	#5		; Trap5
 		move.l	#$3B454401,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$53580000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.w	#$BB,(word_FF9080).l
 		move.w	#$B2,(word_FF9040).l
 		bsr.w	sub_962C
@@ -13693,9 +13693,9 @@ sub_A1C6:
 		jsr	sub_A738(pc)
 		jsr	sub_A774(pc)
 		moveq	#1,d0
-		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram (d0 = indexes)
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		move.l	#$3231302F,d0
-		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram (d0 = indexes)
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		lea	(nemesis_01C120).l,a0
 		lea	(dword_FF6000).l,a4
 		jsr	(decompress_nemesis_to_ram).l ;	a0 = source
@@ -13850,9 +13850,9 @@ sub_A3A8:
 		move.l	#$18181818,d0
 		trap	#5		; Trap5
 		moveq	#1,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$32313000,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		jsr	sub_961A(pc)
 		move.b	#$8C,(byte_FFEE52).w
 		jsr	sub_13FED8
@@ -13861,7 +13861,7 @@ sub_A3A8:
 		move.w	#$100,d0
 		jsr	(decompress_enigma_to_ram).l ; a0 = source
 		move.l	#$504,d0
-		trap	#RAW_COPY_DATA	; do_raw_copy_data (d0 = indexes)
+		trap	#RAW_COPY_DATA	; do_raw_copy_data
 		lea	(nemesis_01C120).l,a0
 		lea	(dword_FF6000).l,a4
 		jsr	(decompress_nemesis_to_ram).l ;	a0 = source
@@ -13921,9 +13921,9 @@ sub_A4CC:
 		move.l	#$18161818,d0
 		trap	#5		; Trap5
 		move.l	#$15141312,d0
-		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram (d0 = indexes)
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		move.l	#$19181716,d0
-		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram (d0 = indexes)
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		lea	(enigma_02C3B8).l,a0
 		lea	(M68K_RAM).l,a1
 		move.w	#$8000,d0
@@ -13982,7 +13982,7 @@ loc_A5DA:
 		trap	#5		; Trap5
 		jsr	sub_A7A6(pc)
 		move.l	#$1C1A1915,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		jsr	sub_AB72(pc)
 		jsr	sub_ABEA(pc)
 		lea	(nemesis_12BBA6).l,a0
@@ -14566,7 +14566,7 @@ sub_AC72:
 		jsr	sub_A774(pc)
 		jsr	(sub_205E).l
 		move.l	#$5401,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		lea	(nemesis_01C120).l,a0
 		lea	(dword_FF6000).l,a4
 		jsr	(decompress_nemesis_to_ram).l ;	a0 = source
@@ -15251,7 +15251,7 @@ sub_B580:
 		move.w	#$39,(word_FF9140).w
 		move.l	a0,-(sp)
 		moveq	#$1A,d0
-		trap	#1		; Trap1
+		trap	#1		; do_decompress_nemesis_to_vram
 		movea.l	(sp)+,a0
 		rts
 
@@ -34403,7 +34403,7 @@ sub_19E62:
 		moveq	#0,d4
 		move.b	(byte_FFFF0D).w,d4
 		move.l	#$4D000000,d0
-		trap	#4		; Trap4
+		trap	#4		; do_decompress_kosinski_to_ram
 		lea	(unk_FFA400).w,a1
 		adda.w	(a1),a1
 		lea	(unk_FFA402).w,a4

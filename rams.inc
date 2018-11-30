@@ -44,7 +44,7 @@ dword_FF8F86: equ $FF8F86
 word_FF8F58: equ $FF8F58
 word_FFFF10: equ $FFFF10
 dword_FFF5DC: equ $FFF5DC
-word_FF8F3A: equ $FF8F3A
+word_FF8F84: equ $FF8F84
 word_FF8F50: equ $FF8F50
 word_FF8F52: equ $FF8F52
 word_FF8F54: equ $FF8F54
@@ -279,7 +279,7 @@ unk_FF9FC0: equ $FF9FC0
 word_FF8F82: equ $FF8F82
 word_FF8F3E: equ $FF8F3E
 word_FF8F3C: equ $FF8F3C
-word_FF8F84: equ $FF8F84
+word_FF8F3A: equ $FF8F3A
 word_FF9142: equ $FF9142
 word_FF9140: equ $FF9140
 unk_FFA360: equ $FFA360
