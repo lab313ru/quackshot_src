@@ -40437,10 +40437,10 @@ loc_13FE16:
 
 loc_13FE2A:
 		lea	(byte_A01BFE).l,a1
-		move.b	#$13,(a1)+
-		move.b	#$80,(a1)+
-		move.b	#$13,(a1)+
-		move.b	#0,(a1)+
+		move.b	#((smps_bank1 >> $10) &	$FF),(a1)+
+		move.b	#((smps_bank1 >> $08) &	$FF),(a1)+
+		move.b	#((smps_bank0 >> $10) &	$FF),(a1)+
+		move.b	#((smps_bank0 >> $08) &	$FF),(a1)+
 		move.b	#0,(a1)+
 		move.b	#$80,(a1)+
 		move.b	#$B4,(a1)+
