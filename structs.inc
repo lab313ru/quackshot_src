@@ -19,6 +19,11 @@ struc_C8E4 macro p0,p1
     dc.w p1
 struc_C8E4 endm
 
+nemesis_ram macro p0,p1
+    dc.l p0
+    dc.l p1
+nemesis_ram endm
+
 struc_14 macro p0,p1
     dc.w p0
     dc.w p1
@@ -36,10 +41,10 @@ struc_65_v2 macro p0,p1,p2,p3,p4,p5,p6,p7,p8
     dc.l p8
 struc_65_v2 endm
 
-struc_19 macro p0,p1
+struc_C04E macro p0,p1
     dc.w p0
     dc.w p1
-struc_19 endm
+struc_C04E endm
 
 struc_18 macro p0,p1
     dc.b p0
@@ -97,33 +102,10 @@ struc_8 macro p0,p1,p2,p3,p4
     dc.w p4
 struc_8 endm
 
-struc_7 macro p0,p1
-    dc.l p0
-    dc.l p1
-struc_7 endm
-
-struc_6 macro p0,p1,p2
-    dc.l p0
-    dc.l p1
-    dc.w p2
-struc_6 endm
-
-struc_5 macro p0,p1
-    dc.l p0
-    dc.l p1
-struc_5 endm
-
-struc_4 macro p0,p1
-    dc.l p0
-    dc.l p1
-struc_4 endm
-
-struc_3 macro p0,p1,p2,p3
-    dc.l p0
-    dc.l p1
-    dc.w p2
-    dc.w p3
-struc_3 endm
+struc_A8CC macro p0,p1
+    dc.w p0
+    dc.w p1
+struc_A8CC endm
 
 struc_1 macro p0,p1,p2
     dc.w p0
@@ -147,17 +129,20 @@ struc_48 macro p0,p1
     dc.l p1
 struc_48 endm
 
-struc_49 macro p0,p1,p2,p3
-    dc.b p0
-    dc.b p1
-    dc.b p2
-    dc.b p3
-struc_49 endm
+nemesis_vram macro p0,p1
+    dc.l p0
+    dc.l p1
+nemesis_vram endm
 
 nemesis_to_vram1 macro p0,p1
     dc.l p0
     dc.l p1
 nemesis_to_vram1 endm
+
+kosinski_data macro p0,p1
+    dc.l p0
+    dc.l p1
+kosinski_data endm
 
 struc_44 macro p0,p1
     dc.w p0
@@ -180,15 +165,16 @@ struc_47 macro p0,p1
     dc.b p1
 struc_47 endm
 
-struc_C04E macro p0,p1
+struc_19 macro p0,p1
     dc.w p0
     dc.w p1
-struc_C04E endm
+struc_19 endm
 
-struc_A8CC macro p0,p1
+struc_42 macro p0,p1,p2
     dc.w p0
     dc.w p1
-struc_A8CC endm
+    dc.l p2
+struc_42 endm
 
 struc_43 macro p0,p1,p2,p3,p4
     dc.w p0
@@ -215,6 +201,13 @@ struc_64 macro p0,p1,p2,p3
     dc.b p3
 struc_64 endm
 
+struc_49 macro p0,p1,p2,p3
+    dc.b p0
+    dc.b p1
+    dc.b p2
+    dc.b p3
+struc_49 endm
+
 struc_BD98 macro p0,p1
     dc.w p0
     dc.w p1
@@ -231,6 +224,11 @@ ram_vram_send macro p0,p1,p2,p3
     dc.w p2
     dc.w p3
 ram_vram_send endm
+
+weapon_type macro p0,p1
+    dc.w p0
+    dc.w p1
+weapon_type endm
 
 struc_C9B0 macro p0,p1
     dc.w p0
@@ -274,11 +272,17 @@ struc_C508 macro p0,p1
     dc.w p1
 struc_C508 endm
 
-struc_42 macro p0,p1,p2
-    dc.w p0
-    dc.w p1
-    dc.l p2
-struc_42 endm
+raw_data macro p0,p1,p2,p3
+    dc.l p0
+    dc.l p1
+    dc.w p2
+    dc.w p3
+raw_data endm
+
+struc_52 macro p0,p1
+    dc.l p0
+    dc.l p1
+struc_52 endm
 
 struc_59 macro p0,p1,p2
     dc.w p0
@@ -314,10 +318,11 @@ struc_53 macro p0,p1,p2,p3
     dc.l p3
 struc_53 endm
 
-struc_52 macro p0,p1
+enigma_data macro p0,p1,p2
     dc.l p0
     dc.l p1
-struc_52 endm
+    dc.w p2
+enigma_data endm
 
 struc_51 macro p0,p1
     dc.b p0

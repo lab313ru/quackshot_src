@@ -44,7 +44,7 @@ dword_FF8F86: equ $FF8F86
 word_FF8F58: equ $FF8F58
 word_FFFF10: equ $FFFF10
 dword_FFF5DC: equ $FFF5DC
-word_FF8F84: equ $FF8F84
+word_FF8F3A: equ $FF8F3A
 word_FF8F50: equ $FF8F50
 word_FF8F52: equ $FF8F52
 word_FF8F54: equ $FF8F54
@@ -112,7 +112,7 @@ dword_FFEF2C: equ $FFEF2C
 byte_FFFF16: equ $FFFF16
 byte_FF9FB6: equ $FF9FB6
 word_FF8F64: equ $FF8F64
-word_FF8F66: equ $FF8F66
+weapon_index: equ $FF8F66
 word_FF8F68: equ $FF8F68
 word_FFA300: equ $FFA300
 dword_FFA2D8: equ $FFA2D8
@@ -248,7 +248,7 @@ byte_FF914D: equ $FF914D
 byte_FF906D: equ $FF906D
 unk_FFFFFF: equ $FFFFFF
 word_FF8F8C: equ $FF8F8C
-word_FF8F8A: equ $FF8F8A
+vblank_sub_index_bak: equ $FF8F8A
 word_FF8F8E: equ $FF8F8E
 unk_FF7800: equ $FF7800
 word_FFF5FA: equ $FFF5FA
@@ -279,7 +279,7 @@ unk_FF9FC0: equ $FF9FC0
 word_FF8F82: equ $FF8F82
 word_FF8F3E: equ $FF8F3E
 word_FF8F3C: equ $FF8F3C
-word_FF8F3A: equ $FF8F3A
+word_FF8F84: equ $FF8F84
 word_FF9142: equ $FF9142
 word_FF9140: equ $FF9140
 unk_FFA360: equ $FFA360
@@ -397,7 +397,7 @@ word_FF8F30: equ $FF8F30
 word_FF8FA6: equ $FF8FA6
 word_FF9082: equ $FF9082
 word_FF9080: equ $FF9080
-word_FF8F98: equ $FF8F98
+lives_count: equ $FF8F98
 word_FF8F96: equ $FF8F96
 word_FF8F90: equ $FF8F90
 word_FF8F92: equ $FF8F92
@@ -411,4 +411,4 @@ word_FF8F9A: equ $FF8F9A
 word_FF8F9C: equ $FF8F9C
 byte_FF908C: equ $FF908C
 unk_FF9D40: equ $FF9D40
-word_FFFF1A: equ $FFFF1A
+vblank_sub_index: equ $FFFF1A
