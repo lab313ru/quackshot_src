@@ -76,6 +76,13 @@ struc_12A9A8 macro p0,p1
     dc.w p1
 struc_12A9A8 endm
 
+raw_data_vdp macro p0,p1,p2,p3
+    dc.l p0
+    dc.l p1
+    dc.w p2
+    dc.w p3
+raw_data_vdp endm
+
 struc_C1D8 macro p0,p1
     dc.w p0
     dc.w p1
@@ -271,13 +278,6 @@ struc_C508 macro p0,p1
     dc.w p0
     dc.w p1
 struc_C508 endm
-
-raw_data macro p0,p1,p2,p3
-    dc.l p0
-    dc.l p1
-    dc.w p2
-    dc.w p3
-raw_data endm
 
 struc_52 macro p0,p1
     dc.l p0

@@ -5,6 +5,7 @@
     include "equals.inc"
     include "rams.inc"
     include "externs.inc"
+    include "funcs.inc"
 
 vectors:	dc.l rand_seed
 		dc.l Reset
@@ -43,7 +44,7 @@ vectors:	dc.l rand_seed
 		dc.l do_decompress_nemesis_to_ram
 		dc.l do_decompress_enigma_to_ram
 		dc.l do_decompress_kosinski_to_ram
-		dc.l Trap5
+		dc.l do_copy_4_palettes_to_ram
 		dc.l Reserv3F
 		dc.l Reserv3F
 		dc.l Reserv3F
@@ -195,7 +196,7 @@ loc_306:
 		btst	#1,d0
 		bne.s	loc_306
 		move.b	(IO_PCBVER+1).l,d0
-		move.b	d0,(byte_FFFF0C).w
+		move.b	d0,(pcb_ver).w
 		andi.b	#$F,d0
 		beq.s	loc_330
 		move.l	#$53454741,($A14000).l
@@ -257,52 +258,52 @@ loc_35A:
 		btst	#6,(IO_EXT_CTRL+1).l
 		bne.s	loc_44E
 		jsr	check_crc(pc)
-		move.b	(byte_FFFF0C).w,d0
+		move.b	(pcb_ver).w,d0
 		lea	(rand_seed).l,a1
 		moveq	#0,d1
-		jsr	sub_94E8
-		jsr	sub_94E8
+		jsr	fill_ram_128_bytes ; d1	= dword
+		jsr	fill_ram_128_bytes ; d1	= dword
 		move.w	#$9C00,(word_FFFF10).w
 		move.w	#$810,(word_FFFF12).w
 		move.w	#$1000,(word_FFFF14).w
-		move.b	d0,(byte_FFFF0C).w
-		btst	#6,d0
-		bne.s	loc_442
-		move.w	#$8134,(word_FFFF08).w
-		move.w	#$8174,(word_FFFF0A).w
+		move.b	d0,(pcb_ver).w
+		btst	#PAL_OR_NTSC,d0
+		bne.s	is_pal_mode
+		move.w	#$8134,(disable_display).w
+		move.w	#$8174,(enable_display).w
 		bra.s	loc_44E
 
-loc_442:
-		move.w	#$813C,(word_FFFF08).w
-		move.w	#$817C,(word_FFFF0A).w
+is_pal_mode:
+		move.w	#$813C,(disable_display).w
+		move.w	#$817C,(enable_display).w
 
 loc_44E:
 		lea	(VDP_CTRL).l,a5
 		lea	(VDP_DATA).l,a6
-		jsr	sub_211E(pc)
+		jsr	clear_ram_0000_fd00(pc)
 		move.w	#0,(word_FFFF20).w
-		btst	#7,(byte_FFFF0C).w
-		sne	(byte_FFFF1C).w
+		btst	#USA_EUROPE_JAPAN,(pcb_ver).w
+		sne	(is_usa_europe_version).w
 		jsr	init_joypads(pc)
-		jsr	sub_20AC(pc)
-		jsr	sub_13FE00
-		move.w	#0,(word_FFFF18).w
+		jsr	clear_vram_cram_vsram(pc)
+		jsr	init_sound_type1
+		move.w	#INIT_SHOW_SEGA_LOGO,(init_step).w
 
-loc_482:
+init_steps_loop:
 		moveq	#0,d0
-		move.b	(word_FFFF18+1).w,d0
+		move.b	(init_step+1).w,d0
 		add.w	d0,d0
 		add.w	d0,d0
-		movea.l	off_4A0(pc,d0.w),a0
+		movea.l	tbl_init_funcs(pc,d0.w),a0
 		jsr	(a0)
 		moveq	#0,d7
 
 loc_494:
-		jsr	sub_961A
+		jsr	wait_for_vblank
 		dbf	d7,loc_494
-		bra.s	loc_482
+		bra.s	init_steps_loop
 
-off_4A0:	dc.l sub_45AE
+tbl_init_funcs:	dc.l show_sega_logo
 		dc.l sub_A4CC
 		dc.l sub_9CB2
 		dc.l sub_4670
@@ -356,11 +357,11 @@ Check:
 
 VBLANK:
 		movem.l	d0-a6,-(sp)
-		tst.b	(byte_FFEE00).w
-		beq.w	loc_7A2
-		move.b	#0,(byte_FFEE00).w
+		tst.b	(vblank_active_flag).w
+		beq.w	exit_vblank
+		move.b	#0,(vblank_active_flag).w
 		move.w	(a5),d0
-		bclr	#0,(byte_FFEE02).w
+		bclr	#0,(cram_update_needed).w
 		beq.s	loc_59A
 		jsr	request_z80_bus
 		move.l	#$93409400,(a5)
@@ -370,7 +371,7 @@ VBLANK:
 		move.w	#$80,-(sp)
 		move.w	(sp)+,(a5)
 		move.l	#$C0000000,(a5)
-		move.w	(dword_FFF580).w,(a6)
+		move.w	(ram_palette_0).w,(a6)
 		jsr	release_z80_bus
 
 loc_59A:
@@ -421,7 +422,7 @@ loc_5FA:
 		bra.w	loc_790
 
 loc_63C:
-		cmpi.w	#1,(word_FFFF18).w
+		cmpi.w	#1,(init_step).w
 		bne.s	loc_676
 		jsr	request_z80_bus
 		move.l	#$93409401,(a5)
@@ -526,7 +527,7 @@ loc_790:
 loc_79E:
 		addq.w	#1,(word_FF8F2A).w
 
-loc_7A2:
+exit_vblank:
 		movem.l	(sp)+,d0-a6
 		rte
 ; d1 = word
@@ -662,13 +663,13 @@ sub_8AE:
 		move.l	#$42A80003,(a5)
 		move.w	d1,(a6)
 		move.w	(word_FF8F90).w,d0
-		jsr	j_draw_lives_count(pc) ; d0 = value
+		jsr	j_draw_lives_count(pc)
 		tst.b	(byte_FFEEE7).w
 		beq.s	loc_91E
 		move.l	#$42B80003,(a5)
 		move.w	d1,(a6)
 		move.w	(word_FF8F92).w,d0
-		jsr	j_draw_lives_count(pc) ; d0 = value
+		jsr	j_draw_lives_count(pc)
 		bra.s	loc_936
 
 loc_91E:
@@ -690,7 +691,7 @@ loc_940:
 		moveq	#0,d0
 		lea	word_AA0(pc),a1
 		move.w	(a1,d1.w),d0
-		jsr	j_get_vram_write_cmd(pc) ; d0 =	vram dest
+		jsr	j_get_vram_write_cmd(pc)
 		moveq	#2,d7
 
 loc_958:
@@ -713,7 +714,7 @@ loc_976:
 		cmpi.w	#6,d6
 		bne.s	loc_940
 		move.l	#$46320003,(a5)
-		btst	#7,(byte_FFFF0C).w
+		btst	#7,(pcb_ver).w
 		bne.s	loc_9A4
 		move.l	#$80518045,(a6)
 		move.w	#$8042,(a6)
@@ -730,7 +731,7 @@ loc_9A4:
 
 loc_9C0:
 		lea	(word_A60).l,a1
-		btst	#7,(byte_FFFF0C).w
+		btst	#7,(pcb_ver).w
 		bne.s	loc_9D4
 		lea	(word_A80).l,a1
 
@@ -742,7 +743,7 @@ loc_9D4:
 		move.l	#$430C0003,(a5)
 		moveq	#$11,d7
 		lea	(word_AAC).l,a1
-		btst	#7,(byte_FFFF0C).w
+		btst	#7,(pcb_ver).w
 		bne.s	loc_9FE
 		lea	(word_AD0).l,a1
 
@@ -753,7 +754,7 @@ loc_9FE:
 		move.l	#$43300003,(a5)
 		moveq	#9,d7
 		lea	(word_AF4).l,a1
-		btst	#7,(byte_FFFF0C).w
+		btst	#7,(pcb_ver).w
 		bne.s	loc_A24
 		lea	(word_B08).l,a1
 
@@ -768,12 +769,12 @@ loc_A28:
 		move.w	#9,(word_FF8F9C).w
 
 loc_A3E:
-		move.b	#$AF,(byte_FFEE52).w
-		jsr	sub_13FED8
+		move.b	#$AF,(smps_cmd2).w
+		jsr	send_smps_cmd	; d0 = cmd
 		move.w	(vblank_sub_index).w,(vblank_sub_index_bak).w
 		move.w	#4,(vblank_sub_index).w
 		move	#$2500,sr
-		move.w	(word_FFFF0A).w,(a5)
+		move.w	(enable_display).w,(a5)
 		rts
 
 word_A60:	dc.w $800D,$800B,$8016,$8016,$803B,$801D,$8012,$800F,$800B,$8013,$801B,$8019,$8016,$800B,$8018,$800F
@@ -831,8 +832,8 @@ loc_B5A:
 		rts
 
 loc_B6E:
-		move.b	#$B2,(byte_FFEE52).w
-		jsr	sub_13FED8
+		move.b	#$B2,(smps_cmd2).w
+		jsr	send_smps_cmd	; d0 = cmd
 
 loc_B7A:
 		move.w	d0,(word_FF8F9C).w
@@ -841,7 +842,7 @@ loc_B7A:
 sub_B80:
 		jsr	sub_CD6(pc)
 		move	#$2700,sr
-		jsr	j_get_vram_write_cmd(pc) ; d0 =	vram dest
+		jsr	j_get_vram_write_cmd(pc)
 		move.l	d0,(a5)
 		move.w	(word_FF8F9C).w,d2
 		cmpi.w	#$A,d2
@@ -905,7 +906,7 @@ loc_C2A:
 sub_C3C:
 		jsr	sub_CD6(pc)
 		move	#$2700,sr
-		jsr	j_get_vram_write_cmd(pc) ; d0 =	vram dest
+		jsr	j_get_vram_write_cmd(pc)
 		move.l	#$803B803B,d1
 		move.l	d0,(a5)
 		cmpi.w	#$A,(word_FF8F9C).w
@@ -941,19 +942,19 @@ loc_C8E:
 
 loc_CA8:
 		move.l	d1,(a6)
-		jsr	loc_9562
+		jsr	fill_vram_8_words ; d1 = word|word
 		addi.l	#$1800000,d0
 		bra.s	loc_CC6
 
 loc_CB8:
 		move.l	d1,(a6)
-		jsr	loc_9562
+		jsr	fill_vram_8_words ; d1 = word|word
 		addi.l	#$1000000,d0
 
 loc_CC6:
 		move.l	d0,(a5)
 		move.l	d1,(a6)
-		jsr	loc_9562
+		jsr	fill_vram_8_words ; d1 = word|word
 		move	#$2500,sr
 		rts
 
@@ -979,8 +980,8 @@ sub_D02:
 		beq.w	loc_D9C
 
 loc_D20:
-		move.b	#$E5,(byte_FFEE52).w
-		jsr	sub_13FED8
+		move.b	#$E5,(smps_cmd2).w
+		jsr	send_smps_cmd	; d0 = cmd
 		move.b	#1,(byte_FFEE5B).w
 		move.w	d0,(weapon_index).w
 		subq.w	#1,d0
@@ -1004,7 +1005,7 @@ loc_D50:
 		lea	(word_FFA300).w,a3
 		moveq	#0,d1
 		movea.l	a3,a1
-		jsr	loc_9508
+		jsr	fill_ram_64_bytes ; d1 = dword
 		move.w	#$A2,0.w(a3)
 		bra.s	loc_D9C
 
@@ -1027,8 +1028,8 @@ loc_D96:
 		jsr	sub_1046(pc)
 
 loc_D9C:
-		move.w	(word_FFFF08).w,(a5)
-		move.w	#5,(word_FFFF18).w
+		move.w	(disable_display).w,(a5)
+		move.w	#5,(init_step).w
 		move.l	(dword_FFEF64).w,(dword_FF8FB2).w
 		move.w	(vblank_sub_index_bak).w,(vblank_sub_index).w
 		btst	#0,(byte_FFEE01).w
@@ -1038,8 +1039,8 @@ loc_D9C:
 loc_DBE:
 		jsr	(sub_3FE6).l
 		move.b	#0,(byte_FFEE5A).w
-		jsr	sub_961A
-		move.w	(word_FFFF0A).w,(a5)
+		jsr	wait_for_vblank
+		move.w	(enable_display).w,(a5)
 		rts
 
 sub_DD6:
@@ -1048,7 +1049,7 @@ sub_DD6:
 		moveq	#8,d0
 		sub.w	(word_FF8F96).w,d0
 		add.w	d0,d0
-		lea	word_F6A(pc),a1
+		lea	unk_F6A(pc),a1
 		lea	(a1,d0.w),a1
 		move.l	(a1)+,(a6)
 		move.l	(a1)+,(a6)
@@ -1067,7 +1068,7 @@ sub_DD6:
 		moveq	#0,d0
 		move.w	(lives_count).w,d0
 		move.w	#$8000,d2
-		jsr	j_draw_lives_count(pc) ; d0 = value
+		jsr	j_draw_lives_count(pc)
 		tst.w	(word_FF8F7A).w
 		beq.s	loc_E80
 		move.l	(dword_FFEF34).w,d0
@@ -1080,8 +1081,8 @@ sub_DD6:
 		cmp.l	d7,d1
 		bcs.s	loc_E62
 		addq.w	#1,(lives_count).w
-		move.b	#$B0,(byte_FFEE52).w
-		jsr	sub_13FED8
+		move.b	#$B0,(smps_cmd2).w
+		jsr	send_smps_cmd	; d0 = cmd
 
 loc_E62:
 		lsl.l	#2,d7
@@ -1090,8 +1091,8 @@ loc_E62:
 		cmp.w	d0,d1
 		beq.s	loc_E7C
 		addq.w	#1,(lives_count).w
-		move.b	#$B0,(byte_FFEE52).w
-		jsr	sub_13FED8
+		move.b	#$B0,(smps_cmd2).w
+		jsr	send_smps_cmd	; d0 = cmd
 
 loc_E7C:
 		jsr	sub_F36(pc)
@@ -1111,7 +1112,7 @@ loc_E80:
 		moveq	#0,d0
 		move.w	(a1,d1.w),d0
 		move.w	#$8000,d2
-		jsr	j_draw_lives_count(pc) ; d0 = value
+		jsr	j_draw_lives_count(pc)
 		bra.s	loc_EC2
 
 loc_EB8:
@@ -1145,7 +1146,7 @@ draw_weapon_icon:
 		moveq	#0,d0
 		lea	tbl_weapon_types(pc,d1.w),a1
 		move.w	(a1)+,d0
-		jsr	j_get_vram_write_cmd(pc) ; d0 =	vram dest
+		jsr	j_get_vram_write_cmd(pc)
 		move.l	d0,(a5)
 		move.w	(a1),d2
 		move.w	d2,(a6)
@@ -1177,24 +1178,51 @@ sub_F36:
 		move.w	d0,d7
 		swap	d0
 		ext.l	d0
+
 		jsr	print_value	; d0 = value
 		move.l	d7,d0
 		jsr	print_value	; d0 = value
 		rts
-
-word_F6A:	dc.w $8030, $8030, $8030, $8030, $8030,	$8030, $8030, $8030
-		dc.w $8031, $8031, $8031, $8031, $8031,	$8031, $8031, $8031
+unk_F6A:	dc.b $80
+		dc.b $30
+		dc.b $80
+		dc.b $30
+		dc.b $80
+		dc.b $30
+		dc.b $80
+		dc.b $30
+		dc.b $80
+		dc.b $30
+		dc.b $80
+		dc.b $30
+		dc.b $80
+		dc.b $30
+		dc.b $80
+		dc.b $30
+		dc.b $80
+		dc.b $31
+		dc.b $80
+		dc.b $31
+		dc.b $80
+		dc.b $31
+		dc.b $80
+		dc.b $31
+		dc.b $80
+		dc.b $31
+		dc.b $80
+		dc.b $31
+		dc.b $80
+		dc.b $31
+		dc.b $80
+		dc.b $31
 word_F8A:	dc.w $8032, $8032, $8032, $8032, $8032
 		dc.w $8033, $8033, $8033, $8033, $8033
 
-; d0 = vram dest
 j_get_vram_write_cmd:
 		jmp	get_vram_write_cmd ; d0	= vram dest
-; d0 = value
-; d2 = mask
+
 j_draw_lives_count:
 		jmp	draw_xx_value	; d0 = value
-
 sub_FAA:
 		moveq	#$32,d1
 		jmp	sub_1046(pc)
@@ -1286,7 +1314,7 @@ sub_1060:
 		move.w	(word_FF8FBC).w,d1
 		beq.w	locret_10D2
 		move.w	#0,(word_FF8FBC).w
-		cmpi.w	#8,(word_FFFF18).w
+		cmpi.w	#8,(init_step).w
 		beq.s	sub_10BC
 		move.b	#$90,d0
 		tst.b	(byte_FFEE76).w
@@ -1295,8 +1323,8 @@ sub_1060:
 		move.b	(byte_FFEE76).w,d0
 
 loc_1086:
-		move.b	d0,(byte_FFEE53).w
-		jsr	sub_13FED8
+		move.b	d0,(smps_cmd1).w
+		jsr	send_smps_cmd	; d0 = cmd
 
 loc_1090:
 		move.b	#0,(byte_FFEE76).w
@@ -1304,9 +1332,9 @@ loc_1090:
 		bsr.s	sub_10BC
 		tst.b	(byte_FFEE77).w
 		bne.s	loc_10B4
-		move.b	(byte_FFEE67).w,(byte_FFEE53).w
-		jsr	sub_13FED8
-		jsr	sub_961A
+		move.b	(byte_FFEE67).w,(smps_cmd1).w
+		jsr	send_smps_cmd	; d0 = cmd
+		jsr	wait_for_vblank
 
 loc_10B4:
 		move.b	#0,(byte_FFEE77).w
@@ -1351,7 +1379,7 @@ loc_110A:
 		jsr	sub_149C(pc)
 
 loc_1112:
-		jsr	sub_961A
+		jsr	wait_for_vblank
 		movem.l	d0/d7-a2,-(sp)
 		bsr.s	sub_115A
 		movem.l	(sp)+,d0/d7-a2
@@ -1524,7 +1552,7 @@ loc_12DE:
 		adda.l	#(stru_15CC-stru_15C6),a1
 
 loc_12EA:
-		jsr	sub_961A
+		jsr	wait_for_vblank
 		cmpi.w	#1,d2
 		bgt.s	loc_130C
 		blt.s	loc_1300
@@ -1655,7 +1683,7 @@ sub_141A:
 		move.w	#$80,d6
 
 loc_1428:
-		jsr	sub_961A
+		jsr	wait_for_vblank
 		move.w	d0,d5
 		move.w	d1,d3
 
@@ -1769,7 +1797,7 @@ loc_1536:
 		eor.b	d2,d5
 		btst	#0,d5
 		beq.s	loc_1548
-		jsr	sub_961A
+		jsr	wait_for_vblank
 
 loc_1548:
 		dbf	d2,loc_14CE
@@ -1830,11 +1858,11 @@ stru_15C6:	struc_1 $35, $36, $835
 stru_15CC:	struc_1 $37, $3B, $837
 stru_15D2:	struc_1 $1035,	$1036, $1835
 do_raw_copy_data:
-		bsr.s	raw_data_copy	; d0 = indexes
+		bsr.s	raw_data_copy_to_vdp ; d0 = indexes
 		rte
 ; d0 = indexes
 
-raw_data_copy:
+raw_data_copy_to_vdp:
 		move	#$2700,sr
 		moveq	#3,d2
 
@@ -1858,28 +1886,28 @@ loc_1604:
 		move	#$2500,sr
 		rts
 
-tbl_raw_copy_data:raw_data M68K_RAM, $459C0003, $D, 3
-		raw_data M68K_RAM, $5C000003, $27, 5
-		raw_data 0, $40000000,	$FFFF, $FFFF
-		raw_data unk_FF1000, $60000003, $1F, $1B
-		raw_data unk_FF1000, $60400003, $1F, $1B
-		raw_data word_12A87A, $449A0003, $C, 2
-		raw_data unk_FFB000, $40000003, $27, $17
-		raw_data M68K_RAM, $60000003, $27, $D
-		raw_data unk_FF1000, $67000003, $27, $D
-		raw_data unk_FF2000, $428C0003, $19, $10
-		raw_data word_4F78, $441E0003,	4, 0
-		raw_data word_4F82, $469E0003,	6, 0
-		raw_data word_4F90, $43160003,	9, 0
-		raw_data word_4FA4, $45160003,	6, 0
-		raw_data word_4FB2, $48160003,	3, 0
-		raw_data M68K_RAM, $432C0003, $B, 0
-		raw_data unk_FFB000, $452C0003, 6, 5
-		raw_data M68K_RAM, $60000003, $27, $1F
-		raw_data unk_FF1000, $629C0003, $B, 9
-		raw_data unk_FF2000, $450C0003, $13, 2
-		raw_data unk_FF1000, $621A0003, $D, $B
-		raw_data word_1718, $45120003,	$16, 4
+tbl_raw_copy_data:raw_data_vdp M68K_RAM, $459C0003, $D, 3
+		raw_data_vdp M68K_RAM,	$5C000003, $27,	5
+		raw_data_vdp 0, $40000000, $FFFF, $FFFF
+		raw_data_vdp unk_FF1000, $60000003, $1F, $1B
+		raw_data_vdp unk_FF1000, $60400003, $1F, $1B
+		raw_data_vdp word_12A87A, $449A0003, $C, 2
+		raw_data_vdp unk_FFB000, $40000003, $27, $17
+		raw_data_vdp M68K_RAM,	$60000003, $27,	$D
+		raw_data_vdp unk_FF1000, $67000003, $27, $D
+		raw_data_vdp unk_FF2000, $428C0003, $19, $10
+		raw_data_vdp word_4F78, $441E0003, 4, 0
+		raw_data_vdp word_4F82, $469E0003, 6, 0
+		raw_data_vdp word_4F90, $43160003, 9, 0
+		raw_data_vdp word_4FA4, $45160003, 6, 0
+		raw_data_vdp word_4FB2, $48160003, 3, 0
+		raw_data_vdp M68K_RAM,	$432C0003, $B, 0
+		raw_data_vdp unk_FFB000, $452C0003, 6,	5
+		raw_data_vdp M68K_RAM,	$60000003, $27,	$1F
+		raw_data_vdp unk_FF1000, $629C0003, $B, 9
+		raw_data_vdp unk_FF2000, $450C0003, $13, 2
+		raw_data_vdp unk_FF1000, $621A0003, $D, $B
+		raw_data_vdp word_1718, $45120003, $16, 4
 word_1718:	dc.w $35, $36, $36, $36, $36
 		dc.w $36, $36, $36, $36, $36
 		dc.w $36, $36, $36, $36, $36
@@ -1938,7 +1966,7 @@ tbl_nemesis_vram:nemesis_vram $40200000, nemesis_01C120
 		nemesis_vram $40A00001, nemesis_10593E
 		nemesis_vram $60000000, nemesis_1071D4
 		nemesis_vram $7A000000, nemesis_107AFA
-		nemesis_vram $40200000, nemesis_13EB3E
+		nemesis_vram $40200000, nemesis_sega_logo
 		nemesis_vram $60000000, nemesis_1068A0
 		nemesis_vram $7A000000, nemesis_106A34
 		nemesis_vram $60000000, nemesis_1061D6
@@ -2091,7 +2119,7 @@ tbl_enigma_data:enigma_data 0, 0, 0
 		enigma_data enigma_0344CE, unk_FF5800,	$61D0
 		enigma_data enigma_034420, unk_FF5000,	$4100
 		enigma_data 0, 0, 0
-		enigma_data enigma_13EB30, M68K_RAM, 1
+		enigma_data enigma_sega_logo_mapping, M68K_RAM, 1
 		enigma_data enigma_035474, unk_FF5000,	$4100
 		enigma_data enigma_035688, unk_FF5800,	$61D0
 		enigma_data enigma_035474, unk_FF5800,	$4100
@@ -2255,7 +2283,7 @@ loc_203C:
 initial_vdp_regs:dc.b 4, $14, $30, $34,	7, $6A,	0, 0, 0, 0, 0, 0, $81, $34, 0, 2, 1, 0,	0
 		align 2
 sub_205E:
-		jsr	(sub_20FE).l
+		jsr	(clear_cram).l
 		bsr.s	sub_2084
 		move.l	#$40000003,(a5)
 		bsr.s	sub_2074
@@ -2266,7 +2294,7 @@ sub_2074:
 		move.w	#$1F,d7
 
 loc_207A:
-		jsr	sub_952A(pc)
+		jsr	fill_vram_64_words(pc) ; d1 = word|word
 		dbf	d7,loc_207A
 		rts
 
@@ -2295,7 +2323,7 @@ loc_209E:
 		dbf	d2,loc_209A
 		rts
 
-sub_20AC:
+clear_vram_cram_vsram:
 		bsr.s	set_initial_vdp_regs
 		move.w	#$8F01,(a5)
 		jsr	request_z80_bus
@@ -2305,42 +2333,42 @@ sub_20AC:
 		move.w	#0,(a6)
 
 loc_20CC:
-		btst	#1,1(a5)
+		btst	#DMA_IN_PROGRESS,1(a5)
 		bne.s	loc_20CC
 		move.l	#$40000000,(a5)
 		move.w	#0,(a6)
 		jsr	release_z80_bus
 		move.w	#$8F02,(a5)
-		bsr.s	sub_20FE
+		bsr.s	clear_cram
 		clr.l	(dword_FFF300).w
 		bsr.s	sub_210A
 		bsr.s	sub_2114
 		move.l	#$40000010,(a5)
 		moveq	#0,d1
-		jmp	loc_954A(pc)
+		jmp	fill_vram_32_words(pc) ; d1 = word|word
 
-sub_20FE:
+clear_cram:
 		move.l	#$C0000000,(a5)
 		moveq	#0,d1
-		jmp	sub_952A(pc)
+		jmp	fill_vram_64_words(pc) ; d1 = word|word
 
 sub_210A:
 		moveq	#0,d1
 		lea	(word_FF8500).w,a1
-		jmp	sub_94E8(pc)
+		jmp	fill_ram_128_bytes(pc) ; d1 = dword
 
 sub_2114:
 		moveq	#0,d1
-		lea	(dword_FFF580).w,a1
-		jmp	sub_94E8(pc)
+		lea	(ram_palette_0).w,a1
+		jmp	fill_ram_128_bytes(pc) ; d1 = dword
 
-sub_211E:
+clear_ram_0000_fd00:
 		lea	(M68K_RAM).l,a1
 		moveq	#0,d1
 		move.w	#$1F9,d7
 
 loc_212A:
-		jsr	sub_94E8
+		jsr	fill_ram_128_bytes ; d1	= dword
 		dbf	d7,loc_212A
 		rts
 
@@ -2420,21 +2448,22 @@ loc_21FA:
 		st	(byte_FFEE6B).w
 		rts
 
-Trap5:
-		bsr.s	sub_2204
+do_copy_4_palettes_to_ram:
+		bsr.s	copy_4_palettes_to_ram
 		rte
 
-sub_2204:
-		move.b	#1,(byte_FFEE02).w
-		lea	(dword_FFF580).w,a2
-		bsr.s	sub_2218
-		bsr.s	sub_2218
-		bsr.s	sub_2218
-		bsr.s	sub_2218
+copy_4_palettes_to_ram:
+		move.b	#1,(cram_update_needed).w
+		lea	(ram_palette_0).w,a2
+		bsr.s	copy_1_palette_to_ram ;	d0 = index
+		bsr.s	copy_1_palette_to_ram ;	d0 = index
+		bsr.s	copy_1_palette_to_ram ;	d0 = index
+		bsr.s	copy_1_palette_to_ram ;	d0 = index
 		rts
+; d0 = index
 
-sub_2218:
-		lea	(word_13CA70).l,a1
+copy_1_palette_to_ram:
+		lea	(palettes_data_1).l,a1
 		moveq	#0,d1
 		move.b	d0,d1
 		ror.l	#8,d0
@@ -3209,13 +3238,13 @@ sub_283A:
 		move.w	(dword_FF8564).w,d1
 		neg.w	d1
 		lea	(word_FFF700).w,a1
-		jsr	sub_94E8(pc)
-		jsr	sub_94E8(pc)
-		jsr	sub_94E8(pc)
-		jsr	sub_94E8(pc)
-		jsr	sub_94E8(pc)
-		jsr	sub_94E8(pc)
-		jsr	sub_94E8(pc)
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
 		moveq	#3,d7
 		lea	(unk_FF8D00).w,a1
 
@@ -3466,15 +3495,15 @@ loc_2AA0:
 		subq.w	#1,(a2)
 		bpl.s	loc_2AD4
 		move.w	#7,(a2)
-		lea	(unk_FFF5C0).w,a3
-		move.w	dword_FFF5D4-unk_FFF5C0(a3),d0
+		lea	(ram_palette_2).w,a3
+		move.w	ram_palette_2+$14-ram_palette_2(a3),d0
 		move.l	$16(a3),$14(a3)
 		move.w	d0,$18(a3)
 		move.w	$12(a3),d0
 		move.w	$1A(a3),$12(a3)
 		move.l	$1C(a3),$1A(a3)
 		move.w	d0,$1E(a3)
-		move.b	#1,(byte_FFEE02).w
+		move.b	#1,(cram_update_needed).w
 
 loc_2AD4:
 		subq.w	#1,2(a2)
@@ -3488,8 +3517,8 @@ loc_2AEC:
 		move.w	4(a2),d0
 		add.w	d0,d0
 		add.w	d0,d0
-		move.l	word_2B0A(pc,d0.w),(dword_FFF5FC).w
-		move.b	#1,(byte_FFEE02).w
+		move.l	word_2B0A(pc,d0.w),(ram_palette_3+$1C).w
+		move.b	#1,(cram_update_needed).w
 
 loc_2B00:
 		lea	(word_328C).l,a1
@@ -3523,7 +3552,7 @@ sub_2B50:
 		sge	2(a2)
 		subq.b	#1,$F(a2)
 		bpl.s	loc_2B8C
-		move.b	#$C1,(byte_FFEE52).w
+		move.b	#$C1,(smps_cmd2).w
 		move.b	#7,$F(a2)
 
 loc_2B8C:
@@ -3628,9 +3657,9 @@ sub_2C54:
 loc_2C74:
 		move.w	$12(a2),d7
 		mulu.w	#6,d7
-		move.l	word_2C90(pc,d7.w),(dword_FFF5EE).w
-		move.w	word_2C90+4(pc,d7.w),(word_FFF5F2).w
-		move.b	#1,(byte_FFEE02).w
+		move.l	word_2C90(pc,d7.w),(ram_palette_3+$E).w
+		move.w	word_2C90+4(pc,d7.w),(ram_palette_3+$12).w
+		move.b	#1,(cram_update_needed).w
 
 locret_2C8E:
 		rts
@@ -3715,8 +3744,8 @@ loc_2D74:
 		move.w	#4,4(a2)
 		bchg	#2,7(a2)
 		move.w	6(a2),d7
-		move.l	word_2DB2(pc,d7.w),(dword_FFF5FC).w
-		move.b	#1,(byte_FFEE02).w
+		move.l	word_2DB2(pc,d7.w),(ram_palette_3+$1C).w
+		move.b	#1,(cram_update_needed).w
 
 loc_2D9E:
 		lea	(word_3366).l,a1
@@ -3758,7 +3787,7 @@ sub_2DE4:
 		bcs.s	locret_2E1E
 		cmpi.w	#$1F0,d1
 		bcc.s	locret_2E1E
-		move.b	#$82,(byte_FFEE52).w
+		move.b	#$82,(smps_cmd2).w
 		sf	(byte_FFEE64).w
 		move.b	#1,(byte_FFEE5E).w
 		move.w	#7,(word_FF8D20).w
@@ -3860,11 +3889,11 @@ sub_2EF8:
 		subq.w	#1,(a2)
 		bpl.s	loc_2F18
 		move.w	#$C,(a2)
-		lea	((dword_FFF5D8+2)).w,a3
+		lea	((ram_palette_2+$1A)).w,a3
 		move.w	0.w(a3),d0
 		move.l	2(a3),0.w(a3)
 		move.w	d0,4(a3)
-		move.b	#1,(byte_FFEE02).w
+		move.b	#1,(cram_update_needed).w
 
 loc_2F18:
 		tst.b	(byte_FFEEF5).w
@@ -3893,13 +3922,13 @@ sub_2F50:
 		subq.w	#1,(a2)
 		bpl.s	locret_2F7C
 		move.w	#$F,(a2)
-		lea	(dword_FFF5D8).w,a3
-		move.w	dword_FFF5DC+2-dword_FFF5D8(a3),d0
+		lea	((ram_palette_2+$18)).w,a3
+		move.w	6(a3),d0
 		move.w	4(a3),6(a3)
 		move.w	2(a3),4(a3)
 		move.w	0.w(a3),2(a3)
 		move.w	d0,0.w(a3)
-		move.b	#1,(byte_FFEE02).w
+		move.b	#1,(cram_update_needed).w
 
 locret_2F7C:
 		rts
@@ -3957,7 +3986,7 @@ sub_2FC0:
 		bne.s	locret_3010
 		move.b	#$A,$E(a2)
 		addq.w	#1,0.w(a2)
-		move.b	#$82,(byte_FFEE52).w
+		move.b	#$82,(smps_cmd2).w
 
 locret_3010:
 		rts
@@ -3973,7 +4002,7 @@ sub_3014:
 		sub.w	(word_FF8560).w,d1
 		subq.b	#1,$F(a2)
 		bpl.s	loc_304A
-		move.b	#$C1,(byte_FFEE52).w
+		move.b	#$C1,(smps_cmd2).w
 		move.b	#7,$F(a2)
 
 loc_304A:
@@ -3994,7 +4023,7 @@ locret_306A:
 loc_306C:
 		move.b	#0,(dword_FF8F86+3).w
 		move.w	#4,0.w(a2)
-		move.b	#$8B,(byte_FFEE53).w
+		move.b	#$8B,(smps_cmd1).w
 		rts
 
 sub_3080:
@@ -4061,12 +4090,12 @@ sub_3114:
 		subq.w	#1,(a2)
 		bpl.s	loc_3138
 		move.w	#1,(a2)
-		lea	((dword_FFF5D8+2)).w,a3
+		lea	((ram_palette_2+$1A)).w,a3
 		move.w	4(a3),d0
 		move.w	2(a3),4(a3)
 		move.w	0.w(a3),2(a3)
 		move.w	d0,(a3)
-		move.b	#1,(byte_FFEE02).w
+		move.b	#1,(cram_update_needed).w
 
 loc_3138:
 		move.w	#$2D0,d1
@@ -4083,12 +4112,12 @@ sub_3158:
 		subq.w	#1,(a2)
 		bpl.s	loc_317A
 		move.w	#7,(a2)
-		lea	(unk_FFF5F4).w,a3
-		move.w	word_FFF5FA-unk_FFF5F4(a3),d0
+		lea	((ram_palette_3+$14)).w,a3
+		move.w	6(a3),d0
 		move.l	2(a3),4(a3)
 		move.w	(a3),2(a3)
 		move.w	d0,(a3)
-		move.b	#1,(byte_FFEE02).w
+		move.b	#1,(cram_update_needed).w
 
 loc_317A:
 		lea	(word_3502).l,a1
@@ -4377,7 +4406,7 @@ sub_3658:
 		move.l	#$6050000,d1
 		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram
 		move.l	#$5041E00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$6053A36,d0
 		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		move.l	#$2010000,d0
@@ -4389,7 +4418,7 @@ sub_3680:
 		move.l	#$6080000,d1
 		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram
 		move.l	#$5062300,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$8070036,d0
 		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		move.l	#$4030000,d0
@@ -4403,7 +4432,7 @@ sub_36A8:
 		move.l	#$6080000,d1
 		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram
 		move.l	#$1D1C1E00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$8074137,d0
 		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		move.l	#$25240000,d0
@@ -4434,7 +4463,7 @@ sub_371E:
 		move.l	#$A090000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$8071F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$A090000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$6050000,d0
@@ -4447,7 +4476,7 @@ sub_374A:
 		move.l	#$A0F0000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$F0D2D00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$A100000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$60B0000,d0
@@ -4459,7 +4488,7 @@ sub_3772:
 		move.l	#$A090000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$80E1F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$A095539,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$60C0000,d0
@@ -4480,7 +4509,7 @@ sub_37B6:
 		move.l	#$E0D0000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$C0B2000,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$F0E3650,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$A090000,d0
@@ -4506,7 +4535,7 @@ sub_380A:
 		move.l	#$C0B0000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$A092300,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$C0B0000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$8070000,d0
@@ -4518,7 +4547,7 @@ sub_3832:
 		move.l	#$13120000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$11102100,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$1E1D0051,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$E0D0000,d0
@@ -4530,7 +4559,7 @@ sub_385A:
 		move.l	#$14120000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$13122200,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$1D5B0000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$100F0000,d0
@@ -4558,7 +4587,7 @@ sub_38BE:
 		move.l	#$13120000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$1B1A2100,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$1E1D4151,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$E110000,d0
@@ -4570,7 +4599,7 @@ sub_38E6:
 		move.l	#$15120000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$1B1A2100,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$1D000051,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$13120000,d0
@@ -4582,7 +4611,7 @@ sub_390E:
 		move.l	#$14120000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$1B1A2100,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$1D005141,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$10140000,d0
@@ -4594,7 +4623,7 @@ sub_3936:
 		move.l	#$13120000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$11122C00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$1E1D0041,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$E230000,d0
@@ -4602,7 +4631,7 @@ sub_3936:
 		st	(byte_FFEE6C).w
 		tst.b	(byte_FFEEF3).w
 		bne.s	locret_396C
-		move.b	#$82,(byte_FFEE53).w
+		move.b	#$82,(smps_cmd1).w
 
 locret_396C:
 		rts
@@ -4617,7 +4646,7 @@ sub_3978:
 		move.l	#$1A190000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$29281F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$1C1B0000,d0
 		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$2827003C,d0
@@ -4630,7 +4659,7 @@ sub_39A4:
 		move.l	#$1A190000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$29282300,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$1E1D0000,d0
 		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$28273D37,d0
@@ -4643,7 +4672,7 @@ sub_39D0:
 		move.l	#$1A190000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$29281F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$1C320000,d0
 		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$2827004D,d0
@@ -4656,7 +4685,7 @@ sub_39FC:
 		move.l	#$1C1B0000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$2B2A2100,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$201F0000,d0
 		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$413C3600,d0
@@ -4670,7 +4699,7 @@ sub_3A2C:
 		move.l	#$1C1B0000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$2B2A3100,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$20210000,d0
 		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$2A290041,d0
@@ -4678,7 +4707,7 @@ sub_3A2C:
 		st	(byte_FFEE80).w
 		tst.b	(byte_FFEEED).w
 		bne.s	locret_3A62
-		move.b	#$82,(byte_FFEE53).w
+		move.b	#$82,(smps_cmd1).w
 
 locret_3A62:
 		rts
@@ -4696,7 +4725,7 @@ sub_3A6C:
 		move.l	#$16150000,d0
 		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$25241F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		st	(byte_FFEE65).w
 		rts
 
@@ -4709,7 +4738,7 @@ sub_3A98:
 		move.l	#$16170000,d0
 		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$255C1F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		st	(byte_FFEE65).w
 		rts
 
@@ -4722,7 +4751,7 @@ sub_3AC4:
 		move.l	#$19180000,d0
 		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$27265D00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		st	(byte_FFEE65).w
 		jsr	sub_3FB8(pc)
 		lea	(unk_FF8D00).w,a1
@@ -4743,7 +4772,7 @@ sub_3B08:
 		move.l	#$161A0000,d0
 		trap	#4		; do_decompress_kosinski_to_ram
 		move.l	#$25241F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		st	(byte_FFEE65).w
 		sf	(byte_FFEE6A).w
 		sf	(byte_FFEEF9).w
@@ -4766,7 +4795,7 @@ sub_3B62:
 		move.l	#$1E090000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$35345800,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$2C090000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$2F2E0000,d0
@@ -4795,7 +4824,7 @@ loc_3BBC:
 		move.l	#$1E260000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$42402F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$2C3E0000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.w	#8,(word_FF8F74).w
@@ -4824,7 +4853,7 @@ loc_3C02:
 		move.l	#$1E260000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$42412F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$2C3E0000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$3D3C0000,d0
@@ -4837,7 +4866,7 @@ sub_3C2A:
 		move.l	#$1E260000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$56553000,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$2C3E0041,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$3D300000,d0
@@ -4856,7 +4885,7 @@ sub_3C62:
 		move.l	#$1D090000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$33325800,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$2B090056,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$27260000,d0
@@ -4869,7 +4898,7 @@ sub_3C8E:
 		move.l	#$201F0000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$37361F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$2E2D0036,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$29280000,d0
@@ -4881,7 +4910,7 @@ sub_3CB6:
 		move.l	#$201F0000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$37362D00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$2E2D0000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$2B2A0000,d0
@@ -4893,7 +4922,7 @@ sub_3CDE:
 		move.l	#$201F0000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$37361F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$2E2D0000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$2D2C0000,d0
@@ -4914,7 +4943,7 @@ sub_3D24:
 		move.l	#$25240000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$37361F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$2E2D3836,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$48000000,d0
@@ -4931,7 +4960,7 @@ sub_3D64:
 		move.l	#$20210000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$37381F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$2E330011,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$2D350000,d0
@@ -4949,7 +4978,7 @@ off_3D9C:	dc.w sub_3DA6
 sub_3DA6:
 		move.w	#sub_30E4,(word_FFEF48).w
 		move.l	#$5B5A2E00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$2F2E0000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$4A490037,d0
@@ -4970,7 +4999,7 @@ sub_3DEC:
 		move.l	#$2C2B0000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$49471E00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$47460011,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$42410000,d0
@@ -4983,7 +5012,7 @@ sub_3E1A:
 		move.l	#$28270000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$44432000,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$403F0000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$3E430000,d0
@@ -4996,7 +5025,7 @@ sub_3E48:
 		move.l	#$28270000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$44435700,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$403F0000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$3E470000,d0
@@ -5008,7 +5037,7 @@ sub_3E70:
 		move.l	#$28270000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$44435F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$403F0000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$3E330000,d0
@@ -5025,7 +5054,7 @@ sub_3EA4:
 		move.l	#$2F2E0000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$4B4A1F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$4A490000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$45440000,d0
@@ -5037,7 +5066,7 @@ sub_3ECC:
 		move.l	#$2A290000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$46451F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$43420037,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$49480000,d0
@@ -5050,7 +5079,7 @@ sub_3EF8:
 		move.l	#$31300000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$4D4C1F00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$4C4B0000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$4B4A0000,d0
@@ -5062,7 +5091,7 @@ sub_3F20:
 		move.l	#$2A290000,d1
 		trap	#3		; do_decompress_enigma_to_ram
 		move.l	#$46455E00,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$43420000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$403F0000,d0
@@ -5096,8 +5125,8 @@ sub_3F48:
 		move.b	(a0)+,d0
 		cmp.b	(byte_FFEE67).w,d0
 		beq.s	locret_3FB6
-		jsr	sub_13FE00
-		move.b	d0,(byte_FFEE53).w
+		jsr	init_sound_type1
+		move.b	d0,(smps_cmd1).w
 		move.b	d0,(byte_FFEE67).w
 
 locret_3FB6:
@@ -5108,13 +5137,13 @@ sub_3FB8:
 		move.w	#$8B03,(a5)
 		lea	(word_FFF700).w,a1
 		moveq	#0,d1
-		jsr	sub_94E8(pc)
-		jsr	sub_94E8(pc)
-		jsr	sub_94E8(pc)
-		jsr	sub_94E8(pc)
-		jsr	sub_94E8(pc)
-		jsr	sub_94E8(pc)
-		jsr	sub_94E8(pc)
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
 		rts
 
 sub_3FE6:
@@ -5185,10 +5214,10 @@ loc_4078:
 sub_407C:
 		moveq	#0,d1
 		lea	(unk_FF8A00).w,a1
-		jsr	sub_94E8(pc)
-		jsr	sub_94E8(pc)
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
 		lea	(word_FF89E0).w,a1
-		jsr	loc_9520(pc)
+		jsr	fill_ram_16_bytes(pc) ;	d1 = dword
 		jsr	sub_435A(pc)
 		jsr	sub_44D0(pc)
 		lea	(unk_FF5000).l,a1
@@ -5574,12 +5603,12 @@ loc_442A:
 		rts
 
 sub_4436:
-		move.b	#1,(byte_FFEE02).w
+		move.b	#1,(cram_update_needed).w
 		move.b	#0,(a4,d4.w)
 		moveq	#0,d0
 		move.b	4(a4,d4.w),d0
 		add.b	d0,d0
-		lea	(dword_FFF580).w,a0
+		lea	(ram_palette_0).w,a0
 		lea	(a0,d0.w),a0
 		lea	(unk_FF8918).w,a3
 		lea	(a3,d0.w),a3
@@ -5663,8 +5692,8 @@ word_451C:	dc.w $46C, $AEE, 0, $AEE, $AEE,	$8EA, $8E8, $8C4
 sub_4560:
 		bsr.s	sub_459A
 		moveq	#0,d1
-		lea	(dword_FFF580).w,a1
-		jsr	sub_94E8
+		lea	(ram_palette_0).w,a1
+		jsr	fill_ram_128_bytes ; d1	= dword
 		moveq	#0,d0
 		bra.s	loc_4584
 
@@ -5684,78 +5713,78 @@ loc_4584:
 
 loc_458A:
 		jsr	sub_4392(pc)
-		jsr	sub_961A
+		jsr	wait_for_vblank
 		dbf	d7,loc_458A
 		rts
 
 sub_459A:
-		sf	(byte_FFEE02).w
-		lea	(dword_FFF580).w,a1
+		sf	(cram_update_needed).w
+		lea	(ram_palette_0).w,a1
 		lea	(unk_FFF600).w,a2
 		jsr	copy_bytes_to_dest_128 ; a1 = source
 		rts
 
-sub_45AE:
-		bset	#7,(word_FFFF18).w
+show_sega_logo:
+		bset	#7,(init_step).w
 		beq.s	loc_460C
 		jsr	sub_962C
-		addq.w	#1,(word_FF8F76).w
-		move.w	(word_FF8F76).w,d0
+		addq.w	#1,(sega_logo_frames_cnt).w
+		move.w	(sega_logo_frames_cnt).w,d0
 		andi.w	#3,d0
 		bne.s	loc_45CE
-		subq.w	#2,(word_FF8F78).w
+		subq.w	#2,(sega_logo_frames).w
 
 loc_45CE:
-		move.b	#1,(byte_FFEE02).w
-		lea	(word_13EAF6).l,a1
-		adda.w	(word_FF8F78).w,a1
-		btst	#7,(byte_FFFF0C).w
+		move.b	#1,(cram_update_needed).w
+		lea	(sega_logo_palette).l,a1
+		adda.w	(sega_logo_frames).w,a1
+		btst	#7,(pcb_ver).w
 		beq.s	loc_45F2
-		lea	(unk_FFF598).w,a2
+		lea	((ram_palette_0+$18)).w,a2
 		move.l	2(a1),(a2)+
 		move.l	6(a1),(a2)
 
 loc_45F2:
-		lea	(unk_FFF584).w,a2
+		lea	((ram_palette_0+4)).w,a2
 		jsr	copy_bytes_to_dest_20(pc) ; a1 = source
-		tst.w	(word_FF8F78).w
+		tst.w	(sega_logo_frames).w
 		bne.s	locret_460A
 		jsr	sub_4572(pc)
-		move.w	#1,(word_FFFF18).w
+		move.w	#1,(init_step).w
 
 locret_460A:
 		rts
 
 loc_460C:
-		move.w	(word_FFFF08).w,(a5)
+		move.w	(disable_display).w,(a5)
 		clr.b	(byte_FFEE01).w
 		jsr	init_joypads(pc)
-		jsr	sub_20AC(pc)
-		jsr	(sub_211E).l
-		move.b	#$F9,(byte_FFEE53).w
-		jsr	sub_13FED8
+		jsr	clear_vram_cram_vsram(pc)
+		jsr	(clear_ram_0000_fd00).l
+		move.b	#$F9,(smps_cmd1).w
+		jsr	send_smps_cmd	; d0 = cmd
 		move.w	#0,(vblank_sub_index).w
-		moveq	#$D,d0
-		trap	#1		; do_decompress_nemesis_to_vram
-		moveq	#$11,d1
-		trap	#3		; do_decompress_enigma_to_ram
-		moveq	#1,d0
-		trap	#0		; do_raw_copy_data
-		move.w	#$28,(word_FF8F78).w
-		clr.w	(word_FF8F76).w
-		move.l	#$ECC,(dword_FFF580).w
-		move.w	(word_FFFF0A).w,(a5)
+		moveq	#NEM_SEGA_LOGO_TILES,d0
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
+		moveq	#ENI_SEGA_LOGO_MAP,d1
+		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram
+		moveq	#COPY_SEGA_LOGO,d0
+		trap	#RAW_COPY_DATA	; do_raw_copy_data
+		move.w	#$28,(sega_logo_frames).w
+		clr.w	(sega_logo_frames_cnt).w
+		move.l	#$ECC,(ram_palette_0).w
+		move.w	(enable_display).w,(a5)
 		rts
 
 sub_4658:
 		jsr	sub_50AA(pc)
-		move.b	#$92,(byte_FFEE53).w
-		jsr	sub_13FED8
-		move.w	#2,(word_FFFF18).w
+		move.b	#$92,(smps_cmd1).w
+		jsr	send_smps_cmd	; d0 = cmd
+		move.w	#2,(init_step).w
 		rts
 
 sub_4670:
-		move.w	(word_FFFF08).w,(a5)
+		move.w	(disable_display).w,(a5)
 		move.w	#0,(vblank_sub_index).w
 		clr.b	(byte_FFEE01).w
 		moveq	#0,d0
@@ -5763,17 +5792,17 @@ sub_4670:
 		jsr	sub_50F6(pc)
 		cmpi.w	#$2F,(word_FF8F40).w
 		beq.s	loc_4698
-		move.w	#4,(word_FFFF18).w
+		move.w	#4,(init_step).w
 		rts
 
 loc_4698:
-		move.w	#9,(word_FFFF18).w
+		move.w	#9,(init_step).w
 		rts
 
 sub_46A0:
-		move.w	(word_FFFF08).w,(a5)
+		move.w	(disable_display).w,(a5)
 		move.w	#1,(vblank_sub_index).w
-		jsr	sub_20AC(pc)
+		jsr	clear_vram_cram_vsram(pc)
 		jsr	sub_B828(pc)
 		moveq	#0,d0
 		move.b	d0,(byte_FFEE64).w
@@ -5786,7 +5815,7 @@ sub_46A0:
 		move.w	#$3C,(word_FF8FA6).w
 		moveq	#0,d1
 		lea	(word_FFA2C0).w,a1
-		jsr	loc_9508(pc)
+		jsr	fill_ram_64_bytes(pc) ;	d1 = dword
 		move.w	#$9298,(a5)
 		lea	(unk_FFFA80).w,a3
 		move.l	#$93809402,(a3)+
@@ -5836,22 +5865,22 @@ loc_476A:
 		jsr	sub_969E(pc)
 		move.l	#$4E000000,d0
 		trap	#4		; do_decompress_kosinski_to_ram
-		tst.b	(byte_FFFF1C).w
+		tst.b	(is_usa_europe_version).w
 		bne.s	loc_47A0
 		move.l	#$4F000000,d0
 		trap	#4		; do_decompress_kosinski_to_ram
 
 loc_47A0:
-		move.w	(word_FFFF0A).w,(a5)
+		move.w	(enable_display).w,(a5)
 		jsr	sub_4560(pc)
-		move.w	#5,(word_FFFF18).w
+		move.w	#5,(init_step).w
 		rts
 
 byte_47B0:	dc.b $FF, 0, 2,	0, 2, 0, 0, 0, $FF, $FF
 word_47BA:	dc.w $FFFF, 5, 6, 7, 7,	7, $A, $A, $FFFF, $FFFF
 sub_47CE:
 		jsr	(sub_1060).l
-		jsr	sub_13FED8
+		jsr	send_smps_cmd	; d0 = cmd
 		jsr	sub_48B8(pc)
 		jsr	sub_2592(pc)
 		jsr	sub_40EA(pc)
@@ -5880,8 +5909,8 @@ locret_4824:
 		rts
 
 loc_4826:
-		move.w	(word_FFFF08).w,(a5)
-		move.w	#8,(word_FFFF18).w
+		move.w	(disable_display).w,(a5)
+		move.w	#8,(init_step).w
 		move.w	#0,(word_FF8FA4).w
 		rts
 
@@ -5894,14 +5923,14 @@ loc_4842:
 		jsr	sub_48C4(pc)
 		jsr	sub_489A(pc)
 		jsr	sub_4572(pc)
-		move.w	#2,(word_FFFF18).w
+		move.w	#2,(init_step).w
 		rts
 
 loc_4856:
 		clr.b	(byte_FFEE4F).w
 		jsr	sub_489A(pc)
 		jsr	sub_4572(pc)
-		move.w	#4,(word_FFFF18).w
+		move.w	#4,(init_step).w
 		rts
 
 loc_486A:
@@ -5913,11 +5942,11 @@ loc_486A:
 		jsr	sub_968A(pc)
 		jsr	sub_4572(pc)
 		move.w	#5,(word_FF8F96).w
-		move.w	#4,(word_FFFF18).w
+		move.w	#4,(init_step).w
 		rts
 
 loc_4892:
-		move.w	#$F,(word_FFFF18).w
+		move.w	#$F,(init_step).w
 		rts
 
 sub_489A:
@@ -5948,7 +5977,7 @@ sub_48C4:
 		rts
 
 sub_48D2:
-		bset	#7,(word_FFFF18).w
+		bset	#7,(init_step).w
 		beq.s	loc_48F8
 		jsr	sub_40EA(pc)
 		jsr	sub_969E(pc)
@@ -5956,7 +5985,7 @@ sub_48D2:
 		subq.w	#1,(word_FF89E0).w
 		bne.s	locret_48F6
 		jsr	sub_4572(pc)
-		move.w	#$10,(word_FFFF18).w
+		move.w	#$10,(init_step).w
 
 locret_48F6:
 		rts
@@ -5966,15 +5995,15 @@ loc_48F8:
 		lea	(word_FFA2C0).w,a0
 		movea.l	a0,a1
 		moveq	#0,d1
-		jsr	loc_9508(pc)
+		jsr	fill_ram_64_bytes(pc) ;	d1 = dword
 		move.w	#$5D,0.w(a0)
 		move.w	#$B4,(word_FF89E0).w
-		move.b	#$91,(byte_FFEE53).w
-		jsr	sub_13FED8
+		move.b	#$91,(smps_cmd1).w
+		jsr	send_smps_cmd	; d0 = cmd
 		rts
 
 sub_4924:
-		bset	#7,(word_FFFF18).w
+		bset	#7,(init_step).w
 		beq.s	sub_4992
 		bsr.s	sub_4950
 		move.w	#$3B,(a6)
@@ -6001,33 +6030,33 @@ loc_495E:
 		rts
 
 sub_4966:
-		clr.b	(byte_FFEE52).w
+		clr.b	(smps_cmd2).w
 		jsr	sub_968A(pc)
 		jsr	sub_4572(pc)
 		tst.b	(word_FF89E0).w
 		bne.s	loc_4980
-		move.w	#$E,(word_FFFF18).w
+		move.w	#$E,(init_step).w
 		rts
 
 loc_4980:
 		move.w	#0,(word_FFFF20).w
-		move.w	#0,(word_FFFF18).w
+		move.w	#0,(init_step).w
 		jsr	sub_968A(pc)
 		rts
 
 sub_4992:
-		move.w	(word_FFFF08).w,(a5)
+		move.w	(disable_display).w,(a5)
 		sf	(byte_FFEE01).w
-		jsr	sub_20AC(pc)
+		jsr	clear_vram_cram_vsram(pc)
 		move.l	#$1000000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$1000000,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$16000000,d0
 		trap	#0		; do_raw_copy_data
-		move.w	(word_FFFF0A).w,(a5)
-		move.b	#$97,(byte_FFEE53).w
-		jsr	sub_13FED8
+		move.w	(enable_display).w,(a5)
+		move.b	#$97,(smps_cmd1).w
+		jsr	send_smps_cmd	; d0 = cmd
 		move.b	#0,(word_FF89E0).w
 		rts
 
@@ -6057,7 +6086,7 @@ loc_49E2:
 		move.l	#0,(rand_seed).w
 		st	(byte_FFEE50).w
 		jsr	sub_46A0(pc)
-		move.w	#7,(word_FFFF18).w
+		move.w	#7,(init_step).w
 		move.l	#$38000000,d0
 		trap	#4		; do_decompress_kosinski_to_ram
 		rts
@@ -6068,11 +6097,11 @@ word_4A5C:	dc.w 3,	1, 3, 1, 0
 word_4A66:	dc.w 0,	0, 2, 0, 0
 sub_4A70:
 		jsr	sub_968A(pc)
-		clr.w	(word_FFFF18).w
+		clr.w	(init_step).w
 		rts
 
 sub_4A7A:
-		jsr	sub_13FED8
+		jsr	send_smps_cmd	; d0 = cmd
 		jsr	sub_2592(pc)
 		jsr	sub_40EA(pc)
 		jsr	sub_969E(pc)
@@ -6086,11 +6115,11 @@ sub_4A7A:
 		rts
 
 loc_4AAA:
-		move.w	#0,(word_FFFF18).w
+		move.w	#0,(init_step).w
 		bra.s	loc_4AB8
 
 loc_4AB2:
-		move.w	#0,(word_FFFF18).w
+		move.w	#0,(init_step).w
 
 loc_4AB8:
 		clr.b	(byte_FFEE50).w
@@ -6100,15 +6129,15 @@ loc_4AB8:
 		rts
 
 sub_4ACA:
-		bset	#7,(word_FFFF18).w
+		bset	#7,(init_step).w
 		bne.s	loc_4AF0
-		move.w	(word_FFFF08).w,(a5)
-		jsr	sub_20AC(pc)
+		move.w	(disable_display).w,(a5)
+		jsr	clear_vram_cram_vsram(pc)
 		jsr	sub_205E(pc)
 		jsr	sub_B828(pc)
 		jsr	sub_4F36(pc)
-		jsr	sub_13FE00
-		move.w	(word_FFFF0A).w,(a5)
+		jsr	init_sound_type1
+		move.w	(enable_display).w,(a5)
 
 loc_4AF0:
 		jmp	sub_969E(pc)
@@ -6172,17 +6201,17 @@ loc_4B7A:
 		rts
 
 loc_4B80:
-		move.w	#$C,(word_FFFF18).w
+		move.w	#$C,(init_step).w
 		rts
 
 sub_4B88:
-		move.w	(word_FFFF08).w,(a5)
+		move.w	(disable_display).w,(a5)
 		move.l	#$40000003,(a5)
 		moveq	#0,d1
 		move.w	#$1F,d7
 
 loc_4B98:
-		jsr	sub_952A(pc)
+		jsr	fill_vram_64_words(pc) ; d1 = word|word
 		dbf	d7,loc_4B98
 		move.b	#1,$31(a0)
 		move.l	#$F0E0D,d0
@@ -6192,11 +6221,11 @@ loc_4B98:
 		moveq	#$11,d0
 		trap	#0		; do_raw_copy_data
 		move.l	#$5900,d0
-		trap	#5		; Trap5
-		move.b	#0,(byte_FFEE02).w
+		trap	#5		; do_copy_4_palettes_to_ram
+		move.b	#0,(cram_update_needed).w
 		move.w	#$50,$10(a0)
 		move.w	#$34,$14(a0)
-		move.w	(word_FFFF0A).w,(a5)
+		move.w	(enable_display).w,(a5)
 		addq.w	#1,2(a0)
 		rts
 
@@ -6250,8 +6279,8 @@ loc_4C36:
 		cmpi.b	#$88,d0
 		seq	(byte_FFEE68).w
 		seq	(byte_FFEE69).w
-		move.b	d0,(byte_FFEE52).w
-		jmp	sub_13FED8
+		move.b	d0,(smps_cmd2).w
+		jmp	send_smps_cmd	; d0 = cmd
 
 loc_4C74:
 		move.w	#9,2(a0)
@@ -6315,7 +6344,7 @@ loc_4D0C:
 		movea.l	a1,a3
 		movea.l	a2,a1
 		move.l	#$203B203B,d1
-		jsr	loc_9522(pc)
+		jsr	fill_ram_12_bytes(pc) ;	d1 = dword
 		move.w	(a1)+,(a2)+
 		movea.l	a1,a2
 		movea.l	a3,a1
@@ -6353,7 +6382,7 @@ locret_4E1C:
 sub_4E1E:
 		jsr	sub_4572(pc)
 		clr.w	(word_FF8FAE).w
-		bclr	#7,(word_FFFF18).w
+		bclr	#7,(init_step).w
 		rts
 
 word_4E2E:	dc.w $200E, $201E, $200D, $2015, $200C,	$201E, $201B, $2011
@@ -6385,8 +6414,8 @@ sub_4F36:
 		move.l	#$120C0B,d0
 		trap	#0		; do_raw_copy_data
 		move.l	#$5900,d0
-		trap	#5		; Trap5
-		move.b	#0,(byte_FFEE02).w
+		trap	#5		; do_copy_4_palettes_to_ram
+		move.b	#0,(cram_update_needed).w
 		rts
 
 word_4F78:	dc.w $201C, $201D, $200B, $201B, $201D
@@ -6478,9 +6507,9 @@ loc_5062:
 sub_5068:
 		jsr	sub_AC72
 		jsr	sub_968A(pc)
-		move.b	#$92,(byte_FFEE53).w
-		jsr	sub_13FED8
-		move.w	#$E,(word_FFFF18).w
+		move.b	#$92,(smps_cmd1).w
+		jsr	send_smps_cmd	; d0 = cmd
+		move.w	#$E,(init_step).w
 		rts
 
 sub_5086:
@@ -6488,10 +6517,10 @@ sub_5086:
 		move.b	(byte_FFEE48).w,d0
 		add.w	d0,d0
 		move.w	word_50A4(pc,d0.w),d0
-		cmp.w	(word_FFF594).w,d0
+		cmp.w	(ram_palette_0+$14).w,d0
 		beq.s	locret_50A2
-		move.w	d0,(word_FFF594).w
-		move.b	#1,(byte_FFEE02).w
+		move.w	d0,(ram_palette_0+$14).w
+		move.b	#1,(cram_update_needed).w
 
 locret_50A2:
 		rts
@@ -6585,7 +6614,7 @@ loc_5158:
 		move.w	d1,(a1)
 		move.b	d0,$3A(a1)
 		clr.w	2(a1)
-		move.b	#$A1,(byte_FFEE52).w
+		move.b	#$A1,(smps_cmd2).w
 
 locret_5170:
 		rts
@@ -6601,7 +6630,7 @@ loc_5172:
 		clr.w	2(a1)
 		subq.w	#5,(word_FF8F90).w
 		move.b	#1,(byte_FFEE5B).w
-		move.b	#$A4,(byte_FFEE52).w
+		move.b	#$A4,(smps_cmd2).w
 
 locret_51A2:
 		rts
@@ -6615,7 +6644,7 @@ loc_51A4:
 		clr.w	2(a1)
 		subq.w	#1,(word_FF8F92).w
 		move.b	#1,(byte_FFEE5B).w
-		move.b	#$A6,(byte_FFEE52).w
+		move.b	#$A6,(smps_cmd2).w
 
 locret_51CA:
 		rts
@@ -6625,7 +6654,7 @@ loc_51CC:
 		move.w	#$66,(a1)
 		move.b	d0,$3A(a1)
 		clr.w	2(a1)
-		move.b	#$A8,(byte_FFEE52).w
+		move.b	#$A8,(smps_cmd2).w
 		rts
 
 locret_51E4:
@@ -6871,7 +6900,7 @@ sub_5444:
 		move.w	#$A,$26(a0)
 		jsr	sub_550A(pc)
 		bclr	#4,$E(a0)
-		move.b	#$A2,(byte_FFEE52).w
+		move.b	#$A2,(smps_cmd2).w
 		move.w	#3,2(a0)
 
 locret_549A:
@@ -6908,7 +6937,7 @@ loc_54E4:
 		bclr	#4,$E(a0)
 		bclr	#1,$D(a0)
 		move.w	#0,6(a0)
-		move.b	#$A3,(byte_FFEE52).w
+		move.b	#$A3,(smps_cmd2).w
 		move.w	#5,2(a0)
 		rts
 
@@ -6948,7 +6977,7 @@ loc_5558:
 		jsr	sub_5604(pc)
 		move.w	#3,2(a0)
 		bclr	#4,$E(a0)
-		move.b	#$A2,(byte_FFEE52).w
+		move.b	#$A2,(smps_cmd2).w
 		rts
 
 loc_557C:
@@ -6960,7 +6989,7 @@ loc_558A:
 		bset	#3,$E(a0)
 
 loc_5590:
-		move.b	#$A2,(byte_FFEE52).w
+		move.b	#$A2,(smps_cmd2).w
 		movea.w	$30(a0),a1
 		move.w	$10(a0),d1
 		sub.w	$10(a1),d1
@@ -6973,7 +7002,7 @@ loc_5590:
 		bclr	#4,$E(a0)
 		btst	#1,$E(a1)
 		bne.s	loc_55DA
-		move.b	#$A5,(byte_FFEE52).w
+		move.b	#$A5,(smps_cmd2).w
 		move.w	#4,2(a0)
 		rts
 
@@ -6996,7 +7025,7 @@ sub_5604:
 sub_5614:
 		subq.w	#1,$26(a0)
 		bne.s	locret_564E
-		move.b	#$A3,(byte_FFEE52).w
+		move.b	#$A3,(smps_cmd2).w
 		move.w	#5,2(a0)
 		move.w	#1,6(a0)
 		bset	#1,$D(a0)
@@ -7859,7 +7888,7 @@ loc_5EF2:
 		lea	(word_FFA2C0).w,a1
 		lea	(unk_FF7C00).l,a2
 		jsr	copy_bytes_to_dest_64(pc) ; a1 = source
-		move.b	#$AE,(byte_FFEE52).w
+		move.b	#$AE,(smps_cmd2).w
 		move.w	#$801A,2(a0)
 
 locret_5F0C:
@@ -8041,8 +8070,8 @@ sub_60A6:
 		bne.s	locret_60D2
 		sf	(byte_FFEE62).w
 		move.w	#0,(word_FF8F9A).w
-		move.b	#$FB,(byte_FFEE52).w
-		jsr	sub_13FED8
+		move.b	#$FB,(smps_cmd2).w
+		jsr	send_smps_cmd	; d0 = cmd
 		move.b	#$78,(byte_FFEE0A).w
 		st	(byte_FFEE08).w
 
@@ -8409,7 +8438,7 @@ sub_659E:
 		move.w	#$10,$26(a0)
 		move.w	#4,$28(a0)
 		clr.l	$34(a0)
-		move.b	#$BC,(byte_FFEE52).w
+		move.b	#$BC,(smps_cmd2).w
 
 loc_65C8:
 		bset	#0,$E(a0)
@@ -8466,7 +8495,7 @@ loc_6664:
 		moveq	#8,d0
 		jsr	sub_5F78(pc)
 		move.w	#$20,$26(a0)
-		move.b	#$A9,(byte_FFEE52).w
+		move.b	#$A9,(smps_cmd2).w
 		rts
 
 sub_6678:
@@ -8685,7 +8714,7 @@ loc_68BC:
 loc_68C8:
 		move.b	#0,(byte_FFEE06).w
 		move.w	#0,(word_FF8F84).w
-		move.b	#$A0,(byte_FFEE52).w
+		move.b	#$A0,(smps_cmd2).w
 		move.w	#$8008,d1
 
 loc_68DE:
@@ -8810,7 +8839,7 @@ loc_6A62:
 		sf	(byte_FFEE42).w
 		move.w	(word_FF8F8C).w,$32(a0)
 		bset	#0,(byte_FFEE03).w
-		move.b	#$A0,(byte_FFEE52).w
+		move.b	#$A0,(smps_cmd2).w
 		jmp	loc_6488(pc)
 
 sub_6A80:
@@ -8934,7 +8963,7 @@ loc_6BD6:
 		subq.w	#1,$26(a0)
 		bpl.s	loc_6BE8
 		move.w	#$F,$26(a0)
-		move.b	#$AA,(byte_FFEE52).w
+		move.b	#$AA,(smps_cmd2).w
 
 loc_6BE8:
 		jsr	sub_5C0C(pc)
@@ -9511,7 +9540,7 @@ loc_71AC:
 		move.b	#$AD,d0
 
 loc_71BA:
-		move.b	d0,(byte_FFEE52).w
+		move.b	d0,(smps_cmd2).w
 		rts
 
 sub_71C0:
@@ -10555,8 +10584,8 @@ loc_7D92:
 		bcs.w	loc_7E54
 		move.w	#5,(word_FF8F9A).w
 		st	(byte_FFEE62).w
-		move.b	#$F0,(byte_FFEE52).w
-		jsr	sub_13FED8
+		move.b	#$F0,(smps_cmd2).w
+		jsr	send_smps_cmd	; d0 = cmd
 		move.w	#$168,(word_FF8FA8).w
 		bra.w	loc_7E54
 
@@ -10687,7 +10716,7 @@ loc_7EE6:
 loc_7EEA:
 		jsr	sub_B9A8(pc)
 		beq.s	locret_7EF6
-		move.b	#$B0,(byte_FFEE52).w
+		move.b	#$B0,(smps_cmd2).w
 
 locret_7EF6:
 		rts
@@ -10846,7 +10875,7 @@ loc_808E:
 		subq.w	#8,$14(a0)
 		move.w	#$6000,$1A(a0)
 		move.w	#$3C,$26(a0)
-		move.b	#$B4,(byte_FFEE52).w
+		move.b	#$B4,(smps_cmd2).w
 		moveq	#9,d0
 		jsr	sub_B83E(pc)
 		bset	#7,$C(a0)
@@ -10893,10 +10922,10 @@ sub_8112:
 		move.w	#$FFFC,$18(a0)
 		move.w	#2,$1C(a0)
 		move.w	#$40,$26(a0)
-		move.b	#$92,(byte_FFEE53).w
-		jsr	sub_13FED8
-		jsr	sub_961A(pc)
-		move.b	#$B1,(byte_FFEE52).w
+		move.b	#$92,(smps_cmd1).w
+		jsr	send_smps_cmd	; d0 = cmd
+		jsr	wait_for_vblank(pc)
+		move.b	#$B1,(smps_cmd2).w
 		moveq	#6,d0
 		jsr	sub_B83E(pc)
 		move.b	#1,(byte_FFEE5E).w
@@ -10996,13 +11025,13 @@ loc_8256:
 		rts
 
 loc_8260:
-		move.b	#$A6,(byte_FFEE52).w
+		move.b	#$A6,(smps_cmd2).w
 		move.w	#$A,$26(a0)
 		bclr	#1,$D(a0)
 		bset	#3,$D(a0)
 		bclr	#7,$E(a0)
 		addq.w	#1,2(a0)
-		move.b	#$D4,(byte_FFEE52).w
+		move.b	#$D4,(smps_cmd2).w
 
 locret_8288:
 		rts
@@ -11025,7 +11054,7 @@ sub_82AA:
 		jsr	sub_19F06
 		movea.l	a3,a1
 		moveq	#0,d1
-		jsr	loc_9508(pc)
+		jsr	fill_ram_64_bytes(pc) ;	d1 = dword
 		move.w	#$AC,(a3)
 		move.b	d0,$36(a3)
 		movem.l	(sp)+,d0-a3
@@ -11061,7 +11090,7 @@ loc_8314:
 		bclr	#2,$D(a0)
 		movea.w	$28(a0),a1
 		st	(a1)
-		move.b	#$C2,(byte_FFEE52).w
+		move.b	#$C2,(smps_cmd2).w
 
 locret_8342:
 		rts
@@ -11079,7 +11108,7 @@ loc_8350:
 		beq.s	locret_836C
 		move.w	#1,6(a0)
 		addq.w	#1,2(a0)
-		move.b	#$C2,(byte_FFEE52).w
+		move.b	#$C2,(smps_cmd2).w
 
 locret_836C:
 		rts
@@ -11128,10 +11157,10 @@ locret_83EC:
 		rts
 
 sub_83EE:
-		cmpi.b	#8,(word_FFFF18+1).w
+		cmpi.b	#8,(init_step+1).w
 		beq.s	locret_842A
 		move.w	#$37,$28(a0)
-		move.b	#$C1,(byte_FFEE52).w
+		move.b	#$C1,(smps_cmd2).w
 		st	(byte_FFEEEC).w
 		addq.w	#1,2(a0)
 
@@ -11184,10 +11213,10 @@ loc_8486:
 		jmp	sub_92C8(pc)
 
 sub_848C:
-		cmpi.b	#8,(word_FFFF18+1).w
+		cmpi.b	#8,(init_step+1).w
 		beq.s	locret_84C0
 		move.w	#$37,$28(a0)
-		move.b	#$C1,(byte_FFEE52).w
+		move.b	#$C1,(smps_cmd2).w
 		addq.w	#1,2(a0)
 
 loc_84A4:
@@ -11282,7 +11311,7 @@ loc_8592:
 		sf	(byte_FFEE5E).w
 		bset	#0,(byte_FFEE75).w
 		bne.s	locret_85B4
-		move.b	#$8F,(byte_FFEE53).w
+		move.b	#$8F,(smps_cmd1).w
 		move.b	#$8F,(byte_FFEE67).w
 
 locret_85B4:
@@ -11444,7 +11473,7 @@ loc_88A2:
 		move.w	#$120,$10(a0)
 		move.w	#$160,$14(a0)
 		move.w	#$40,$26(a0)
-		jsr	sub_961A
+		jsr	wait_for_vblank
 		move.l	a0,-(sp)
 		move.l	#$59000000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
@@ -12067,7 +12096,7 @@ sub_8F8E:
 		tst.b	(byte_FFEED3).w
 		beq.s	loc_8FA8
 		addq.w	#1,2(a0)
-		move.b	#$D5,(byte_FFEE52).w
+		move.b	#$D5,(smps_cmd2).w
 
 loc_8FA8:
 		moveq	#$11,d1
@@ -12076,7 +12105,7 @@ loc_8FA8:
 		jmp	sub_92C8(pc)
 
 sub_8FB4:
-		cmpi.b	#8,(word_FFFF18+1).w
+		cmpi.b	#8,(init_step+1).w
 		beq.s	locret_8FD2
 		moveq	#5,d0
 		jsr	sub_4462(pc)
@@ -12195,7 +12224,7 @@ sub_9104:
 		bcs.s	loc_9134
 		moveq	#0,d1
 		movea.l	a3,a1
-		jsr	loc_9508(pc)
+		jsr	fill_ram_64_bytes(pc) ;	d1 = dword
 		move.w	#$C7,0.w(a3)
 		move.w	a0,$30(a3)
 
@@ -12447,7 +12476,7 @@ sub_93AC:
 		jsr	sub_19F06
 		moveq	#0,d1
 		movea.l	a3,a1
-		jsr	loc_9508(pc)
+		jsr	fill_ram_64_bytes(pc) ;	d1 = dword
 		move.w	#$A0,0.w(a3)
 		move.w	2(a0),$14(a3)
 		move.w	4(a0),$10(a3)
@@ -12557,8 +12586,10 @@ get_vram_write_cmd:
 		ori.w	#$4000,d0
 		swap	d0
 		rts
+; d1 = dword
+; a1 = dest
 
-sub_94E8:
+fill_ram_128_bytes:
 		move.l	d1,(a1)+
 		move.l	d1,(a1)+
 		move.l	d1,(a1)+
@@ -12575,8 +12606,10 @@ sub_94E8:
 		move.l	d1,(a1)+
 		move.l	d1,(a1)+
 		move.l	d1,(a1)+
+; d1 = dword
+; a1 = dest
 
-loc_9508:
+fill_ram_64_bytes:
 		move.l	d1,(a1)+
 		move.l	d1,(a1)+
 		move.l	d1,(a1)+
@@ -12589,17 +12622,22 @@ loc_9508:
 		move.l	d1,(a1)+
 		move.l	d1,(a1)+
 		move.l	d1,(a1)+
+; d1 = dword
+; a1 = dest
 
-loc_9520:
+fill_ram_16_bytes:
 		move.l	d1,(a1)+
+; d1 = dword
+; a1 = dest
 
-loc_9522:
+fill_ram_12_bytes:
 		move.l	d1,(a1)+
 		move.l	d1,(a1)+
 		move.l	d1,(a1)+
 		rts
+; d1 = word|word
 
-sub_952A:
+fill_vram_64_words:
 		move.l	d1,(a6)
 		move.l	d1,(a6)
 		move.l	d1,(a6)
@@ -12616,8 +12654,9 @@ sub_952A:
 		move.l	d1,(a6)
 		move.l	d1,(a6)
 		move.l	d1,(a6)
+; d1 = word|word
 
-loc_954A:
+fill_vram_32_words:
 		move.l	d1,(a6)
 		move.l	d1,(a6)
 		move.l	d1,(a6)
@@ -12626,14 +12665,16 @@ loc_954A:
 		move.l	d1,(a6)
 		move.l	d1,(a6)
 		move.l	d1,(a6)
+; d1 = word|word
 
-loc_955A:
+fill_vram_16_words:
 		move.l	d1,(a6)
 		move.l	d1,(a6)
 		move.l	d1,(a6)
 		move.l	d1,(a6)
+; d1 = word|word
 
-loc_9562:
+fill_vram_8_words:
 		move.l	d1,(a6)
 		move.l	d1,(a6)
 		move.l	d1,(a6)
@@ -12747,12 +12788,12 @@ loc_95FE:
 		move.l	(sp)+,d1
 		rts
 
-sub_961A:
-		move.b	#1,(byte_FFEE00).w
+wait_for_vblank:
+		move.b	#1,(vblank_active_flag).w
 		move	#$2500,sr
 
 loc_9624:
-		tst.b	(byte_FFEE00).w
+		tst.b	(vblank_active_flag).w
 		bne.s	loc_9624
 		rts
 
@@ -12805,8 +12846,8 @@ draw_xx_value:
 		rts
 
 sub_968A:
-		move.b	#$F8,(byte_FFEE53).w
-		jsr	sub_13FED8
+		move.b	#$F8,(smps_cmd1).w
+		jsr	send_smps_cmd	; d0 = cmd
 		move.b	#0,(byte_FFEE67).w
 		rts
 
@@ -13308,15 +13349,15 @@ sub_9CB2:
 		cmpi.w	#1,(word_FFA344).w
 		beq.w	loc_9DC4
 		bgt.w	sub_9F2A
-		move.w	(word_FFFF08).w,(a5)
+		move.w	(disable_display).w,(a5)
 		move.w	#0,(vblank_sub_index).w
 		clr.b	(byte_FFEE01).w
 		jsr	sub_B828(pc)
 		jsr	sub_205E(pc)
 		jsr	init_joypads(pc)
-		jsr	sub_20AC(pc)
+		jsr	clear_vram_cram_vsram(pc)
 		move.l	#$17161500,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		move.l	#$3B454401,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$53580000,d0
@@ -13356,12 +13397,12 @@ loc_9D70:
 		trap	#0		; do_raw_copy_data
 
 loc_9D8A:
-		move.w	(word_FFFF0A).w,(a5)
+		move.w	(enable_display).w,(a5)
 		lea	(unk_FFA360).w,a1
 		move.w	#$420A,(a1)
 		move.w	#$D,2(a1)
 		move.w	#2,4(a1)
-		btst	#7,(byte_FFFF0C).w
+		btst	#7,(pcb_ver).w
 		bne.s	loc_9DB6
 		move.w	#9,2(a1)
 		move.w	#3,4(a1)
@@ -13372,7 +13413,7 @@ loc_9DB6:
 		rts
 
 loc_9DC4:
-		jsr	sub_13FED8
+		jsr	send_smps_cmd	; d0 = cmd
 		tst.b	(byte_FFEEFA).w
 		beq.s	loc_9DFE
 		move.w	#0,(vblank_sub_index).w
@@ -13472,7 +13513,7 @@ sub_9F2A:
 		beq.s	locret_9F52
 
 loc_9F42:
-		move.w	#3,(word_FFFF18).w
+		move.w	#3,(init_step).w
 		clr.w	(word_FFA344).w
 		jmp	sub_968A
 
@@ -13547,7 +13588,7 @@ loc_9FE2:
 loc_9FF8:
 		move.w	(a1,d0.w),(word_FF9050).l
 		move.w	2(a1,d0.w),(word_FF9054).l
-		btst	#7,(byte_FFFF0C).w
+		btst	#7,(pcb_ver).w
 		bne.s	loc_A04A
 		lea	(byte_127CD8).l,a2
 		moveq	#0,d1
@@ -13688,10 +13729,10 @@ stru_A136:	struc_13 2, $2A, 2
 		struc_13 $F, $18, $E
 sub_A1C6:
 		jsr	(init_joypads).l
-		jsr	sub_13FE00
-		move.w	(word_FFFF08).w,(a5)
-		jsr	sub_A738(pc)
-		jsr	sub_A774(pc)
+		jsr	init_sound_type1
+		move.w	(disable_display).w,(a5)
+		jsr	clear_vram(pc)
+		jsr	clear_ram_0000_fd00_0(pc)
 		moveq	#1,d0
 		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		move.l	#$3231302F,d0
@@ -13704,22 +13745,22 @@ sub_A1C6:
 		jsr	sub_A2A4(pc)
 		move.l	#$48000000,(a5)
 		moveq	#$FFFFFFFF,d1
-		jsr	loc_955A(pc)
+		jsr	fill_vram_16_words(pc) ; d1 = word|word
 		move.b	#1,(byte_FFFC06).w
 		move.w	#$3C,(word_FFFC10).w
 		move.w	#4,(vblank_sub_index).w
-		jsr	sub_961A(pc)
+		jsr	wait_for_vblank(pc)
 		move.w	#$FFE0,(word_FF8560).w
 		jsr	sub_A6B0(pc)
-		move.b	#$8D,(byte_FFEE52).w
-		jsr	sub_13FED8
-		move.w	(word_FFFF0A).w,(a5)
+		move.b	#$8D,(smps_cmd2).w
+		jsr	send_smps_cmd	; d0 = cmd
+		move.w	(enable_display).w,(a5)
 
 loc_A246:
 		jsr	sub_969E(pc)
 		jsr	sub_A7E2(pc)
 		jsr	sub_AB26(pc)
-		jsr	sub_13FED8
+		jsr	send_smps_cmd	; d0 = cmd
 		jsr	sub_A6CC(pc)
 		jsr	sub_A6F4(pc)
 		tst.b	(byte_FFFC07).w
@@ -13728,7 +13769,7 @@ loc_A246:
 
 loc_A26A:
 		move.w	#3,(vblank_sub_index).w
-		jsr	sub_961A(pc)
+		jsr	wait_for_vblank(pc)
 		tst.b	(byte_FFFC14).w
 		beq.s	loc_A246
 		jsr	sub_A6BE(pc)
@@ -13739,10 +13780,10 @@ loc_A280:
 		jsr	sub_A6FA(pc)
 		move.w	(sp)+,d7
 		move.w	#4,(vblank_sub_index).w
-		jsr	sub_961A(pc)
+		jsr	wait_for_vblank(pc)
 		dbf	d7,loc_A280
 		move.w	#0,(word_FFFF20).w
-		move.w	#0,(word_FFFF18).w
+		move.w	#0,(init_step).w
 		rts
 
 sub_A2A4:
@@ -13756,12 +13797,12 @@ sub_A2A4:
 		bsr.s	sub_A2CC
 
 sub_A2C4:
-		jsr	sub_952A(pc)
-		jsr	sub_952A(pc)
+		jsr	fill_vram_64_words(pc) ; d1 = word|word
+		jsr	fill_vram_64_words(pc) ; d1 = word|word
 
 sub_A2CC:
-		jsr	sub_952A(pc)
-		jmp	sub_952A(pc)
+		jsr	fill_vram_64_words(pc) ; d1 = word|word
+		jmp	fill_vram_64_words(pc) ; d1 = word|word
 
 sub_A2D4:
 		move.w	(word_FF8F34).w,d1
@@ -13774,16 +13815,16 @@ sub_A2D4:
 		move.w	(a0,d2.w),d2
 		movea.l	d2,a0
 		jsr	(a0)
-		lea	(word_13CA70).l,a1
-		lea	word_13D1F0-word_13CA70(a1),a1
-		lea	(dword_FFF580).w,a2
+		lea	(palettes_data_1).l,a1
+		lea	word_13D1F0-palettes_data_1(a1),a1
+		lea	(ram_palette_0).w,a2
 		jsr	copy_bytes_to_dest_64 ;	a1 = source
 		lea	$20(a1),a1
 		jsr	copy_bytes_to_dest_32 ;	a1 = source
 		jsr	sub_A71C(pc)
-		lea	(word_13CA70).l,a1
-		lea	word_13CD70-word_13CA70(a1),a1
-		lea	(unk_FFF5C0).w,a2
+		lea	(palettes_data_1).l,a1
+		lea	word_13CD70-palettes_data_1(a1),a1
+		lea	(ram_palette_2).w,a2
 		jsr	copy_bytes_to_dest_32 ;	a1 = source
 		lea	word_13CD50-word_13CD70(a1),a1
 		jsr	copy_bytes_to_dest_32 ;	a1 = source
@@ -13840,22 +13881,22 @@ loc_A396:
 
 sub_A3A8:
 		jsr	(init_joypads).l
-		jsr	loc_13FE16
-		move.w	(word_FFFF08).w,(a5)
-		jsr	sub_A738(pc)
-		jsr	sub_A774(pc)
+		jsr	init_sound_type2
+		move.w	(disable_display).w,(a5)
+		jsr	clear_vram(pc)
+		jsr	clear_ram_0000_fd00_0(pc)
 		move.l	#$3C3E3D3C,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		jsr	sub_A71C(pc)
 		move.l	#$18181818,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		moveq	#1,d0
 		trap	#1		; do_decompress_nemesis_to_vram
 		move.l	#$32313000,d0
 		trap	#1		; do_decompress_nemesis_to_vram
-		jsr	sub_961A(pc)
-		move.b	#$8C,(byte_FFEE52).w
-		jsr	sub_13FED8
+		jsr	wait_for_vblank(pc)
+		move.b	#$8C,(smps_cmd2).w
+		jsr	send_smps_cmd	; d0 = cmd
 		lea	(enigma_12C192).l,a0
 		lea	(unk_FF1000).l,a1
 		move.w	#$100,d0
@@ -13873,13 +13914,13 @@ sub_A3A8:
 		move.w	#$6B,(word_FF91C0).w
 		move.w	#$78,(word_FFFC10).w
 		move.w	#4,(vblank_sub_index).w
-		jsr	sub_961A(pc)
+		jsr	wait_for_vblank(pc)
 		jsr	sub_A6B0(pc)
 		move.w	#5,(word_FFFC16).w
-		move.w	(word_FFFF0A).w,(a5)
+		move.w	(enable_display).w,(a5)
 
 loc_A462:
-		btst	#6,(byte_FFFF0C).w
+		btst	#6,(pcb_ver).w
 		beq.s	loc_A482
 		subq.w	#1,(word_FFFC16).w
 		bne.s	loc_A482
@@ -13894,7 +13935,7 @@ loc_A482:
 		jsr	sub_AB26(pc)
 		jsr	sub_A6D2(pc)
 		move.w	#3,(vblank_sub_index).w
-		jsr	sub_961A(pc)
+		jsr	wait_for_vblank(pc)
 		cmpi.w	#7,(word_FF9002).w
 		bne.s	loc_A462
 		jsr	sub_A71C(pc)
@@ -13906,23 +13947,23 @@ loc_A4AE:
 		jsr	sub_A6FA(pc)
 		move.w	(sp)+,d7
 		move.w	#4,(vblank_sub_index).w
-		jsr	sub_961A(pc)
+		jsr	wait_for_vblank(pc)
 		dbf	d7,loc_A4AE
-		move.w	#$A,(word_FFFF18).w
+		move.w	#$A,(init_step).w
 		rts
 
 sub_A4CC:
-		lea	byte_A7CE(pc),a0
+		lea	initial_vdp_regs_0(pc),a0
 		jsr	(init_vdp_regs).l ; a0 = vdp regs array	(19)
-		jsr	sub_13FE00
-		move.w	(word_FFFF08).w,(a5)
-		jsr	sub_A738(pc)
-		jsr	sub_A774(pc)
-		move.l	#$18161818,d0
-		trap	#5		; Trap5
-		move.l	#$15141312,d0
+		jsr	init_sound_type1
+		move.w	(disable_display).w,(a5)
+		jsr	clear_vram(pc)
+		jsr	clear_ram_0000_fd00_0(pc)
+		move.l	#make_indexes($18,$16,$18,$18),d0
+		trap	#COPY_PAL_TO_RAM ; do_copy_4_palettes_to_ram
+		move.l	#make_indexes($15,$14,$13,$12),d0
 		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
-		move.l	#$19181716,d0
+		move.l	#make_indexes($19,$18,$17,$16),d0
 		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		lea	(enigma_02C3B8).l,a0
 		lea	(M68K_RAM).l,a1
@@ -13944,14 +13985,14 @@ sub_A4CC:
 		move.w	#$31,(word_FF9040).w
 		move.w	#$32,(word_FF9080).w
 		jsr	sub_962C
-		jsr	sub_961A(pc)
+		jsr	wait_for_vblank(pc)
 		bclr	#0,(byte_FFFF16).w
 		bne.s	loc_A5DA
 		move.w	#5,(word_FFFC16).w
-		move.w	(word_FFFF0A).w,(a5)
+		move.w	(enable_display).w,(a5)
 
 loc_A582:
-		btst	#6,(byte_FFFF0C).w
+		btst	#6,(pcb_ver).w
 		beq.s	loc_A5A2
 		subq.w	#1,(word_FFFC16).w
 		bne.s	loc_A5A2
@@ -13964,22 +14005,22 @@ loc_A5A2:
 		jsr	sub_969E(pc)
 		jsr	sub_A9C4(pc)
 		jsr	sub_AB26(pc)
-		jsr	sub_13FED8
+		jsr	send_smps_cmd	; d0 = cmd
 		move.w	#3,(vblank_sub_index).w
-		jsr	sub_961A(pc)
+		jsr	wait_for_vblank(pc)
 		tst.b	(byte_FFFC05).w
 		bne.w	loc_A642
 		btst	#7,(word_FF8FB0+1).w
 		beq.s	loc_A582
-		move.b	#$F9,(byte_FFEE52).w
-		jsr	sub_13FED8
+		move.b	#$F9,(smps_cmd2).w
+		jsr	send_smps_cmd	; d0 = cmd
 
 loc_A5DA:
-		move.w	(word_FFFF08).w,(a5)
-		jsr	sub_A738(pc)
-		jsr	sub_A774(pc)
+		move.w	(disable_display).w,(a5)
+		jsr	clear_vram(pc)
+		jsr	clear_ram_0000_fd00_0(pc)
 		move.l	#$17161519,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 		jsr	sub_A7A6(pc)
 		move.l	#$1C1A1915,d0
 		trap	#1		; do_decompress_nemesis_to_vram
@@ -13994,8 +14035,8 @@ loc_A5DA:
 		move.l	#off_12E272,(dword_FF9120).w
 		move.l	#off_12E272,(dword_FF9160).w
 		jsr	sub_962C
-		jsr	sub_961A(pc)
-		move.w	(word_FFFF0A).w,(a5)
+		jsr	wait_for_vblank(pc)
+		move.w	(enable_display).w,(a5)
 
 loc_A642:
 		move.w	#$168,(word_FF8F7E).w
@@ -14003,25 +14044,25 @@ loc_A642:
 loc_A648:
 		jsr	sub_969E(pc)
 		move.w	#3,(vblank_sub_index).w
-		jsr	sub_961A(pc)
+		jsr	wait_for_vblank(pc)
 		btst	#7,(word_FF8FB0+1).w
 		bne.s	loc_A684
 		subq.w	#1,(word_FF8F7E).w
 		bne.s	loc_A648
-		move.b	#$F8,(byte_FFEE52).w
-		jsr	sub_13FED8
-		move.w	#6,(word_FFFF18).w
-		move.b	#$F8,(byte_FFEE52).w
-		jsr	sub_13FED8
+		move.b	#$F8,(smps_cmd2).w
+		jsr	send_smps_cmd	; d0 = cmd
+		move.w	#6,(init_step).w
+		move.b	#$F8,(smps_cmd2).w
+		jsr	send_smps_cmd	; d0 = cmd
 		bra.s	loc_A696
 
 loc_A684:
-		move.w	#$B,(word_FFFF18).w
-		move.b	#$F8,(byte_FFEE52).w
-		jsr	sub_13FED8
+		move.w	#$B,(init_step).w
+		move.b	#$F8,(smps_cmd2).w
+		jsr	send_smps_cmd	; d0 = cmd
 
 loc_A696:
-		move.w	(word_FFFF08).w,(a5)
+		move.w	(disable_display).w,(a5)
 		move.l	#$C0000000,(a5)
 		moveq	#0,d0
 		moveq	#$1F,d7
@@ -14029,7 +14070,7 @@ loc_A696:
 loc_A6A4:
 		move.l	d0,(a6)
 		dbf	d7,loc_A6A4
-		move.w	(word_FFFF0A).w,(a5)
+		move.w	(enable_display).w,(a5)
 		rts
 
 sub_A6B0:
@@ -14085,16 +14126,16 @@ locret_A71A:
 		rts
 
 sub_A71C:
-		lea	(dword_FFF580).w,a1
+		lea	(ram_palette_0).w,a1
 		lea	(unk_FFF600).w,a2
 		jmp	copy_bytes_to_dest_128 ; a1 = source
 
 sub_A72A:
 		lea	(unk_FFF600).w,a1
-		lea	(dword_FFF580).w,a2
+		lea	(ram_palette_0).w,a2
 		jmp	copy_bytes_to_dest_128 ; a1 = source
 
-sub_A738:
+clear_vram:
 		move.w	#$8F01,(a5)
 		jsr	request_z80_bus
 		move.l	#$93FF94FF,(a5)
@@ -14103,7 +14144,7 @@ sub_A738:
 		move.w	#0,(a6)
 
 loc_A756:
-		btst	#1,1(a5)
+		btst	#DMA_IN_PROGRESS,1(a5)
 		bne.s	loc_A756
 		move.l	#$40000000,(a5)
 		move.w	#0,(a6)
@@ -14111,13 +14152,13 @@ loc_A756:
 		move.w	#$8F02,(a5)
 		rts
 
-sub_A774:
+clear_ram_0000_fd00_0:
 		lea	(M68K_RAM).l,a1
 		moveq	#0,d1
 		move.w	#$1F9,d7
 
 loc_A780:
-		jsr	sub_94E8(pc)
+		jsr	fill_ram_128_bytes(pc) ; d1 = dword
 		dbf	d7,loc_A780
 		rts
 
@@ -14130,14 +14171,14 @@ sub_A78A:
 		rts
 
 sub_A7A6:
-		move.l	#$22E0EEE,(dword_FFF5D0).w
-		move.l	#$460022A,(dword_FFF5D4).w
-		move.l	#$4AE048E,(dword_FFF5D8).w
-		move.l	#$26E0000,(dword_FFF5DC).w
-		move.b	#1,(byte_FFEE02).w
+		move.l	#$22E0EEE,(ram_palette_2+$10).w
+		move.l	#$460022A,(ram_palette_2+$14).w
+		move.l	#$4AE048E,(ram_palette_2+$18).w
+		move.l	#$26E0000,(ram_palette_2+$1C).w
+		move.b	#1,(cram_update_needed).w
 		rts
 
-byte_A7CE:	dc.b 4,	$14, $30, $2C, 7, $5A, 0, 0, 0,	0, 0, 2, $81, $2C, 0, 2, 3, 0, 0
+initial_vdp_regs_0:dc.b	4, $14,	$30, $2C, 7, $5A, 0, 0,	0, 0, 0, 2, $81, $2C, 0, 2, 3, 0, 0
 		align 2
 sub_A7E2:
 		st	(byte_FFEE7A).w
@@ -14146,7 +14187,7 @@ sub_A7E2:
 
 sub_A7EC:
 		lea	stru_A8CC(pc),a1
-		btst	#7,(byte_FFFF0C).w
+		btst	#7,(pcb_ver).w
 		bne.s	loc_A7FC
 		lea	stru_A8EC(pc),a1
 
@@ -14166,7 +14207,7 @@ loc_A7FC:
 		move.w	2(a1,d7.w),d6
 		tst.b	(byte_FFEE7A).w
 		beq.s	loc_A83E
-		btst	#6,(byte_FFFF0C).w
+		btst	#6,(pcb_ver).w
 		beq.s	loc_A83E
 		divu.w	#6,d6
 		mulu.w	#5,d6
@@ -14415,9 +14456,9 @@ sub_AAB4:
 		movem.l	a0-a6,-(sp)
 		moveq	#6,d0
 		trap	#0		; do_raw_copy_data
-		move.l	#$EEE0EEA,(dword_FFF5A2).w
-		move.l	#$ECA0EC4,(dword_FFF5A6).w
-		move.b	#1,(byte_FFEE02).w
+		move.l	#$EEE0EEA,(ram_palette_1+2).w
+		move.l	#$ECA0EC4,(ram_palette_1+6).w
+		move.b	#1,(cram_update_needed).w
 		move.w	#7,(word_FFFC4A).w
 		move.l	#word_12BC1C,(dword_FFFC40).w
 		move.l	#$60000001,(a5)
@@ -14426,7 +14467,7 @@ sub_AAB4:
 		move.w	#$B,d7
 
 loc_AAF2:
-		jsr	sub_952A(pc)
+		jsr	fill_vram_64_words(pc) ; d1 = word|word
 		dbf	d7,loc_AAF2
 		move.l	#$60000001,(dword_FFFC44).w
 		lea	(nemesis_12A5FA).l,a0
@@ -14480,7 +14521,7 @@ sub_AB72:
 		lea	(unk_FF2000).l,a1
 		move.w	#$2460,d0
 		jsr	(decompress_enigma_to_ram).l ; a0 = source
-		btst	#7,(byte_FFFF0C).w
+		btst	#7,(pcb_ver).w
 		bne.s	loc_ABC8
 		lea	(enigma_0315A2).l,a0
 		lea	(M68K_RAM).l,a1
@@ -14561,9 +14602,9 @@ loc_AC60:
 
 sub_AC72:
 		jsr	(init_joypads).l
-		move.w	(word_FFFF08).w,(a5)
-		jsr	sub_A738(pc)
-		jsr	sub_A774(pc)
+		move.w	(disable_display).w,(a5)
+		jsr	clear_vram(pc)
+		jsr	clear_ram_0000_fd00_0(pc)
 		jsr	(sub_205E).l
 		move.l	#$5401,d0
 		trap	#1		; do_decompress_nemesis_to_vram
@@ -14579,15 +14620,15 @@ sub_AC72:
 		move.w	#$100,d0
 		jsr	(decompress_enigma_to_ram).l ; a0 = source
 		moveq	#$15,d0
-		jsr	(raw_data_copy).l ; d0 = indexes
+		jsr	(raw_data_copy_to_vdp).l ; d0 =	indexes
 		move.w	#$13,(word_FFFC80).w
-		btst	#7,(byte_FFFF0C).w
+		btst	#7,(pcb_ver).w
 		bne.s	loc_ACEA
 		move.w	#$21,(word_FFFC80).w
 
 loc_ACEA:
-		move.b	#$90,(byte_FFEE53).w
-		jsr	sub_13FED8
+		move.b	#$90,(smps_cmd1).w
+		jsr	send_smps_cmd	; d0 = cmd
 		move.w	#0,(word_FFFC82).w
 
 loc_ACFC:
@@ -14607,18 +14648,18 @@ loc_ACFC:
 		lea	(word_AED2).l,a0
 		move.w	(a0,d1.w),d0
 		swap	d0
-		jsr	(sub_2204).l
-		move.w	#0,(word_FFF59E).w
+		jsr	(copy_4_palettes_to_ram).l
+		move.w	#0,(ram_palette_0+$1E).w
 		moveq	#$13,d0
-		jsr	(raw_data_copy).l ; d0 = indexes
+		jsr	(raw_data_copy_to_vdp).l ; d0 =	indexes
 		move.w	#3,(vblank_sub_index).w
-		jsr	sub_961A(pc)
-		move.w	(word_FFFF0A).w,(a5)
+		jsr	wait_for_vblank(pc)
+		move.w	(enable_display).w,(a5)
 		move.w	d7,d1
 		add.w	d1,d1
 		moveq	#0,d7
 		lea	stru_AEAA(pc),a0
-		btst	#7,(byte_FFFF0C).w
+		btst	#7,(pcb_ver).w
 		bne.s	loc_AD6E
 		lea	$A(a0),a0
 
@@ -14626,7 +14667,7 @@ loc_AD6E:
 		move.b	(a0,d1.w),d7
 		move.b	1(a0,d1.w),d0
 		bsr.s	sub_AD92
-		move.w	(word_FFFF08).w,(a5)
+		move.w	(disable_display).w,(a5)
 		tst.b	(byte_FFFC85).w
 		bne.s	locret_AD90
 		addq.w	#1,(word_FFFC82).w
@@ -14652,7 +14693,7 @@ loc_AD96:
 loc_ADB6:
 		jsr	sub_AB26(pc)
 		move.w	#3,(vblank_sub_index).w
-		jsr	sub_961A(pc)
+		jsr	wait_for_vblank(pc)
 		move.b	(word_FF8FB0+1).w,d0
 		btst	#7,d0
 		bne.w	loc_AE32
@@ -14666,7 +14707,7 @@ loc_ADE2:
 		move.w	d7,-(sp)
 		jsr	sub_AB26(pc)
 		move.w	#3,(vblank_sub_index).w
-		jsr	sub_961A(pc)
+		jsr	wait_for_vblank(pc)
 		move.w	(sp)+,d7
 		dbf	d7,loc_ADE2
 		move.b	(byte_FFFC84).w,d0
@@ -14685,7 +14726,7 @@ loc_AE12:
 		moveq	#$B,d0
 
 loc_AE22:
-		jsr	sub_952A(pc)
+		jsr	fill_vram_64_words(pc) ; d1 = word|word
 		dbf	d0,loc_AE22
 		move.w	(sp)+,d7
 		dbf	d7,loc_AD96
@@ -14698,7 +14739,7 @@ loc_AE32:
 		moveq	#$B,d0
 
 loc_AE42:
-		jsr	sub_952A(pc)
+		jsr	fill_vram_64_words(pc) ; d1 = word|word
 		dbf	d0,loc_AE42
 		move.w	(sp)+,d7
 		add.w	d7,(word_FFFC80).w
@@ -14913,16 +14954,16 @@ sub_B0D2:
 		jsr	sub_B7CE(pc)
 		move.w	#$3C,$38(a0)
 		move.b	#3,$30(a0)
-		move.l	#$ACE04AE,(dword_FFF5D4).w
-		move.l	#$48E026E,(dword_FFF5D8).w
-		move.w	#$24E,(dword_FFF5DC).w
-		move.b	#1,(byte_FFEE02).w
+		move.l	#$ACE04AE,(ram_palette_2+$14).w
+		move.l	#$48E026E,(ram_palette_2+$18).w
+		move.w	#$24E,(ram_palette_2+$1C).w
+		move.b	#1,(cram_update_needed).w
 
 sub_B114:
 		jsr	sub_B740(pc)
 		cmpi.b	#3,$30(a0)
 		bne.s	loc_B126
-		move.b	#$81,(byte_FFEE52).w
+		move.b	#$81,(smps_cmd2).w
 
 loc_B126:
 		subq.b	#1,$30(a0)
@@ -14944,8 +14985,8 @@ loc_B140:
 		movea.l	(sp)+,a0
 		move.w	#$1E0,$38(a0)
 		move.l	#$17161514,d0
-		trap	#5		; Trap5
-		lea	(dword_FFF580).w,a1
+		trap	#5		; do_copy_4_palettes_to_ram
+		lea	(ram_palette_0).w,a1
 		lea	(unk_FFF600).w,a2
 		jsr	copy_bytes_to_dest_128 ; a1 = source
 		jmp	sub_B74A(pc)
@@ -14961,17 +15002,17 @@ sub_B1A0:
 		jsr	sub_B740(pc)
 		move.w	#$1AE,$38(a0)
 		move.w	#4,2(a0)
-		move.l	#$2480228,(dword_FFF580+2).w
-		move.l	#$2260224,(dword_FFF586).w
-		move.b	#1,(byte_FFEE02).w
+		move.l	#$2480228,(ram_palette_0+2).w
+		move.l	#$2260224,(ram_palette_0+6).w
+		move.b	#1,(cram_update_needed).w
 		rts
 
 sub_B1C8:
 		jsr	sub_B740(pc)
 		move.w	#$F0,$38(a0)
-		move.l	#$46A0248,(dword_FFF580+2).w
-		move.l	#$2260224,(dword_FFF586).w
-		move.b	#1,(byte_FFEE02).w
+		move.l	#$46A0248,(ram_palette_0+2).w
+		move.l	#$2260224,(ram_palette_0+6).w
+		move.b	#1,(cram_update_needed).w
 		move.w	#2,(word_FF9002).w
 		rts
 
@@ -15011,13 +15052,13 @@ sub_B22C:
 		move.l	#off_21532,$20(a0)
 		moveq	#$29,d0
 		jsr	sub_B7CE(pc)
-		lea	((dword_FFF580+2)).w,a1
+		lea	((ram_palette_0+2)).w,a1
 		moveq	#6,d7
 
 loc_B264:
 		move.l	#0,(a1)+
 		dbf	d7,loc_B264
-		move.b	#1,(byte_FFEE02).w
+		move.b	#1,(cram_update_needed).w
 
 sub_B274:
 		jsr	(sub_5FDC).l
@@ -15233,7 +15274,7 @@ sub_B50C:
 		move.w	#4,6(a0)
 		move.w	#$1E,$38(a0)
 		move.l	#$17161519,d0
-		trap	#5		; Trap5
+		trap	#5		; do_copy_4_palettes_to_ram
 
 sub_B560:
 		jsr	sub_B88A
@@ -15340,7 +15381,7 @@ sub_B6BE:
 		move.l	#$54160003,(a5)
 		moveq	#0,d1
 		move.l	d1,(a6)
-		jmp	loc_955A
+		jmp	fill_vram_16_words ; d1	= word|word
 
 sub_B6DE:
 		move.w	(word_FF9110).w,$10(a0)
@@ -15390,13 +15431,13 @@ sub_B74A:
 
 loc_B756:
 		lea	(unk_FFF600).w,a1
-		lea	(dword_FFF580).w,a2
+		lea	(ram_palette_0).w,a2
 		jsr	copy_bytes_to_dest_128 ; a1 = source
 		bsr.s	sub_B78A
 		moveq	#2,d5
 
 loc_B768:
-		jsr	sub_961A
+		jsr	wait_for_vblank
 		dbf	d5,loc_B768
 		subq.w	#1,d0
 		dbf	d6,loc_B756
@@ -15404,13 +15445,13 @@ loc_B768:
 		rts
 
 sub_B780:
-		lea	(unk_FFF5E0).w,a1
+		lea	(ram_palette_3).w,a1
 		moveq	#4,d5
 		moveq	#$F,d7
 		bra.s	loc_B792
 
 sub_B78A:
-		lea	(dword_FFF580).w,a1
+		lea	(ram_palette_0).w,a1
 		moveq	#4,d5
 		moveq	#$3F,d7
 
@@ -15445,7 +15486,7 @@ loc_B7B4:
 		andi.w	#$EEE,d3
 		move.w	d3,(a1)+
 		dbf	d7,loc_B792
-		move.b	#1,(byte_FFEE02).w
+		move.b	#1,(cram_update_needed).w
 		rts
 sub_B7CE:
 		jmp	sub_B83E
@@ -15491,7 +15532,7 @@ loc_B7FC:
 loc_B820:
 		movea.l	a0,a1
 		moveq	#0,d1
-		bra.w	loc_9508
+		bra.w	fill_ram_64_bytes ; d1 = dword
 
 sub_B828:
 		moveq	#$4A,d7
@@ -15504,7 +15545,7 @@ loc_B82E:
 
 sub_B838:
 		moveq	#0,d1
-		jmp	sub_94E8(pc)
+		jmp	fill_ram_128_bytes(pc) ; d1 = dword
 
 sub_B83E:
 		addq.w	#1,2(a0)
@@ -17708,8 +17749,8 @@ loc_D8B8:
 		lea	(word_D904).l,a1
 		add.w	d0,d0
 		move.w	(a1,d0.w),d0
-		move.w	d0,(word_FFF5FA).w
-		move.b	#1,(byte_FFEE02).w
+		move.w	d0,(ram_palette_3+$1A).w
+		move.b	#1,(cram_update_needed).w
 		btst	#0,$27(a0)
 		bne.s	loc_D8E4
 		move.l	$18(a0),d0
@@ -18128,14 +18169,14 @@ loc_DE0E:
 		bne.s	loc_DE28
 		move.l	#$FFFE0000,$1C(a0)
 		addq.w	#1,2(a0)
-		move.b	#$B7,(byte_FFEE52).w
+		move.b	#$B7,(smps_cmd2).w
 		rts
 
 loc_DE28:
 		move.w	$38(a0),d0
 		andi.w	#$3F,d0
 		bne.s	loc_DE38
-		move.b	#$B7,(byte_FFEE52).w
+		move.b	#$B7,(smps_cmd2).w
 
 loc_DE38:
 		subq.b	#1,$26(a0)
@@ -18394,7 +18435,7 @@ loc_E136:
 		bne.w	loc_E10E
 		jsr	sub_EA3C(pc)
 		bne.w	loc_E10E
-		move.b	#$B8,(byte_FFEE52).w
+		move.b	#$B8,(smps_cmd2).w
 		cmpi.w	#3,0.w(a0)
 		beq.s	loc_E180
 		cmpi.w	#$2D,0.w(a0)
@@ -18537,7 +18578,7 @@ loc_E338:
 		bne.w	loc_E10E
 		jsr	sub_EA3C(pc)
 		bne.w	loc_E10E
-		move.b	#$B8,(byte_FFEE52).w
+		move.b	#$B8,(smps_cmd2).w
 		cmpi.w	#3,0.w(a0)
 		beq.s	loc_E382
 		cmpi.w	#$2D,0.w(a0)
@@ -18882,7 +18923,7 @@ loc_E7B8:
 		subq.b	#1,$26(a0)
 		bne.s	locret_E800
 		addq.w	#1,2(a0)
-		move.b	#$BD,(byte_FFEE52).w
+		move.b	#$BD,(smps_cmd2).w
 		move.b	#$F0,$26(a0)
 		move.w	#4,$1C(a0)
 		move.l	(dword_FF8520).w,d0
@@ -18927,7 +18968,7 @@ sub_E842:
 		jsr	sub_BC72(pc)
 		move.l	#off_11AD26,$20(a0)
 		bset	#7,$C(a0)
-		move.b	#$BD,(byte_FFEE52).w
+		move.b	#$BD,(smps_cmd2).w
 		bra.w	sub_B856
 
 loc_E864:
@@ -19060,7 +19101,7 @@ sub_E9D8:
 		jsr	copy_bytes_to_dest_64(pc) ; a1 = source
 		movea.l	a0,a1
 		moveq	#0,d1
-		jsr	loc_9508(pc)
+		jsr	fill_ram_64_bytes(pc) ;	d1 = dword
 		suba.w	#$40,a1
 		suba.w	#$40,a2
 		bra.s	loc_EA00
@@ -19084,7 +19125,7 @@ sub_EA04:
 		jsr	copy_bytes_to_dest_64(pc) ; a1 = source
 		movea.l	a0,a1
 		moveq	#0,d1
-		jsr	loc_9508(pc)
+		jsr	fill_ram_64_bytes(pc) ;	d1 = dword
 		suba.w	#$40,a1
 		suba.w	#$40,a2
 		bra.s	loc_EA2C
@@ -19347,7 +19388,7 @@ word_EC90:	dc.w $FF, $100,	$100, $100, $100, $100,	$101, $101, $101, $102
 sub_ED12:
 		jsr	sub_E9A8(pc)
 		bne.s	locret_ED1C
-		move.b	d2,(byte_FFEE52).w
+		move.b	d2,(smps_cmd2).w
 
 locret_ED1C:
 		rts
@@ -20340,7 +20381,7 @@ loc_F81E:
 		beq.s	loc_F866
 
 loc_F824:
-		move.b	#$C0,(byte_FFEE52).w
+		move.b	#$C0,(smps_cmd2).w
 		moveq	#1,d6
 
 loc_F82C:
@@ -20390,7 +20431,7 @@ loc_F8B2:
 		subq.b	#1,$26(a0)
 		bne.s	loc_F908
 		addq.w	#1,2(a0)
-		move.b	#$C0,(byte_FFEE52).w
+		move.b	#$C0,(smps_cmd2).w
 		move.b	#$18,$26(a0)
 		bclr	#1,$D(a0)
 		bclr	#2,$D(a0)
@@ -20545,7 +20586,7 @@ loc_FA7C:
 		bne.w	loc_FA54
 		jsr	sub_EA3C(pc)
 		bne.w	loc_FA54
-		move.b	#$B8,(byte_FFEE52).w
+		move.b	#$B8,(smps_cmd2).w
 		move.w	#6,0.w(a1)
 		move.w	$14(a0),$14(a1)
 		subi.w	#$14,$14(a1)
@@ -20675,7 +20716,7 @@ sub_FC04:
 		blt.s	locret_FC28
 		addq.w	#1,2(a0)
 		bclr	#2,$D(a0)
-		move.b	#$A7,(byte_FFEE52).w
+		move.b	#$A7,(smps_cmd2).w
 		move.b	#$24,$26(a0)
 
 locret_FC28:
@@ -20760,7 +20801,7 @@ sub_FD16:
 		subq.b	#1,$26(a0)
 		bhi.s	locret_FD26
 		addq.w	#1,2(a0)
-		move.b	#$D0,(byte_FFEE52).w
+		move.b	#$D0,(smps_cmd2).w
 
 locret_FD26:
 		rts
@@ -20943,7 +20984,7 @@ locret_FF36:
 sub_FF38:
 		subq.b	#1,$26(a0)
 		bhi.w	locret_FFF8
-		move.b	#$CC,(byte_FFEE52).w
+		move.b	#$CC,(smps_cmd2).w
 		move.b	#4,$26(a0)
 		subq.b	#1,$27(a0)
 		moveq	#0,d0
@@ -21593,7 +21634,7 @@ locret_106D6:
 		rts
 
 loc_106D8:
-		move.b	#$CB,(byte_FFEE52).w
+		move.b	#$CB,(smps_cmd2).w
 		moveq	#3,d6
 		lea	(stru_1071C).l,a2
 
@@ -21862,7 +21903,7 @@ loc_109D0:
 		bset	#3,$D(a0)
 		bclr	#7,$E(a0)
 		addq.w	#1,2(a0)
-		move.b	#$D4,(byte_FFEE52).w
+		move.b	#$D4,(smps_cmd2).w
 
 locret_10A02:
 		rts
@@ -22395,7 +22436,7 @@ locret_10FEC:
 sub_10FEE:
 		subq.b	#1,$26(a0)
 		bgt.s	locret_1100C
-		move.b	#$D2,(byte_FFEE52).w
+		move.b	#$D2,(smps_cmd2).w
 		move.w	#1,$1C(a0)
 		bclr	#7,$E(a0)
 		moveq	#1,d0
@@ -23143,7 +23184,7 @@ sub_1188A:
 		rts
 
 loc_11894:
-		move.b	#$D3,(byte_FFEE52).w
+		move.b	#$D3,(smps_cmd2).w
 		addq.w	#1,2(a0)
 		rts
 
@@ -23250,7 +23291,7 @@ sub_11962:
 loc_119AC:
 		moveq	#4,d0
 		bsr.s	sub_119F6
-		move.b	#$E2,(byte_FFEE52).w
+		move.b	#$E2,(smps_cmd2).w
 		jmp	sub_B852(pc)
 
 loc_119BA:
@@ -23280,11 +23321,11 @@ locret_119F4:
 		rts
 
 sub_119F6:
-		move.b	#1,(byte_FFEE02).w
+		move.b	#1,(cram_update_needed).w
 		lea	(word_11A14).l,a1
 		lsl.w	#4,d0
 		adda.l	d0,a1
-		lea	((dword_FFF5EE+2)).w,a2
+		lea	((ram_palette_3+$10)).w,a2
 		moveq	#3,d7
 
 loc_11A0C:
@@ -23541,7 +23582,7 @@ sub_11D4E:
 		tst.b	$26(a0)
 		beq.s	loc_11D76
 		addq.w	#2,2(a0)
-		move.b	#$C0,(byte_FFEE52).w
+		move.b	#$C0,(smps_cmd2).w
 		bset	#3,$D(a0)
 		btst	#0,$36(a0)
 		bne.s	loc_11D70
@@ -23656,7 +23697,7 @@ sub_11E8E:
 		bclr	#6,$E(a0)
 		beq.s	loc_11EA4
 		addq.w	#1,2(a0)
-		move.b	#$E1,(byte_FFEE52).w
+		move.b	#$E1,(smps_cmd2).w
 		neg.l	$1C(a0)
 
 loc_11EA4:
@@ -23686,7 +23727,7 @@ sub_11EDC:
 		bclr	#6,$E(a0)
 		bne.s	loc_11EF2
 		addq.w	#1,2(a0)
-		move.b	#$E1,(byte_FFEE52).w
+		move.b	#$E1,(smps_cmd2).w
 		neg.l	$1C(a0)
 
 loc_11EF2:
@@ -23771,7 +23812,7 @@ loc_11FE0:
 		bra.w	sub_15C48
 
 loc_11FE4:
-		move.b	#$E0,(byte_FFEE52).w
+		move.b	#$E0,(smps_cmd2).w
 		move.w	#5,d6
 		lea	(stru_12020).l,a2
 
@@ -23817,7 +23858,7 @@ sub_12080:
 		subq.b	#1,$26(a0)
 		bhi.s	loc_1209E
 		addq.w	#1,2(a0)
-		move.b	#$DF,(byte_FFEE52).w
+		move.b	#$DF,(smps_cmd2).w
 		move.b	#$40,$26(a0)
 		neg.l	$18(a0)
 		neg.l	$1C(a0)
@@ -23880,7 +23921,7 @@ sub_12114:
 		jsr	copy_bytes_to_dest_64 ;	a1 = source
 		movea.l	a0,a1
 		moveq	#0,d1
-		jsr	loc_9508
+		jsr	fill_ram_64_bytes ; d1 = dword
 
 sub_1215E:
 		move.w	(dword_FF8524).w,d0
@@ -23969,7 +24010,7 @@ loc_12254:
 		jmp	sub_120E4(pc)
 
 sub_1225C:
-		move.b	#$C4,(byte_FFEE52).w
+		move.b	#$C4,(smps_cmd2).w
 		moveq	#7,d6
 		lea	(stru_122EC).l,a2
 
@@ -24067,7 +24108,7 @@ sub_123D0:
 loc_123DE:
 		subq.w	#1,$38(a0)
 		bne.s	loc_123F4
-		move.b	#$C4,(byte_FFEE52).w
+		move.b	#$C4,(smps_cmd2).w
 		moveq	#2,d0
 		add.w	4(a0),d0
 		jmp	sub_B83E(pc)
@@ -26035,7 +26076,7 @@ loc_13A30:
 		move.w	a2,$2A(a1)
 		moveq	#0,d1
 		movea.l	a0,a1
-		jmp	loc_9508
+		jmp	fill_ram_64_bytes ; d1 = dword
 
 locret_13A5E:
 		rts
@@ -26326,7 +26367,7 @@ loc_13D88:
 		bclr	#2,$D(a0)
 		tst.b	$28(a0)
 		beq.s	locret_13DDC
-		move.b	#$C0,(byte_FFEE52).w
+		move.b	#$C0,(smps_cmd2).w
 		jsr	sub_EA3C(pc)
 		bne.s	locret_13DDC
 		move.w	#$1F,0.w(a1)
@@ -29063,7 +29104,7 @@ loc_15ED8:
 sub_15EE2:
 		subq.w	#1,$2A(a0)
 		bhi.s	loc_15F54
-		move.b	#$C9,(byte_FFEE52).w
+		move.b	#$C9,(smps_cmd2).w
 		move.w	#$80,$2A(a0)
 		lea	(stru_1606E).l,a2
 		btst	#0,$36(a0)
@@ -29328,7 +29369,7 @@ sub_16262:
 		subq.b	#1,$26(a0)
 		bhi.w	loc_16276
 		move.b	#8,$26(a0)
-		move.b	#$C5,(byte_FFEE52).w
+		move.b	#$C5,(smps_cmd2).w
 
 loc_16276:
 		jsr	sub_16166(pc)
@@ -29493,7 +29534,7 @@ sub_16460:
 		subq.b	#1,$26(a0)
 		bhi.s	loc_16472
 		move.b	#8,$26(a0)
-		move.b	#$C5,(byte_FFEE52).w
+		move.b	#$C5,(smps_cmd2).w
 
 loc_16472:
 		subq.b	#1,$28(a0)
@@ -29568,8 +29609,8 @@ locret_1654E:
 		rts
 
 sub_16550:
-		move.b	#1,(byte_FFEE02).w
-		lea	(unk_FFF5A0).w,a2
+		move.b	#1,(cram_update_needed).w
+		lea	(ram_palette_1).w,a2
 		move.b	$27(a0),d1
 		andi.b	#1,d1
 		bne.s	loc_16572
@@ -30021,7 +30062,7 @@ off_16A0A:	dc.w sub_16A12-off_16A0A
 		dc.w loc_16AB0-off_16A0A
 		dc.w sub_16AF4-off_16A0A
 sub_16A12:
-		move.b	#$CC,(byte_FFEE52).w
+		move.b	#$CC,(smps_cmd2).w
 		move.b	#5,$26(a0)
 		addq.w	#1,$3E(a0)
 		move.w	#5,$1C(a0)
@@ -30175,7 +30216,7 @@ off_16BB6:	dc.w sub_16BBC-off_16BB6
 		dc.w sub_16BEA-off_16BB6
 		dc.w sub_16C02-off_16BB6
 sub_16BBC:
-		move.b	#$CD,(byte_FFEE52).w
+		move.b	#$CD,(smps_cmd2).w
 		cmpi.w	#$C0,$14(a0)
 		bcc.s	loc_16BD4
 		addi.l	#$1800,$1C(a0)
@@ -30214,8 +30255,8 @@ locret_16C26:
 
 loc_16C28:
 		bset	#0,$C(a0)
-		move.b	#$95,(byte_FFEE53).w
-		jsr	sub_13FED8
+		move.b	#$95,(smps_cmd1).w
+		jsr	send_smps_cmd	; d0 = cmd
 		addi.w	#$3E8,(word_FF8F7A).w
 		moveq	#2,d0
 		jsr	sub_82AA
@@ -30244,8 +30285,8 @@ loc_16C72:
 		lea	word_16CC0(pc),a1
 
 loc_16C80:
-		move.b	#1,(byte_FFEE02).w
-		lea	(unk_FFF5A0).w,a2
+		move.b	#1,(cram_update_needed).w
+		lea	(ram_palette_1).w,a2
 		jsr	copy_bytes_to_dest_32 ;	a1 = source
 		tst.b	$34(a0)
 		bne.s	locret_16C9E
@@ -30796,7 +30837,7 @@ loc_1726A:
 		blt.s	loc_172AC
 
 loc_1728C:
-		move.b	#$E3,(byte_FFEE52).w
+		move.b	#$E3,(smps_cmd2).w
 		bset	#2,$3A(a1)
 		bclr	#1,$3A(a1)
 		bra.s	loc_172AC
@@ -31051,7 +31092,7 @@ loc_175D2:
 loc_175DA:
 		move.w	#4,2(a0)
 		move.b	#$64,$26(a0)
-		move.b	#$95,(byte_FFEE53).w
+		move.b	#$95,(smps_cmd1).w
 		clr.w	$2A(a0)
 		move.w	$10(a0),d0
 		sub.w	(dword_FFA2D0).w,d0
@@ -31396,8 +31437,8 @@ loc_17A2A:
 		rts
 
 sub_17A3E:
-		move.b	#1,(byte_FFEE02).w
-		lea	(unk_FFF5A0).w,a2
+		move.b	#1,(cram_update_needed).w
+		lea	(ram_palette_1).w,a2
 		lea	(unk_FFF620).w,a1
 		moveq	#7,d7
 
@@ -31423,8 +31464,8 @@ loc_17A72:
 		move.w	#1,2(a0)
 		lea	(word_FF9000).l,a1
 		move.w	#$D,word_FF9002-word_FF9000(a1)
-		move.b	#$F8,(byte_FFEE53).w
-		jsr	sub_13FED8
+		move.b	#$F8,(smps_cmd1).w
+		jsr	send_smps_cmd	; d0 = cmd
 		move.w	#5,(word_FF8D20).w
 		st	(byte_FFEE5E).w
 
@@ -31977,7 +32018,7 @@ loc_1818A:
 		rts
 
 loc_1819E:
-		move.b	#$E4,(byte_FFEE52).w
+		move.b	#$E4,(smps_cmd2).w
 		jsr	sub_18694
 		jsr	sub_17CBE
 		bset	#1,$D(a0)
@@ -32291,7 +32332,7 @@ loc_1855E:
 		jsr	sub_185EE
 		tst.w	d0
 		beq.s	loc_18588
-		move.b	#$E3,(byte_FFEE52).w
+		move.b	#$E3,(smps_cmd2).w
 		move.b	#$14,$26(a0)
 		move.l	#$FFFE9000,$1C(a0)
 		addq.b	#1,$3B(a0)
@@ -32421,7 +32462,7 @@ loc_186C4:
 		beq.s	locret_186DA
 		move.w	#1,6(a0)
 		addq.w	#1,2(a0)
-		move.b	#$C2,(byte_FFEE52).w
+		move.b	#$C2,(smps_cmd2).w
 
 locret_186DA:
 		rts
@@ -32437,7 +32478,7 @@ loc_186E8:
 		beq.s	locret_186DA
 		move.w	#1,6(a0)
 		addq.w	#1,2(a0)
-		move.b	#$C2,(byte_FFEE52).w
+		move.b	#$C2,(smps_cmd2).w
 		rts
 
 sub_18700:
@@ -32497,8 +32538,8 @@ sub_1878C:
 		move.w	#$D0,(dword_FF9014).w
 
 loc_187AA:
-		move.b	#1,(byte_FFEE02).w
-		lea	(unk_FFF5A0).w,a2
+		move.b	#1,(cram_update_needed).w
+		lea	(ram_palette_1).w,a2
 		move.b	$27(a0),d1
 		andi.b	#1,d1
 		bne.s	loc_187CC
@@ -32550,8 +32591,8 @@ sub_1882A:
 		move.w	#$B7,0.w(a1)
 		move.w	#$D0,$14(a1)
 		move.w	#$100,$10(a1)
-		move.b	#$93,(byte_FFEE53).w
-		jmp	sub_13FED8
+		move.b	#$93,(smps_cmd1).w
+		jmp	send_smps_cmd	; d0 = cmd
 
 locret_1885E:
 		rts
@@ -32563,7 +32604,7 @@ sub_18860:
 		move.b	$26(a0),d0
 		andi.b	#7,d0
 		bne.s	loc_1887C
-		move.b	#$C1,(byte_FFEE52).w
+		move.b	#$C1,(smps_cmd2).w
 
 loc_1887C:
 		subq.b	#1,$26(a0)
@@ -32696,7 +32737,7 @@ sub_189BA:
 loc_189EC:
 		moveq	#0,d1
 		lea	(word_FFA2C0).w,a1
-		jmp	loc_9508
+		jmp	fill_ram_64_bytes ; d1 = dword
 
 locret_189F8:
 		rts
@@ -32712,7 +32753,7 @@ sub_189FA:
 		jsr	(sub_104E).l
 		jsr	(sub_1060).l
 		jsr	(sub_4572).l
-		move.w	#9,(word_FFFF18).w
+		move.w	#9,(init_step).w
 
 locret_18A34:
 		rts
@@ -32883,7 +32924,7 @@ sub_18BE0:
 		moveq	#0,d1
 
 loc_18BFA:
-		move.b	#$D8,(byte_FFEE52).w
+		move.b	#$D8,(smps_cmd2).w
 		movea.w	(word_FF928C).w,a1
 		bset	d0,$2A(a1)
 		bclr	#2,$D(a1)
@@ -32927,7 +32968,7 @@ sub_18C7E:
 		clr.b	(byte_FF9299).w
 
 loc_18C9E:
-		move.b	#$D9,(byte_FFEE52).w
+		move.b	#$D9,(smps_cmd2).w
 		clr.b	$2B(a0)
 		move.w	d0,$10(a0)
 		bclr	#2,$D(a0)
@@ -33267,7 +33308,7 @@ sub_18FB8:
 		subq.b	#1,$26(a0)
 		bhi.s	loc_18FCA
 		move.b	#$1E,$26(a0)
-		move.b	#$D6,(byte_FFEE52).w
+		move.b	#$D6,(smps_cmd2).w
 
 loc_18FCA:
 		movea.w	(word_FF9284).w,a1
@@ -33285,7 +33326,7 @@ locret_18FEC:
 		rts
 
 sub_18FEE:
-		move.b	#$D7,(byte_FFEE52).w
+		move.b	#$D7,(smps_cmd2).w
 		move.b	#1,(byte_FF929A).w
 		clr.b	(byte_FF929B).w
 		clr.b	(byte_FF929C).w
@@ -33666,7 +33707,7 @@ sub_195DE:
 		subq.b	#1,$26(a0)
 		bhi.s	loc_195F0
 		move.b	#$A,$26(a0)
-		move.b	#$DA,(byte_FFEE52).w
+		move.b	#$DA,(smps_cmd2).w
 
 loc_195F0:
 		lea	(byte_19474).l,a1
@@ -33807,7 +33848,7 @@ sub_19756:
 		cmpa.w	(word_FF928C).w,a0
 		bne.s	locret_19766
 		bsr.w	sub_19782
-		move.b	#$DB,(byte_FFEE52).w
+		move.b	#$DB,(smps_cmd2).w
 
 locret_19766:
 		rts
@@ -33936,10 +33977,10 @@ loc_19912:
 		move.b	#1,$C(a2)
 		dbf	d7,loc_19912
 		addi.w	#$3E8,(word_FF8F7A).w
-		move.b	#$95,(byte_FFEE53).w
+		move.b	#$95,(smps_cmd1).w
 		move.b	#$95,(byte_FFEE67).w
 		st	(byte_FFEEED).w
-		jmp	sub_13FED8
+		jmp	send_smps_cmd	; d0 = cmd
 
 sub_1993A:
 		tst.b	(byte_FF9299).w
@@ -39952,52 +39993,29 @@ kosinski_13B000:
     binclude "src/kosinski/data_13B000.bin"
 kosinski_13BD40:
     binclude "src/kosinski/data_13BD40.bin"
-word_13CA70:	dc.w	 0, $EEE, $8C8,	$484, $262, $8CE, $48A,	$246
-		dc.w  $8AE, $46A,  $EE,	$24E, $ECA, $A86, $642,	$222
-		dc.w	 0, $EEE, $EAA,	$A66, $844, $CCA, $886,	$442
-		dc.w  $8AE, $46A,  $26,	   0, $CCA, $886, $442,	$222
-		dc.w	 0, $6AE, $E44,	$22E, $282, $EEE,    0,	   0
-		dc.w	 0,    0,    0,	   0,	 0,    0,    0,	   0
-		dc.w	 0, $6AE, $E44,	$22E, $282, $EEE,    0,	   0
-		dc.w	 0,    0,    0,	   0,	 0,    0,    0,	   0
-		dc.w  $8CC, $6AE, $48C,	$46A, $248,  $26, $224,	$EEE
-		dc.w  $ACE, $8AC, $68A,	$468, $664, $442, $222,	   0
-		dc.w	 0, $CEE, $AEE,	$8CC, $6AA, $688, $468,	$AAA
-		dc.w  $666, $444, $CEC,	$CEA, $CE8,    0,    0,	   0
-		dc.w  $CE8, $EEE, $8CC,	$8A8, $686, $466, $246,	$446
-		dc.w  $226, $224,    2,	$664, $442, $444, $222,	   0
-		dc.w  $EC6, $ACE, $48C,	$24A,  $26, $222, $68A,	$466
-		dc.w  $244, $2A8, $486,	$EEE, $8AE, $ACE, $8AE,	$6AC
-		dc.w  $A22, $E86, $8CE,	$6AE, $8AA, $688, $8CC,	$2A8
-		dc.w  $48E, $264, $C84,	$EA4, $EC8, $EEC, $246,	$26A
-		dc.w  $642, $AC4, $E68,	$A60, $882, $462, $442,	$220
-		dc.w  $422, $422, $A86,	$864, $642, $C64, $A44,	$642
-		dc.w  $64A, $A64, $644,	$422, $624, $844, $CC6,	$AA4
-		dc.w  $884, $662, $A66,	$642, $222,    0, $A66,	$CA2
-		dc.w  $EC6, $ACE, $48E,	$46C, $24A, $246, $264,	 $24
-		dc.w  $EEE, $ECA, $A86,	$642,	 0,    0,    0,	   0
-		dc.w  $EA0, $ACE, $68C,	$468, $466, $462, $240,	$220
-		dc.w  $248, $246, $244,	$4AE, $48E, $26E, $24E,	   0
-		dc.w  $EC6, $CEE, $28E,	 $48,  $24, $222, $6CE,	$26C
-		dc.w   $26,  $22,    0,	   0, $ACE,    0,    0,	   0
-		dc.w  $EC6, $ACE, $48C,	$24A,  $26, $222, $68A,	$466
-		dc.w  $244, $2A8, $486,	$22A, $8AE, $ACE, $8AE,	$68C
-		dc.w  $ACE, $28E, $4AE,	$26E,  $4A, $248,  $AE,	$488
-		dc.w  $48E, $244, $46E,	$48E, $2AE, $6CE, $246,	$26A
-		dc.w  $666, $48A, $468,	$446, $224, $EEC, $8A8,	$684
-		dc.w  $664, $442, $242,	$444, $222, $EAA, $624,	$422
-		dc.w  $888, $EE8, $CA2,	$A86, $862, $666, $844,	$642
-		dc.w  $622, $422, $EEE,	$ECA, $A86,    0,    0,	   0
-		dc.w  $666, $48A, $468,	$446, $224, $EEC, $8A8,	$684
-		dc.w  $664, $442, $242,	$444, $222, $EAA, $624,	$422
-		dc.w	 0, $864, $EEE,	$ECA, $A86,    0,    0,	   0
-		dc.w	 0,    0,    0,	   0,	 0,    0,    0,	   0
-		dc.w	 0, $46A, $248,	$226, $224, $222, $422,	$864
-		dc.w  $A86, $CA8, $622,	$822, $A22, $68C,    0,	   0
-		dc.w	 0, $EEE, $8C8,	$484, $262, $8CE, $48A,	$246
-		dc.w  $AAE, $46A,   $E,	$24E, $ECA, $A86, $642,	   0
-		dc.w	 0,  $26,  $48,	 $6A,  $AE,  $EE, $B22,	$E64
-		dc.w	 0,    0, $ACE,	$4AE, $48E, $26E, $24E,	   0
+palettes_data_1:dc.w	 0, $EEE, $8C8,	$484, $262, $8CE, $48A,	$246, $8AE, $46A,  $EE,	$24E, $ECA, $A86, $642,	$222
+		dc.w	 0, $EEE, $EAA,	$A66, $844, $CCA, $886,	$442, $8AE, $46A,  $26,	   0, $CCA, $886, $442,	$222
+		dc.w	 0, $6AE, $E44,	$22E, $282, $EEE,    0,	   0,	 0,    0,    0,	   0,	 0,    0,    0,	   0
+		dc.w	 0, $6AE, $E44,	$22E, $282, $EEE,    0,	   0,	 0,    0,    0,	   0,	 0,    0,    0,	   0
+		dc.w  $8CC, $6AE, $48C,	$46A, $248,  $26, $224,	$EEE, $ACE, $8AC, $68A,	$468, $664, $442, $222,	   0
+		dc.w	 0, $CEE, $AEE,	$8CC, $6AA, $688, $468,	$AAA, $666, $444, $CEC,	$CEA, $CE8,    0,    0,	   0
+		dc.w  $CE8, $EEE, $8CC,	$8A8, $686, $466, $246,	$446, $226, $224,    2,	$664, $442, $444, $222,	   0
+		dc.w  $EC6, $ACE, $48C,	$24A,  $26, $222, $68A,	$466, $244, $2A8, $486,	$EEE, $8AE, $ACE, $8AE,	$6AC
+		dc.w  $A22, $E86, $8CE,	$6AE, $8AA, $688, $8CC,	$2A8, $48E, $264, $C84,	$EA4, $EC8, $EEC, $246,	$26A
+		dc.w  $642, $AC4, $E68,	$A60, $882, $462, $442,	$220, $422, $422, $A86,	$864, $642, $C64, $A44,	$642
+		dc.w  $64A, $A64, $644,	$422, $624, $844, $CC6,	$AA4, $884, $662, $A66,	$642, $222,    0, $A66,	$CA2
+		dc.w  $EC6, $ACE, $48E,	$46C, $24A, $246, $264,	 $24, $EEE, $ECA, $A86,	$642,	 0,    0,    0,	   0
+		dc.w  $EA0, $ACE, $68C,	$468, $466, $462, $240,	$220, $248, $246, $244,	$4AE, $48E, $26E, $24E,	   0
+		dc.w  $EC6, $CEE, $28E,	 $48,  $24, $222, $6CE,	$26C,  $26,  $22,    0,	   0, $ACE,    0,    0,	   0
+		dc.w  $EC6, $ACE, $48C,	$24A,  $26, $222, $68A,	$466, $244, $2A8, $486,	$22A, $8AE, $ACE, $8AE,	$68C
+		dc.w  $ACE, $28E, $4AE,	$26E,  $4A, $248,  $AE,	$488, $48E, $244, $46E,	$48E, $2AE, $6CE, $246,	$26A
+		dc.w  $666, $48A, $468,	$446, $224, $EEC, $8A8,	$684, $664, $442, $242,	$444, $222, $EAA, $624,	$422
+		dc.w  $888, $EE8, $CA2,	$A86, $862, $666, $844,	$642, $622, $422, $EEE,	$ECA, $A86,    0,    0,	   0
+		dc.w  $666, $48A, $468,	$446, $224, $EEC, $8A8,	$684, $664, $442, $242,	$444, $222, $EAA, $624,	$422
+		dc.w	 0, $864, $EEE,	$ECA, $A86,    0,    0,	   0,	 0,    0,    0,	   0,	 0,    0,    0,	   0
+		dc.w	 0, $46A, $248,	$226, $224, $222, $422,	$864, $A86, $CA8, $622,	$822, $A22, $68C,    0,	   0
+		dc.w	 0, $EEE, $8C8,	$484, $262, $8CE, $48A,	$246, $AAE, $46A,   $E,	$24E, $ECA, $A86, $642,	   0
+		dc.w	 0,  $26,  $48,	 $6A,  $AE,  $EE, $B22,	$E64,	 0,    0, $ACE,	$4AE, $48E, $26E, $24E,	   0
 word_13CD50:	dc.w	 0, $ACE, $8AC,	$68A, $468, $446, $66A,	$488
 		dc.w   $2E,  $4E,  $6E,	 $8E,  $AE,  $CE,  $EE,	$222
 word_13CD70:	dc.w	 0,    0,    0,	   0,	 0,    0,    0,	   0
@@ -40413,23 +40431,21 @@ kosinski_13DAD6:
     binclude "src/kosinski/data_13DAD6.bin"
 kosinski_13E026:
     binclude "src/kosinski/data_13E026.bin"
-word_13EAF6:	dc.w  $EC0, $EA0, $E80,	$E60, $E40, $E20, $E00,	$C00
-		dc.w  $A00, $600, $800,	$A00, $C00, $E00, $E20,	$E40
-		dc.w  $E60, $E80, $EA0,	$EC0, $EA0, $E80, $E60,	$E40
-		dc.w  $E20, $E00, $C00,	$A00, $800
-enigma_13EB30:
-    binclude "src/enigma/data_13EB30.bin"
-nemesis_13EB3E:
-    binclude "src/nemesis/data_13EB3E.bin"
+sega_logo_palette:
+    binclude "src/sega_logo/palette.bin"
+enigma_sega_logo_mapping:
+    binclude "src/sega_logo/enigma_mapping.bin"
+nemesis_sega_logo:
+    binclude "src/sega_logo/nemesis_tiles.bin"
 
-sub_13FE00:
+init_sound_type1:
 		move.w	#$100,(IO_Z80RES).l
 		jsr	request_z80_bus(pc)
 		movem.l	d1/a1-a2,-(sp)
 		jsr	load_smps_driver_parts_1_2(pc)
 		bra.s	loc_13FE2A
 
-loc_13FE16:
+init_sound_type2:
 		move.w	#$100,(IO_Z80RES).l
 		jsr	request_z80_bus(pc)
 		movem.l	d1/a1-a2,-(sp)
@@ -40489,18 +40505,20 @@ loc_13FED0:
 		move.b	(a2)+,(a1)+
 		dbf	d1,loc_13FED0
 		rts
+; d0 = cmd
+; #$F9 - ?
 
-sub_13FED8:
+send_smps_cmd:
 		move.l	d0,-(sp)
-		move.b	(byte_FFEE53).w,d0
+		move.b	(smps_cmd1).w,d0
 		beq.s	loc_13FEE8
-		move.b	#0,(byte_FFEE53).w
+		move.b	#0,(smps_cmd1).w
 		bra.s	loc_13FEF4
 
 loc_13FEE8:
-		move.b	(byte_FFEE52).w,d0
+		move.b	(smps_cmd2).w,d0
 		beq.s	loc_13FF0A
-		move.b	#0,(byte_FFEE52).w
+		move.b	#0,(smps_cmd2).w
 
 loc_13FEF4:
 		jsr	request_z80_bus(pc)
@@ -40508,7 +40526,7 @@ loc_13FEF4:
 		nop
 		nop
 		nop
-		move.b	d0,(byte_A01C0A).l
+		move.b	d0,(z80_cmd).l
 		jsr	release_z80_bus(pc)
 
 loc_13FF0A:
