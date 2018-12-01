@@ -17,7 +17,7 @@ def main(mode, path):
         lib_name = 'Kosinski'
 
     if lib_name is not None:
-        lib_name = 'kens_dlls/' + lib_name
+        lib_name = 'kens/' + lib_name
         lib_name += '_x64' if platform.architecture()[0] == '64bit' else '_x86'
         lib_name += '.dll'
         print lib_name
@@ -33,37 +33,46 @@ def main(mode, path):
         print 'Cannot open input file'
         sys.exit(-1)
 
-    error_code = 0
+    insize = 0
     if mode[1] == 'e':
         # long (__cdecl *Comp)(char *SrcFile, char *DstFile, bool Padding);
         # long (__cdecl *Decomp)(char *SrcFile, char *DstFile, long Pointer, bool Padding);
 
         if mode[0] == 'c':
-            error_code = lib.Comp(path, new_path, False)
+            insize = lib.Comp(path, new_path, False)
         else:
-            error_code = lib.Decomp(path, new_path, 0, False)
+            insize = lib.Decomp(path, new_path, 0, False)
     elif mode[1] == 'n':
         # long (__cdecl *Comp)(char *SrcFile, char *DstFile);
         # long (__cdecl *Decomp)(char *SrcFile, char *DstFile, long Pointer);
 
         if mode[0] == 'c':
-            error_code = lib.Comp(path, new_path)
+            insize = lib.Comp(path, new_path)
         else:
-            error_code = lib.Decomp(path, new_path, 0)
+            insize = lib.Decomp(path, new_path, 0)
     elif mode[1] == 'k':
         # long (__cdecl *Comp)(char *SrcFile, char *DstFile, bool Moduled);
         # long (__cdecl *Decomp)(char *SrcFile, char *DstFile, long Pointer, bool Moduled);
 
         if mode[0] == 'c':
-            error_code = lib.Comp(path, new_path, False)
+            insize = lib.Comp(path, new_path, False)
         else:
-            error_code = lib.Decomp(path, new_path, 0, False)
+            insize = lib.Decomp(path, new_path, 0, False)
 
-    if error_code == 0:
-        print 'File "%s" successfully %s to %s' % (
-            path, 'unpacked' if mode[0] == 'd' else 'packed', new_path)
+    if mode[0] == 'd':
+        if insize > 0:
+            print 'File "%s" successfully unpacked to "%s" => (src: %d bytes)' % (path, new_path, insize)
+
+            diff_size = abs(insize - os.path.getsize(path))
+            if diff_size != 0:
+                print 'There are %d useless bytes at the end of file!' % diff_size
+        else:
+            print 'Cannot unpack "%s" file' % path
     else:
-        print 'Cannot unpack "%s" file' % path
+        if insize == 0:
+            print 'File "%s" successfully packed to "%s"' % (path, new_path)
+        else:
+            print 'Cannot pack "%s" file' % path
 
 
 if __name__ == '__main__':
