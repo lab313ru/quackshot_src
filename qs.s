@@ -1,11 +1,11 @@
     cpu 68000
     supmode on
     padding off
-    include "structs.inc"
-    include "equals.inc"
-    include "rams.inc"
-    include "externs.inc"
-    include "funcs.inc"
+    include "qs_structs.inc"
+    include "qs_equals.inc"
+    include "qs_rams.inc"
+    include "qs_externs.inc"
+    include "qs_funcs.inc"
 
 vectors:	dc.l rand_seed
 		dc.l Reset
