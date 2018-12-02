@@ -7,6 +7,8 @@
     include "qs_externs.inc"
     include "qs_funcs.inc"
 
+; segment "ROM"
+; ROM segment
 vectors:	dc.l rand_seed
 		dc.l Reset
 		dc.l Reserv3F
@@ -1172,7 +1174,7 @@ sub_F36:
 		asl.l	#3,d7
 		add.l	d0,d0
 		add.l	d7,d0
-		divu.w	#$2710,d0
+		divu.w	#10000,d0
 		swap	d0
 		moveq	#0,d7
 		move.w	d0,d7
@@ -2256,7 +2258,7 @@ tbl_kosinski_data:kosinski_data kosinski_032B4C, M68K_RAM
 		kosinski_data kosinski_03FA36,	unk_FF2800
 		kosinski_data kosinski_03F196,	M68K_RAM
 		kosinski_data kosinski_03F316,	unk_FF2800
-		kosinski_data kosinski_13E026,	level_start_params
+		kosinski_data kosinski_level_params, level_start_params
 		kosinski_data kosinski_019F18,	level_start_params
 		kosinski_data kosinski_13B000,	unk_FFCE00
 		kosinski_data kosinski_13BD40,	unk_FFCE00
@@ -40438,8 +40440,8 @@ byte_13DAD0:	dc.b   0,  0,  1,  2,  0
 		align 2
 kosinski_13DAD6:
     binclude "src/kosinski/data_13DAD6.bin"
-kosinski_13E026:
-    binclude "src/kosinski/data_13E026.bin"
+kosinski_level_params:
+    binclude "src/levels/kosinski_params.bin"
 sega_logo_palette:
     binclude "src/sega_logo/palette.bin"
 enigma_sega_logo_mapping:

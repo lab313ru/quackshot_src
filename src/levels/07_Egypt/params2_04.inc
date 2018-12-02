@@ -1,0 +1,1 @@
+	lvl_params2 2, ARRAY1_INDEX_C, $A4, $94, $78, $68,	0, ARRAY2_INDEX_20, $1C0, 0, $220, $100, ARRAY2_INDEX_5, $1C0, 0, $220,	0
