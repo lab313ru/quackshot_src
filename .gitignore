@@ -8,3 +8,6 @@ bin/*
 *.p
 *.map
 Quack Shot Starring Donald Duck (JUE) (REV 01) \[!].bin
+qs.bin
+*.asm
+kosinski_params.bin

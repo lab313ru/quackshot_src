@@ -43,7 +43,7 @@ dword_FFFC40: equ $FFFC40
 dword_FF8F86: equ $FF8F86
 word_FF8F58: equ $FF8F58
 word_FFFF10: equ $FFFF10
-word_FF8F84: equ $FF8F84
+player_start_rotated: equ $FF8F3A
 word_FF8F50: equ $FF8F50
 word_FF8F52: equ $FF8F52
 word_FF8F54: equ $FF8F54
@@ -145,7 +145,7 @@ unk_FF7C00: equ $FF7C00
 byte_FF8F2E: equ $FF8F2E
 word_FF8F2A: equ $FF8F2A
 word_FF8F2C: equ $FF8F2C
-word_FFA406: equ $FFA406
+level_params4: equ $FFA406
 byte_FF9FF6: equ $FF9FF6
 word_FF8F28: equ $FF8F28
 byte_FFEED2: equ $FFEED2
@@ -158,7 +158,7 @@ word_FF91B8: equ $FF91B8
 byte_FFEED8: equ $FFEED8
 byte_FFEED9: equ $FFEED9
 word_FF9042: equ $FF9042
-unk_FF9EC0: equ $FF9EC0
+objects_memory: equ $FF9EC0
 word_FFA34C: equ $FFA34C
 unk_FF8918: equ $FF8918
 unk_FFA350: equ $FFA350
@@ -194,7 +194,7 @@ word_FF9100: equ $FF9100
 word_FF8F72: equ $FF8F72
 word_FF8F70: equ $FF8F70
 sega_logo_frames_cnt: equ $FF8F76
-level_sub_index: equ $FF8F74
+level_params1_index: equ $FF8F74
 sega_logo_frames: equ $FF8F78
 dword_FF90A0: equ $FF90A0
 unk_FF6020: equ $FF6020
@@ -212,10 +212,10 @@ word_FF8F7E: equ $FF8F7E
 unk_FF8D00: equ $FF8D00
 unk_FF9C00: equ $FF9C00
 byte_FFA036: equ $FFA036
-word_FFA402: equ $FFA402
-level_start_params: equ $FFA400
+level_params2: equ $FFA402
+level_params1: equ $FFA400
 byte_FF910C: equ $FF910C
-word_FFA404: equ $FFA404
+level_params3: equ $FFA404
 rand_seed: equ $FFFF00
 word_FF8508: equ $FF8508
 byte_FFEE0B: equ $FFEE0B
@@ -268,7 +268,7 @@ unk_FF9FC0: equ $FF9FC0
 word_FF8F82: equ $FF8F82
 word_FF8F3E: equ $FF8F3E
 word_FF8F3C: equ $FF8F3C
-player_start_rotated: equ $FF8F3A
+word_FF8F84: equ $FF8F84
 word_FF9142: equ $FF9142
 word_FF9140: equ $FF9140
 unk_FFA360: equ $FFA360
@@ -326,7 +326,7 @@ word_FF8FB6: equ $FF8FB6
 word_FF8FB0: equ $FF8FB0
 dword_FF8FB2: equ $FF8FB2
 unk_FF8B00: equ $FF8B00
-level_sub_index_param: equ $FF8F36
+level_sub_index: equ $FF8F36
 level_main_index: equ $FF8F34
 ram_palette_3: equ $FFF5E0
 some_mapping_array: equ $FF8A00

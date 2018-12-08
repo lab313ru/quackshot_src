@@ -43,7 +43,7 @@ def kosinski_compress(src, dst):
         sys.exit(-1)
 
 
-def assemble_level_params(basedir):
+def assemble_level_params(base_dir):
     os.chdir(LEVELS_DIR)
 
     run_process('%s %s %s' % (AS_BIN, AS_ARGS, LEVEL_PARAMS_SRC))
@@ -51,12 +51,12 @@ def assemble_level_params(basedir):
     pre, ext = os.path.splitext(LEVEL_PARAMS_SRC)
     run_process('%s %s' % (P2_BIN, pre))
 
-    os.chdir(basedir)
+    os.chdir(base_dir)
     kosinski_compress(pre + P2_BIN_DST_EXT, pre.replace('_dec', '') + P2_BIN_DST_EXT)
 
 
-def assemble_main_src(basedir):
-    os.chdir(basedir)
+def assemble_main_src(base_dir):
+    os.chdir(base_dir)
 
     run_process('%s %s %s' % (AS_BIN, AS_ARGS, MAIN_SRC))
 
