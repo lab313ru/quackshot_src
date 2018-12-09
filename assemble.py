@@ -45,6 +45,28 @@ def kosinski_compress(src, dst):
         sys.exit(-1)
 
 
+def nemesis_compress(src, dst):
+    lib_name = 'kens/Nemesis'
+    lib_name += '_x64' if platform.architecture()[0] == '64bit' else '_x86'
+    lib_name += '.dll'
+
+    lib = cdll.LoadLibrary(lib_name)
+
+    if lib is None:
+        print 'Cannot load Nemesis compression lib'
+        sys.exit(-1)
+
+    if not os.path.exists(src):
+        print 'Cannot open input file "%s"' % src
+        sys.exit(-1)
+
+    insize = lib.Comp(src, dst)
+
+    if insize != 0:
+        print 'Cannot pack "%s" file' % src
+        sys.exit(-1)
+
+
 def assemble_level_params(base_dir):
     os.chdir(LEVELS_DIR)
 
@@ -74,7 +96,7 @@ def assemble_enemies_tiles(base_dir):
     os.chdir(base_dir)
     for efile in enlist:
         pre, ext = os.path.splitext(efile)
-        kosinski_compress(efile, pre[:-4] + ext)
+        nemesis_compress(efile, pre[:-4] + ext)
 
 
 def assemble_main_src(base_dir):

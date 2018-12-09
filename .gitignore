@@ -11,3 +11,4 @@ Quack Shot Starring Donald Duck (JUE) (REV 01) \[!].bin
 qs.bin
 *.asm
 /src/levels/kosinski_params.bin
+/src/enemies/*/nemesis_tiles.bin
