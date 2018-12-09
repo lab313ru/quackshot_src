@@ -1323,7 +1323,7 @@ sub_1060:
 		beq.w	locret_10D2
 		move.w	#0,(word_FF8FBC).w
 		cmpi.w	#8,(init_step).w
-		beq.s	sub_10BC
+		beq.s	get_dialog	; d1 = dialog index
 		move.b	#$90,d0
 		tst.b	(byte_FFEE76).w
 		beq.s	loc_1086
@@ -1337,7 +1337,7 @@ loc_1086:
 loc_1090:
 		move.b	#0,(byte_FFEE76).w
 		st	(byte_FFEE64).w
-		bsr.s	sub_10BC
+		bsr.s	get_dialog	; d1 = dialog index
 		tst.b	(byte_FFEE77).w
 		bne.s	loc_10B4
 		move.b	(smps_cmd1_new).w,(smps_cmd1).w
@@ -1347,21 +1347,23 @@ loc_1090:
 loc_10B4:
 		move.b	#0,(byte_FFEE77).w
 		rts
+; d1 = dialog index
 
-sub_10BC:
+get_dialog:
 		add.w	d1,d1
 		add.w	d1,d1
 		lea	(unk_FFCE00).w,a1
 		adda.w	(a1),a1
 		move.w	(a1,d1.w),d0
 		adda.w	2(a1,d1.w),a1
-		jsr	sub_10D6(pc)
+		jsr	sub_10D6(pc)	; a1 = dialog data
 
 locret_10D2:
 		rts
 
 nullsub_1:
 		rts
+; a1 = dialog data
 
 sub_10D6:
 		movem.l	d0-d6/a1-a2,-(sp)
@@ -1377,10 +1379,10 @@ sub_10D6:
 
 loc_10F4:
 		move.w	#$258,(word_FF8F70).w
-		move.w	#$8000,(word_FFA34C).w
+		move.w	#$8000,(dialog_border_mask).w
 		tst.b	(a1)+
 		beq.s	loc_110A
-		move.w	#$A000,(word_FFA34C).w
+		move.w	#$A000,(dialog_border_mask).w
 
 loc_110A:
 		bsr.w	sub_12AA
@@ -1611,7 +1613,7 @@ sub_1358:
 		move.w	d5,(a5)
 		move.w	#3,(a5)
 		move.w	0.w(a1),d4
-		add.w	(word_FFA34C).w,d4
+		add.w	(dialog_border_mask).w,d4
 		move.w	d4,(a6)
 		move.w	d5,d4
 		addq.w	#2,d4
@@ -1625,7 +1627,7 @@ loc_137C:
 		move.w	d5,(a5)
 		move.w	#3,(a5)
 		move.w	2(a1),d4
-		add.w	(word_FFA34C).w,d4
+		add.w	(dialog_border_mask).w,d4
 		move.w	d4,(a6)
 		move.w	d5,d4
 		addq.w	#2,d4
@@ -1636,7 +1638,7 @@ loc_137C:
 		move.w	d5,(a5)
 		move.w	#3,(a5)
 		move.w	4(a1),d4
-		add.w	(word_FFA34C).w,d4
+		add.w	(dialog_border_mask).w,d4
 		move.w	d4,(a6)
 		rts
 
@@ -1739,7 +1741,7 @@ loc_146E:
 
 sub_149C:
 		movem.l	d0-d6/a1-a2,-(sp)
-		move.w	(word_FFA34C).w,d4
+		move.w	(dialog_border_mask).w,d4
 		lea	(unk_FFA360).w,a2
 		move.w	0.w(a2),d0
 		move.w	4(a2),d2
@@ -2263,7 +2265,7 @@ tbl_kosinski_data:kosinski_data kosinski_032B4C, M68K_RAM
 		kosinski_data kosinski_03F316,	unk_FF2800
 		kosinski_data kosinski_level_params, level_params1
 		kosinski_data kosinski_019F18,	level_params1
-		kosinski_data kosinski_13B000,	unk_FFCE00
+		kosinski_data kosinski_dialogs, unk_FFCE00
 		kosinski_data kosinski_13BD40,	unk_FFCE00
 init_joypads:
 		jsr	request_z80_bus
@@ -5878,7 +5880,7 @@ loc_476A:
 		jsr	sub_969E(pc)
 		jsr	sub_2592(pc)
 		jsr	sub_969E(pc)
-		move.l	#make_indexes($4E,$00,$00,$00),d0
+		move.l	#make_indexes(KOS_DIALOGS_DATA,$00,$00,$00),d0
 		trap	#DECOMP_KOSINSKI_RAM ; do_decompress_kosinski_to_ram
 		tst.b	(is_usa_europe_version).w
 		bne.s	loc_47A0
@@ -6439,14 +6441,14 @@ sub_4F36:
 		move.w	#$9A,(word_FF9000).w
 		clr.b	(byte_FFEE01).w
 		move.l	#$4F2001,d0
-		trap	#1		; do_decompress_nemesis_to_vram
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		lea	(kosinski_129144).l,a0
 		lea	(M68K_RAM).l,a1
 		jsr	(decompress_kosinski_to_ram).l ; a0 = source
 		move.l	#$120C0B,d0
-		trap	#0		; do_raw_copy_data
+		trap	#RAW_COPY_DATA	; do_raw_copy_data
 		move.l	#$5900,d0
-		trap	#5		; do_copy_4_palettes_to_ram
+		trap	#COPY_PAL_TO_RAM ; do_copy_4_palettes_to_ram
 		move.b	#0,(cram_update_needed).w
 		rts
 
@@ -13440,7 +13442,7 @@ loc_9D8A:
 		move.w	#3,4(a1)
 
 loc_9DB6:
-		move.w	#0,(word_FFA34C).w
+		move.w	#0,(dialog_border_mask).w
 		jsr	(sub_12AA).l
 		rts
 
@@ -40320,8 +40322,8 @@ smps_driver_part3:
     binclude "src/smps/driver_3.bin"
     align 2, 0
 
-kosinski_13B000:
-    binclude "src/kosinski/data_13B000.bin"
+kosinski_dialogs:
+    binclude "src/dialogs/kosinski_dialogs.bin"
     align 2, 0
 		align 2, 0
 

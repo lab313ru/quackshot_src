@@ -1,0 +1,16 @@
+RECT_IDX_0: equ 0
+RECT_IDX_1: equ 1
+RECT_IDX_2: equ 2
+RECT_IDX_3: equ 3
+RECT_IDX_4: equ 4
+RECT_IDX_5: equ 5
+RECT_IDX_6: equ 6
+RECT_IDX_7: equ 7
+RECT_IDX_8: equ 8
+RECT_IDX_9: equ 9
+RECT_IDX_A: equ $A
+RECT_IDX_B: equ $B
+RECT_IDX_C: equ $C
+RECT_IDX_D: equ $D
+RECT_IDX_E: equ $E
+RECT_IDX_F: equ $F

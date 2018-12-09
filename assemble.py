@@ -15,10 +15,12 @@ LEVELS_DIR = os.path.join(os.getcwd(), SRC_DIR, 'levels')
 ENEMIES_DIR = os.path.join(os.getcwd(), SRC_DIR, 'enemies')
 FONTS_DIR = os.path.join(os.getcwd(), SRC_DIR, 'fonts')
 MAIN_MENU_DIR = os.path.join(os.getcwd(), SRC_DIR, 'main_menu')
+DIALOGS_DIR = os.path.join(os.getcwd(), SRC_DIR, 'dialogs')
 MAIN_SRC = os.path.join(os.getcwd(), 'qs.s')
 NEM_ENEMY_TILES_DEC = 'nemesis_tiles_dec.bin'
 NEM_MAIN_FONT_DEC = 'nemesis_main_dec.bin'
 LEVEL_PARAMS_SRC = os.path.join(os.getcwd(), LEVELS_DIR, 'kosinski_params_dec.s')
+DIALOGS_SRC = os.path.join(os.getcwd(), DIALOGS_DIR, 'kosinski_dialogs_dec.s')
 
 
 def run_process(cmd):
@@ -82,6 +84,18 @@ def assemble_level_params(base_dir):
     kosinski_compress(pre + P2_BIN_DST_EXT, pre[:-4] + P2_BIN_DST_EXT)
 
 
+def assemble_dialogs(base_dir):
+    os.chdir(DIALOGS_DIR)
+
+    run_process('%s %s %s' % (AS_BIN, AS_ARGS, DIALOGS_SRC))
+
+    pre, ext = os.path.splitext(DIALOGS_SRC)
+    run_process('%s %s' % (P2_BIN, pre))
+
+    os.chdir(base_dir)
+    kosinski_compress(pre + P2_BIN_DST_EXT, pre[:-4] + P2_BIN_DST_EXT)
+
+
 def assemble_main_font(base_dir):
     os.chdir(base_dir)
 
@@ -131,4 +145,5 @@ if __name__ == '__main__':
     assemble_enemies_tiles(basedir)
     assemble_main_font(basedir)
     assemble_level_names(basedir)
+    assemble_dialogs(basedir)
     assemble_main_src(basedir)

@@ -209,7 +209,7 @@ word_FFA344: equ $FFA344
 word_FFA346: equ $FFA346
 word_FFA348: equ $FFA348
 word_FFA34A: equ $FFA34A
-word_FFA34C: equ $FFA34C
+dialog_border_mask: equ $FFA34C
 unk_FFA350: equ $FFA350
 unk_FFA360: equ $FFA360
 level_params1: equ $FFA400
