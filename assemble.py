@@ -13,8 +13,10 @@ P2_BIN_DST_EXT = '.bin'
 SRC_DIR = os.path.join(os.getcwd(), 'src')
 LEVELS_DIR = os.path.join(os.getcwd(), SRC_DIR, 'levels')
 ENEMIES_DIR = os.path.join(os.getcwd(), SRC_DIR, 'enemies')
+FONTS_DIR = os.path.join(os.getcwd(), SRC_DIR, 'fonts')
 MAIN_SRC = os.path.join(os.getcwd(), 'qs.s')
 NEM_ENEMY_TILES_DEC = 'nemesis_tiles_dec.bin'
+NEM_MAIN_FONT_DEC = 'nemesis_main_dec.bin'
 LEVEL_PARAMS_SRC = os.path.join(os.getcwd(), LEVELS_DIR, 'kosinski_params_dec.s')
 
 
@@ -79,6 +81,14 @@ def assemble_level_params(base_dir):
     kosinski_compress(pre + P2_BIN_DST_EXT, pre[:-4] + P2_BIN_DST_EXT)
 
 
+def assemble_main_font(base_dir):
+    os.chdir(base_dir)
+
+    path = os.path.join(FONTS_DIR, NEM_MAIN_FONT_DEC)
+    pre, ext = os.path.splitext(path)
+    nemesis_compress(path, pre[:-4] + ext)
+
+
 def assemble_enemies_tiles(base_dir):
     def list_enemies(enms_dir):
         ll = list()
@@ -112,4 +122,5 @@ if __name__ == '__main__':
     basedir = os.getcwd()
     assemble_level_params(basedir)
     assemble_enemies_tiles(basedir)
+    assemble_main_font(basedir)
     assemble_main_src(basedir)

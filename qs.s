@@ -1962,7 +1962,7 @@ loc_181E:
 		dbf	d2,loc_1804
 		rts
 
-tbl_nemesis_vram:nemesis_vram $40200000, nemesis_01C120
+tbl_nemesis_vram:nemesis_vram $40200000, nemesis_main_font
 		nemesis_vram $72000001, nemesis_01CBEA
 		nemesis_vram $56800003, nemesis_01D70E
 		nemesis_vram $55400000, nemesis_01D15A
@@ -1988,7 +1988,7 @@ tbl_nemesis_vram:nemesis_vram $40200000, nemesis_01C120
 		nemesis_vram $5E000000, nemesis_031E84
 		nemesis_vram $55400000, nemesis_031BF8
 		nemesis_vram $40000000, nemesis_031620
-		nemesis_vram $40200002, nemesis_01C120
+		nemesis_vram $40200002, nemesis_main_font
 		nemesis_vram $4C000002, nemesis_030946
 		nemesis_vram $60000000, nemesis_10812A
 		nemesis_vram $7A000000, nemesis_108C16
@@ -5779,7 +5779,7 @@ loc_460C:
 		move.b	#$F9,(smps_cmd1).w
 		jsr	send_smps_cmd	; d0 = cmd
 		move.w	#0,(vblank_sub_index).w
-		moveq	#NEM_SEGA_LOGO_TILES,d0
+		moveq	#NEM_SEGA_LOGO,d0
 		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		moveq	#ENI_SEGA_LOGO_MAP,d1
 		trap	#DECOMP_ENIGMA_RAM ; do_decompress_enigma_to_ram
@@ -5837,10 +5837,10 @@ sub_46A0:
 		move.l	#$96009500,(a3)+
 		move.w	#$9700,(a3)+
 		move.l	#$70000083,(a3)
-		move.l	#$4030201,d0
-		trap	#1		; do_decompress_nemesis_to_vram
+		move.l	#make_indexes($04,$03,$02,NEM_MAIN_FONT),d0
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		move.l	#$201F0000,d0
-		trap	#1		; do_decompress_nemesis_to_vram
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		moveq	#$22,d0
 		move.w	(weapon_index).w,d1
 		subq.w	#2,d1
@@ -5848,7 +5848,7 @@ sub_46A0:
 		moveq	#$21,d0
 
 loc_471A:
-		trap	#1		; do_decompress_nemesis_to_vram
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		move.w	(level_main_index).w,d0
 		lea	(unk_FFEEBF).w,a1
 		tst.b	(a1,d0.w)
@@ -13536,7 +13536,7 @@ locret_9F52:
 		rts
 
 sub_9F54:
-		move.w	#$257,d7
+		move.w	#599,d7
 		moveq	#0,d0
 		move.w	#$C00,d0
 
@@ -13752,7 +13752,7 @@ sub_A1C6:
 		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		move.l	#$3231302F,d0
 		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
-		lea	(nemesis_01C120).l,a0
+		lea	(nemesis_main_font).l,a0
 		lea	(dword_FF6000).l,a4
 		jsr	(decompress_nemesis_to_ram).l ;	a0 = source
 		move.w	#1,(level_main_index).w
@@ -13918,7 +13918,7 @@ sub_A3A8:
 		jsr	(decompress_enigma_to_ram).l ; a0 = source
 		move.l	#$504,d0
 		trap	#RAW_COPY_DATA	; do_raw_copy_data
-		lea	(nemesis_01C120).l,a0
+		lea	(nemesis_main_font).l,a0
 		lea	(dword_FF6000).l,a4
 		jsr	(decompress_nemesis_to_ram).l ;	a0 = source
 		move.w	#$6C,(word_FF9100).w
@@ -14623,10 +14623,10 @@ sub_AC72:
 		jsr	(sub_205E).l
 		move.l	#$5401,d0
 		trap	#1		; do_decompress_nemesis_to_vram
-		lea	(nemesis_01C120).l,a0
+		lea	(nemesis_main_font).l,a0
 		lea	(dword_FF6000).l,a4
 		jsr	(decompress_nemesis_to_ram).l ;	a0 = source
-		lea	(nemesis_01C120).l,a0
+		lea	(nemesis_main_font).l,a0
 		jsr	sub_AE56(pc)
 		jsr	sub_AB26(pc)
 		move.b	#0,(byte_FFFC85).w
@@ -14701,7 +14701,7 @@ loc_AD96:
 		move.w	(word_FFFC80).w,d1
 		move.w	#$8000,d0
 		jsr	sub_12A964
-		lea	(nemesis_01C120).l,a0
+		lea	(nemesis_main_font).l,a0
 		jsr	sub_AE56(pc)
 		addq.w	#1,(word_FFFC80).w
 
@@ -14714,7 +14714,7 @@ loc_ADB6:
 		bne.w	loc_AE32
 		andi.b	#$F0,d0
 		beq.s	loc_ADB6
-		lea	(nemesis_01C120).l,a0
+		lea	(nemesis_main_font).l,a0
 		jsr	sub_AE60(pc)
 		moveq	#7,d7
 
@@ -14771,7 +14771,7 @@ sub_AE60:
 loc_AE68:
 		move.w	#7,(word_FFFC4A).w
 		move.l	#$40200000,(dword_FFFC44).w
-		move.w	(nemesis_01C120).l,d0
+		move.w	(nemesis_main_font).l,d0
 		andi.w	#$FFF,d0
 		subq.w	#1,d0
 		move.w	d0,(word_FFFC48).w
@@ -14994,7 +14994,7 @@ loc_B140:
 		move.w	#3,2(a0)
 		move.w	#$4B0,(word_FFFC02).w
 		move.l	a0,-(sp)
-		lea	(nemesis_01C120).l,a0
+		lea	(nemesis_main_font).l,a0
 		lea	(dword_FF6000).l,a4
 		jsr	(decompress_nemesis_to_ram).l ;	a0 = source
 		movea.l	(sp)+,a0
@@ -15343,7 +15343,7 @@ sub_B5F2:
 		bra.w	sub_B6DE
 off_B5FE:	dc.w sub_B606-off_B5FE
 		dc.w sub_B62A-off_B5FE
-		dc.w sub_B678-off_B5FE
+		dc.w load_press_start_button_mapping-off_B5FE
 		dc.w sub_B6BE-off_B5FE
 
 sub_B606:
@@ -15359,7 +15359,7 @@ sub_B62A:
 		cmpi.w	#2,(word_FF9102).w
 		bne.s	locret_B676
 		move.l	a0,-(sp)
-		lea	(nemesis_01C120).l,a0
+		lea	(nemesis_main_font).l,a0
 		lea	(M68K_RAM).l,a4
 		jsr	(decompress_nemesis_to_ram).l ;	a0 = source
 		move.l	#$40200002,(a5)
@@ -15378,16 +15378,16 @@ loc_B65C:
 locret_B676:
 		rts
 
-sub_B678:
+load_press_start_button_mapping:
 		jsr	sub_B740(pc)
 		move.w	#$1E,$38(a0)
 		move.w	#3,2(a0)
 		move.l	#$54160003,(a5)
-		lea	word_B69A(pc),a1
+		lea	press_start_button_mapping(pc),a1
 		move.l	(a1)+,(a6)
 		jmp	copy_words_16	; a1 = source
 
-word_B69A:	dc.w $A53A, $A53B, $A53C, $A53D, $A53D,	0, $A53D, $A53E, $A53F
+press_start_button_mapping:dc.w	$A53A, $A53B, $A53C, $A53D, $A53D, 0, $A53D, $A53E, $A53F
 		dc.w $A53B, $A53E, 0, $A540, $A541, $A53E, $A53E, $A542, $A543
 sub_B6BE:
 		jsr	sub_B740(pc)
@@ -34542,8 +34542,8 @@ kosinski_019F18:
     binclude "src/kosinski/data_019F18.bin"
     align 2, 0
 		align 2, 0
-nemesis_01C120:
-    binclude "src/nemesis/data_01C120.bin"
+nemesis_main_font:
+    binclude "src/fonts/nemesis_main.bin"
     align 2, 0
 nemesis_01CBEA:
     binclude "src/nemesis/data_01CBEA.bin"
