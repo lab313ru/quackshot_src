@@ -6284,7 +6284,7 @@ loc_4C32:
 loc_4C36:
 		move.w	d0,$32(a0)
 		move.w	#2,(word_FF8FAE).w
-		lea	(word_4E2E).l,a1
+		lea	(tbl_lvl_names).l,a1
 		lea	(a1,d0.w),a1
 		lea	(M68K_RAM).l,a2
 		jsr	copy_bytes_to_dest_32(pc) ; a1 = source
@@ -6316,7 +6316,8 @@ sub_4C98:
 		move.w	#7,2(a0)
 		rts
 
-byte_4CA6:	dc.b $83, $84, $88, $8E, $89, $85, $86,	$96, $8A, $87, $8B, 0
+byte_4CA6:	dc.b $83, $84, $88, $8E, $89, $85, $86,	$96, $8A, $87, $8B
+		align 2, 0
 sub_4CB2:
 		move.b	(word_FF8FB0+1).w,d7
 		btst	#7,d7
@@ -6400,23 +6401,39 @@ sub_4E1E:
 		bclr	#7,(init_step).w
 		rts
 
-word_4E2E:	dc.w $200E, $201E, $200D, $2015, $200C,	$201E, $201B, $2011
-		dc.w $203B, $203B, $203B, $203B, $2017,	$200F, $2021, $2013
-		dc.w $200D, $2001, $203B, $203B, $203B,	$203B, $203B, $203B
-		dc.w $201D, $201B, $200B, $2018, $201C,	$2022, $2016, $201F
-		dc.w $200B, $2018, $2013, $200B, $201F,	$2013, $2015, $2013
-		dc.w $2018, $2011, $203B, $201C, $2012,	$2013, $2019, $203B
-		dc.w $201C, $2001, $201E, $201D, $2012,	$203B, $2019, $2001
-		dc.w $2016, $200F, $203B, $203B, $2017,	$200B, $2012, $200B
-		dc.w $201B, $200B, $2014, $200B, $2012,	$203B, $203B, $203B
-		dc.w $200F, $2011, $2022, $2019, $201D,	$203B, $203B, $203B
-		dc.w $203B, $203B, $203B, $203B, $2012,	$2013, $200E, $200F
-		dc.w $2001, $201E, $201D, $203B, $203B,	$203B, $203B, $203B
-		dc.w $201D, $2012, $200F, $203B, $2013,	$201C, $2016, $200B
-		dc.w $2018, $200E, $203B, $203B, $201B,	$2001, $2001, $2017
-		dc.w $2002, $203B, $203B, $203B, $203B,	$203B, $203B, $203B
-		dc.w $201B, $2001, $2001, $2017, $2003,	$203B, $203B, $203B
-		dc.w $203B, $203B, $203B, $203B
+tbl_lvl_names:
+    binclude "src/levels/01_Duckburg/name.bin"
+    align 2, 0
+
+    binclude "src/levels/02_Mexico/name.bin"
+    align 2, 0
+
+    binclude "src/levels/03_Transylvania/name.bin"
+    align 2, 0
+
+    binclude "src/levels/04_Viking_Ship/name.bin"
+    align 2, 0
+
+    binclude "src/levels/05_South_Pole/name.bin"
+    align 2, 0
+
+    binclude "src/levels/06_Maharajah/name.bin"
+    align 2, 0
+
+    binclude "src/levels/07_Egypt/name.bin"
+    align 2, 0
+
+    binclude "src/levels/08_Hideout/name.bin"
+    align 2, 0
+
+    binclude "src/levels/09_The_Island/name.bin"
+    align 2, 0
+
+    binclude "src/main_menu/room1_name.bin"
+    align 2, 0
+
+    binclude "src/main_menu/room2_name.bin"
+    align 2, 0
 sub_4F36:
 		move.w	#5,(vblank_sub_index).w
 		move.w	#$9A,(word_FF9000).w
@@ -13630,7 +13647,7 @@ loc_A03E:
 		rts
 
 loc_A04A:
-		lea	(word_4E2E).l,a2
+		lea	(tbl_lvl_names).l,a2
 		moveq	#0,d1
 		move.w	(level_main_index).w,d1
 		subq.w	#1,d1

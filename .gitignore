@@ -6,9 +6,11 @@ bin/*
 *.nam
 *.til
 *.p
+*.pyc
 *.map
 Quack Shot Starring Donald Duck (JUE) (REV 01) \[!].bin
 qs.bin
 *.asm
 /src/levels/kosinski_params.bin
 /src/enemies/*/nemesis_tiles.bin
+/src/fonts/nemesis_main.bin

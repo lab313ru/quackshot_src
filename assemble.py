@@ -14,6 +14,7 @@ SRC_DIR = os.path.join(os.getcwd(), 'src')
 LEVELS_DIR = os.path.join(os.getcwd(), SRC_DIR, 'levels')
 ENEMIES_DIR = os.path.join(os.getcwd(), SRC_DIR, 'enemies')
 FONTS_DIR = os.path.join(os.getcwd(), SRC_DIR, 'fonts')
+MAIN_MENU_DIR = os.path.join(os.getcwd(), SRC_DIR, 'main_menu')
 MAIN_SRC = os.path.join(os.getcwd(), 'qs.s')
 NEM_ENEMY_TILES_DEC = 'nemesis_tiles_dec.bin'
 NEM_MAIN_FONT_DEC = 'nemesis_main_dec.bin'
@@ -109,6 +110,12 @@ def assemble_enemies_tiles(base_dir):
         nemesis_compress(efile, pre[:-4] + ext)
 
 
+def assemble_level_names(base_dir):
+    os.chdir(base_dir)
+
+    run_process('level_names.py bin')
+
+
 def assemble_main_src(base_dir):
     os.chdir(base_dir)
 
@@ -123,4 +130,5 @@ if __name__ == '__main__':
     assemble_level_params(basedir)
     assemble_enemies_tiles(basedir)
     assemble_main_font(basedir)
+    assemble_level_names(basedir)
     assemble_main_src(basedir)
