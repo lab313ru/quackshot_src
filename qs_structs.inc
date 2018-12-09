@@ -1,3 +1,48 @@
+enemies_lvl_1 macro p0,p1
+    dc.w p0
+    dc.w p1
+enemies_lvl_1 endm
+
+enemies_lvl_2 macro p0,p1
+    dc.w p0
+    dc.w p1
+enemies_lvl_2 endm
+
+enemies_lvl_3 macro p0,p1
+    dc.w p0
+    dc.w p1
+enemies_lvl_3 endm
+
+enemies_lvl_4 macro p0,p1
+    dc.w p0
+    dc.w p1
+enemies_lvl_4 endm
+
+enemies_lvl_5 macro p0,p1
+    dc.w p0
+    dc.w p1
+enemies_lvl_5 endm
+
+enemies_lvl_6 macro p0,p1
+    dc.w p0
+    dc.w p1
+enemies_lvl_6 endm
+
+enemies_lvl_7 macro p0,p1
+    dc.w p0
+    dc.w p1
+enemies_lvl_7 endm
+
+enemies_lvl_8 macro p0,p1
+    dc.w p0
+    dc.w p1
+enemies_lvl_8 endm
+
+enemies_lvl_9 macro p0,p1
+    dc.w p0
+    dc.w p1
+enemies_lvl_9 endm
+
 enigma_data macro p0,p1,p2
     dc.l p0
     dc.l p1
@@ -285,51 +330,6 @@ struc_C396 macro p0,p1
     dc.w p0
     dc.w p1
 struc_C396 endm
-
-struc_C45C macro p0,p1
-    dc.w p0
-    dc.w p1
-struc_C45C endm
-
-struc_C508 macro p0,p1
-    dc.w p0
-    dc.w p1
-struc_C508 endm
-
-struc_C588 macro p0,p1
-    dc.w p0
-    dc.w p1
-struc_C588 endm
-
-struc_C66C macro p0,p1
-    dc.w p0
-    dc.w p1
-struc_C66C endm
-
-struc_C730 macro p0,p1
-    dc.w p0
-    dc.w p1
-struc_C730 endm
-
-struc_C7E8 macro p0,p1
-    dc.w p0
-    dc.w p1
-struc_C7E8 endm
-
-struc_C83C macro p0,p1
-    dc.w p0
-    dc.w p1
-struc_C83C endm
-
-struc_C8E4 macro p0,p1
-    dc.w p0
-    dc.w p1
-struc_C8E4 endm
-
-struc_C9B0 macro p0,p1
-    dc.w p0
-    dc.w p1
-struc_C9B0 endm
 
 weapon_type macro p0,p1
     dc.w p0

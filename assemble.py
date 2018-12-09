@@ -12,7 +12,9 @@ P2_BIN_DST_EXT = '.bin'
 
 SRC_DIR = os.path.join(os.getcwd(), 'src')
 LEVELS_DIR = os.path.join(os.getcwd(), SRC_DIR, 'levels')
+ENEMIES_DIR = os.path.join(os.getcwd(), SRC_DIR, 'enemies')
 MAIN_SRC = os.path.join(os.getcwd(), 'qs.s')
+NEM_ENEMY_TILES_DEC = 'nemesis_tiles_dec.bin'
 LEVEL_PARAMS_SRC = os.path.join(os.getcwd(), LEVELS_DIR, 'kosinski_params_dec.s')
 
 
@@ -52,7 +54,27 @@ def assemble_level_params(base_dir):
     run_process('%s %s' % (P2_BIN, pre))
 
     os.chdir(base_dir)
-    kosinski_compress(pre + P2_BIN_DST_EXT, pre.replace('_dec', '') + P2_BIN_DST_EXT)
+    kosinski_compress(pre + P2_BIN_DST_EXT, pre[:-4] + P2_BIN_DST_EXT)
+
+
+def assemble_enemies_tiles(base_dir):
+    def list_enemies(enms_dir):
+        ll = list()
+
+        for dname in os.listdir(enms_dir):
+            dname = os.path.join(enms_dir, dname)
+
+            for fname in os.listdir(dname):
+                if fname == NEM_ENEMY_TILES_DEC:
+                    ll.append(os.path.join(dname, fname))
+        return ll
+
+    enlist = list_enemies(ENEMIES_DIR)
+
+    os.chdir(base_dir)
+    for efile in enlist:
+        pre, ext = os.path.splitext(efile)
+        kosinski_compress(efile, pre[:-4] + ext)
 
 
 def assemble_main_src(base_dir):
@@ -67,4 +89,5 @@ def assemble_main_src(base_dir):
 if __name__ == '__main__':
     basedir = os.getcwd()
     assemble_level_params(basedir)
+    assemble_enemies_tiles(basedir)
     assemble_main_src(basedir)

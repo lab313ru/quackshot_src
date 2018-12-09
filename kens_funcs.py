@@ -20,7 +20,7 @@ def main(mode, path):
         lib_name = 'kens/' + lib_name
         lib_name += '_x64' if platform.architecture()[0] == '64bit' else '_x86'
         lib_name += '.dll'
-        print lib_name
+        # print lib_name
     else:
         sys.exit(-1)
 
@@ -63,7 +63,7 @@ def main(mode, path):
         if insize > 0:
             print 'File "%s" successfully unpacked to "%s" => (src: %d bytes)' % (path, new_path, insize)
 
-            diff_size = abs(insize - os.path.getsize(path))
+            diff_size = insize - os.path.getsize(path)
             if diff_size != 0:
                 print 'There are %d useless bytes at the end of file!' % diff_size
         else:
@@ -73,6 +73,8 @@ def main(mode, path):
             print 'File "%s" successfully packed to "%s"' % (path, new_path)
         else:
             print 'Cannot pack "%s" file' % path
+
+    print '\n'
 
 
 if __name__ == '__main__':

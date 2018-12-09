@@ -314,7 +314,7 @@ byte_FFEEFA: equ $FFEEFA
 byte_FFEEFB: equ $FFEEFB
 byte_FFEEFC: equ $FFEEFC
 byte_FFEEFD: equ $FFEEFD
-dword_FFEF00: equ $FFEF00
+sprites_after_00_ptr: equ $FFEF00
 dword_FFEF08: equ $FFEF08
 dword_FFEF10: equ $FFEF10
 dword_FFEF14: equ $FFEF14
@@ -343,7 +343,7 @@ unk_FFF000: equ $FFF000
 unk_FFF200: equ $FFF200
 word_FFF280: equ $FFF280
 unk_FFF282: equ $FFF282
-dword_FFF300: equ $FFF300
+sprites_ram: equ $FFF300
 ram_palette_0: equ $FFF580
 ram_palette_1: equ $FFF5A0
 ram_palette_2: equ $FFF5C0

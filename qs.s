@@ -183,6 +183,7 @@ word_294:	dc.w $8000
 		dc.l $40000080
 init_z80_driver:
     binclude "src/init_z80.bin"
+    align 2, 0
 		dc.l $81048F02
 		dc.l $C0000000
 		dc.l $40000010
@@ -383,14 +384,14 @@ loc_59A:
 		jmp	tbl_vblank_subs(pc,d0.w)
 
 tbl_vblank_subs:
-		bra.w	loc_5BE
+		bra.w	send_sprites_to_vram
 		bra.w	loc_5F6
 		bra.w	loc_5FA
 		bra.w	loc_63C
 		bra.w	loc_790
 		bra.w	loc_756
 
-loc_5BE:
+send_sprites_to_vram:
 		jsr	request_z80_bus
 		move.l	#$93409401,(a5)
 		move.l	#$958096F9,(a5)
@@ -399,7 +400,7 @@ loc_5BE:
 		move.w	#$83,-(sp)
 		move.w	(sp)+,(a5)
 		move.l	#$54000003,(a5)
-		move.w	(dword_FFF300).w,(a6)
+		move.w	(sprites_ram).w,(a6)
 		jsr	release_z80_bus
 		jsr	sub_28DC(pc)
 		bra.w	loc_790
@@ -416,10 +417,10 @@ loc_5FA:
 		move.w	#$83,-(sp)
 		move.w	(sp)+,(a5)
 		move.l	#$54000003,(a5)
-		move.w	(dword_FFF300).w,(a6)
+		move.w	(sprites_ram).w,(a6)
 		jsr	release_z80_bus
 		jsr	sub_28DC(pc)
-		jsr	loc_4218(pc)
+		jsr	sub_4218(pc)
 		jsr	(sub_DD6).l
 		bra.w	loc_790
 
@@ -434,7 +435,7 @@ loc_63C:
 		move.w	#$82,-(sp)
 		move.w	(sp)+,(a5)
 		move.l	#$74000002,(a5)
-		move.w	(dword_FFF300).w,(a6)
+		move.w	(sprites_ram).w,(a6)
 		jsr	release_z80_bus
 		bra.s	loc_6A6
 
@@ -447,7 +448,7 @@ loc_676:
 		move.w	#$83,-(sp)
 		move.w	(sp)+,(a5)
 		move.l	#$54000003,(a5)
-		move.w	(dword_FFF300).w,(a6)
+		move.w	(sprites_ram).w,(a6)
 		jsr	release_z80_bus
 
 loc_6A6:
@@ -515,7 +516,7 @@ loc_756:
 		move.w	#$83,-(sp)
 		move.w	(sp)+,(a5)
 		move.l	#$54000003,(a5)
-		move.w	(dword_FFF300).w,(a6)
+		move.w	(sprites_ram).w,(a6)
 		jsr	release_z80_bus
 		jsr	(sub_4FD2).l
 		bra.w	*+4
@@ -2013,14 +2014,14 @@ tbl_nemesis_vram:nemesis_vram $40200000, nemesis_01C120
 		nemesis_vram $78000001, nemesis_12C226
 		nemesis_vram $60000000, nemesis_10F6B4
 		nemesis_vram $60000001, nemesis_020E9A
-		nemesis_vram $7C000001, nemesis_125F08
+		nemesis_vram $7C000001, nemesis_enemy_tiles_62
 		nemesis_vram $60000001, nemesis_01E242
 		nemesis_vram $60000001, nemesis_01E0B4
 		nemesis_vram $62000001, nemesis_01DAEC
 		nemesis_vram $68000001, nemesis_01FF84
 		nemesis_vram $62000001, nemesis_020200
 		nemesis_vram $4C000001, nemesis_031620
-		nemesis_vram $6A000001, nemesis_01F0B4
+		nemesis_vram $6A000001, nemesis_enemy_tiles_34
 		nemesis_vram $6A000001, nemesis_01E242
 		nemesis_vram $60000000, nemesis_10D6A0
 		nemesis_vram $60000000, nemesis_11044C
@@ -2038,10 +2039,10 @@ tbl_nemesis_vram:nemesis_vram $40200000, nemesis_01C120
 		nemesis_vram $60000000, nemesis_112D44
 		nemesis_vram $7A000000, nemesis_1135BC
 		nemesis_vram $64000001, nemesis_01FD9C
-		nemesis_vram $78000001, nemesis_1230DE
+		nemesis_vram $78000001, nemesis_enemy_tiles_49
 		nemesis_vram $60000000, nemesis_1291A4
 		nemesis_vram $64000001, nemesis_020534
-		nemesis_vram $6A000001, nemesis_01F1FE
+		nemesis_vram $6A000001, nemesis_enemy_tiles_29
 		nemesis_vram $64000001, nemesis_020834
 		nemesis_vram $60000001, nemesis_127EC6
 		nemesis_vram $60000000, nemesis_12E4C8
@@ -2291,7 +2292,7 @@ initial_vdp_regs:dc.b 4, $14, $30, $34,	7, $6A,	0, 0, 0, 0, 0, 0, $81, $34, 0, 2
 		align 2, 0
 sub_205E:
 		jsr	(clear_cram).l
-		bsr.s	sub_2084
+		bsr.s	clear_first_sprite
 		move.l	#$40000003,(a5)
 		bsr.s	sub_2074
 		move.l	#$60000003,(a5)
@@ -2305,11 +2306,11 @@ loc_207A:
 		dbf	d7,loc_207A
 		rts
 
-sub_2084:
+clear_first_sprite:
 		moveq	#0,d1
 		move.l	#$54000003,(a5)
 		move.l	d1,(a6)
-		move.l	d1,(dword_FFF300).w
+		move.l	d1,(sprites_ram).w
 		rts
 ; a1 = source
 ; d0 = vdp cmd
@@ -2347,7 +2348,7 @@ loc_20CC:
 		jsr	release_z80_bus
 		move.w	#$8F02,(a5)
 		bsr.s	clear_cram
-		clr.l	(dword_FFF300).w
+		clr.l	(sprites_ram).w
 		bsr.s	sub_210A
 		bsr.s	sub_2114
 		move.l	#$40000010,(a5)
@@ -3986,7 +3987,7 @@ sub_2FC0:
 		moveq	#0,d2
 		move.l	a2,-(sp)
 		movea.l	a3,a2
-		jsr	loc_424A(pc)	; d0 = ?
+		jsr	sub_424A(pc)	; d0 = ?
 		movea.l	(sp)+,a2
 		addq.w	#1,2(a2)
 		cmpi.w	#$C,2(a2)
@@ -5332,7 +5333,7 @@ loc_418A:
 
 sub_4190:
 		btst	#0,d6
-		bne.w	loc_424A	; d0 = ?
+		bne.w	sub_424A	; d0 = ?
 		movea.l	$C(a0),a1
 		move.w	$10(a0),d0
 		add.w	d0,d0
@@ -5373,7 +5374,7 @@ sub_4190:
 		move.b	#1,(byte_FFEE4B).w
 		rts
 
-loc_4218:
+sub_4218:
 		bclr	#0,(byte_FFEE4B).w
 		beq.s	locret_4248
 		lea	(unk_FFFA90).w,a3
@@ -5394,9 +5395,14 @@ loc_4240:
 
 locret_4248:
 		rts
+; d0 = ?
+; d1 = width
+; d2 = hight
+; a1 = ?
+; a2 = ?
 
-loc_424A:
-		movem.l	d3-d7/a3-a4,-(sp) ; d0 = ?
+sub_424A:
+		movem.l	d3-d7/a3-a4,-(sp)
 		move.l	#$800000,d4
 
 loc_4254:
@@ -5866,18 +5872,18 @@ loc_4748:
 
 loc_476A:
 		jsr	sub_19E62
-		jsr	sub_C418
+		jsr	load_enemies_tiles
 		jsr	sub_40EA(pc)
 		jsr	sub_962C(pc)
 		jsr	sub_969E(pc)
 		jsr	sub_2592(pc)
 		jsr	sub_969E(pc)
-		move.l	#$4E000000,d0
-		trap	#4		; do_decompress_kosinski_to_ram
+		move.l	#make_indexes($4E,$00,$00,$00),d0
+		trap	#DECOMP_KOSINSKI_RAM ; do_decompress_kosinski_to_ram
 		tst.b	(is_usa_europe_version).w
 		bne.s	loc_47A0
-		move.l	#$4F000000,d0
-		trap	#4		; do_decompress_kosinski_to_ram
+		move.l	#make_indexes($4F,$00,$00,$00),d0
+		trap	#DECOMP_KOSINSKI_RAM ; do_decompress_kosinski_to_ram
 
 loc_47A0:
 		move.w	(enable_display).w,(a5)
@@ -13129,7 +13135,7 @@ nullsub_10:
 		rts
 
 sub_9A6A:
-		lea	(dword_FFF300).w,a2
+		lea	(sprites_ram).w,a2
 		move.l	#$1400301,(a2)+
 		move.l	#1,(a2)+
 		move.l	#$1400302,(a2)+
@@ -13140,7 +13146,7 @@ sub_9A6A:
 		move.l	#0,(a2)+
 		move.b	#4,(byte_FFEE40).w
 		move.b	#$4C,(byte_FF8F2E).w
-		move.l	a2,(dword_FFEF00).w
+		move.l	a2,(sprites_after_00_ptr).w
 		movea.w	(word_FF8F50).w,a1
 		clr.w	(a1)
 		movea.w	(word_FF8F52).w,a1
@@ -13164,7 +13170,7 @@ sub_9AD0:
 		dbf	d7,sub_9AD0
 
 loc_9AE4:
-		movea.l	(dword_FFEF00).w,a1
+		movea.l	(sprites_after_00_ptr).w,a1
 		move.l	#0,(a1)
 		rts
 
@@ -13220,7 +13226,7 @@ loc_9B5C:
 		bmi.w	sub_B7F6
 
 loc_9B80:
-		movea.l	(dword_FFEF00).w,a2
+		movea.l	(sprites_after_00_ptr).w,a2
 		moveq	#0,d1
 		move.w	6(a0),d0
 		add.w	d0,d0
@@ -13324,13 +13330,13 @@ loc_9C78:
 		dbf	d1,loc_9C16
 
 loc_9C7C:
-		move.l	a2,(dword_FFEF00).w
+		move.l	a2,(sprites_after_00_ptr).w
 		rts
 
 sub_9C82:
-		cmpi.w	#$60,d0
+		cmpi.w	#96,d0
 		bcs.s	loc_9C92
-		cmpi.w	#$160,d0
+		cmpi.w	#352,d0
 		bcc.s	loc_9C92
 		moveq	#0,d5
 		rts
@@ -13341,9 +13347,9 @@ loc_9C92:
 		rts
 
 sub_9C98:
-		cmpi.w	#$60,d0
+		cmpi.w	#96,d0
 		bcs.s	loc_9CA8
-		cmpi.w	#$1C0,d0
+		cmpi.w	#448,d0
 		bcc.s	loc_9CA8
 		moveq	#0,d5
 		rts
@@ -13365,12 +13371,12 @@ sub_9CB2:
 		jsr	sub_205E(pc)
 		jsr	init_joypads(pc)
 		jsr	clear_vram_cram_vsram(pc)
-		move.l	#$17161500,d0
-		trap	#5		; do_copy_4_palettes_to_ram
-		move.l	#$3B454401,d0
-		trap	#1		; do_decompress_nemesis_to_vram
-		move.l	#$53580000,d0
-		trap	#1		; do_decompress_nemesis_to_vram
+		move.l	#make_indexes($17,$16,$15,$00),d0
+		trap	#COPY_PAL_TO_RAM ; do_copy_4_palettes_to_ram
+		move.l	#make_indexes($3B,$45,$44,$01),d0
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
+		move.l	#make_indexes($53,$58,$00,$00),d0
+		trap	#DECOMP_NEMESIS_VRAM ; do_decompress_nemesis_to_vram
 		move.w	#$BB,(word_FF9080).l
 		move.w	#$B2,(word_FF9040).l
 		bsr.w	sub_962C
@@ -13385,16 +13391,16 @@ sub_9CB2:
 		lea	(enigma_030620).l,a0
 		lea	(unk_FF1000).l,a1
 		jsr	(decompress_enigma_to_ram).l ; a0 = source
-		move.l	#$908,d0
-		trap	#0		; do_raw_copy_data
+		move.l	#make_indexes($00,$00,$09,$08),d0
+		trap	#RAW_COPY_DATA	; do_raw_copy_data
 		tst.b	(byte_FFEEF3).w
 		beq.s	loc_9D70
 		move.w	#$8100,d0
 		lea	(enigma_127F88).l,a0
 		lea	(unk_FF2000).l,a1
 		jsr	(decompress_enigma_to_ram).l ; a0 = source
-		moveq	#$A,d0
-		trap	#0		; do_raw_copy_data
+		moveq	#make_indexes($00,$00,$00,$0A),d0
+		trap	#RAW_COPY_DATA	; do_raw_copy_data
 		bra.s	loc_9D8A
 
 loc_9D70:
@@ -13402,8 +13408,8 @@ loc_9D70:
 		lea	(enigma_128004).l,a0
 		lea	(unk_FF2000).l,a1
 		jsr	(decompress_enigma_to_ram).l ; a0 = source
-		moveq	#$14,d0
-		trap	#0		; do_raw_copy_data
+		moveq	#make_indexes($00,$00,$00,$14),d0
+		trap	#RAW_COPY_DATA	; do_raw_copy_data
 
 loc_9D8A:
 		move.w	(enable_display).w,(a5)
@@ -16410,11 +16416,11 @@ stru_C400:	struc_30 $9E, $C400, 0
 stru_C406:	struc_30 $83, $8400, 0
 		struc_30 $84, $8500, 0
 		struc_30 $85, $C500, 0
-sub_C418:
+load_enemies_tiles:
 		move.w	(level_main_index).w,d0
 		add.w	d0,d0
-		move.w	off_C448(pc,d0.w),d0
-		lea	off_C448(pc,d0.w),a1
+		move.w	tbl_lvl_enemies_tiles(pc,d0.w),d0
+		lea	tbl_lvl_enemies_tiles(pc,d0.w),a1
 		move.w	(level_sub_index).w,d0
 		add.w	d0,d0
 		add.w	d0,d0
@@ -16429,231 +16435,231 @@ loc_C438:
 		dbf	d2,loc_C438
 		rts
 
-off_C448:	dc.w stru_C45C-off_C448
-		dc.w stru_C45C-off_C448
-		dc.w stru_C508-off_C448
-		dc.w stru_C588-off_C448
-		dc.w stru_C66C-off_C448
-		dc.w stru_C730-off_C448
-		dc.w stru_C7E8-off_C448
-		dc.w stru_C83C-off_C448
-		dc.w stru_C8E4-off_C448
-		dc.w stru_C9B0-off_C448
-stru_C45C:	struc_C45C 8, stru_C468-stru_C45C
-		struc_C45C 6, stru_C4B0-stru_C45C
-		struc_C45C 3, stru_C4E8-stru_C45C
-stru_C468:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-		nemesis_to_vram1 $4FE00002, nemesis_117038
-		nemesis_to_vram1 $55600002, nemesis_11785A
-		nemesis_to_vram1 $5E200002, nemesis_117D5E
-		nemesis_to_vram1 $60A00002, nemesis_1180CE
-		nemesis_to_vram1 $61A00002, nemesis_117F60
-		nemesis_to_vram1 $64400002, nemesis_1182F6
-		nemesis_to_vram1 $66400002, nemesis_11838A
-stru_C4B0:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-		nemesis_to_vram1 $4FE00002, nemesis_11785A
-		nemesis_to_vram1 $58A00002, nemesis_1173C0
-		nemesis_to_vram1 $5CC00002, nemesis_1175A0
-		nemesis_to_vram1 $62000002, nemesis_11838A
-		nemesis_to_vram1 $6A400002, nemesis_117F60
-stru_C4E8:	nemesis_to_vram1 $40000002, nemesis_1173C0
-		nemesis_to_vram1 $4B000002, nemesis_1175A0
-		nemesis_to_vram1 $4FC00002, nemesis_11818A
-		nemesis_to_vram1 $52400002, nemesis_119858
-stru_C508:	struc_C508 5, stru_C518-stru_C508
-		struc_C508 5, stru_C548-stru_C508
-		struc_C508 5, stru_C548-stru_C508
-		struc_C508 1, stru_C578-stru_C508
-stru_C518:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $40000002, nemesis_1188AE
-		nemesis_to_vram1 $44000002, nemesis_119298
-		nemesis_to_vram1 $48400002, nemesis_117716
-		nemesis_to_vram1 $49E00002, nemesis_11785A
-		nemesis_to_vram1 $52A00002, nemesis_1165DA
-stru_C548:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-		nemesis_to_vram1 $4FE00002, nemesis_11785A
-		nemesis_to_vram1 $58A00002, nemesis_11838A
-		nemesis_to_vram1 $60E00002, nemesis_11969A
-		nemesis_to_vram1 $63800002, nemesis_119AA4
-stru_C578:	nemesis_to_vram1 $40000002, nemesis_119132
-		nemesis_to_vram1 $41E00002, nemesis_118AF4
-stru_C588:	struc_C588 4, stru_C5A4-stru_C588
-		struc_C588 5, stru_C5CC-stru_C588
-		struc_C588 4, stru_C5FC-stru_C588
-		struc_C588 6, stru_C624-stru_C588
-		struc_C588 6, stru_C624-stru_C588
-		struc_C588 6, stru_C624-stru_C588
-		struc_C588 1, stru_C65C-stru_C588
-stru_C5A4:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-		nemesis_to_vram1 $4FE00002, nemesis_1213EE
-		nemesis_to_vram1 $51600002, nemesis_120462
-		nemesis_to_vram1 $56E00002, nemesis_1195A4
-stru_C5CC:	nemesis_to_vram1 $40000002, nemesis_120462
-		nemesis_to_vram1 $45800002, nemesis_12096E
-		nemesis_to_vram1 $4E600002, nemesis_120800
-		nemesis_to_vram1 $51C00002, nemesis_120E28
-		nemesis_to_vram1 $57600002, nemesis_1213EE
-		nemesis_to_vram1 $58E00002, nemesis_120734
-stru_C5FC:	nemesis_to_vram1 $40000002, nemesis_12096E
-		nemesis_to_vram1 $48E00002, nemesis_120800
-		nemesis_to_vram1 $4C400002, nemesis_1210E2
-		nemesis_to_vram1 $4E600002, nemesis_12125A
-		nemesis_to_vram1 $64000001, nemesis_01F1FE
-stru_C624:	nemesis_to_vram1 $40000002, nemesis_120462
-		nemesis_to_vram1 $45800002, nemesis_12096E
-		nemesis_to_vram1 $4E600002, nemesis_120800
-		nemesis_to_vram1 $51C00002, nemesis_11FEE6
-		nemesis_to_vram1 $59600002, nemesis_120E28
-		nemesis_to_vram1 $5EE00002, nemesis_1213EE
-		nemesis_to_vram1 $60600002, nemesis_120734
-stru_C65C:	nemesis_to_vram1 $40000002, nemesis_120462
-		nemesis_to_vram1 $45800002, nemesis_1227A6
-stru_C66C:	struc_C66C 6, stru_C680-stru_C66C
-		struc_C66C 5, stru_C6B8-stru_C66C
-		struc_C66C 0, stru_C6E8-stru_C66C
-		struc_C66C 6, stru_C6F0-stru_C66C
-		struc_C66C 0, stru_C728-stru_C66C
-stru_C680:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $7C000001, nemesis_11C646
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-		nemesis_to_vram1 $4FE00002, nemesis_11785A
-		nemesis_to_vram1 $58A00002, nemesis_11E74C
-		nemesis_to_vram1 $5EA00002, nemesis_01F0B4
-		nemesis_to_vram1 $60A00002, nemesis_11ED08
-stru_C6B8:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $7C000001, nemesis_11C646
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-		nemesis_to_vram1 $4FE00002, nemesis_11785A
-		nemesis_to_vram1 $58A00002, nemesis_11EB1C
-		nemesis_to_vram1 $5BA00002, nemesis_11CD46
-stru_C6E8:	nemesis_to_vram1 $78000001, nemesis_114200
-stru_C6F0:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $7C000001, nemesis_11C646
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-		nemesis_to_vram1 $4FE00002, nemesis_11DC2A
-		nemesis_to_vram1 $64A00002, nemesis_11E74C
-		nemesis_to_vram1 $6AA00002, nemesis_01F0B4
-		nemesis_to_vram1 $6CA00002, nemesis_120E28
-stru_C728:	nemesis_to_vram1 $78000001, nemesis_1280F6
-stru_C730:	struc_C730 5, stru_C740-stru_C730
-		struc_C730 7, stru_C7A8-stru_C730
-		struc_C730 6, stru_C770-stru_C730
-		struc_C730 5, stru_C7B8-stru_C730
-stru_C740:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $7C000001, nemesis_11C646
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-		nemesis_to_vram1 $4FE00002, nemesis_11785A
-		nemesis_to_vram1 $58A00002, nemesis_11F9D8
-		nemesis_to_vram1 $60800002, nemesis_11F200
-stru_C770:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $7C000001, nemesis_11C646
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-		nemesis_to_vram1 $4FE00002, nemesis_11785A
-		nemesis_to_vram1 $58A00002, nemesis_11F9D8
-		nemesis_to_vram1 $60800002, nemesis_11F5C6
-		nemesis_to_vram1 $69800002, nemesis_11CE12
-stru_C7A8:	nemesis_to_vram1 $7C000001, nemesis_11C646
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-stru_C7B8:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $4FE00002, nemesis_11785A
-		nemesis_to_vram1 $58A00002, nemesis_11DC2A
-		nemesis_to_vram1 $6D600002, nemesis_11EE72
-		nemesis_to_vram1 $76800002, nemesis_11F9D8
-		nemesis_to_vram1 $6A000001, nemesis_01E470
-stru_C7E8:	struc_C7E8 3, stru_C814-stru_C7E8
-		struc_C7E8 0, stru_C80C-stru_C7E8
-		struc_C7E8 3, stru_C814-stru_C7E8
-		struc_C7E8 3, stru_C814-stru_C7E8
-		struc_C7E8 3, stru_C814-stru_C7E8
-		struc_C7E8 3, stru_C814-stru_C7E8
-		struc_C7E8 3, stru_C814-stru_C7E8
-		struc_C7E8 3, stru_C814-stru_C7E8
-		struc_C7E8 0, stru_C834-stru_C7E8
-stru_C80C:	nemesis_to_vram1 $78000001, nemesis_1147B0
-stru_C814:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-		nemesis_to_vram1 $4FE00002, nemesis_11D5E2
-		nemesis_to_vram1 $5A600002, nemesis_11838A
-stru_C834:	nemesis_to_vram1 $78000001, nemesis_1230DE
-stru_C83C:	struc_C83C 6, stru_C854-stru_C83C
-		struc_C83C 3, stru_C88C-stru_C83C
-		struc_C83C 2, stru_C8AC-stru_C83C
-		struc_C83C 1, stru_C8C4-stru_C83C
-		struc_C83C 6, stru_C854-stru_C83C
-		struc_C83C 1, stru_C8D4-stru_C83C
-stru_C854:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $7C000001, nemesis_11C646
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-		nemesis_to_vram1 $4FE00002, nemesis_11785A
-		nemesis_to_vram1 $58A00002, nemesis_11838A
-		nemesis_to_vram1 $60E00002, nemesis_1188AE
-		nemesis_to_vram1 $64E00002, nemesis_11C56E
-stru_C88C:	nemesis_to_vram1 $40000002, nemesis_11C7DA
-		nemesis_to_vram1 $49400002, nemesis_11C56E
-		nemesis_to_vram1 $4B400002, nemesis_11C094
-		nemesis_to_vram1 $51400002, nemesis_11D50C
-stru_C8AC:	nemesis_to_vram1 $40000002, nemesis_11C7DA
-		nemesis_to_vram1 $49400002, nemesis_11D50C
-		nemesis_to_vram1 $4C000002, nemesis_115C8C
-stru_C8C4:	nemesis_to_vram1 $40000002, nemesis_11C094
-		nemesis_to_vram1 $4C800002, nemesis_1230DE
-stru_C8D4:	nemesis_to_vram1 $40000002, nemesis_11C476
-		nemesis_to_vram1 $41800002, nemesis_11C7DA
-stru_C8E4:	struc_C8E4 7, stru_C8F8-stru_C8E4
-		struc_C8E4 7, stru_C8F8-stru_C8E4
-		struc_C8E4 3, stru_C938-stru_C8E4
-		struc_C8E4 7, stru_C958-stru_C8E4
-		struc_C8E4 2, stru_C998-stru_C8E4
-stru_C8F8:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $7C000001, nemesis_11C646
-		nemesis_to_vram1 $40000002, nemesis_11785A
-		nemesis_to_vram1 $48C00002, nemesis_119132
-		nemesis_to_vram1 $4AA00002, nemesis_11B318
-		nemesis_to_vram1 $51600002, nemesis_11B6EE
-		nemesis_to_vram1 $55600002, nemesis_11632E
-		nemesis_to_vram1 $58000002, nemesis_116502
-stru_C938:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $7C000001, nemesis_11C646
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-		nemesis_to_vram1 $4FE00002, nemesis_11B0F8
-stru_C958:	nemesis_to_vram1 $78000001, nemesis_1202D4
-		nemesis_to_vram1 $7C000001, nemesis_11C646
-		nemesis_to_vram1 $40000002, nemesis_1165DA
-		nemesis_to_vram1 $4FE00002, nemesis_11785A
-		nemesis_to_vram1 $58A00002, nemesis_11838A
-		nemesis_to_vram1 $60E00002, nemesis_11DC2A
-		nemesis_to_vram1 $75A00002, nemesis_1173C0
-		nemesis_to_vram1 $79C00002, nemesis_11AF10
-stru_C998:	nemesis_to_vram1 $40000002, nemesis_125F08
-		nemesis_to_vram1 $50000002, nemesis_1165DA
-		nemesis_to_vram1 $60000002, nemesis_126506
-stru_C9B0:	struc_C9B0 4, stru_C9F8-stru_C9B0
-		struc_C9B0 6, stru_C9C0-stru_C9B0
-		struc_C9B0 0, stru_CA20-stru_C9B0
-		struc_C9B0 5, stru_CA28-stru_C9B0
-stru_C9C0:	nemesis_to_vram1 $78000001, nemesis_11503C
-		nemesis_to_vram1 $4F600002, nemesis_12096E
-		nemesis_to_vram1 $58400002, nemesis_11C56E
-		nemesis_to_vram1 $5A400002, nemesis_119132
-		nemesis_to_vram1 $5C200002, nemesis_120800
-		nemesis_to_vram1 $5F800002, nemesis_11B978
-		nemesis_to_vram1 $6B800002, nemesis_118AF4
-stru_C9F8:	nemesis_to_vram1 $40000002, nemesis_119132
-		nemesis_to_vram1 $41E00002, nemesis_11B318
-		nemesis_to_vram1 $48A00002, nemesis_11641C
-		nemesis_to_vram1 $4A200002, nemesis_116142
-		nemesis_to_vram1 $4E200002, nemesis_11ED08
-stru_CA20:	nemesis_to_vram1 $40000002, nemesis_115C8C
-stru_CA28:	nemesis_to_vram1 $78000001, nemesis_124824
-		nemesis_to_vram1 $7A800001, nemesis_1224C8
-		nemesis_to_vram1 $40000002, nemesis_126E90
-		nemesis_to_vram1 $4E200002, nemesis_124A5A
-		nemesis_to_vram1 $60000002, nemesis_1276A8
-		nemesis_to_vram1 $6C800002, nemesis_125384
+tbl_lvl_enemies_tiles:dc.w tbl_enemies_lvl_0__1-tbl_lvl_enemies_tiles
+		dc.w tbl_enemies_lvl_0__1-tbl_lvl_enemies_tiles
+		dc.w tbl_enemies_lvl_2-tbl_lvl_enemies_tiles
+		dc.w tbl_enemies_lvl_3-tbl_lvl_enemies_tiles
+		dc.w tbl_enemies_lvl_4-tbl_lvl_enemies_tiles
+		dc.w tbl_enemies_lvl_5-tbl_lvl_enemies_tiles
+		dc.w tbl_enemies_lvl_6-tbl_lvl_enemies_tiles
+		dc.w tbl_enemies_lvl_7-tbl_lvl_enemies_tiles
+		dc.w tbl_enemies_lvl_8-tbl_lvl_enemies_tiles
+		dc.w tbl_enemies_lvl_9-tbl_lvl_enemies_tiles
+tbl_enemies_lvl_0__1:enemies_lvl_1 8, tbl_enemies_lvl_1_0-tbl_enemies_lvl_0__1
+		enemies_lvl_1 6, tbl_enemies_lvl_1_1-tbl_enemies_lvl_0__1
+		enemies_lvl_1 3, tbl_enemies_lvl_1_2-tbl_enemies_lvl_0__1
+tbl_enemies_lvl_1_0:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_2
+		nemesis_to_vram1 $55600002, nemesis_enemy_tiles_3
+		nemesis_to_vram1 $5E200002, nemesis_enemy_tiles_4
+		nemesis_to_vram1 $60A00002, nemesis_enemy_tiles_5
+		nemesis_to_vram1 $61A00002, nemesis_enemy_tiles_6
+		nemesis_to_vram1 $64400002, nemesis_enemy_tiles_7
+		nemesis_to_vram1 $66400002, nemesis_enemy_tiles_8
+tbl_enemies_lvl_1_1:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_3
+		nemesis_to_vram1 $58A00002, nemesis_enemy_tiles_9
+		nemesis_to_vram1 $5CC00002, nemesis_enemy_tiles_10
+		nemesis_to_vram1 $62000002, nemesis_enemy_tiles_8
+		nemesis_to_vram1 $6A400002, nemesis_enemy_tiles_6
+tbl_enemies_lvl_1_2:nemesis_to_vram1 $40000002, nemesis_enemy_tiles_9
+		nemesis_to_vram1 $4B000002, nemesis_enemy_tiles_10
+		nemesis_to_vram1 $4FC00002, nemesis_enemy_tiles_11
+		nemesis_to_vram1 $52400002, nemesis_enemy_tiles_12
+tbl_enemies_lvl_2:enemies_lvl_2 5, tbl_enemies_lvl_2_0-tbl_enemies_lvl_2
+		enemies_lvl_2 5, tbl_enemies_lvl_2_1__2-tbl_enemies_lvl_2
+		enemies_lvl_2 5, tbl_enemies_lvl_2_1__2-tbl_enemies_lvl_2
+		enemies_lvl_2 1, tbl_enemies_lvl_2_3-tbl_enemies_lvl_2
+tbl_enemies_lvl_2_0:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_13
+		nemesis_to_vram1 $44000002, nemesis_enemy_tiles_14
+		nemesis_to_vram1 $48400002, nemesis_enemy_tiles_15
+		nemesis_to_vram1 $49E00002, nemesis_enemy_tiles_3
+		nemesis_to_vram1 $52A00002, nemesis_enemy_tiles_1
+tbl_enemies_lvl_2_1__2:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_3
+		nemesis_to_vram1 $58A00002, nemesis_enemy_tiles_8
+		nemesis_to_vram1 $60E00002, nemesis_enemy_tiles_16
+		nemesis_to_vram1 $63800002, nemesis_enemy_tiles_17
+tbl_enemies_lvl_2_3:nemesis_to_vram1 $40000002, nemesis_enemy_tiles_18
+		nemesis_to_vram1 $41E00002, nemesis_enemy_tiles_19
+tbl_enemies_lvl_3:enemies_lvl_3 4, tbl_enemies_lvl_3_0-tbl_enemies_lvl_3
+		enemies_lvl_3 5, tbl_enemies_lvl_3_1-tbl_enemies_lvl_3
+		enemies_lvl_3 4, tbl_enemies_lvl_3_2-tbl_enemies_lvl_3
+		enemies_lvl_3 6, tbl_enemies_lvl_3_3__5-tbl_enemies_lvl_3
+		enemies_lvl_3 6, tbl_enemies_lvl_3_3__5-tbl_enemies_lvl_3
+		enemies_lvl_3 6, tbl_enemies_lvl_3_3__5-tbl_enemies_lvl_3
+		enemies_lvl_3 1, tbl_enemies_lvl_3_6-tbl_enemies_lvl_3
+tbl_enemies_lvl_3_0:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_20
+		nemesis_to_vram1 $51600002, nemesis_enemy_tiles_21
+		nemesis_to_vram1 $56E00002, nemesis_enemy_tiles_22
+tbl_enemies_lvl_3_1:nemesis_to_vram1 $40000002, nemesis_enemy_tiles_21
+		nemesis_to_vram1 $45800002, nemesis_enemy_tiles_23
+		nemesis_to_vram1 $4E600002, nemesis_enemy_tiles_24
+		nemesis_to_vram1 $51C00002, nemesis_enemy_tiles_25
+		nemesis_to_vram1 $57600002, nemesis_enemy_tiles_20
+		nemesis_to_vram1 $58E00002, nemesis_enemy_tiles_26
+tbl_enemies_lvl_3_2:nemesis_to_vram1 $40000002, nemesis_enemy_tiles_23
+		nemesis_to_vram1 $48E00002, nemesis_enemy_tiles_24
+		nemesis_to_vram1 $4C400002, nemesis_enemy_tiles_27
+		nemesis_to_vram1 $4E600002, nemesis_enemy_tiles_28
+		nemesis_to_vram1 $64000001, nemesis_enemy_tiles_29
+tbl_enemies_lvl_3_3__5:nemesis_to_vram1 $40000002, nemesis_enemy_tiles_21
+		nemesis_to_vram1 $45800002, nemesis_enemy_tiles_23
+		nemesis_to_vram1 $4E600002, nemesis_enemy_tiles_24
+		nemesis_to_vram1 $51C00002, nemesis_enemy_tiles_30
+		nemesis_to_vram1 $59600002, nemesis_enemy_tiles_25
+		nemesis_to_vram1 $5EE00002, nemesis_enemy_tiles_20
+		nemesis_to_vram1 $60600002, nemesis_enemy_tiles_26
+tbl_enemies_lvl_3_6:nemesis_to_vram1 $40000002, nemesis_enemy_tiles_21
+		nemesis_to_vram1 $45800002, nemesis_enemy_tiles_31
+tbl_enemies_lvl_4:enemies_lvl_4 6, tbl_enemies_lvl_4_0-tbl_enemies_lvl_4
+		enemies_lvl_4 5, tbl_enemies_lvl_4_1-tbl_enemies_lvl_4
+		enemies_lvl_4 0, tbl_enemies_lvl_4_2-tbl_enemies_lvl_4
+		enemies_lvl_4 6, tbl_enemies_lvl_4_3-tbl_enemies_lvl_4
+		enemies_lvl_4 0, tbl_enemies_lvl_4_4-tbl_enemies_lvl_4
+tbl_enemies_lvl_4_0:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $7C000001, nemesis_enemy_tiles_32
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_3
+		nemesis_to_vram1 $58A00002, nemesis_enemy_tiles_33
+		nemesis_to_vram1 $5EA00002, nemesis_enemy_tiles_34
+		nemesis_to_vram1 $60A00002, nemesis_enemy_tiles_35
+tbl_enemies_lvl_4_1:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $7C000001, nemesis_enemy_tiles_32
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_3
+		nemesis_to_vram1 $58A00002, nemesis_enemy_tiles_36
+		nemesis_to_vram1 $5BA00002, nemesis_enemy_tiles_37
+tbl_enemies_lvl_4_2:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_38
+tbl_enemies_lvl_4_3:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $7C000001, nemesis_enemy_tiles_32
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_39
+		nemesis_to_vram1 $64A00002, nemesis_enemy_tiles_33
+		nemesis_to_vram1 $6AA00002, nemesis_enemy_tiles_34
+		nemesis_to_vram1 $6CA00002, nemesis_enemy_tiles_25
+tbl_enemies_lvl_4_4:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_40
+tbl_enemies_lvl_5:enemies_lvl_5 5, tbl_enemies_lvl_5_0-tbl_enemies_lvl_5
+		enemies_lvl_5 7, tbl_enemies_lvl_5_1-tbl_enemies_lvl_5
+		enemies_lvl_5 6, tbl_enemies_lvl_5_2-tbl_enemies_lvl_5
+		enemies_lvl_5 5, tbl_enemies_lvl_5_3-tbl_enemies_lvl_5
+tbl_enemies_lvl_5_0:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $7C000001, nemesis_enemy_tiles_32
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_3
+		nemesis_to_vram1 $58A00002, nemesis_enemy_tiles_41
+		nemesis_to_vram1 $60800002, nemesis_enemy_tiles_42
+tbl_enemies_lvl_5_2:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $7C000001, nemesis_enemy_tiles_32
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_3
+		nemesis_to_vram1 $58A00002, nemesis_enemy_tiles_41
+		nemesis_to_vram1 $60800002, nemesis_enemy_tiles_43
+		nemesis_to_vram1 $69800002, nemesis_enemy_tiles_44
+tbl_enemies_lvl_5_1:nemesis_to_vram1 $7C000001, nemesis_enemy_tiles_32
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+tbl_enemies_lvl_5_3:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_3
+		nemesis_to_vram1 $58A00002, nemesis_enemy_tiles_39
+		nemesis_to_vram1 $6D600002, nemesis_enemy_tiles_45
+		nemesis_to_vram1 $76800002, nemesis_enemy_tiles_41
+		nemesis_to_vram1 $6A000001, nemesis_enemy_tiles_46
+tbl_enemies_lvl_6:enemies_lvl_6 3, tbl_enemies_lvl_6_0__7-tbl_enemies_lvl_6
+		enemies_lvl_6 0, tbl_enemies_lvl_6_1-tbl_enemies_lvl_6
+		enemies_lvl_6 3, tbl_enemies_lvl_6_0__7-tbl_enemies_lvl_6
+		enemies_lvl_6 3, tbl_enemies_lvl_6_0__7-tbl_enemies_lvl_6
+		enemies_lvl_6 3, tbl_enemies_lvl_6_0__7-tbl_enemies_lvl_6
+		enemies_lvl_6 3, tbl_enemies_lvl_6_0__7-tbl_enemies_lvl_6
+		enemies_lvl_6 3, tbl_enemies_lvl_6_0__7-tbl_enemies_lvl_6
+		enemies_lvl_6 3, tbl_enemies_lvl_6_0__7-tbl_enemies_lvl_6
+		enemies_lvl_6 0, tbl_enemies_lvl_6_8-tbl_enemies_lvl_6
+tbl_enemies_lvl_6_1:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_47
+tbl_enemies_lvl_6_0__7:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_48
+		nemesis_to_vram1 $5A600002, nemesis_enemy_tiles_8
+tbl_enemies_lvl_6_8:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_49
+tbl_enemies_lvl_7:enemies_lvl_7 6, tbl_enemies_lvl_7_0_4-tbl_enemies_lvl_7
+		enemies_lvl_7 3, tbl_enemies_lvl_7_1-tbl_enemies_lvl_7
+		enemies_lvl_7 2, tbl_enemies_lvl_7_2-tbl_enemies_lvl_7
+		enemies_lvl_7 1, tbl_enemies_lvl_7_3-tbl_enemies_lvl_7
+		enemies_lvl_7 6, tbl_enemies_lvl_7_0_4-tbl_enemies_lvl_7
+		enemies_lvl_7 1, tbl_enemies_lvl_7_5-tbl_enemies_lvl_7
+tbl_enemies_lvl_7_0_4:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $7C000001, nemesis_enemy_tiles_32
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_3
+		nemesis_to_vram1 $58A00002, nemesis_enemy_tiles_8
+		nemesis_to_vram1 $60E00002, nemesis_enemy_tiles_13
+		nemesis_to_vram1 $64E00002, nemesis_enemy_tiles_50
+tbl_enemies_lvl_7_1:nemesis_to_vram1 $40000002, nemesis_enemy_tiles_51
+		nemesis_to_vram1 $49400002, nemesis_enemy_tiles_50
+		nemesis_to_vram1 $4B400002, nemesis_enemy_tiles_52
+		nemesis_to_vram1 $51400002, nemesis_enemy_tiles_53
+tbl_enemies_lvl_7_2:nemesis_to_vram1 $40000002, nemesis_enemy_tiles_51
+		nemesis_to_vram1 $49400002, nemesis_enemy_tiles_53
+		nemesis_to_vram1 $4C000002, nemesis_enemy_tiles_54
+tbl_enemies_lvl_7_3:nemesis_to_vram1 $40000002, nemesis_enemy_tiles_52
+		nemesis_to_vram1 $4C800002, nemesis_enemy_tiles_49
+tbl_enemies_lvl_7_5:nemesis_to_vram1 $40000002, nemesis_enemy_tiles_55
+		nemesis_to_vram1 $41800002, nemesis_enemy_tiles_51
+tbl_enemies_lvl_8:enemies_lvl_8 7, tbl_enemies_lvl_8_0__1-tbl_enemies_lvl_8
+		enemies_lvl_8 7, tbl_enemies_lvl_8_0__1-tbl_enemies_lvl_8
+		enemies_lvl_8 3, tbl_enemies_lvl_8_2-tbl_enemies_lvl_8
+		enemies_lvl_8 7, tbl_enemies_lvl_8_3-tbl_enemies_lvl_8
+		enemies_lvl_8 2, tbl_enemies_lvl_8_4-tbl_enemies_lvl_8
+tbl_enemies_lvl_8_0__1:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $7C000001, nemesis_enemy_tiles_32
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_3
+		nemesis_to_vram1 $48C00002, nemesis_enemy_tiles_18
+		nemesis_to_vram1 $4AA00002, nemesis_enemy_tiles_56
+		nemesis_to_vram1 $51600002, nemesis_enemy_tiles_57
+		nemesis_to_vram1 $55600002, nemesis_enemy_tiles_58
+		nemesis_to_vram1 $58000002, nemesis_enemy_tiles_59
+tbl_enemies_lvl_8_2:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $7C000001, nemesis_enemy_tiles_32
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_60
+tbl_enemies_lvl_8_3:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_0
+		nemesis_to_vram1 $7C000001, nemesis_enemy_tiles_32
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $4FE00002, nemesis_enemy_tiles_3
+		nemesis_to_vram1 $58A00002, nemesis_enemy_tiles_8
+		nemesis_to_vram1 $60E00002, nemesis_enemy_tiles_39
+		nemesis_to_vram1 $75A00002, nemesis_enemy_tiles_9
+		nemesis_to_vram1 $79C00002, nemesis_enemy_tiles_61
+tbl_enemies_lvl_8_4:nemesis_to_vram1 $40000002, nemesis_enemy_tiles_62
+		nemesis_to_vram1 $50000002, nemesis_enemy_tiles_1
+		nemesis_to_vram1 $60000002, nemesis_enemy_tiles_63
+tbl_enemies_lvl_9:enemies_lvl_9 4, tbl_enemies_lvl_9_0-tbl_enemies_lvl_9
+		enemies_lvl_9 6, tbl_enemies_lvl_9_1-tbl_enemies_lvl_9
+		enemies_lvl_9 0, tbl_enemies_lvl_9_2-tbl_enemies_lvl_9
+		enemies_lvl_9 5, tbl_enemies_lvl_9_3-tbl_enemies_lvl_9
+tbl_enemies_lvl_9_1:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_64
+		nemesis_to_vram1 $4F600002, nemesis_enemy_tiles_23
+		nemesis_to_vram1 $58400002, nemesis_enemy_tiles_50
+		nemesis_to_vram1 $5A400002, nemesis_enemy_tiles_18
+		nemesis_to_vram1 $5C200002, nemesis_enemy_tiles_24
+		nemesis_to_vram1 $5F800002, nemesis_enemy_tiles_65
+		nemesis_to_vram1 $6B800002, nemesis_enemy_tiles_19
+tbl_enemies_lvl_9_0:nemesis_to_vram1 $40000002, nemesis_enemy_tiles_18
+		nemesis_to_vram1 $41E00002, nemesis_enemy_tiles_56
+		nemesis_to_vram1 $48A00002, nemesis_enemy_tiles_66
+		nemesis_to_vram1 $4A200002, nemesis_enemy_tiles_67
+		nemesis_to_vram1 $4E200002, nemesis_enemy_tiles_35
+tbl_enemies_lvl_9_2:nemesis_to_vram1 $40000002, nemesis_enemy_tiles_54
+tbl_enemies_lvl_9_3:nemesis_to_vram1 $78000001, nemesis_enemy_tiles_68
+		nemesis_to_vram1 $7A800001, nemesis_enemy_tiles_69
+		nemesis_to_vram1 $40000002, nemesis_enemy_tiles_70
+		nemesis_to_vram1 $4E200002, nemesis_enemy_tiles_71
+		nemesis_to_vram1 $60000002, nemesis_enemy_tiles_72
+		nemesis_to_vram1 $6C800002, nemesis_enemy_tiles_73
 sub_CA58:
 		move.w	$32(a0),d1
 		lea	(off_CAA6).l,a1
@@ -29033,7 +29039,7 @@ loc_15DA0:
 		move.w	#7,(word_FFFC4A).w
 		move.l	#word_17AEA,(dword_FFFC40).w
 		move.l	#$45800002,(dword_FFFC44).w
-		lea	(nemesis_1227A6).l,a0
+		lea	(nemesis_enemy_tiles_31).l,a0
 		move.w	(a0),d0
 		andi.w	#$FFF,d0
 		subq.w	#1,d0
@@ -31487,7 +31493,7 @@ sub_17AA6:
 		move.l	#word_17AEA,(dword_FFFC40).w
 		lea	(dword_17AE6).l,a1
 		move.l	(a1),(dword_FFFC44).w
-		lea	(nemesis_126E90).l,a0
+		lea	(nemesis_enemy_tiles_70).l,a0
 		move.w	(a0),d0
 		andi.w	#$FFF,d0
 		subq.w	#1,d0
@@ -33955,7 +33961,7 @@ sub_198B2:
 		move.w	#7,(word_FFFC4A).w
 		move.l	#word_17AEA,(dword_FFFC40).w
 		move.l	#$78000001,(dword_FFFC44).w
-		lea	(nemesis_1280F6).l,a0
+		lea	(nemesis_enemy_tiles_40).l,a0
 		move.w	(a0),d0
 		andi.w	#$FFF,d0
 		subq.w	#1,d0
@@ -34534,17 +34540,23 @@ locret_19F16:
 
 kosinski_019F18:
     binclude "src/kosinski/data_019F18.bin"
+    align 2, 0
 		align 2, 0
 nemesis_01C120:
     binclude "src/nemesis/data_01C120.bin"
+    align 2, 0
 nemesis_01CBEA:
     binclude "src/nemesis/data_01CBEA.bin"
+    align 2, 0
 enigma_01CF5A:
     binclude "src/enigma/data_01CF5A.bin"
+    align 2, 0
 enigma_01CFB6:
     binclude "src/enigma/data_01CFB6.bin"
+    align 2, 0
 nemesis_01D15A:
     binclude "src/nemesis/data_01D15A.bin"
+    align 2, 0
 off_1D66A:	dc.w byte_1D66E-off_1D66A
 		dc.w byte_1D680-off_1D66A
 byte_1D66E:	dc.b $A, $FF, 0, $1C, 0, $28, 0, $34, 0, $40, 0, $4C, 0, $58, 0, $64
@@ -34560,8 +34572,10 @@ byte_1D680:	dc.b 3,	4, 0, $6A, 0, $76, 0, $82, 0, $76, 0, $30, $30,	$30, $30, 0
 		dc.b $FC, 0, 0,	$30, $30, $30, $30, 0, $F0, 5, 0, $27, $F8, 0
 nemesis_01D70E:
     binclude "src/nemesis/data_01D70E.bin"
+    align 2, 0
 nemesis_01DAEC:
     binclude "src/nemesis/data_01DAEC.bin"
+    align 2, 0
 off_1E078:	dc.w byte_1E07A-off_1E078
 byte_1E07A:	dc.b 3,	$FF, 0,	$A, 0, $16, 0, $22, 0, $2E, 0, $31, $31, $31, $31, 0
 		dc.b 0,	$F, 0, 0, 0, 0,	0, $31,	$31, $31, $31, 0, 0, $F, 0, $10
@@ -34569,6 +34583,7 @@ byte_1E07A:	dc.b 3,	$FF, 0,	$A, 0, $16, 0, $22, 0, $2E, 0, $31, $31, $31, $31, 0
 		dc.b $31, $31, $31, 0, 0, $F, 0, $30, 0, 0
 nemesis_01E0B4:
     binclude "src/nemesis/data_01E0B4.bin"
+    align 2, 0
 off_1E20A:	dc.w byte_1E20E-off_1E20A
 		dc.w byte_1E216-off_1E20A
 byte_1E20E:	dc.b 2,	$FF, 0,	$28, 0,	$1C, 0,	$10
@@ -34577,24 +34592,28 @@ byte_1E216:	dc.b 2,	$FF, 0,	8, 0, $14, 0, $20, 0, $33, $33,	$33, $33, 0, $F5, 6
 		dc.b 0,	$33, $33, $33, $33, 0, $F5, 6, 0, $C, $F8, 0
 nemesis_01E242:
     binclude "src/nemesis/data_01E242.bin"
+    align 2, 0
 off_1E2A4:	dc.w byte_1E2A6-off_1E2A4
 byte_1E2A6:	dc.b 0,	$FF, 0,	4, 1, $2E, $2E,	$2E, $2E, 0, $E0, $F, 0, 0, $F0, $C0
 		dc.b $F, 0, 0, $F0
 nemesis_01E2BA:
     binclude "src/nemesis/data_01E2BA.bin"
+    align 2, 0
 off_1E42E:	dc.w byte_1E430-off_1E42E
 byte_1E430:	dc.b 1,	$A, 0, 6, 0, $20, 3, $34, $34, $34, $34, 0, $D0, 0, 0, 0
 		dc.b 0,	$D8, 4,	0, 1, 0, $E0, 9, 0, 3, 0, $F0, 1, 0, 9,	0
 		dc.b 4,	$34, $34, $34, $34, 0, $D0, 0, 0, 0, 0,	$D8, 4,	0, $B, 0
 		dc.b $E0, 8, 0,	$D, 0, $E8, 4, 0, $10, 0, $F0, 1, 0, $12, 0, 0
-nemesis_01E470:
-    binclude "src/nemesis/data_01E470.bin"
+nemesis_enemy_tiles_46:
+    binclude "src/enemies/46/nemesis_tiles.bin"
+    align 2, 0
 off_1E60E:	dc.w byte_1E610-off_1E60E
 byte_1E610:	dc.b 2,	4, 0, 8, 0, $14, 0, $24, 0, $31, $31, $31, $31,	0, 0, $F, 0, 0,	0, 0
 		dc.b 1,	$31, $31, $31, $31, 0, 0, $D, 0, 0, 0, $12, $D,	0, 8, 0, 1, $31, $31, $31
 		dc.b $31, 0, 0,	$D, 0, 0, 0, $14, $D, 0, 8, 0
 nemesis_01E644:
     binclude "src/nemesis/data_01E644.bin"
+    align 2, 0
 off_1E864:	dc.w byte_1E866-off_1E864
 byte_1E866:	dc.b 1,	$FF, 0,	6, 0, $1C, 2, $36, $36,	$36, $36, 0, 0,	$F, 0, 0
 		dc.b 0,	$20, 5,	0, $10,	0, $20,	5, 0, $10, $10,	0, 2, $36, $36,	$36
@@ -34602,6 +34621,7 @@ byte_1E866:	dc.b 1,	$FF, 0,	6, 0, $1C, 2, $36, $36,	$36, $36, 0, 0,	$F, 0, 0
 		dc.b $10, 0
 nemesis_01E898:
     binclude "src/nemesis/data_01E898.bin"
+    align 2, 0
 off_1EFD2:	dc.w byte_1F000-off_1EFD2
 		dc.w byte_1F008-off_1EFD2
 		dc.w byte_1F010-off_1EFD2
@@ -34623,15 +34643,17 @@ byte_1F010:	dc.b 2,	4, $80,	$4A, $80, $64, $80, $7E, 2, $39, $39, $39, $39,	0, $
 		dc.b $39, $39, $39, 0, $FD, 5, 0, $12, $F3, $FD, 5, 0, $28, $E3, $D, 8
 		dc.b 0,	$2C, $EB, $15, 4, 0, $2F, $F3, 2, 0, $A, 0, $55, 0, 0, $A
 		dc.b 0,	$5E, $18, 0
-nemesis_01F0B4:
-    binclude "src/nemesis/data_01F0B4.bin"
+nemesis_enemy_tiles_34:
+    binclude "src/enemies/34/nemesis_tiles.bin"
+    align 2, 0
 off_1F1B4:	dc.w byte_1F1B6-off_1F1B4
 byte_1F1B6:	dc.b 2,	4, 0, 8, 0, $14, 0, $2E, 0, $35, $35, $35, $35,	0, 0, $F, 0, 0,	0, 0
 		dc.b 3,	$35, $35, $35, $35, 0, 0, 3, 0,	0, $FC,	0, 3, 0, 4, 6, 0, 3, 0,	8
 		dc.b $12, 0, 3,	0, $C, $1C, 3, $35, $35, $35, $35, 0, 0, 3, 0, 0, $F8, 0, 3, 0
 		dc.b 4,	4, 0, 3, 0, 8, $14, 0, 3, 0, $C, $20
-nemesis_01F1FE:
-    binclude "src/nemesis/data_01F1FE.bin"
+nemesis_enemy_tiles_29:
+    binclude "src/enemies/29/nemesis_tiles.bin"
+    align 2, 0
 off_1F44C:	dc.w byte_1F44E-off_1F44C
 byte_1F44E:	dc.b 2,	4, 0, 8, 0, $13, 0, $23, 0, $3A, $3A, $3A, $3A,	0, 0, $D
 		dc.b 0,	$10, 0,	1, $3A,	$3A, $3A, $3A, 0, $FE, $C, 0, 8, 0, $A,	$C
@@ -34639,32 +34661,38 @@ byte_1F44E:	dc.b 2,	4, 0, 8, 0, $13, 0, $23, 0, $3A, $3A, $3A, $3A,	0, 0, $D
 		dc.b 0,	$C, 0, 0
 nemesis_01F482:
     binclude "src/nemesis/data_01F482.bin"
+    align 2, 0
 off_1F54A:	dc.w byte_1F54C-off_1F54A
 byte_1F54C:	dc.b 0,	$FF, 0,	4, 0, $30, $30,	$30, $30, 0, $E0, 7, 0,	0, $F8,	0
 nemesis_01F55C:
     binclude "src/nemesis/data_01F55C.bin"
+    align 2, 0
 off_1F8D6:	dc.w byte_1F8D8-off_1F8D6
 byte_1F8D8:	dc.b 0,	$FF, 0,	4, 5, 5, 5, 5, 5, 0, $B0, $E, 0, 0, $E0, $B0
 		dc.b $E, 8, 0, 0, $C8, $F, 0, $C, $E0, $C8, $F,	8, $C, 0, $E8, $E
 		dc.b 0,	$1C, $E0, $E8, $E, 8, $1C, 0
 nemesis_01F900:
     binclude "src/nemesis/data_01F900.bin"
+    align 2, 0
 off_1FB80:	dc.w byte_1FB82-off_1FB80
 byte_1FB82:	dc.b 0,	$FF, 0,	4, 3, 5, 5, 5, 5, 0, $C0, $F, 0, 0, $E0, $C0
 		dc.b $F, 8, 0, 0, $E0, $F, 0, $10, $E0,	$E0, $F, 8, $10, 0
 nemesis_01FBA0:
     binclude "src/nemesis/data_01FBA0.bin"
+    align 2, 0
 off_1FD76:	dc.w byte_1FD78-off_1FD76
 byte_1FD78:	dc.b 0,	$FF, 0,	4, 4, 0, 0, 0, 0, 0, $E8, 4, 0,	0, $E4,	$E8
 		dc.b $C, 0, 2, 4, $F0, $D, 0, 6, $D4, $F0, $D, 0, $E, $F4, $F0,	9
 		dc.b 0,	$16, $14, 0
 nemesis_01FD9C:
     binclude "src/nemesis/data_01FD9C.bin"
+    align 2, 0
 off_1FECC:	dc.w byte_1FECE-off_1FECC
 byte_1FECE:	dc.b 1,	$FF, 0,	6, 0, $11, 0, 7, 8, 7, 8, 0, 0,	$D, 0, 0
 		dc.b $E0, 0, 0,	0, 0, 0, 0, $F0, 7, 0, 8, $F0
 nemesis_01FEEA:
     binclude "src/nemesis/data_01FEEA.bin"
+    align 2, 0
 off_1FF3C:	dc.w byte_1FF40-off_1FF3C
 		dc.w byte_1FF4A-off_1FF3C
 byte_1FF40:	dc.b 3,	8, 0, $14, 0, $20, 0, $2C, 0, $20
@@ -34674,6 +34702,7 @@ byte_1FF4A:	dc.b 3,	8, 0, $2E, 0, $2E, 0, $2E, 0, $2E, 0, 0, 0, 0, 0, 0
 		dc.b 0,	0, 0, 0, 0, 0, 0, 3, 0,	0
 nemesis_01FF84:
     binclude "src/nemesis/data_01FF84.bin"
+    align 2, 0
 off_2019C:	dc.w byte_201A0-off_2019C
 		dc.w byte_201E2-off_2019C
 byte_201A0:	dc.b 5,	$28, 0,	$E, 0, $28, 0, $E, 0, $E, 0, $E, 0, $E,	3, $32
@@ -34685,6 +34714,7 @@ byte_201E2:	dc.b 1,	$A, 0, 6, 0, $12, 0, $32, $32, $32, $32, 0, $E0, 4, 0, $14
 		dc.b 0,	0, 0, $32, $32,	$32, $32, 0, $E0, 4, 0,	$10, 0,	0
 nemesis_020200:
     binclude "src/nemesis/data_020200.bin"
+    align 2, 0
 off_204C2:	dc.w byte_204C6-off_204C2
 		dc.w byte_20512-off_204C2
 byte_204C6:	dc.b 4,	$1E, 0,	$C, 0, $2C, 0, $C, 0, $C, 0, $C, 4, $32, $32, $32
@@ -34697,6 +34727,7 @@ byte_20512:	dc.b 3,	$3C, 0,	$A, 0, $16, 0, $16, 0, $16, 0, 0, 0, 0,	0, 0
 		dc.b 0,	0
 nemesis_020534:
     binclude "src/nemesis/data_020534.bin"
+    align 2, 0
 off_207EE:	dc.w byte_207F2-off_207EE
 		dc.w byte_20816-off_207EE
 byte_207F2:	dc.b 0,	$FF, 0,	4, 4, $3B, $3B,	$3B, $3B, 0, 0,	$D, 0, 0, 0, $10
@@ -34706,6 +34737,7 @@ byte_20816:	dc.b 1,	$1E, 0,	6, 0, $12, 0, 0, 0, 0, 0, 0, 0,	4, 0, $1A
 		dc.b 0,	0, 0, 0, 0, 0, 0, 0, 0,	4, 0, $1C, 0, 0
 nemesis_020834:
     binclude "src/nemesis/data_020834.bin"
+    align 2, 0
 off_20D36:	dc.w byte_20D3A-off_20D36
 		dc.w byte_20D4E-off_20D36
 byte_20D3A:	dc.b 0,	$FF, 0,	4, 1, $1F, $1F,	$1F, $1F, 0, $E8, 1, 0,	0, 4, $F0
@@ -34716,10 +34748,12 @@ byte_20D4E:	dc.b 3,	$1E, 0,	$A, 0, $16, 0, $26, 0, $32, 0, $1A, $1E, $1B, $1E, 0
 		dc.b $F0, 0, 0,	$1D, $1E, $1B, $1E, 0, $F0, $D,	0, $2D,	$F0, 0
 nemesis_020D8C:
     binclude "src/nemesis/data_020D8C.bin"
+    align 2, 0
 off_20E88:	dc.w byte_20E8A-off_20E88
 byte_20E8A:	dc.b 0,	$FF, 0,	4, 0, 6, 6, 6, 6, 0, $E8, $A, 0, 0, $F4, 0
 nemesis_020E9A:
     binclude "src/nemesis/data_020E9A.bin"
+    align 2, 0
 off_214CA:	dc.w byte_214D0-off_214CA
 		dc.w byte_2150A-off_214CA
 		dc.w byte_2151E-off_214CA
@@ -37062,399 +37096,595 @@ byte_2BED6:	dc.b 1,	8, 0, $1E, 0, $2A, 0, $25, $25,	$25, $25, 0, $FC, 0, 0,	0
 		dc.b $FC, 0, 0,	$26, $26, $26, $26, 0, $F8, 5, 0, $18, $F8, 0
 nemesis_02BF24:
     binclude "src/nemesis/data_02BF24.bin"
+    align 2, 0
 nemesis_02C1E6:
     binclude "src/nemesis/data_02C1E6.bin"
+    align 2, 0
 nemesis_02C23C:
     binclude "src/nemesis/data_02C23C.bin"
+    align 2, 0
 enigma_02C3B8:
     binclude "src/enigma/data_02C3B8.bin"
+    align 2, 0
 enigma_02C470:
     binclude "src/enigma/data_02C470.bin"
+    align 2, 0
 enigma_02C572:
     binclude "src/enigma/data_02C572.bin"
+    align 2, 0
 nemesis_02C68E:
     binclude "src/nemesis/data_02C68E.bin"
+    align 2, 0
 nemesis_02CD86:
     binclude "src/nemesis/data_02CD86.bin"
+    align 2, 0
 nemesis_02D2BA:
     binclude "src/nemesis/data_02D2BA.bin"
+    align 2, 0
 nemesis_02D6EE:
     binclude "src/nemesis/data_02D6EE.bin"
+    align 2, 0
 nemesis_030566:
     binclude "src/nemesis/data_030566.bin"
+    align 2, 0
 enigma_030598:
     binclude "src/enigma/data_030598.bin"
+    align 2, 0
 enigma_030620:
     binclude "src/enigma/data_030620.bin"
+    align 2, 0
 nemesis_030946:
     binclude "src/nemesis/data_030946.bin"
+    align 2, 0
 enigma_0315A2:
     binclude "src/enigma/data_0315A2.bin"
+    align 2, 0
 enigma_0315D4:
     binclude "src/enigma/data_0315D4.bin"
+    align 2, 0
 enigma_031608:
     binclude "src/enigma/data_031608.bin"
+    align 2, 0
 enigma_031616:
     binclude "src/enigma/data_031616.bin"
+    align 2, 0
 nemesis_031620:
     binclude "src/nemesis/data_031620.bin"
+    align 2, 0
 nemesis_031BF8:
     binclude "src/nemesis/data_031BF8.bin"
+    align 2, 0
 nemesis_031E84:
     binclude "src/nemesis/data_031E84.bin"
+    align 2, 0
 
 enigma_032200:
     binclude "src/enigma/data_032200.bin"
+    align 2, 0
 enigma_0325F2:
     binclude "src/enigma/data_0325F2.bin"
+    align 2, 0
 enigma_032802:
     binclude "src/enigma/data_032802.bin"
+    align 2, 0
 kosinski_032B4C:
     binclude "src/kosinski/data_032B4C.bin"
+    align 2, 0
 kosinski_03320C:
     binclude "src/kosinski/data_03320C.bin"
+    align 2, 0
 kosinski_03335C:
     binclude "src/kosinski/data_03335C.bin"
+    align 2, 0
 kosinski_0338FC:
     binclude "src/kosinski/data_0338FC.bin"
+    align 2, 0
 kosinski_033A1C:
     binclude "src/kosinski/data_033A1C.bin"
+    align 2, 0
 kosinski_033DCC:
     binclude "src/kosinski/data_033DCC.bin"
+    align 2, 0
 enigma_033F3C:
     binclude "src/enigma/data_033F3C.bin"
+    align 2, 0
 enigma_03439E:
     binclude "src/enigma/data_03439E.bin"
+    align 2, 0
 enigma_034420:
     binclude "src/enigma/data_034420.bin"
+    align 2, 0
 enigma_034486:
     binclude "src/enigma/data_034486.bin"
+    align 2, 0
 enigma_0344CE:
     binclude "src/enigma/data_0344CE.bin"
+    align 2, 0
 kosinski_0345C0:
     binclude "src/kosinski/data_0345C0.bin"
+    align 2, 0
 kosinski_0348A0:
     binclude "src/kosinski/data_0348A0.bin"
+    align 2, 0
 kosinski_034980:
     binclude "src/kosinski/data_034980.bin"
+    align 2, 0
 kosinski_034BB0:
     binclude "src/kosinski/data_034BB0.bin"
+    align 2, 0
 kosinski_034FE0:
     binclude "src/kosinski/data_034FE0.bin"
+    align 2, 0
 kosinski_035170:
     binclude "src/kosinski/data_035170.bin"
+    align 2, 0
 enigma_035200:
     binclude "src/enigma/data_035200.bin"
+    align 2, 0
 enigma_03535C:
     binclude "src/enigma/data_03535C.bin"
+    align 2, 0
 enigma_035474:
     binclude "src/enigma/data_035474.bin"
+    align 2, 0
 enigma_035688:
     binclude "src/enigma/data_035688.bin"
+    align 2, 0
 kosinski_035772:
     binclude "src/kosinski/data_035772.bin"
+    align 2, 0
 kosinski_035A62:
     binclude "src/kosinski/data_035A62.bin"
+    align 2, 0
 kosinski_035AE2:
     binclude "src/kosinski/data_035AE2.bin"
+    align 2, 0
 kosinski_035FC2:
     binclude "src/kosinski/data_035FC2.bin"
+    align 2, 0
 kosinski_036052:
     binclude "src/kosinski/data_036052.bin"
+    align 2, 0
 kosinski_036382:
     binclude "src/kosinski/data_036382.bin"
+    align 2, 0
 kosinski_0364E2:
     binclude "src/kosinski/data_0364E2.bin"
+    align 2, 0
 kosinski_036752:
     binclude "src/kosinski/data_036752.bin"
+    align 2, 0
 kosinski_036BD2:
     binclude "src/kosinski/data_036BD2.bin"
+    align 2, 0
 kosinski_036ED2:
     binclude "src/kosinski/data_036ED2.bin"
+    align 2, 0
 kosinski_036F02:
     binclude "src/kosinski/data_036F02.bin"
+    align 2, 0
 enigma_036FA2:
     binclude "src/enigma/data_036FA2.bin"
+    align 2, 0
 enigma_037368:
     binclude "src/enigma/data_037368.bin"
+    align 2, 0
 enigma_037500:
     binclude "src/enigma/data_037500.bin"
+    align 2, 0
 enigma_037672:
     binclude "src/enigma/data_037672.bin"
+    align 2, 0
 kosinski_037856:
     binclude "src/kosinski/data_037856.bin"
+    align 2, 0
 kosinski_037D46:
     binclude "src/kosinski/data_037D46.bin"
+    align 2, 0
 kosinski_037E66:
     binclude "src/kosinski/data_037E66.bin"
+    align 2, 0
 kosinski_0385C6:
     binclude "src/kosinski/data_0385C6.bin"
+    align 2, 0
 kosinski_0386D6:
     binclude "src/kosinski/data_0386D6.bin"
+    align 2, 0
 kosinski_038876:
     binclude "src/kosinski/data_038876.bin"
+    align 2, 0
 kosinski_038C46:
     binclude "src/kosinski/data_038C46.bin"
+    align 2, 0
 kosinski_038E26:
     binclude "src/kosinski/data_038E26.bin"
+    align 2, 0
 enigma_038F76:
     binclude "src/enigma/data_038F76.bin"
+    align 2, 0
 enigma_0392F6:
     binclude "src/enigma/data_0392F6.bin"
+    align 2, 0
 enigma_0394D2:
     binclude "src/enigma/data_0394D2.bin"
+    align 2, 0
 kosinski_03951A:
     binclude "src/kosinski/data_03951A.bin"
+    align 2, 0
 kosinski_039B5A:
     binclude "src/kosinski/data_039B5A.bin"
+    align 2, 0
 kosinski_039BBA:
     binclude "src/kosinski/data_039BBA.bin"
+    align 2, 0
 kosinski_039DDA:
     binclude "src/kosinski/data_039DDA.bin"
+    align 2, 0
 kosinski_03A5CA:
     binclude "src/kosinski/data_03A5CA.bin"
+    align 2, 0
 kosinski_03A70A:
     binclude "src/kosinski/data_03A70A.bin"
+    align 2, 0
 enigma_03A77A:
     binclude "src/enigma/data_03A77A.bin"
+    align 2, 0
 enigma_03AAA8:
     binclude "src/enigma/data_03AAA8.bin"
+    align 2, 0
 kosinski_03ACDA:
     binclude "src/kosinski/data_03ACDA.bin"
+    align 2, 0
 kosinski_03B06A:
     binclude "src/kosinski/data_03B06A.bin"
+    align 2, 0
 kosinski_03B19A:
     binclude "src/kosinski/data_03B19A.bin"
+    align 2, 0
 kosinski_03B33A:
     binclude "src/kosinski/data_03B33A.bin"
+    align 2, 0
 kosinski_03B4CA:
     binclude "src/kosinski/data_03B4CA.bin"
+    align 2, 0
 kosinski_03B7EA:
     binclude "src/kosinski/data_03B7EA.bin"
+    align 2, 0
 kosinski_03BBAA:
     binclude "src/kosinski/data_03BBAA.bin"
+    align 2, 0
 kosinski_03BDBA:
     binclude "src/kosinski/data_03BDBA.bin"
+    align 2, 0
 kosinski_03BE9A:
     binclude "src/kosinski/data_03BE9A.bin"
+    align 2, 0
 enigma_03BF4A:
     binclude "src/enigma/data_03BF4A.bin"
+    align 2, 0
 enigma_03C1AA:
     binclude "src/enigma/data_03C1AA.bin"
+    align 2, 0
 enigma_03C27C:
     binclude "src/enigma/data_03C27C.bin"
+    align 2, 0
 enigma_03C2EA:
     binclude "src/enigma/data_03C2EA.bin"
+    align 2, 0
 kosinski_03C388:
     binclude "src/kosinski/data_03C388.bin"
+    align 2, 0
 kosinski_03C528:
     binclude "src/kosinski/data_03C528.bin"
+    align 2, 0
 kosinski_03C6A8:
     binclude "src/kosinski/data_03C6A8.bin"
+    align 2, 0
 kosinski_03CB88:
     binclude "src/kosinski/data_03CB88.bin"
+    align 2, 0
 kosinski_03CCF8:
     binclude "src/kosinski/data_03CCF8.bin"
+    align 2, 0
 kosinski_03CE58:
     binclude "src/kosinski/data_03CE58.bin"
+    align 2, 0
 kosinski_03CF58:
     binclude "src/kosinski/data_03CF58.bin"
+    align 2, 0
 kosinski_03D428:
     binclude "src/kosinski/data_03D428.bin"
+    align 2, 0
 kosinski_03D5A8:
     binclude "src/kosinski/data_03D5A8.bin"
+    align 2, 0
 kosinski_03D6C8:
     binclude "src/kosinski/data_03D6C8.bin"
+    align 2, 0
 kosinski_03D778:
     binclude "src/kosinski/data_03D778.bin"
+    align 2, 0
 enigma_03D978:
     binclude "src/enigma/data_03D978.bin"
+    align 2, 0
 enigma_03DCD4:
     binclude "src/enigma/data_03DCD4.bin"
+    align 2, 0
 enigma_03DDF2:
     binclude "src/enigma/data_03DDF2.bin"
+    align 2, 0
 enigma_03DFC6:
     binclude "src/enigma/data_03DFC6.bin"
+    align 2, 0
 enigma_03E184:
     binclude "src/enigma/data_03E184.bin"
+    align 2, 0
 enigma_03E2A6:
     binclude "src/enigma/data_03E2A6.bin"
+    align 2, 0
 kosinski_03E446:
     binclude "src/kosinski/data_03E446.bin"
+    align 2, 0
 kosinski_03F0F6:
     binclude "src/kosinski/data_03F0F6.bin"
+    align 2, 0
 kosinski_03F196:
     binclude "src/kosinski/data_03F196.bin"
+    align 2, 0
 kosinski_03F316:
     binclude "src/kosinski/data_03F316.bin"
+    align 2, 0
 kosinski_03F486:
     binclude "src/kosinski/data_03F486.bin"
+    align 2, 0
 kosinski_03FA36:
     binclude "src/kosinski/data_03FA36.bin"
+    align 2, 0
 kosinski_03FC66:
     binclude "src/kosinski/data_03FC66.bin"
+    align 2, 0
 kosinski_03FD76:
     binclude "src/kosinski/data_03FD76.bin"
+    align 2, 0
 enigma_100000:
     binclude "src/enigma/data_100000.bin"
+    align 2, 0
 enigma_10012A:
     binclude "src/enigma/data_10012A.bin"
+    align 2, 0
 enigma_1002E4:
     binclude "src/enigma/data_1002E4.bin"
+    align 2, 0
 enigma_100514:
     binclude "src/enigma/data_100514.bin"
+    align 2, 0
 kosinski_100594:
     binclude "src/kosinski/data_100594.bin"
+    align 2, 0
 kosinski_101294:
     binclude "src/kosinski/data_101294.bin"
+    align 2, 0
 kosinski_101924:
     binclude "src/kosinski/data_101924.bin"
+    align 2, 0
 kosinski_101A64:
     binclude "src/kosinski/data_101A64.bin"
+    align 2, 0
 kosinski_101E44:
     binclude "src/kosinski/data_101E44.bin"
+    align 2, 0
 kosinski_1025B4:
     binclude "src/kosinski/data_1025B4.bin"
+    align 2, 0
 kosinski_102744:
     binclude "src/kosinski/data_102744.bin"
+    align 2, 0
 		align 2, 0
 nemesis_102A00:
     binclude "src/nemesis/data_102A00.bin"
+    align 2, 0
 nemesis_1034B4:
     binclude "src/nemesis/data_1034B4.bin"
+    align 2, 0
 nemesis_1039F6:
     binclude "src/nemesis/data_1039F6.bin"
+    align 2, 0
 nemesis_1041EA:
     binclude "src/nemesis/data_1041EA.bin"
+    align 2, 0
 nemesis_104370:
     binclude "src/nemesis/data_104370.bin"
+    align 2, 0
 nemesis_10593E:
     binclude "src/nemesis/data_10593E.bin"
+    align 2, 0
 nemesis_1061D6:
     binclude "src/nemesis/data_1061D6.bin"
+    align 2, 0
 nemesis_1068A0:
     binclude "src/nemesis/data_1068A0.bin"
+    align 2, 0
 nemesis_106A34:
     binclude "src/nemesis/data_106A34.bin"
+    align 2, 0
 nemesis_106FC4:
     binclude "src/nemesis/data_106FC4.bin"
+    align 2, 0
 nemesis_1071D4:
     binclude "src/nemesis/data_1071D4.bin"
+    align 2, 0
 nemesis_107AFA:
     binclude "src/nemesis/data_107AFA.bin"
+    align 2, 0
 nemesis_10812A:
     binclude "src/nemesis/data_10812A.bin"
+    align 2, 0
 nemesis_108C16:
     binclude "src/nemesis/data_108C16.bin"
+    align 2, 0
 nemesis_1092BC:
     binclude "src/nemesis/data_1092BC.bin"
+    align 2, 0
 nemesis_1093E6:
     binclude "src/nemesis/data_1093E6.bin"
+    align 2, 0
 nemesis_10A2AE:
     binclude "src/nemesis/data_10A2AE.bin"
+    align 2, 0
 nemesis_10A810:
     binclude "src/nemesis/data_10A810.bin"
+    align 2, 0
 nemesis_10AFDC:
     binclude "src/nemesis/data_10AFDC.bin"
+    align 2, 0
 nemesis_10B5B8:
     binclude "src/nemesis/data_10B5B8.bin"
+    align 2, 0
 nemesis_10C436:
     binclude "src/nemesis/data_10C436.bin"
+    align 2, 0
 nemesis_10CADC:
     binclude "src/nemesis/data_10CADC.bin"
+    align 2, 0
 nemesis_10CF40:
     binclude "src/nemesis/data_10CF40.bin"
+    align 2, 0
 nemesis_10D6A0:
     binclude "src/nemesis/data_10D6A0.bin"
+    align 2, 0
 nemesis_10DE54:
     binclude "src/nemesis/data_10DE54.bin"
+    align 2, 0
 nemesis_10E9E4:
     binclude "src/nemesis/data_10E9E4.bin"
+    align 2, 0
 nemesis_10ED2A:
     binclude "src/nemesis/data_10ED2A.bin"
+    align 2, 0
 nemesis_10F300:
     binclude "src/nemesis/data_10F300.bin"
+    align 2, 0
 nemesis_10F6B4:
     binclude "src/nemesis/data_10F6B4.bin"
+    align 2, 0
 nemesis_10FB88:
     binclude "src/nemesis/data_10FB88.bin"
+    align 2, 0
 nemesis_10FF98:
     binclude "src/nemesis/data_10FF98.bin"
+    align 2, 0
 nemesis_11044C:
     binclude "src/nemesis/data_11044C.bin"
+    align 2, 0
 nemesis_1111F0:
     binclude "src/nemesis/data_1111F0.bin"
+    align 2, 0
 nemesis_11174C:
     binclude "src/nemesis/data_11174C.bin"
+    align 2, 0
 nemesis_1117EA:
     binclude "src/nemesis/data_1117EA.bin"
+    align 2, 0
 nemesis_1122C8:
     binclude "src/nemesis/data_1122C8.bin"
+    align 2, 0
 nemesis_112728:
     binclude "src/nemesis/data_112728.bin"
+    align 2, 0
 nemesis_112D44:
     binclude "src/nemesis/data_112D44.bin"
+    align 2, 0
 nemesis_1135BC:
     binclude "src/nemesis/data_1135BC.bin"
+    align 2, 0
 nemesis_113C5E:
     binclude "src/nemesis/data_113C5E.bin"
+    align 2, 0
 
-nemesis_114200:
-    binclude "src/nemesis/data_114200.bin"
-nemesis_1147B0:
-    binclude "src/nemesis/data_1147B0.bin"
-nemesis_11503C:
-    binclude "src/nemesis/data_11503C.bin"
-nemesis_115C8C:
-    binclude "src/nemesis/data_115C8C.bin"
-nemesis_116142:
-    binclude "src/nemesis/data_116142.bin"
-nemesis_11632E:
-    binclude "src/nemesis/data_11632E.bin"
-nemesis_11641C:
-    binclude "src/nemesis/data_11641C.bin"
-nemesis_116502:
-    binclude "src/nemesis/data_116502.bin"
-nemesis_1165DA:
-    binclude "src/nemesis/data_1165DA.bin"
-nemesis_117038:
-    binclude "src/nemesis/data_117038.bin"
-nemesis_1173C0:
-    binclude "src/nemesis/data_1173C0.bin"
-nemesis_1175A0:
-    binclude "src/nemesis/data_1175A0.bin"
-nemesis_117716:
-    binclude "src/nemesis/data_117716.bin"
-nemesis_11785A:
-    binclude "src/nemesis/data_11785A.bin"
-nemesis_117D5E:
-    binclude "src/nemesis/data_117D5E.bin"
-nemesis_117F60:
-    binclude "src/nemesis/data_117F60.bin"
-nemesis_1180CE:
-    binclude "src/nemesis/data_1180CE.bin"
-nemesis_11818A:
-    binclude "src/nemesis/data_11818A.bin"
-nemesis_1182F6:
-    binclude "src/nemesis/data_1182F6.bin"
-nemesis_11838A:
-    binclude "src/nemesis/data_11838A.bin"
-nemesis_1188AE:
-    binclude "src/nemesis/data_1188AE.bin"
-nemesis_118AF4:
-    binclude "src/nemesis/data_118AF4.bin"
-nemesis_119132:
-    binclude "src/nemesis/data_119132.bin"
-nemesis_119298:
-    binclude "src/nemesis/data_119298.bin"
-nemesis_1195A4:
-    binclude "src/nemesis/data_1195A4.bin"
-nemesis_11969A:
-    binclude "src/nemesis/data_11969A.bin"
-nemesis_119858:
-    binclude "src/nemesis/data_119858.bin"
-nemesis_119AA4:
-    binclude "src/nemesis/data_119AA4.bin"
+nemesis_enemy_tiles_38:
+    binclude "src/enemies/38/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_47:
+    binclude "src/enemies/47/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_64:
+    binclude "src/enemies/64/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_54:
+    binclude "src/enemies/54/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_67:
+    binclude "src/enemies/67/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_58:
+    binclude "src/enemies/58/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_66:
+    binclude "src/enemies/66/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_59:
+    binclude "src/enemies/59/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_1:
+    binclude "src/enemies/01/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_2:
+    binclude "src/enemies/02/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_9:
+    binclude "src/enemies/09/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_10:
+    binclude "src/enemies/10/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_15:
+    binclude "src/enemies/15/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_3:
+    binclude "src/enemies/03/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_4:
+    binclude "src/enemies/04/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_6:
+    binclude "src/enemies/06/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_5:
+    binclude "src/enemies/05/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_11:
+    binclude "src/enemies/11/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_7:
+    binclude "src/enemies/07/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_8:
+    binclude "src/enemies/08/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_13:
+    binclude "src/enemies/13/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_19:
+    binclude "src/enemies/19/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_18:
+    binclude "src/enemies/18/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_14:
+    binclude "src/enemies/14/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_22:
+    binclude "src/enemies/22/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_16:
+    binclude "src/enemies/16/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_12:
+    binclude "src/enemies/12/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_17:
+    binclude "src/enemies/17/nemesis_tiles.bin"
+    align 2, 0
 off_119FAA:	dc.w byte_119FAE-off_119FAA
 		dc.w byte_119FB4-off_119FAA
 byte_119FAE:	dc.b 1,	$14, 0,	$C, 0, $21
@@ -37862,70 +38092,102 @@ byte_11AECC:	dc.b 0,	0, 0, $29, 0, $41, $41,	$41, $41, 0, $F0, 5, 0,	0, $F8,	3
 		dc.b $C, 0, $18, $EC, $D8, 3, 0, $1C, $C, 3, $4A, $4A, $4B, $4B, 0, $D0
 		dc.b $E, 0, 4, $EC, $E8, $D, 0,	$20, $EC, $F8, $C, 0, $18, $EC,	$D8, 3
 		dc.b 0,	$28, $C, 0
-nemesis_11AF10:
-    binclude "src/nemesis/data_11AF10.bin"
-nemesis_11B0F8:
-    binclude "src/nemesis/data_11B0F8.bin"
-nemesis_11B318:
-    binclude "src/nemesis/data_11B318.bin"
-nemesis_11B6EE:
-    binclude "src/nemesis/data_11B6EE.bin"
-nemesis_11B978:
-    binclude "src/nemesis/data_11B978.bin"
-nemesis_11C094:
-    binclude "src/nemesis/data_11C094.bin"
-nemesis_11C476:
-    binclude "src/nemesis/data_11C476.bin"
-nemesis_11C56E:
-    binclude "src/nemesis/data_11C56E.bin"
-nemesis_11C646:
-    binclude "src/nemesis/data_11C646.bin"
-nemesis_11C7DA:
-    binclude "src/nemesis/data_11C7DA.bin"
-nemesis_11CD46:
-    binclude "src/nemesis/data_11CD46.bin"
-nemesis_11CE12:
-    binclude "src/nemesis/data_11CE12.bin"
-nemesis_11D50C:
-    binclude "src/nemesis/data_11D50C.bin"
-nemesis_11D5E2:
-    binclude "src/nemesis/data_11D5E2.bin"
-nemesis_11DC2A:
-    binclude "src/nemesis/data_11DC2A.bin"
-nemesis_11E74C:
-    binclude "src/nemesis/data_11E74C.bin"
-nemesis_11EB1C:
-    binclude "src/nemesis/data_11EB1C.bin"
-nemesis_11ED08:
-    binclude "src/nemesis/data_11ED08.bin"
-nemesis_11EE72:
-    binclude "src/nemesis/data_11EE72.bin"
-nemesis_11F200:
-    binclude "src/nemesis/data_11F200.bin"
-nemesis_11F5C6:
-    binclude "src/nemesis/data_11F5C6.bin"
-nemesis_11F9D8:
-    binclude "src/nemesis/data_11F9D8.bin"
-nemesis_11FEE6:
-    binclude "src/nemesis/data_11FEE6.bin"
-nemesis_1202D4:
-    binclude "src/nemesis/data_1202D4.bin"
-nemesis_120462:
-    binclude "src/nemesis/data_120462.bin"
-nemesis_120734:
-    binclude "src/nemesis/data_120734.bin"
-nemesis_120800:
-    binclude "src/nemesis/data_120800.bin"
-nemesis_12096E:
-    binclude "src/nemesis/data_12096E.bin"
-nemesis_120E28:
-    binclude "src/nemesis/data_120E28.bin"
-nemesis_1210E2:
-    binclude "src/nemesis/data_1210E2.bin"
-nemesis_12125A:
-    binclude "src/nemesis/data_12125A.bin"
-nemesis_1213EE:
-    binclude "src/nemesis/data_1213EE.bin"
+nemesis_enemy_tiles_61:
+    binclude "src/enemies/61/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_60:
+    binclude "src/enemies/60/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_56:
+    binclude "src/enemies/56/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_57:
+    binclude "src/enemies/57/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_65:
+    binclude "src/enemies/65/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_52:
+    binclude "src/enemies/52/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_55:
+    binclude "src/enemies/55/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_50:
+    binclude "src/enemies/50/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_32:
+    binclude "src/enemies/32/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_51:
+    binclude "src/enemies/51/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_37:
+    binclude "src/enemies/37/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_44:
+    binclude "src/enemies/44/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_53:
+    binclude "src/enemies/53/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_48:
+    binclude "src/enemies/48/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_39:
+    binclude "src/enemies/39/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_33:
+    binclude "src/enemies/33/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_36:
+    binclude "src/enemies/36/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_35:
+    binclude "src/enemies/35/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_45:
+    binclude "src/enemies/45/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_42:
+    binclude "src/enemies/42/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_43:
+    binclude "src/enemies/43/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_41:
+    binclude "src/enemies/41/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_30:
+    binclude "src/enemies/30/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_0:
+    binclude "src/enemies/00/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_21:
+    binclude "src/enemies/21/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_26:
+    binclude "src/enemies/26/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_24:
+    binclude "src/enemies/24/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_23:
+    binclude "src/enemies/23/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_25:
+    binclude "src/enemies/25/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_27:
+    binclude "src/enemies/27/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_28:
+    binclude "src/enemies/28/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_20:
+    binclude "src/enemies/20/nemesis_tiles.bin"
+    align 2, 0
 off_1214C6:	dc.w byte_1214C8-off_1214C6
 byte_1214C8:	dc.b 0,	0, 0, 4, 1, $47, $47, $47, $47,	0, $E0,	$F, 0, 0, $E8, $E0
 		dc.b 7,	0, $10,	8
@@ -38383,12 +38645,15 @@ byte_122488:	dc.b 2,	8, 0, $1E, 0, $13, 0, 8, 0, 0, 0, 0, 0,	0, $F8,	1
 		dc.b 0,	0, $FC,	0, 0, 0, 0, 0, 0, $F8, $D, 0, 2, $F0, 0, 0
 		dc.b 0,	0, 0, 0, $F4, $A, 0, $A, $F4, 0, $70, $70, $70,	$70, 0,	$EE
 		dc.b $F, 0, $13, $F5, 0, $70, $70, $70,	$70, 0,	$F4, $A, 0, $23, $F5, 0
-nemesis_1224C8:
-    binclude "src/nemesis/data_1224C8.bin"
-nemesis_1227A6:
-    binclude "src/nemesis/data_1227A6.bin"
-nemesis_1230DE:
-    binclude "src/nemesis/data_1230DE.bin"
+nemesis_enemy_tiles_69:
+    binclude "src/enemies/69/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_31:
+    binclude "src/enemies/31/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_49:
+    binclude "src/enemies/49/nemesis_tiles.bin"
+    align 2, 0
 off_1245AE:	dc.w byte_1245BE-off_1245AE
 		dc.w byte_1245C2-off_1245AE
 		dc.w byte_1245C6-off_1245AE
@@ -38455,8 +38720,9 @@ off_124802:	dc.w byte_124806-off_124802
 byte_124806:	dc.b 0,	$FF, 0,	8
 byte_12480A:	dc.b 0,	$FF, $80, 4, 2,	0, 0, 0, 0, 0, $D8, 9, 0, 0, $F4, $E0
 		dc.b 1,	0, 6, $C, $E8, $E, 0, 8, $EC, 0
-nemesis_124824:
-    binclude "src/nemesis/data_124824.bin"
+nemesis_enemy_tiles_68:
+    binclude "src/enemies/68/nemesis_tiles.bin"
+    align 2, 0
 off_1249FC:	dc.w byte_124A00-off_1249FC
 		dc.w byte_124A04-off_1249FC
 byte_124A00:	dc.b 0,	0, 0, 8
@@ -38466,8 +38732,9 @@ byte_124A04:	dc.b 0,	0, 0, $2D, 6, 0, 0, 0, 0, 0, $A0, $F, 0, 0, $E0, $C0
 		dc.b 0,	0, 0, $A0, 7, 0, $5B, $E8, $C0,	4, 0, $63, $E8,	$C8, 2,	0
 		dc.b $65, $F0, $E0, 3, 0, $68, $F0, $A0, $F, 8,	0, $F8,	$C0, $F, 0, $6C
 		dc.b $F8, $E0, $F, 0, $7C, $F8
-nemesis_124A5A:
-    binclude "src/nemesis/data_124A5A.bin"
+nemesis_enemy_tiles_71:
+    binclude "src/enemies/71/nemesis_tiles.bin"
+    align 2, 0
 off_125330:	dc.w byte_125336-off_125330
 		dc.w byte_12533A-off_125330
 		dc.w byte_125340-off_125330
@@ -38478,8 +38745,9 @@ byte_125340:	dc.b 0,	0, 0, $34, 1, 0, 0, 0, 0, 0, $F0, $D, 0, 0, $E8, $F0
 		dc.b 3,	0, $1C,	$FD, 1,	0, 0, 0, 0, 0, $E8, $E,	0, $20,	$E8, $E8
 		dc.b 6,	0, $2C,	8, 1, 0, 0, 0, 0, 0, $D0, $B, 0, $32, $F4, $F0
 		dc.b 9,	0, $3E,	$F4
-nemesis_125384:
-    binclude "src/nemesis/data_125384.bin"
+nemesis_enemy_tiles_73:
+    binclude "src/enemies/73/nemesis_tiles.bin"
+    align 2, 0
 off_125880:	dc.w byte_12588E-off_125880
 		dc.w byte_12588E-off_125880
 		dc.w byte_12588E-off_125880
@@ -38638,14 +38906,18 @@ byte_125D84:	dc.b 7,	4, 1, $1B, 1, $5A, 1, $6F, $81,	$5A, $81, $1B, $81, $30, 1,
 		dc.b $C, 9, $10, 9, $E4, 4, 0, $10, $A,	$EC, $F4, $A, $10, $F, $F4, 2
 		dc.b $B9, $B9, $B9, $B9, 0, $C,	3, $10,	$18, $FC, 4, 8,	$10, $1C, $F4, $F4
 		dc.b 1,	$10, $1F, $FC
-nemesis_125F08:
-    binclude "src/nemesis/data_125F08.bin"
-nemesis_126506:
-    binclude "src/nemesis/data_126506.bin"
-nemesis_126E90:
-    binclude "src/nemesis/data_126E90.bin"
-nemesis_1276A8:
-    binclude "src/nemesis/data_1276A8.bin"
+nemesis_enemy_tiles_62:
+    binclude "src/enemies/62/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_63:
+    binclude "src/enemies/63/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_70:
+    binclude "src/enemies/70/nemesis_tiles.bin"
+    align 2, 0
+nemesis_enemy_tiles_72:
+    binclude "src/enemies/72/nemesis_tiles.bin"
+    align 2, 0
 byte_127CD8:	dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $72, $93, $99, $77, $3B, $3B, $3B,	$3B
 		dc.b $3B, $3B, $3B, $3B, $3B, $3B, $3B,	$3B, $93, $78, $7D, $7B, $3B, $3B, $3B,	$3B
 		dc.b $3B, $3B, $3B, $3B, $3B, $3D, $3B,	$3B, $85, $98, $9F, $7D, $9A, $8B, $87,	$72
@@ -38666,16 +38938,22 @@ byte_127D88:	dc.b 0,	0, 0, $F, 0, 0,	0, 0, 0, 0, $F0, 5, 0, 0, $F8, 0
 		dc.b 0,	0, 0, 0, 0, $F8, 5, 0, 4, $F0
 nemesis_127DA2:
     binclude "src/nemesis/data_127DA2.bin"
+    align 2, 0
 nemesis_127EC6:
     binclude "src/nemesis/data_127EC6.bin"
+    align 2, 0
 enigma_127F88:
     binclude "src/enigma/data_127F88.bin"
+    align 2, 0
 enigma_128004:
     binclude "src/enigma/data_128004.bin"
+    align 2, 0
 nemesis_128028:
     binclude "src/nemesis/data_128028.bin"
-nemesis_1280F6:
-    binclude "src/nemesis/data_1280F6.bin"
+    align 2, 0
+nemesis_enemy_tiles_40:
+    binclude "src/enemies/40/nemesis_tiles.bin"
+    align 2, 0
 off_128DC6:	dc.w byte_128DD8-off_128DC6
 		dc.w byte_128DE6-off_128DC6
 		dc.w byte_128E18-off_128DC6
@@ -38748,8 +39026,10 @@ byte_1290F2:	dc.b 4,	2, $80,	$C, $80, $17, $80, $27,	$80, $37, $80, $47, 0, 0, $
 		dc.b $32, $F0
 kosinski_129144:
     binclude "src/kosinski/data_129144.bin"
+    align 2, 0
 nemesis_1291A4:
     binclude "src/nemesis/data_1291A4.bin"
+    align 2, 0
 
     org $69D00
 sub_129D00:
@@ -39298,6 +39578,7 @@ sub_12A5E8:
 
 nemesis_12A5FA:
     binclude "src/nemesis/data_12A5FA.bin"
+    align 2, 0
 word_12A87A:	dc.w $2300, $2301, $2302, $2303, $2304,	$2305, $2306, $2307, $2308, $2309
 		dc.w $230A, $230B, $230C, $230D, $230E,	$230F, $2310, $2311, $2312, $2313
 		dc.w $2314, $2315, $2316, $2317, $2318,	$2319, $231A, $231B, $231C, $231D
@@ -39908,6 +40189,7 @@ byte_12BB80:	dc.b $B, $10, $1D, $F, $1B, 0, $1D, $12, $F, $17, 0, $13, $18, 0, $
 byte_12BB9A:	dc.b $1D, $12, $F, $13,	$1B, 0,	1, $20,	$18, $26, $FF, 0
 nemesis_12BBA6:
     binclude "src/nemesis/data_12BBA6.bin"
+    align 2, 0
 word_12BC1C:	dc.w $8008, $8008, $8008, $8008, $C00C,	$C00C, $C00C, $C00C
 		dc.w $E00E, $E00E, $E00E, $E00E, $F00F,	$F00F, $F00F, $F00F
 		dc.w $F88F, $F88F, $F88F, $F88F, $FCCF,	$FCCF, $FCCF, $FCCF
@@ -39922,10 +40204,13 @@ byte_12BC9C:	dc.b $FF, $FF, $FF, $FF, $FF, $FF, $FF,	0, 0, $FF, $FF,	$FF, $FF, $
 		dc.b 0,	0, 0, $FF, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0
 nemesis_12BCDC:
     binclude "src/nemesis/data_12BCDC.bin"
+    align 2, 0
 enigma_12C192:
     binclude "src/enigma/data_12C192.bin"
+    align 2, 0
 nemesis_12C226:
     binclude "src/nemesis/data_12C226.bin"
+    align 2, 0
 off_12E272:	dc.w byte_12E286-off_12E272
 		dc.w byte_12E28A-off_12E272
 		dc.w byte_12E294-off_12E272
@@ -39979,39 +40264,53 @@ byte_12E2CA:	dc.b 0,	$FF, 1,	$DE, $FF, 0, 1,	0, 0, 0, 0, 0, $E0, 8, 0, 1
 		dc.b 0,	8, 8, $E8, $E, 0, $C, $E0, $E8,	$E, 0, $18, 0, 0
 nemesis_12E4C8:
     binclude "src/nemesis/data_12E4C8.bin"
+    align 2, 0
 enigma_12FE5C:
     binclude "src/enigma/data_12FE5C.bin"
+    align 2, 0
 enigma_12FE7A:
     binclude "src/enigma/data_12FE7A.bin"
+    align 2, 0
 enigma_12FEAE:
     binclude "src/enigma/data_12FEAE.bin"
+    align 2, 0
 enigma_12FEE8:
     binclude "src/enigma/data_12FEE8.bin"
+    align 2, 0
 enigma_12FF02:
     binclude "src/enigma/data_12FF02.bin"
+    align 2, 0
 enigma_12FF1E:
     binclude "src/enigma/data_12FF1E.bin"
+    align 2, 0
 
     org $70000
 smps_bank0:
     binclude "src/smps/bank0.bin"
+    align 2, 0
 
     org $78000
 smps_bank1:
     binclude "src/smps/bank1.bin"
+    align 2, 0
 smps_driver_part1:
     binclude "src/smps/driver_1.bin"
+    align 2, 0
 smps_driver_part2:
     binclude "src/smps/driver_2.bin"
+    align 2, 0
 smps_driver_part3:
     binclude "src/smps/driver_3.bin"
+    align 2, 0
 
 kosinski_13B000:
     binclude "src/kosinski/data_13B000.bin"
+    align 2, 0
 		align 2, 0
 
 kosinski_13BD40:
     binclude "src/kosinski/data_13BD40.bin"
+    align 2, 0
 		align 2, 0
 
 palettes_data_1:dc.w	 0, $EEE, $8C8,	$484, $262, $8CE, $48A,	$246, $8AE, $46A,  $EE,	$24E, $ECA, $A86, $642,	$222
@@ -40450,14 +40749,19 @@ byte_13DAD0:	dc.b   0,  0,  1,  2,  0
 		align 2, 0
 kosinski_13DAD6:
     binclude "src/kosinski/data_13DAD6.bin"
+    align 2, 0
 kosinski_level_params:
     binclude "src/levels/kosinski_params.bin"
+    align 2, 0
 sega_logo_palette:
     binclude "src/sega_logo/palette.bin"
+    align 2, 0
 enigma_sega_logo_mapping:
     binclude "src/sega_logo/enigma_mapping.bin"
+    align 2, 0
 nemesis_sega_logo:
     binclude "src/sega_logo/nemesis_tiles.bin"
+    align 2, 0
 
 init_sound_type1:
 		move.w	#$100,(IO_Z80RES).l

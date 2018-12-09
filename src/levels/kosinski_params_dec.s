@@ -96,146 +96,217 @@ tbl_params1_lvl_9:dc.w tbl_params1_lvl_9_0-tbl_params1_lvl_9
 		dc.w tbl_params1_lvl_9_3-tbl_params1_lvl_9
 tbl_params1_lvl_1_0:
     binclude "01_Duckburg/params1_00.bin"
+    align 2, 0
 tbl_params1_lvl_1_1:
     binclude "01_Duckburg/params1_01.bin"
+    align 2, 0
 tbl_params1_lvl_1_2:
     binclude "01_Duckburg/params1_02.bin"
+    align 2, 0
 tbl_params1_lvl_1_3:
     binclude "01_Duckburg/params1_03.bin"
+    align 2, 0
 tbl_params1_lvl_1_4:
     binclude "01_Duckburg/params1_04.bin"
+    align 2, 0
 tbl_params1_lvl_1_5:
     binclude "01_Duckburg/params1_05.bin"
+    align 2, 0
 tbl_params1_lvl_1_6:
     binclude "01_Duckburg/params1_06.bin"
+    align 2, 0
 tbl_params1_lvl_2_0:
     binclude "02_Mexico/params1_00.bin"
+    align 2, 0
 tbl_params1_lvl_2_1:
     binclude "02_Mexico/params1_01.bin"
+    align 2, 0
 tbl_params1_lvl_2_2:
     binclude "02_Mexico/params1_02.bin"
+    align 2, 0
 tbl_params1_lvl_2_3:
     binclude "02_Mexico/params1_03.bin"
+    align 2, 0
 tbl_params1_lvl_2_4:
     binclude "02_Mexico/params1_04.bin"
+    align 2, 0
 tbl_params1_lvl_2_5:
     binclude "02_Mexico/params1_05.bin"
+    align 2, 0
 tbl_params1_lvl_2_6:
     binclude "02_Mexico/params1_06.bin"
+    align 2, 0
 tbl_params1_lvl_2_7:
     binclude "02_Mexico/params1_07.bin"
+    align 2, 0
 tbl_params1_lvl_3_0:
     binclude "03_Transylvania/params1_00.bin"
+    align 2, 0
 tbl_params1_lvl_3_1:
     binclude "03_Transylvania/params1_01.bin"
+    align 2, 0
 tbl_params1_lvl_3_2:
     binclude "03_Transylvania/params1_02.bin"
+    align 2, 0
 tbl_params1_lvl_3_3:
     binclude "03_Transylvania/params1_03.bin"
+    align 2, 0
 tbl_params1_lvl_3_4:
     binclude "03_Transylvania/params1_04.bin"
+    align 2, 0
 tbl_params1_lvl_3_5:
     binclude "03_Transylvania/params1_05.bin"
+    align 2, 0
 tbl_params1_lvl_3_6:
     binclude "03_Transylvania/params1_06.bin"
+    align 2, 0
 tbl_params1_lvl_3_7:
     binclude "03_Transylvania/params1_07.bin"
+    align 2, 0
 tbl_params1_lvl_3_8:
     binclude "03_Transylvania/params1_08.bin"
+    align 2, 0
 tbl_params1_lvl_4_0:
     binclude "04_Viking_Ship/params1_00.bin"
+    align 2, 0
 tbl_params1_lvl_4_1:
     binclude "04_Viking_Ship/params1_01.bin"
+    align 2, 0
 tbl_params1_lvl_4_7:
     binclude "04_Viking_Ship/params1_07.bin"
+    align 2, 0
 tbl_params1_lvl_4_3:
     binclude "04_Viking_Ship/params1_03.bin"
+    align 2, 0
 tbl_params1_lvl_4_4:
     binclude "04_Viking_Ship/params1_04.bin"
+    align 2, 0
 tbl_params1_lvl_4_5:
     binclude "04_Viking_Ship/params1_05.bin"
+    align 2, 0
 tbl_params1_lvl_4_6:
     binclude "04_Viking_Ship/params1_06.bin"
+    align 2, 0
 tbl_params1_lvl_5_0:
     binclude "05_South_Pole/params1_00.bin"
+    align 2, 0
 tbl_params1_lvl_5_1:
     binclude "05_South_Pole/params1_01.bin"
+    align 2, 0
 tbl_params1_lvl_5_2:
     binclude "05_South_Pole/params1_02.bin"
+    align 2, 0
 tbl_params1_lvl_5_3:
     binclude "05_South_Pole/params1_03.bin"
+    align 2, 0
 tbl_params1_lvl_5_4:
     binclude "05_South_Pole/params1_04.bin"
+    align 2, 0
 tbl_params1_lvl_5_5:
     binclude "05_South_Pole/params1_05.bin"
+    align 2, 0
 tbl_params1_lvl_5_6:
     binclude "05_South_Pole/params1_06.bin"
+    align 2, 0
 tbl_params1_lvl_5_7:
     binclude "05_South_Pole/params1_07.bin"
+    align 2, 0
 tbl_params1_lvl_5_8:
     binclude "05_South_Pole/params1_08.bin"
+    align 2, 0
 tbl_params1_lvl_6_0:
     binclude "06_Maharajah/params1_00.bin"
+    align 2, 0
 tbl_params1_lvl_6_1:
     binclude "06_Maharajah/params1_01.bin"
+    align 2, 0
 tbl_params1_lvl_6_2:
     binclude "06_Maharajah/params1_02.bin"
+    align 2, 0
 tbl_params1_lvl_6_3:
     binclude "06_Maharajah/params1_03.bin"
+    align 2, 0
 tbl_params1_lvl_6_4:
     binclude "06_Maharajah/params1_04.bin"
+    align 2, 0
 tbl_params1_lvl_6_5:
     binclude "06_Maharajah/params1_05.bin"
+    align 2, 0
 tbl_params1_lvl_6_6:
     binclude "06_Maharajah/params1_06.bin"
+    align 2, 0
 tbl_params1_lvl_6_7:
     binclude "06_Maharajah/params1_07.bin"
+    align 2, 0
 tbl_params1_lvl_6_8:
     binclude "06_Maharajah/params1_08.bin"
+    align 2, 0
 tbl_params1_lvl_6_9:
     binclude "06_Maharajah/params1_09.bin"
+    align 2, 0
 tbl_params1_lvl_6_10:
     binclude "06_Maharajah/params1_10.bin"
+    align 2, 0
 tbl_params1_lvl_7_0:
     binclude "07_Egypt/params1_00.bin"
+    align 2, 0
 tbl_params1_lvl_7_1:
     binclude "07_Egypt/params1_01.bin"
+    align 2, 0
 tbl_params1_lvl_7_2:
     binclude "07_Egypt/params1_02.bin"
+    align 2, 0
 tbl_params1_lvl_7_3:
     binclude "07_Egypt/params1_03.bin"
+    align 2, 0
 tbl_params1_lvl_7_4:
     binclude "07_Egypt/params1_04.bin"
+    align 2, 0
 tbl_params1_lvl_7_5:
     binclude "07_Egypt/params1_05.bin"
+    align 2, 0
 tbl_params1_lvl_7_6:
     binclude "07_Egypt/params1_06.bin"
+    align 2, 0
 tbl_params1_lvl_7_7:
     binclude "07_Egypt/params1_07.bin"
+    align 2, 0
 tbl_params1_lvl_7_8:
     binclude "07_Egypt/params1_08.bin"
+    align 2, 0
 tbl_params1_lvl_7_9:
     binclude "07_Egypt/params1_09.bin"
+    align 2, 0
 tbl_params1_lvl_7_10:
     binclude "07_Egypt/params1_10.bin"
+    align 2, 0
 tbl_params1_lvl_8_0:
     binclude "08_Hideout/params1_00.bin"
+    align 2, 0
 tbl_params1_lvl_8_1:
     binclude "08_Hideout/params1_01.bin"
+    align 2, 0
 tbl_params1_lvl_8_2:
     binclude "08_Hideout/params1_02.bin"
+    align 2, 0
 tbl_params1_lvl_8_3:
     binclude "08_Hideout/params1_03.bin"
+    align 2, 0
 tbl_params1_lvl_8_4:
     binclude "08_Hideout/params1_04.bin"
+    align 2, 0
 tbl_params1_lvl_9_0:
     binclude "09_The_Island/params1_00.bin"
+    align 2, 0
 tbl_params1_lvl_9_1:
     binclude "09_The_Island/params1_01.bin"
+    align 2, 0
 tbl_params1_lvl_9_2:
     binclude "09_The_Island/params1_02.bin"
+    align 2, 0
 tbl_params1_lvl_9_3:
     binclude "09_The_Island/params1_03.bin"
+    align 2, 0
 tbl_lvl_params2:dc.w tbl_params2_lvl_1-tbl_lvl_params2
 		dc.w tbl_params2_lvl_1-tbl_lvl_params2
 		dc.w tbl_params2_lvl_2-tbl_lvl_params2
@@ -251,22 +322,29 @@ tbl_params2_lvl_1:dc.w tbl_params2_lvl_1_0-tbl_params2_lvl_1
 		dc.w tbl_params2_lvl_1_2-tbl_params2_lvl_1
 tbl_params2_lvl_1_0:
     binclude "01_Duckburg/params2_00.bin"
+    align 2, 0
 tbl_params2_lvl_1_1:
     binclude "01_Duckburg/params2_01.bin"
+    align 2, 0
 tbl_params2_lvl_1_2:
     binclude "01_Duckburg/params2_02.bin"
+    align 2, 0
 tbl_params2_lvl_2:dc.w tbl_params2_lvl_2_0-tbl_params2_lvl_2
 		dc.w tbl_params2_lvl_2_1-tbl_params2_lvl_2
 		dc.w tbl_params2_lvl_2_2-tbl_params2_lvl_2
 		dc.w tbl_params2_lvl_2_3-tbl_params2_lvl_2
 tbl_params2_lvl_2_0:
     binclude "02_Mexico/params2_00.bin"
+    align 2, 0
 tbl_params2_lvl_2_1:
     binclude "02_Mexico/params2_01.bin"
+    align 2, 0
 tbl_params2_lvl_2_2:
     binclude "02_Mexico/params2_02.bin"
+    align 2, 0
 tbl_params2_lvl_2_3:
     binclude "02_Mexico/params2_03.bin"
+    align 2, 0
 tbl_params2_lvl_3:dc.w tbl_params2_lvl_3_0-tbl_params2_lvl_3
 		dc.w tbl_params2_lvl_3_1-tbl_params2_lvl_3
 		dc.w tbl_params2_lvl_3_2-tbl_params2_lvl_3
@@ -276,18 +354,25 @@ tbl_params2_lvl_3:dc.w tbl_params2_lvl_3_0-tbl_params2_lvl_3
 		dc.w tbl_params2_lvl_3_6-tbl_params2_lvl_3
 tbl_params2_lvl_3_0:
     binclude "03_Transylvania/params2_00.bin"
+    align 2, 0
 tbl_params2_lvl_3_1:
     binclude "03_Transylvania/params2_01.bin"
+    align 2, 0
 tbl_params2_lvl_3_2:
     binclude "03_Transylvania/params2_02.bin"
+    align 2, 0
 tbl_params2_lvl_3_3:
     binclude "03_Transylvania/params2_03.bin"
+    align 2, 0
 tbl_params2_lvl_3_4:
     binclude "03_Transylvania/params2_04.bin"
+    align 2, 0
 tbl_params2_lvl_3_5:
     binclude "03_Transylvania/params2_05.bin"
+    align 2, 0
 tbl_params2_lvl_3_6:
     binclude "03_Transylvania/params2_06.bin"
+    align 2, 0
 tbl_params2_lvl_4:dc.w tbl_params2_lvl_4_0-tbl_params2_lvl_4
 		dc.w tbl_params2_lvl_4_1-tbl_params2_lvl_4
 		dc.w tbl_params2_lvl_4_2-tbl_params2_lvl_4
@@ -295,26 +380,35 @@ tbl_params2_lvl_4:dc.w tbl_params2_lvl_4_0-tbl_params2_lvl_4
 		dc.w tbl_params2_lvl_4_4-tbl_params2_lvl_4
 tbl_params2_lvl_4_0:
     binclude "04_Viking_Ship/params2_00.bin"
+    align 2, 0
 tbl_params2_lvl_4_1:
     binclude "04_Viking_Ship/params2_01.bin"
+    align 2, 0
 tbl_params2_lvl_4_2:
     binclude "04_Viking_Ship/params2_02.bin"
+    align 2, 0
 tbl_params2_lvl_4_3:
     binclude "04_Viking_Ship/params2_03.bin"
+    align 2, 0
 tbl_params2_lvl_4_4:
     binclude "04_Viking_Ship/params2_04.bin"
+    align 2, 0
 tbl_params2_lvl_5:dc.w tbl_params2_lvl_5_0-tbl_params2_lvl_5
 		dc.w tbl_params2_lvl_5_1-tbl_params2_lvl_5
 		dc.w tbl_params2_lvl_5_2-tbl_params2_lvl_5
 		dc.w tbl_params2_lvl_5_3-tbl_params2_lvl_5
 tbl_params2_lvl_5_0:
     binclude "05_South_Pole/params2_00.bin"
+    align 2, 0
 tbl_params2_lvl_5_1:
     binclude "05_South_Pole/params2_01.bin"
+    align 2, 0
 tbl_params2_lvl_5_2:
     binclude "05_South_Pole/params2_02.bin"
+    align 2, 0
 tbl_params2_lvl_5_3:
     binclude "05_South_Pole/params2_03.bin"
+    align 2, 0
 tbl_params2_lvl_6:dc.w tbl_params2_lvl_6_0-tbl_params2_lvl_6
 		dc.w tbl_params2_lvl_6_1-tbl_params2_lvl_6
 		dc.w tbl_params2_lvl_6_2-tbl_params2_lvl_6
@@ -326,18 +420,25 @@ tbl_params2_lvl_6:dc.w tbl_params2_lvl_6_0-tbl_params2_lvl_6
 		dc.w tbl_params2_lvl_6_8-tbl_params2_lvl_6
 tbl_params2_lvl_6_0:
     binclude "06_Maharajah/params2_00.bin"
+    align 2, 0
 tbl_params2_lvl_6_1:
     binclude "06_Maharajah/params2_01.bin"
+    align 2, 0
 tbl_params2_lvl_6_2:
     binclude "06_Maharajah/params2_02.bin"
+    align 2, 0
 tbl_params2_lvl_6_3:
     binclude "06_Maharajah/params2_03.bin"
+    align 2, 0
 tbl_params2_lvl_6_5:
     binclude "06_Maharajah/params2_05.bin"
+    align 2, 0
 tbl_params2_lvl_6_7:
     binclude "06_Maharajah/params2_07.bin"
+    align 2, 0
 tbl_params2_lvl_6_8:
     binclude "06_Maharajah/params2_08.bin"
+    align 2, 0
 tbl_params2_lvl_7:dc.w tbl_params2_lvl_7_0-tbl_params2_lvl_7
 		dc.w tbl_params2_lvl_7_1-tbl_params2_lvl_7
 		dc.w tbl_params2_lvl_7_2-tbl_params2_lvl_7
@@ -346,16 +447,22 @@ tbl_params2_lvl_7:dc.w tbl_params2_lvl_7_0-tbl_params2_lvl_7
 		dc.w tbl_params2_lvl_7_5-tbl_params2_lvl_7
 tbl_params2_lvl_7_0:
     binclude "07_Egypt/params2_00.bin"
+    align 2, 0
 tbl_params2_lvl_7_1:
     binclude "07_Egypt/params2_01.bin"
+    align 2, 0
 tbl_params2_lvl_7_2:
     binclude "07_Egypt/params2_02.bin"
+    align 2, 0
 tbl_params2_lvl_7_3:
     binclude "07_Egypt/params2_03.bin"
+    align 2, 0
 tbl_params2_lvl_7_4:
     binclude "07_Egypt/params2_04.bin"
+    align 2, 0
 tbl_params2_lvl_7_5:
     binclude "07_Egypt/params2_05.bin"
+    align 2, 0
 tbl_params2_lvl_8:dc.w tbl_params2_lvl_8_0-tbl_params2_lvl_8
 		dc.w tbl_params2_lvl_8_1-tbl_params2_lvl_8
 		dc.w tbl_params2_lvl_8_2-tbl_params2_lvl_8
@@ -363,26 +470,35 @@ tbl_params2_lvl_8:dc.w tbl_params2_lvl_8_0-tbl_params2_lvl_8
 		dc.w tbl_params2_lvl_8_4-tbl_params2_lvl_8
 tbl_params2_lvl_8_0:
     binclude "08_Hideout/params2_00.bin"
+    align 2, 0
 tbl_params2_lvl_8_1:
     binclude "08_Hideout/params2_01.bin"
+    align 2, 0
 tbl_params2_lvl_8_2:
     binclude "08_Hideout/params2_02.bin"
+    align 2, 0
 tbl_params2_lvl_8_3:
     binclude "08_Hideout/params2_03.bin"
+    align 2, 0
 tbl_params2_lvl_8_4:
     binclude "08_Hideout/params2_04.bin"
+    align 2, 0
 tbl_params2_lvl_9:dc.w tbl_params2_lvl_9_0-tbl_params2_lvl_9
 		dc.w tbl_params2_lvl_9_1-tbl_params2_lvl_9
 		dc.w tbl_params2_lvl_9_2-tbl_params2_lvl_9
 		dc.w tbl_params2_lvl_9_3-tbl_params2_lvl_9
 tbl_params2_lvl_9_0:
     binclude "09_The_Island/params2_00.bin"
+    align 2, 0
 tbl_params2_lvl_9_1:
     binclude "09_The_Island/params2_01.bin"
+    align 2, 0
 tbl_params2_lvl_9_2:
     binclude "09_The_Island/params2_02.bin"
+    align 2, 0
 tbl_params2_lvl_9_3:
     binclude "09_The_Island/params2_03.bin"
+    align 2, 0
 tbl_lvl_params3:dc.w tbl_params3_0-tbl_lvl_params3
 		dc.w tbl_params3_1-tbl_lvl_params3
 		dc.w tbl_params3_9-tbl_lvl_params3
@@ -431,111 +547,156 @@ tbl_lvl_params3:dc.w tbl_params3_0-tbl_lvl_params3
 		dc.w tbl_params3_45-tbl_lvl_params3
 tbl_params3_0:
     binclude "params3/00.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_1:
     binclude "params3/01.bin"
+    align 2, 0
 tbl_params3_9:
     binclude "params3/09.bin"
+    align 2, 0
 tbl_params3_3:
     binclude "params3/03.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_4:
     binclude "params3/04.bin"
+    align 2, 0
 tbl_params3_5:
     binclude "params3/05.bin"
+    align 2, 0
 tbl_params3_6:
     binclude "params3/06.bin"
+    align 2, 0
 tbl_params3_7:
     binclude "params3/07.bin"
+    align 2, 0
 tbl_params3_8:
     binclude "params3/08.bin"
+    align 2, 0
 tbl_params3_10:
     binclude "params3/10.bin"
+    align 2, 0
 tbl_params3_11:
     binclude "params3/11.bin"
+    align 2, 0
 tbl_params3_12:
     binclude "params3/12.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_13:
     binclude "params3/13.bin"
+    align 2, 0
 tbl_params3_14:
     binclude "params3/14.bin"
+    align 2, 0
 tbl_params3_15:
     binclude "params3/15.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_16:
     binclude "params3/16.bin"
+    align 2, 0
 tbl_params3_17:
     binclude "params3/17.bin"
+    align 2, 0
 tbl_params3_18:
     binclude "params3/18.bin"
+    align 2, 0
 tbl_params3_19:
     binclude "params3/19.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_20:
     binclude "params3/20.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_21:
     binclude "params3/21.bin"
+    align 2, 0
 tbl_params3_22:
     binclude "params3/22.bin"
+    align 2, 0
 tbl_params3_23:
     binclude "params3/23.bin"
+    align 2, 0
 tbl_params3_24:
     binclude "params3/24.bin"
+    align 2, 0
 tbl_params3_25:
     binclude "params3/25.bin"
+    align 2, 0
 tbl_params3_26:
     binclude "params3/26.bin"
+    align 2, 0
 tbl_params3_27:
     binclude "params3/27.bin"
+    align 2, 0
 tbl_params3_28:
     binclude "params3/28.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_29:
     binclude "params3/29.bin"
+    align 2, 0
 tbl_params3_30:
     binclude "params3/30.bin"
+    align 2, 0
 tbl_params3_31:
     binclude "params3/31.bin"
+    align 2, 0
 tbl_params3_32:
     binclude "params3/32.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_33:
     binclude "params3/33.bin"
+    align 2, 0
 tbl_params3_34:
     binclude "params3/34.bin"
+    align 2, 0
 tbl_params3_35:
     binclude "params3/35.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_36:
     binclude "params3/36.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_37:
     binclude "params3/37.bin"
+    align 2, 0
 tbl_params3_38:
     binclude "params3/38.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_39:
     binclude "params3/39.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_45:
     binclude "params3/45.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_40:
     binclude "params3/40.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_41:
     binclude "params3/41.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_42:
     binclude "params3/42.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_43:
     binclude "params3/43.bin"
+    align 2, 0
 		align 2, 0
 tbl_params3_44:
     binclude "params3/44.bin"
+    align 2, 0
 		align 2, 0
 tbl_lvl_params4:dc.w tbl_params4_2-tbl_lvl_params4
 		dc.w tbl_params4_2-tbl_lvl_params4
@@ -559,53 +720,71 @@ tbl_lvl_params4:dc.w tbl_params4_2-tbl_lvl_params4
 		dc.w tbl_params4_19-tbl_lvl_params4
 tbl_params4_2:
     binclude "params4/02.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_3:
     binclude "params4/03.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_7:
     binclude "params4/07.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_6:
     binclude "params4/06.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_5:
     binclude "params4/05.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_8:
     binclude "params4/08.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_9:
     binclude "params4/09.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_10:
     binclude "params4/10.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_11:
     binclude "params4/11.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_4:
     binclude "params4/04.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_13:
     binclude "params4/13.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_12:
     binclude "params4/12.bin"
+    align 2, 0
 tbl_params4_19:
     binclude "params4/19.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_18:
     binclude "params4/18.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_14:
     binclude "params4/14.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_16:
     binclude "params4/16.bin"
+    align 2, 0
 tbl_params4_17:
     binclude "params4/17.bin"
+    align 2, 0
 		align 2, 0
 tbl_params4_15:
     binclude "params4/15.bin"
+    align 2, 0
 		align 2, 0
